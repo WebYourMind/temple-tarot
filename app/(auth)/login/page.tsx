@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import AuthenticationPage from "app/(auth)/components/auth-page";
-import { LoginForm } from "app/(auth)/login/components/login-form";
+import LoginForm from "app/(auth)/login/components/login-form";
 
 export const metadata: Metadata = {
   title: "Authentication",

@@ -18,17 +18,17 @@ export default async function middleware(req: NextRequest) {
   const url = req.nextUrl;
 
   const searchParams = req.nextUrl.searchParams.toString();
-  // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""}`;
 
-  // redirect to login page if no auth
-  const session = await getToken({ req });
+  const session = await getToken({ req, secret: process.env.SECRET });
+  // redirect if not logged in
   if (!session && path !== "/login" && path !== "/register") {
     return NextResponse.redirect(new URL("/login", req.url));
+    // if logged in, redirect away from login pages
+  } else if (session && (path == "/login" || path == "/register")) {
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // rewrite root application to `/home` folder
-  if (path == "/") {
-    return NextResponse.rewrite(new URL(`/home${path === "/" ? "" : path}`, req.url));
-  }
+  // "/" to show /home content
+  if (path === "/") return NextResponse.rewrite(new URL("/home", req.url));
 }
