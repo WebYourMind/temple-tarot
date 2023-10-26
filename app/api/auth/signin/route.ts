@@ -46,10 +46,15 @@ export async function POST(request: UserRequest) {
         }
       );
     } else {
-      return NextResponse.json({
-        ok: false,
-        error: "Invalid credentials.",
-      });
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "Invalid credentials.",
+        },
+        {
+          status: 401,
+        }
+      );
     }
   }
 }
