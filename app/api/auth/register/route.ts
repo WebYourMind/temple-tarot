@@ -1,24 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
-interface User {
+interface CustomBody {
   id: string;
   email: string;
   password: string;
   name?: string;
 }
 
-interface CustomBody {
-  body: {
-    email: string;
-    password: string;
-  };
-}
-
-type UserRequest = NextRequest & CustomBody;
-
 // acts as a mock api
-export async function POST(request: UserRequest) {
-  const user = (await request.json()) as User;
+export async function POST(request: NextRequest) {
+  const user = (await request.json()) as CustomBody;
 
   if (user) {
     return NextResponse.json(
