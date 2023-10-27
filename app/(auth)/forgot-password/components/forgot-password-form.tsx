@@ -48,7 +48,7 @@ const ForgotPasswordForm = () => {
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">Forgot your password?</h1>
           <p className="text-sm text-muted-foreground">
-            Enter your email address below and we'll send you a link to reset it.
+            Enter your email address below and we&apos;ll send you a link to reset it.
           </p>
         </div>
 
@@ -68,7 +68,7 @@ const ForgotPasswordForm = () => {
                 Back to login page
               </Link>
               {error && <div className="rounded border border-red-500 p-2 text-red-500">{error}</div>}
-              {message && <div className="borderp-2 rounded">{message}</div>}
+              {message && <div className="rounded border p-2">{message}</div>}
               <Button disabled={isLoading}>
                 {isLoading && <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />}
                 {isLoading ? "Processing" : "Submit"}
