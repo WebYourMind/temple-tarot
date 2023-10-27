@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -16,10 +17,6 @@ export default function LoginForm() {
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-
-    // const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
-
-    // const endpoint = API_URL ? `${API_URL}/auth/signin` : "/api/auth/signin";
 
     const result = await signIn("credentials", {
       redirect: false, // This option will prevent auto-redirects
@@ -56,6 +53,9 @@ export default function LoginForm() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      <Link href="/forgot-password" className="text-xs underline opacity-90">
+        Forgot your password?
+      </Link>
     </AuthForm>
   );
 }

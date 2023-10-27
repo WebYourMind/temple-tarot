@@ -3,8 +3,8 @@ import AuthenticationPage from "app/(auth)/components/auth-page";
 import LoginForm from "app/(auth)/login/components/login-form";
 
 export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
+  title: "Login - Merlin AI",
+  description: "Merlin AI login page.",
 };
 
 export default function LoginPage() {

@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   cookies: {
     sessionToken: {
-      name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
+      name: "next-auth.session-token",
       options: {
         httpOnly: true,
         sameSite: "lax",
