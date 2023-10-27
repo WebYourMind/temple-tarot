@@ -10,7 +10,7 @@ export default function LogoutButton() {
   }
   return (
     <>
-      <p className="font-semi mb-6 max-w-2xl md:text-lg lg:mb-8 lg:text-xl">Welcome, {session?.user?.name}.</p>
+      <p className="mb-6 max-w-2xl md:text-lg lg:mb-8 lg:text-xl">Welcome, {session?.user?.name}.</p>
       <Button onClick={logout}>Logout</Button>
     </>
   );
