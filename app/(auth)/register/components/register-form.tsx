@@ -2,6 +2,7 @@
 import { useState, SyntheticEvent } from "react";
 import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 interface ResponseData {
@@ -18,46 +19,60 @@ export default function RegisterForm() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
+  const router = useRouter();
+
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
-    setIsLoading(true);
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+    if (password === confirmPassword) {
+      setIsLoading(true);
 
-    const endpoint = API_URL ? `${API_URL}/auth/register` : "/api/auth/register";
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
-    const res = await fetch(endpoint, {
-      method: "POST",
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-        confirmPassword,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+      const endpoint = API_URL ? `${API_URL}/auth/register` : "/api/auth/register";
 
-    const data = (await res.json()) as ResponseData;
-
-    if (data.ok) {
-      const token = data.token;
-      // use next-auth to handle token
-      signIn("credentials", {
-        callbackUrl: "/",
-        token,
+      const res = await fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          confirmPassword,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-    } else if (data.error) {
-      setError(data.error);
-    }
 
-    setIsLoading(false);
+      const data = (await res.json()) as ResponseData;
+
+      if (res.status === 201) {
+        router.push("/login");
+        const result = await signIn("credentials", {
+          redirect: false, // This option will prevent auto-redirects
+          email,
+          password,
+          callbackUrl: "/api/auth/signin",
+        });
+
+        if (result?.error) {
+          setError(result.error);
+          setIsLoading(false);
+        } else {
+          router.replace("/");
+        }
+      } else if (data.error) {
+        setError(data.error);
+      }
+
+      setIsLoading(false);
+    } else {
+      setError("Passwords don't match.");
+    }
   }
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={onSubmit}>
-      {error && <div className="alert alert-danger">{error}</div>}
+    <AuthForm isLoading={isLoading} onSubmit={onSubmit} error={error}>
       <InputField
         id="name"
         placeholder="Jane Doe"

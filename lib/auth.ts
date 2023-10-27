@@ -1,16 +1,32 @@
 import { getServerSession, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import jwt from "jsonwebtoken";
+import { Session } from "next-auth";
+import { User as NextAuthUser } from "next-auth";
+import { JWT } from "next-auth/jwt/types";
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
-type User = {
+interface User {
   id: string;
   email: string;
   password: string;
   name: string;
   token: string;
-};
+}
+
+interface CustomUser extends NextAuthUser {
+  accessToken?: string;
+}
+
+interface ExtendedSession extends Session {
+  user: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    id?: string;
+    accessToken?: string;
+  };
+}
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
@@ -24,20 +40,15 @@ export const authOptions: NextAuthOptions = {
       name: "Credentials",
       credentials: {},
       authorize: async (credentials: any) => {
-        const token = credentials.token; // Retrieve the token
+        const route = await import("app/api/auth/signin/route");
+        const res = (await route.POST(credentials)) as Response;
 
-        if (token) {
-          try {
-            const secret = process.env.SECRET as string;
-            const decoded = jwt.verify(token, secret) as User;
-
-            // Return user information
-            return { id: decoded.id, email: decoded.email, name: decoded.name };
-          } catch (error) {
-            return null; // token verification failed
-          }
+        if (res.status === 200) {
+          const user = (await res.json()) as User;
+          return { ...user, accessToken: user.token } as CustomUser;
         } else {
-          return null; // no token provided
+          const errorData = (await res.json()) as { error: string };
+          throw new Error(errorData.error || "An unknown error occurred");
         }
       },
     }),
@@ -45,29 +56,36 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   cookies: {
     sessionToken: {
-      name: `next-auth.session-token`,
+      name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
       options: {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: process.env.NODE_ENV === "production", // Set to true in production
+        domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` : undefined,
+        secure: VERCEL_DEPLOYMENT,
       },
     },
   },
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, user }: { token: JWT; user: CustomUser | null }) => {
       if (user) {
-        token.user = user;
+        token = {
+          ...token,
+          accessToken: user.accessToken,
+        };
       }
       return token;
     },
-    session: async ({ session, token }) => {
-      session.user = {
-        ...session.user,
-        // @ts-expect-error
-        id: token.sub,
+    session: async ({ session, token }: { session: Session; token: JWT }) => {
+      const userWithToken: ExtendedSession = {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.sub as string,
+          accessToken: token.accessToken as string,
+        },
       };
-      return session;
+      return userWithToken;
     },
   },
 };

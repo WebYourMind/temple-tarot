@@ -1,46 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import jwt from "jsonwebtoken";
 
-interface User {
-  id: string;
+interface Credentials {
   email: string;
   password: string;
-  name?: string;
 }
-
-interface CustomBody {
-  body: {
-    email: string;
-    password: string;
-  };
-}
-
-type UserRequest = NextRequest & CustomBody;
 
 // acts as a mock api
-export async function POST(request: UserRequest) {
-  const credentials = (await request.json()) as any;
+export async function POST(request: NextRequest & Credentials) {
+  const credentials = { email: request.email, password: request.password }; // (await request.json()) as any;
 
   if (credentials) {
-    const filePath = path.join(process.cwd(), "mock-data", "users.json");
-    const rawdata = fs.readFileSync(filePath);
-
-    const users = JSON.parse(rawdata.toString()) as User[];
+    const users = [{ name: "test", password: "test", token: "abc123", id: "1", email: "test@example.com" }];
 
     const user = users.find((u) => u.email === credentials.email && u.password === credentials.password);
 
     if (user) {
-      // Generating JWT
-      const secretKey = process.env.SECRET as string;
-      const token = jwt.sign({ userId: user.id, email: user.email, name: user.name }, secretKey, { expiresIn: "1h" });
+      //   // Generating JWT
+      //   const secretKey = process.env.SECRET as string;
+      //   const token = jwt.sign({ userId: user.id, email: user.email, name: user.name }, secretKey, { expiresIn: "1h" });
 
       return NextResponse.json(
-        {
-          ok: true,
-          token,
-        },
+        { token: user.token, id: user.id, email: user.email, name: user.name },
         {
           status: 200,
         }
@@ -48,8 +28,7 @@ export async function POST(request: UserRequest) {
     } else {
       return NextResponse.json(
         {
-          ok: false,
-          error: "Invalid credentials.",
+          error: "Authentication failed.",
         },
         {
           status: 401,
