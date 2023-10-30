@@ -97,6 +97,8 @@ Password:
 test
 ```
 
+[(Merlin AI FE deployed here)](https://merlin-ai-fe.vercel.app/)
+
 ## 🚀 Deployment
 
 Easily deploy your Next.js app with [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=github&utm_campaign=next-enterprise) by clicking the button below:
