@@ -9,14 +9,6 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
   reactStrictMode: true,
   experimental: { instrumentationHook: true },
   output: "standalone",
-  experimental: {
-    outputFileTracingIgnores: [
-      "**/node_modules/@swc/**/*",
-      "**/node_modules/@esbuild/**/*",
-      "**/node_modules/terser/**/*",
-      "**/node_modules/webpack/**/*",
-    ],
-  },
   rewrites() {
     return [
       { source: "/healthz", destination: "/api/health" },
