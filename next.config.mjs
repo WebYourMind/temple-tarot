@@ -10,14 +10,12 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
   experimental: { instrumentationHook: true },
   output: "standalone",
   experimental: {
-    outputFileTracingIgnores: {
-      "*": [
-        "node_modules/@swc/**/*",
-        "node_modules/@esbuild/**/*",
-        "node_modules/terser/**/*",
-        "node_modules/webpack/**/*",
-      ],
-    },
+    outputFileTracingIgnores: [
+      "**/node_modules/@swc/**/*",
+      "**/node_modules/@esbuild/**/*",
+      "**/node_modules/terser/**/*",
+      "**/node_modules/webpack/**/*",
+    ],
   },
   rewrites() {
     return [
