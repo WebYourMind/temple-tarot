@@ -72,7 +72,7 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` : undefined,
+        // domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` : undefined,
         secure: VERCEL_DEPLOYMENT,
       },
     },
