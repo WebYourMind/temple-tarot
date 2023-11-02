@@ -4,6 +4,7 @@ import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useResponseMessage } from "lib/useResponseMessage";
 
 interface ResponseData {
   ok: boolean;
@@ -13,7 +14,10 @@ interface ResponseData {
 
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const { responseMessage, showMessage } = useResponseMessage({
+    message: "",
+    error: false,
+  });
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -56,23 +60,23 @@ export default function RegisterForm() {
         });
 
         if (result?.error) {
-          setError(result.error);
+          showMessage(result.error, true);
           setIsLoading(false);
         } else {
           router.replace("/");
         }
       } else if (data.error) {
-        setError(data.error);
+        showMessage(data.error, true);
       }
 
       setIsLoading(false);
     } else {
-      setError("Passwords don't match.");
+      showMessage("Passwords don't match.", true);
     }
   }
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={onSubmit} error={error}>
+    <AuthForm isLoading={isLoading} onSubmit={onSubmit} error={responseMessage.message}>
       <InputField
         id="name"
         placeholder="Jane Doe"

@@ -12,7 +12,7 @@ interface AuthenticationProps {
 
 const AuthPage: React.FC<AuthenticationProps> = ({ heading, paragraph, formComponent, link, linkText }) => {
   return (
-    <div className="container relative h-screen flex-col items-center justify-center md:grid lg:max-w-none">
+    <>
       <Link
         href={link}
         className={cn(buttonVariants({ variant: "ghost" }), "absolute right-4 top-4 md:right-8 md:top-8")}
@@ -26,7 +26,7 @@ const AuthPage: React.FC<AuthenticationProps> = ({ heading, paragraph, formCompo
         </div>
         {formComponent}
       </div>
-    </div>
+    </>
   );
 };
 

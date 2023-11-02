@@ -27,7 +27,8 @@ export default async function middleware(req: NextRequest) {
     path !== "/login" &&
     path !== "/register" &&
     path !== "/forgot-password" &&
-    !path.startsWith("/reset-password")
+    !path.startsWith("/reset-password") &&
+    !path.startsWith("/verify-email")
   ) {
     return NextResponse.redirect(new URL("/login", req.url));
     // if logged in, redirect away from login pages
