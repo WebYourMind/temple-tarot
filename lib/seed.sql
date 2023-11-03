@@ -31,3 +31,9 @@ CREATE TABLE verification_tokens (
     expires TIMESTAMPTZ NOT NULL,
     token TEXT NOT NULL PRIMARY KEY
 );
+
+CREATE TABLE password_reset_tokens (
+    user_id INTEGER REFERENCES users(id) NOT NULL,
+    token TEXT NOT NULL PRIMARY KEY,
+    expires TIMESTAMPTZ NOT NULL
+);

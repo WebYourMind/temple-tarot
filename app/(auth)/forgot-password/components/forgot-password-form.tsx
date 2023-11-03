@@ -20,11 +20,7 @@ const ForgotPasswordForm = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
-
-      const endpoint = API_URL ? `${API_URL}/auth/password/forgot` : "/api/auth/forgot-password";
-
-      const res = await fetch(endpoint, {
+      const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
         body: JSON.stringify({
           email,

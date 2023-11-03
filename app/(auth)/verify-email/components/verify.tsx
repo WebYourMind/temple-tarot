@@ -23,7 +23,7 @@ const Verify = () => {
         });
 
         const data = (await response.json()) as { message: string; error: string };
-        showMessage(data.message || data.error, data.error !== null);
+        showMessage(data.message || data.error, data.error !== null); // TODO
       } catch (error) {
         showMessage("Verification failed. Please try again later.", true);
       }

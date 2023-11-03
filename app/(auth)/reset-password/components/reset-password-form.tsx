@@ -30,11 +30,7 @@ export default function ResetPasswordForm() {
     try {
       const token = searchParams?.get("token");
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
-
-      const endpoint = API_URL ? `${API_URL}/auth/password/reset` : "/api/auth/reset-password";
-
-      const res = await fetch(endpoint, {
+      const res = await fetch("/api/auth/reset-password", {
         method: "POST",
         body: JSON.stringify({
           token,

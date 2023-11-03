@@ -31,11 +31,7 @@ export default function RegisterForm() {
     if (password === confirmPassword) {
       setIsLoading(true);
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
-
-      const endpoint = API_URL ? `${API_URL}/auth/register` : "/api/auth/register";
-
-      const res = await fetch(endpoint, {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         body: JSON.stringify({
           name,
