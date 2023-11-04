@@ -1,32 +1,23 @@
-import { getServerSession, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { Session } from "next-auth";
-import { User as NextAuthUser } from "next-auth";
-import { JWT } from "next-auth/jwt/types";
+import { getServerSession, type NextAuthOptions, User } from "next-auth";
+import PostgresAdapter from "@auth/pg-adapter";
+import { sql } from "@vercel/postgres";
+import { Pool } from "pg";
+import bcrypt from "bcrypt";
+
+interface ExtendedUser extends User {
+  id: string;
+}
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
-interface User {
-  id: string;
-  email: string;
-  password: string;
-  name: string;
-  token: string;
-}
-
-interface CustomUser extends NextAuthUser {
-  accessToken?: string;
-}
-
-interface ExtendedSession extends Session {
-  user: {
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
-    id?: string;
-    accessToken?: string;
-  };
-}
+const pool = new Pool({
+  host: "localhost",
+  user: "database-user",
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+});
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
@@ -35,57 +26,70 @@ export const authOptions: NextAuthOptions = {
     verifyRequest: `/login`,
     error: "/login", // Error code passed in query string as ?error=
   },
+  adapter: PostgresAdapter(pool),
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {},
       authorize: async (credentials: any) => {
-        const route = await import("app/api/auth/signin/route");
-        const res = (await route.POST(credentials)) as Response;
+        try {
+          const email = credentials.email;
+          const password = credentials.password;
 
-        if (res.status === 200) {
-          const user = (await res.json()) as User;
-          return { ...user, accessToken: user.token } as CustomUser;
-        } else {
-          const errorData = (await res.json()) as { error: string };
-          throw new Error(errorData.error || "An unknown error occurred");
+          // Query the database to find the user with the provided email.
+          const result = await sql`SELECT * FROM users WHERE email = ${email}`;
+
+          // If a user is found, and the password matches, return the user details.
+          if (result.rows.length > 0) {
+            const user = result.rows[0];
+            const passwordMatch = await bcrypt.compare(password, user.hashed_password);
+
+            if (passwordMatch) {
+              return {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+              };
+            }
+          }
+
+          // If no user is found, or the password doesn't match, throw an error.
+          throw new Error("Invalid username or password");
+        } catch (error: any) {
+          throw new Error(error.message || "An unknown error occurred during authentication");
         }
       },
     }),
   ],
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+  },
+
   cookies: {
     sessionToken: {
-      name: "next-auth.session-token",
+      name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
       options: {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        domain: VERCEL_DEPLOYMENT ? `${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` : undefined,
+        // domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` : undefined,
         secure: VERCEL_DEPLOYMENT,
       },
     },
   },
   callbacks: {
-    jwt: async ({ token, user }: { token: JWT; user: CustomUser | null }) => {
+    jwt: async ({ token, user }) => {
       if (user) {
-        token = {
-          ...token,
-          accessToken: user.accessToken,
-        };
+        token.id = user.id; // Adding user id to the token
       }
       return token;
     },
-    session: async ({ session, token }: { session: Session; token: JWT }) => {
-      const userWithToken: ExtendedSession = {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.sub as string,
-          accessToken: token.accessToken as string,
-        },
-      };
-      return userWithToken;
+    session: async ({ session, token }) => {
+      if (session.user) {
+        const user = session.user as ExtendedUser;
+        user.id = token.id as string;
+      }
+      return session;
     },
   },
 };

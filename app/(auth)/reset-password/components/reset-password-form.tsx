@@ -5,31 +5,32 @@ import { useRouter, useSearchParams } from "next/navigation";
 import InputField from "app/(auth)/components/input-field";
 import { Button } from "components/ui/button";
 import { ColorWheelIcon } from "@radix-ui/react-icons";
+import Message from "components/ui/message";
+import { useResponseMessage } from "lib/useResponseMessage";
 
 export default function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const route = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { responseMessage, showMessage } = useResponseMessage({
+    message: "",
+    error: false,
+  });
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      showMessage("Passwords do not match.", true);
       return;
     }
     setIsLoading(true);
 
     try {
-      const token = searchParams;
+      const token = searchParams?.get("token");
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
-
-      const endpoint = API_URL ? `${API_URL}/auth/password/reset` : "/api/auth/reset-password";
-
-      const res = await fetch(endpoint, {
+      const res = await fetch("/api/auth/reset-password", {
         method: "POST",
         body: JSON.stringify({
           token,
@@ -47,7 +48,7 @@ export default function ResetPasswordForm() {
         throw new Error(data.error);
       }
     } catch (error) {
-      setError("An error occurred while processing your request.");
+      showMessage("An error occurred while processing your request.", true);
     }
     setIsLoading(false);
   };
@@ -80,7 +81,7 @@ export default function ResetPasswordForm() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              {error && <div className="rounded border border-red-500 p-2 text-red-500">{error}</div>}
+              {responseMessage.message && <Message error={responseMessage.error}>{responseMessage.message}</Message>}
               <Button disabled={isLoading}>
                 {isLoading && <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />}
                 {isLoading ? "Processing" : "Submit"}
