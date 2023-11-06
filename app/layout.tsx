@@ -1,6 +1,7 @@
 import "styles/tailwind.css";
 import { Metadata } from "next";
 import { Providers } from "app/providers";
+import { Header } from "components/header";
 
 const title = "Merlin AI";
 const description = "A guide for thinking based on natural systems.";
@@ -29,7 +30,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
       </body>
     </html>
   );
