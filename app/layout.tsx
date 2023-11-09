@@ -1,7 +1,7 @@
 import "styles/tailwind.css";
 import { Metadata } from "next";
 import { Providers } from "app/providers";
-import { Header } from "components/header";
+import { Header } from "components/navigation/header";
 
 const title = "Merlin AI";
 const description = "A guide for thinking based on natural systems.";

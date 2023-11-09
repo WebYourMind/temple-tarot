@@ -10,6 +10,7 @@ interface SidebarItemProps {
   menuItem: {
     path: string;
     name: string;
+    icon: React.ReactNode;
   };
 }
 
@@ -23,13 +24,14 @@ export function SidebarItem({ menuItem }: SidebarItemProps) {
     <div className="relative">
       <Link
         href={menuItem.path}
-        className={cn(buttonVariants({ variant: "ghost" }), "group w-full pl-8 pr-16", isActive && "bg-accent")}
+        className={cn(buttonVariants({ variant: "ghost" }), "group w-full pl-4 pr-4", isActive && "bg-accent")}
       >
         <div
-          className="relative max-h-5 flex-1 select-none overflow-hidden text-ellipsis break-all"
+          className="relative flex max-h-5 flex-1 select-none flex-row items-center overflow-hidden text-ellipsis break-all"
           title={menuItem.name}
         >
-          <span className="whitespace-nowrap">{menuItem.name}</span>
+          {menuItem.icon}
+          <span className="ml-3">{menuItem.name}</span>
         </div>
       </Link>
     </div>

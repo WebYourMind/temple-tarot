@@ -1,26 +1,42 @@
 import { Metadata } from "next";
-import LogoutButton from "app/home/components/logout-button";
+import { type Message } from "ai/react";
+import { sql } from "@vercel/postgres";
+import { Chat } from "components/chat/chat";
+import { getSession } from "lib/auth";
 
 export const metadata: Metadata = {
   title: "Merlin AI",
   description: "A guide for thinking based on natural systems.",
 };
 
-export default function Home() {
+async function getExistingMessages(userId: string) {
+  try {
+    // Attempt to retrieve an existing chat thread for the user.
+    const { rows: existingMessages } = await sql`SELECT * FROM chat_messages WHERE user_id=${userId};`;
+
+    if (existingMessages.length > 0) {
+      return existingMessages; // Return existing thread if found.
+    }
+  } catch (error) {
+    console.error("An error occurred while getting or creating a chat thread:", error);
+    throw error; // Re-throw the error to handle it in a calling function.
+  }
+}
+
+export default async function Home() {
+  const data = await getSession();
+  let messages;
+  if (data && data.user) {
+    try {
+      messages = (await getExistingMessages(data.user.id)) as Message[];
+    } catch (error) {
+      // Handle errors, like showing an error message to the user
+      // You might want to display a friendly error message or take other actions.
+    }
+  }
   return (
-    <section className="bg-white dark:bg-gray-900">
-      <div className="mx-auto grid max-w-screen-xl px-4 py-8 text-center lg:py-16">
-        <div className="mx-auto place-self-center">
-          <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none tracking-tight dark:text-white md:text-5xl xl:text-6xl">
-            Merlin AI
-          </h1>
-          <p className="mb-6 max-w-2xl font-light text-gray-500 dark:text-gray-400 md:text-lg lg:mb-8 lg:text-xl">
-            This page temporarily acts as the homepage of the application that should only be accessible for logged-in
-            users.
-          </p>
-          <LogoutButton />
-        </div>
-      </div>
-    </section>
+    <div className="md:pt-16">
+      <Chat initialMessages={messages} />
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import AuthenticationPage from "app/(auth)/components/auth-page";
+import AuthPage from "app/(auth)/components/auth-page";
 import RegisterForm from "app/(auth)/register/components/register-form";
 
 export const metadata: Metadata = {
@@ -9,12 +9,10 @@ export const metadata: Metadata = {
 
 export default function RegistrationPage() {
   return (
-    <AuthenticationPage
+    <AuthPage
       heading="Create an account"
       paragraph="Enter your details below to create your account"
       formComponent={<RegisterForm />}
-      link="/login"
-      linkText="Login"
     />
   );
 }

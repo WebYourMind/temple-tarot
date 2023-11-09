@@ -4,15 +4,15 @@ import Link from "next/link";
 import { cn } from "lib/utils";
 import { Button, buttonVariants } from "components/ui/button";
 import { Sidebar } from "./sidebar";
-import { IconNextChat, IconSeparator } from "./ui/icons";
+import { IconSeparator } from "../ui/icons";
 import { UserMenu } from "./user-menu";
 import { getSession } from "lib/auth";
-import { SidebarList } from "components/sidebar-list";
+import { SidebarList } from "components/navigation/sidebar-list";
 
 export async function Header() {
   const session = await getSession();
   return (
-    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-gradient-to-b from-background/10 via-background/50 to-background/80 px-4">
+    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-white px-4 md:absolute">
       <div className="flex items-center">
         {session?.user ? (
           <Sidebar>
@@ -21,9 +21,10 @@ export async function Header() {
             </React.Suspense>
           </Sidebar>
         ) : (
-          <Link href="/" target="_blank" rel="nofollow">
-            <IconNextChat className="mr-2 h-6 w-6 dark:hidden" inverted />
-            <IconNextChat className="mr-2 hidden h-6 w-6 dark:block" />
+          <Link href="/" target="_blank" rel="nofollow" className="mr-1">
+            {/* <IconNextChat className="mr-2 h-6 w-6 dark:hidden" inverted />
+            <IconNextChat className="mr-2 hidden h-6 w-6 dark:block" /> */}
+            Merlin AI
           </Link>
         )}
         <div className="flex items-center">
@@ -31,16 +32,22 @@ export async function Header() {
           {session?.user ? (
             <UserMenu user={session.user} />
           ) : (
-            <Button variant="link" asChild className="-ml-2">
-              <Link href="/sign-in?callbackUrl=/">Login</Link>
-            </Button>
+            <>
+              <Button variant="link" asChild className="-ml-2">
+                <Link href="/sign-in?callbackUrl=/">Login</Link>
+              </Button>
+
+              <Button variant="link" asChild className="-ml-2">
+                <Link href="/register">Register</Link>
+              </Button>
+            </>
           )}
         </div>
       </div>
       <div className="flex items-center justify-end space-x-2">
         <a href="shift.to" target="_blank" className={cn(buttonVariants())}>
           <span className="hidden sm:block">Shift Thinking</span>
-          <span className="sm:hidden">Deploy</span>
+          <span className="sm:hidden">shift.to</span>
         </a>
       </div>
     </header>

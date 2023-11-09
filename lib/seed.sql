@@ -37,3 +37,11 @@ CREATE TABLE password_reset_tokens (
     token TEXT NOT NULL PRIMARY KEY,
     expires TIMESTAMPTZ NOT NULL
 );
+
+CREATE TABLE chat_messages (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) NOT NULL,
+    content TEXT NOT NULL,
+    role VARCHAR(50) NOT NULL, -- 'user' or 'assistant'
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);

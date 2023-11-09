@@ -2,11 +2,9 @@
 
 import React, { useState, SyntheticEvent } from "react";
 import InputField from "../../components/input-field";
-import { Button } from "components/ui/button";
-import { ColorWheelIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import Message from "components/ui/message";
-import { useResponseMessage } from "lib/useResponseMessage";
+import { useResponseMessage } from "lib/hooks/use-response-message";
+import AuthForm from "app/(auth)/components/auth-form";
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
@@ -43,38 +41,20 @@ const ForgotPasswordForm = () => {
   };
 
   return (
-    <>
-      <div className="flex flex-col space-y-2 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Forgot your password?</h1>
-        <p className="text-sm text-muted-foreground">
-          Enter your email address below and we&apos;ll send you a link to reset it.
-        </p>
-      </div>
-
-      <div className="grid gap-6">
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-2">
-            <InputField
-              id="email"
-              placeholder="name@example.com"
-              type="email"
-              disabled={isLoading}
-              label="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Link href="/login" className="text-xs underline opacity-90">
-              Back to login page
-            </Link>
-            {responseMessage.message && <Message error={responseMessage.error}>{responseMessage.message}</Message>}
-            <Button disabled={isLoading}>
-              {isLoading && <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? "Processing" : "Submit"}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </>
+    <AuthForm isLoading={isLoading} onSubmit={handleSubmit} responseMessage={responseMessage}>
+      <InputField
+        id="email"
+        placeholder="name@example.com"
+        type="email"
+        disabled={isLoading}
+        label="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <Link href="/login" className="text-xs underline opacity-90">
+        Back to login page
+      </Link>
+    </AuthForm>
   );
 };
 

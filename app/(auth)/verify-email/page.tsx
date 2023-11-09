@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Verify from "./components/verify";
+import AuthPage from "../components/auth-page";
 
 export const metadata: Metadata = {
   title: "Email verification - Merlin AI",
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function VerifyEmailPage() {
-  return <Verify />;
+  return <AuthPage heading="Email Verification" paragraph="" formComponent={<Verify />} />;
 }

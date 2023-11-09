@@ -1,9 +1,21 @@
+import { ChatBubbleIcon, EyeOpenIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { SidebarItem } from "./sidebar-item";
 
 const menuItems = [
   {
-    name: "My profile",
-    path: "/profile",
+    name: "Chat with Merlin",
+    path: "/",
+    icon: <ChatBubbleIcon />,
+  },
+  {
+    name: "My Thinking Style Report",
+    path: "/report",
+    icon: <EyeOpenIcon />,
+  },
+  {
+    name: "Retake Thinking Style Quiz",
+    path: "/quiz",
+    icon: <QuestionMarkCircledIcon />,
   },
 ];
 
@@ -16,7 +28,7 @@ export async function SidebarList() {
         </div>
       ) : (
         <div className="p-8 text-center">
-          <p className="text-sm text-muted-foreground">No chat history</p>
+          <p className="text-sm text-muted-foreground">No Menu</p>
         </div>
       )}
     </div>
