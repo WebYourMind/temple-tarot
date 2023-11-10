@@ -45,3 +45,19 @@ CREATE TABLE chat_messages (
     role VARCHAR(50) NOT NULL, -- 'user' or 'assistant'
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE scores (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    analytical DECIMAL(3,2) CHECK (analytical >= 0 AND analytical <= 1),
+    creative DECIMAL(3,2) CHECK (creative >= 0 AND creative <= 1),
+    practical DECIMAL(3,2) CHECK (practical >= 0 AND practical <= 1),
+    reflective DECIMAL(3,2) CHECK (reflective >= 0 AND reflective <= 1),
+    interpersonal DECIMAL(3,2) CHECK (interpersonal >= 0 AND interpersonal <= 1),
+    logical DECIMAL(3,2) CHECK (logical >= 0 AND logical <= 1),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- other useful queries for development
+DELETE FROM chat_messages;

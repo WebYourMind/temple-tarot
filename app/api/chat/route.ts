@@ -19,13 +19,13 @@ async function getThinkingStyleScores() {
 }
 
 // Craft a description for the model
-function createThinkingStyleDescription(scores: any) {
-  return `The user has the following thinking style scores - Analytical: ${scores.analytical}, Creative: ${scores.creative}, Logical: ${scores.logical}, Practical: ${scores.practical}. Tailor your response style to the user's preferences based on their thinking style. Offer solutions that leverage the user's strengths within their thinking styles. Your response should be short, concise, and easily readable.`;
+function createConextPrompt(scores: any) {
+  return `The user has the following thinking style scores - Analytical: ${scores.analytical}, Creative: ${scores.creative}, Logical: ${scores.logical}, Practical: ${scores.practical}. Tailor your response style to the user's preferences based on their thinking style. Offer solutions that leverage the user's strengths within their thinking styles. Base your responses off the teachings of Mark Bonchek. Your response should be short, concise, and easily readable.`;
 }
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { messages, previewToken } = json as any;
+  const { messages, previewToken, thinkingStyle } = json as any;
   const userId = (await getSession())?.user.id;
 
   if (!userId) {
@@ -38,15 +38,9 @@ export async function POST(req: Request) {
     configuration.apiKey = previewToken;
   }
 
-  //   for (const message of messages) {
   const message = messages[messages.length - 1];
-  if (message.role === "user") {
-    await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${message.content}, ${message.role})`;
-  }
-  //   }
-
-  const scores = await getThinkingStyleScores();
-  const thinkingStyleDescription = createThinkingStyleDescription(scores);
+  const contextPrompt = createConextPrompt(thinkingStyle);
+  console.log(contextPrompt);
 
   try {
     const res = await openai.createChatCompletion({
@@ -54,37 +48,52 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "system",
-          content: thinkingStyleDescription,
+          content: contextPrompt,
         },
         message, // user's messages follow here
       ],
       temperature: 0.2,
       stream: true,
-      max_tokens: 1000,
+      //   max_tokens: 1000,
       user: userId.toString(),
     });
+    console.log(res);
+
+    const retryAfter = res?.headers.get("Retry-After");
+    if (retryAfter) {
+      const retryAfterSeconds = parseInt(retryAfter, 10);
+      console.log(`Retrying after ${retryAfterSeconds} seconds.`);
+      // Wait for the specified number of seconds before retrying
+      await new Promise((resolve) => setTimeout(resolve, retryAfterSeconds * 1000));
+      // Consider adding logic to retry the request here
+    }
 
     const stream = OpenAIStream(res, {
       async onCompletion(completion) {
+        await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${message.content}, ${message.role})`;
         await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${completion}, 'assistant')`;
       },
     });
 
     return new StreamingTextResponse(stream);
   } catch (error: any) {
-    console.error("An error occurred:", error);
+    // Log the error status and headers
+    console.error("Error status:", error.response?.status);
+    console.error("Response headers:", [...error.response?.headers.entries()]);
 
-    // If the error object has a response property, it could be an HTTP response
-    if (error.response) {
-      console.error("Response status:", error.response.status);
-      console.error("Response headers:", error.response.headers);
-      console.error("Response data:", error.response.data);
-    } else if (error.request) {
-      // The request was made but no response was received
-      console.error("No response received:", error.request);
-    } else {
-      // Something else triggered an error
-      console.error("Error message:", error.message);
+    // Check for 'Retry-After' header and parse it
+    const retryAfter = error.response?.headers.get("Retry-After");
+    if (retryAfter) {
+      const retryAfterSeconds = parseInt(retryAfter, 10);
+      console.log(`Retrying after ${retryAfterSeconds} seconds.`);
+      // Wait for the specified number of seconds before retrying
+      await new Promise((resolve) => setTimeout(resolve, retryAfterSeconds * 1000));
+      // Consider adding logic to retry the request here
+    }
+
+    // Handle other types of errors or rethrow if not related to rate limiting
+    if (!error.response || error.response.status !== 429) {
+      throw error;
     }
   }
 }

@@ -20,14 +20,16 @@ import { useState } from "react";
 import { Button } from "components/ui/button";
 import { Input } from "components/ui/input";
 import { toast } from "react-hot-toast";
+import { ThinkingStyle } from "app/api/quiz/route";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 export interface ChatProps extends React.ComponentProps<"div"> {
   initialMessages?: Message[];
+  thinkingStyle?: ThinkingStyle;
   id?: string;
 }
 
-export function Chat({ id, initialMessages, className }: ChatProps) {
+export function Chat({ id, initialMessages, thinkingStyle, className }: ChatProps) {
   const [previewToken, setPreviewToken] = useLocalStorage<string | null>("ai-token", null);
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW);
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? "");
@@ -35,6 +37,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     initialMessages,
     body: {
       id,
+      thinkingStyle,
       previewToken,
     },
     onResponse(response) {
