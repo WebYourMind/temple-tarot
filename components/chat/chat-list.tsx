@@ -3,11 +3,11 @@ import { type Message } from "ai";
 import { Separator } from "components/ui/separator";
 import { ChatMessage } from "components/chat/chat-message";
 
-export interface ChatList {
+export interface ChatListType {
   messages: Message[];
 }
 
-export function ChatList({ messages }: ChatList) {
+export function ChatList({ messages }: ChatListType) {
   if (!messages.length) {
     return null;
   }

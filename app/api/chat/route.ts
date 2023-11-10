@@ -11,21 +11,13 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-// Assuming you have a function to get thinking style scores
-async function getThinkingStyleScores() {
-  // Replace with actual logic to retrieve thinking style scores
-  const scores = { analytical: 80, creative: 70, logical: 90, practical: 60 };
-  return scores;
-}
-
-// Craft a description for the model
-function createConextPrompt(scores: any) {
+function createContextPrompt(scores: any) {
   return `The user has the following thinking style scores - Analytical: ${scores.analytical}, Creative: ${scores.creative}, Logical: ${scores.logical}, Practical: ${scores.practical}. Tailor your response style to the user's preferences based on their thinking style. Offer solutions that leverage the user's strengths within their thinking styles. Base your responses off the teachings of Mark Bonchek. Your response should be short, concise, and easily readable.`;
 }
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { messages, previewToken, thinkingStyle } = json as any;
+  const { messages, thinkingStyle } = json as any;
   const userId = (await getSession())?.user.id;
 
   if (!userId) {
@@ -33,18 +25,20 @@ export async function POST(req: Request) {
       status: 401,
     });
   }
+  const model = process.env.GPT_MODEL;
 
-  if (previewToken) {
-    configuration.apiKey = previewToken;
+  if (!model) {
+    return new Response("No GPT model set", {
+      status: 500,
+    });
   }
 
   const message = messages[messages.length - 1];
-  const contextPrompt = createConextPrompt(thinkingStyle);
-  console.log(contextPrompt);
+  const contextPrompt = createContextPrompt(thinkingStyle);
 
   try {
     const res = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo", // "gpt-4-1106-preview",
+      model,
       messages: [
         {
           role: "system",
@@ -57,7 +51,6 @@ export async function POST(req: Request) {
       //   max_tokens: 1000,
       user: userId.toString(),
     });
-    console.log(res);
 
     const retryAfter = res?.headers.get("Retry-After");
     if (retryAfter) {

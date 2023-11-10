@@ -34,9 +34,9 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
             p({ children }) {
               return <p className="mb-2 last:mb-0">{children}</p>;
             },
-            code({ node, inline, className, children, ...props }: any) {
+            code({ inline, className, children, ...props }: any) {
               if (children.length) {
-                if (children[0] == "▍") {
+                if (children[0] === "▍") {
                   return <span className="mt-1 animate-pulse cursor-default">▍</span>;
                 }
 

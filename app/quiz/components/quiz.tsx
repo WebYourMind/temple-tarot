@@ -23,6 +23,14 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     if (userId) {
       setIsLoading(true);
       const scores = calculateScores(answers);
+      //   const scores = {
+      //     analytical: "0.73",
+      //     creative: "0.93",
+      //     practical: "0.80",
+      //     reflective: "1.00",
+      //     interpersonal: "0.87",
+      //     logical: "0.93",
+      //   };
 
       const res = await fetch("/api/quiz", {
         method: "POST",
@@ -38,7 +46,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
       const data = (await res.json()) as any;
 
       if (res.status === 201) {
-        router.push("/chat");
+        router.push("/report");
         console.log("success", data);
       } else if (data.error) {
         console.error(data.error);
@@ -51,7 +59,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   }
 
   return (
-    <div className="container mx-auto mb-8 flex justify-center">
+    <div className="container mx-auto my-16 flex justify-center">
       <form onSubmit={handleSubmit}>
         {questions.map((section, sectionIndex) => (
           <div key={sectionIndex} className="mb-8">
@@ -68,7 +76,6 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
                         value={index + 1}
                         onChange={() => handleOptionChange(question, index + 1)}
                         checked={answers[question] === index + 1}
-                        className="form-radio"
                       />
                       <span className="ml-2">{index + 1}</span>
                     </label>

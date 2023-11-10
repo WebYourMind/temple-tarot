@@ -48,7 +48,8 @@ export async function GET(request: NextRequest) {
 
     // Query to select the latest scores row for the given user ID
     const { rows: scores } = await sql`
-      SELECT * FROM scores
+      SELECT analytical, creative, interpersonal, logical, practical, reflective 
+      FROM scores
       WHERE user_id = ${userId}
       ORDER BY created_at DESC
       LIMIT 1;
