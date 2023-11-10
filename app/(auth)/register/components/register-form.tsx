@@ -4,7 +4,7 @@ import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { useResponseMessage } from "lib/useResponseMessage";
+import { useResponseMessage } from "lib/hooks/use-response-message";
 
 interface ResponseData {
   ok: boolean;
@@ -72,7 +72,7 @@ export default function RegisterForm() {
   }
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={onSubmit} error={responseMessage.message}>
+    <AuthForm isLoading={isLoading} onSubmit={onSubmit} responseMessage={responseMessage}>
       <InputField
         id="name"
         placeholder="Jane Doe"

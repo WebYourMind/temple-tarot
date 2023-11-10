@@ -5,7 +5,7 @@ import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useResponseMessage } from "lib/useResponseMessage";
+import { useResponseMessage } from "lib/hooks/use-response-message";
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -38,7 +38,7 @@ export default function LoginForm() {
   }
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={onSubmit} error={responseMessage.message}>
+    <AuthForm isLoading={isLoading} onSubmit={onSubmit} responseMessage={responseMessage}>
       <InputField
         id="email"
         placeholder="name@example.com"

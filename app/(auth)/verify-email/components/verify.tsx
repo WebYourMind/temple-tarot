@@ -2,7 +2,7 @@
 import { useCallback, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Message from "components/ui/message";
-import { useResponseMessage } from "lib/useResponseMessage";
+import { useResponseMessage } from "lib/hooks/use-response-message";
 
 const Verify = () => {
   const searchParams = useSearchParams();
@@ -40,14 +40,7 @@ const Verify = () => {
     }
   }, [searchParams, showMessage, verifyEmail]);
 
-  return (
-    <>
-      <div className="flex flex-col space-y-2 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Email Verification</h1>
-      </div>
-      {responseMessage.message && <Message error={responseMessage.error}>{responseMessage.message}</Message>}
-    </>
-  );
+  return <>{responseMessage.message && <Message error={responseMessage.error}>{responseMessage.message}</Message>}</>;
 };
 
 export default Verify;

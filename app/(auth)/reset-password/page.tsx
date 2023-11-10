@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import ResetPasswordForm from "./components/reset-password-form";
+import AuthPage from "../components/auth-page";
 
 export const metadata: Metadata = {
   title: "Reset password - Merlin AI",
@@ -7,5 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default function ForgotPassword() {
-  return <ResetPasswordForm />;
+  return (
+    <AuthPage heading="Reset Password" paragraph="Enter a new password below." formComponent={<ResetPasswordForm />} />
+  );
 }

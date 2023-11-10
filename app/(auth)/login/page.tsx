@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import AuthenticationPage from "app/(auth)/components/auth-page";
+import AuthPage from "app/(auth)/components/auth-page";
 import LoginForm from "app/(auth)/login/components/login-form";
 
 export const metadata: Metadata = {
@@ -9,12 +9,10 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <AuthenticationPage
+    <AuthPage
       heading="Welcome back"
       paragraph="Enter your login details below to sign in to your account"
       formComponent={<LoginForm />}
-      link="/register"
-      linkText="Register"
     />
   );
 }
