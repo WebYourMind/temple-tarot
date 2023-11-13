@@ -92,11 +92,11 @@ export default function Report({ scores, report: savedReport }: any) {
   }
 
   return (
-    <div className="mx-auto my-20 max-w-4xl rounded-md bg-white">
+    <div className="mx-auto my-20 max-w-4xl rounded-md bg-white px-5">
       {scores && isLoading && !report ? (
         <p>Loading report...</p>
       ) : (
-        <ReactMarkdown className="prose prose-indigo prose-lg">{`${report}`}</ReactMarkdown>
+        <ReactMarkdown className="prose prose-indigo md:prose-lg">{`${report}`}</ReactMarkdown>
       )}
       {!scores && (
         <div className="mx-auto mt-5 flex w-full flex-col justify-center space-y-6 sm:w-[350px]">

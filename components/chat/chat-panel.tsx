@@ -23,7 +23,7 @@ export function ChatPanel({ id, isLoading, stop, append, reload, input, setInput
             </Button>
           ) : (
             messages?.length > 0 && (
-              <Button variant="outline" onClick={() => reload()} className="bg-background">
+              <Button variant="outline" onClick={() => reload()} className="mb-5 bg-background">
                 <IconRefresh className="mr-2" />
                 Regenerate response
               </Button>

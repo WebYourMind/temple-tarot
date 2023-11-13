@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "components/ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "components/ui/button";
 import { Input } from "components/ui/input";
 import { toast } from "react-hot-toast";
@@ -47,9 +47,14 @@ export function Chat({ id, initialMessages, score, className }: ChatProps) {
     },
   });
 
+  useEffect(() => {
+    // Scroll to the bottom of the page
+    window.scrollTo(0, document.documentElement.scrollHeight);
+  }, [messages]);
+
   return (
     <>
-      <div className={cn("pb-[200px] pt-4 md:pt-10", className)}>
+      <div className={cn("pb-[125px] pt-4 md:pt-10", className)}>
         {messages.length ? (
           <>
             <ChatList messages={messages} />

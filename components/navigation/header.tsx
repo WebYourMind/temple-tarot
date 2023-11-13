@@ -12,7 +12,7 @@ import { SidebarList } from "components/navigation/sidebar-list";
 export async function Header() {
   const session = await getSession();
   return (
-    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-white px-4 md:absolute">
+    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-white px-4">
       <div className="flex items-center">
         {session?.user ? (
           <Sidebar>
@@ -22,8 +22,6 @@ export async function Header() {
           </Sidebar>
         ) : (
           <Link href="/" target="_blank" rel="nofollow" className="mr-1">
-            {/* <IconNextChat className="mr-2 h-6 w-6 dark:hidden" inverted />
-            <IconNextChat className="mr-2 hidden h-6 w-6 dark:block" /> */}
             Merlin AI
           </Link>
         )}

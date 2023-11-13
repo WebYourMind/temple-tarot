@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "lib/utils";
 import { buttonVariants } from "components/ui/button";
+import { SheetClose } from "components/ui/sheet";
 
 interface SidebarItemProps {
   menuItem: {
@@ -22,18 +23,20 @@ export function SidebarItem({ menuItem }: SidebarItemProps) {
 
   return (
     <div className="relative">
-      <Link
-        href={menuItem.path}
-        className={cn(buttonVariants({ variant: "ghost" }), "group w-full pl-4 pr-4", isActive && "bg-accent")}
-      >
-        <div
-          className="relative flex max-h-5 flex-1 select-none flex-row items-center overflow-hidden text-ellipsis break-all"
-          title={menuItem.name}
+      <SheetClose asChild>
+        <Link
+          href={menuItem.path}
+          className={cn(buttonVariants({ variant: "ghost" }), "group w-full pl-4 pr-4", isActive && "bg-accent")}
         >
-          {menuItem.icon}
-          <span className="ml-3">{menuItem.name}</span>
-        </div>
-      </Link>
+          <div
+            className="relative flex max-h-5 flex-1 select-none flex-row items-center overflow-hidden text-ellipsis break-all"
+            title={menuItem.name}
+          >
+            {menuItem.icon}
+            <span className="ml-3">{menuItem.name}</span>
+          </div>
+        </Link>
+      </SheetClose>
     </div>
   );
 }
