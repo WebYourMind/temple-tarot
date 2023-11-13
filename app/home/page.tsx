@@ -3,7 +3,7 @@ import { type Message } from "ai/react";
 import { sql } from "@vercel/postgres";
 import { Chat } from "components/chat/chat";
 import { getSession } from "lib/auth";
-import { ThinkingStyle } from "app/api/quiz/route";
+import { Score } from "lib/quiz";
 
 export const metadata: Metadata = {
   title: "Merlin AI",
@@ -46,18 +46,18 @@ async function getExistingMessages(userId: string) {
 export default async function Home() {
   const data = await getSession();
   let messages;
-  let thinkingStyle;
+  let score;
   if (data && data.user) {
     try {
       messages = (await getExistingMessages(data.user.id)) as Message[];
-      thinkingStyle = (await getThinkingStyle(data.user.id)) as ThinkingStyle;
+      score = (await getThinkingStyle(data.user.id)) as Score;
     } catch (error) {
       console.error(error);
     }
   }
   return (
     <div className="md:pt-16">
-      <Chat initialMessages={messages} thinkingStyle={thinkingStyle} />
+      <Chat initialMessages={messages} score={score} />
     </div>
   );
 }

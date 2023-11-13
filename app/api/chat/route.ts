@@ -4,6 +4,7 @@ import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 
 import { getSession } from "lib/auth";
+import { Score } from "lib/quiz";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -11,13 +12,13 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-function createContextPrompt(scores: any) {
-  return `The user has the following thinking style scores - Analytical: ${scores.analytical}, Creative: ${scores.creative}, Logical: ${scores.logical}, Practical: ${scores.practical}. Tailor your response style to the user's preferences based on their thinking style. Offer solutions that leverage the user's strengths within their thinking styles. Base your responses off the teachings of Mark Bonchek. Your response should be short, concise, and easily readable.`;
+function createContextPrompt(scores: Score) {
+  return `The user has the following thinking style scores - explorer: ${scores.explorer}, analyst: ${scores.analyst}, designer: ${scores.designer}, optimizer: ${scores.optimizer}, connector: ${scores.connector}, nurturer: ${scores.nurturer}, energizer: ${scores.energizer}, achiever: ${scores.achiever}. Tailor your response style to the user's archetypes based on their thinking styles. Offer solutions that leverage the user's strengths within their archetypes. Base your response off the teachings of Mark Bonchek. Your response should be short, concise, and easily readable.`;
 }
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { messages, thinkingStyle } = json as any;
+  const { messages, score } = json as any;
   const userId = (await getSession())?.user.id;
 
   if (!userId) {
@@ -34,7 +35,7 @@ export async function POST(req: Request) {
   }
 
   const message = messages[messages.length - 1];
-  const contextPrompt = createContextPrompt(thinkingStyle);
+  const contextPrompt = createContextPrompt(score);
 
   try {
     const res = await openai.createChatCompletion({

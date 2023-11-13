@@ -23,14 +23,6 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     if (userId) {
       setIsLoading(true);
       const scores = calculateScores(answers);
-      //   const scores = {
-      //     analytical: "0.73",
-      //     creative: "0.93",
-      //     practical: "0.80",
-      //     reflective: "1.00",
-      //     interpersonal: "0.87",
-      //     logical: "0.93",
-      //   };
 
       const res = await fetch("/api/quiz", {
         method: "POST",

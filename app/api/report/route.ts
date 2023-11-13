@@ -1,24 +1,26 @@
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
-import { ThinkingStyle } from "../quiz/route";
+import { Score } from "lib/quiz";
 import { sql } from "@vercel/postgres";
 import { getSession } from "lib/auth";
 
 const createReportGenerationPrompt = ({
-  analytical,
-  creative,
-  interpersonal,
-  logical,
-  practical,
-  reflective,
-}: ThinkingStyle) => `
-Generate a comprehensive insight report in markdown format for a user based on the following thinking style profile: analytical(${analytical}), creative(${creative}), interpersonal(${interpersonal}), logical(${logical}), practical(${practical}), reflective(${reflective}). Please provide personalized advice that includes:
+  explorer,
+  analyst,
+  designer,
+  optimizer,
+  connector,
+  nurturer,
+  energizer,
+  achiever,
+}: Score) => `
+Generate a comprehensive insight report in markdown format for a user based on the following thinking style profile: explorer(${explorer}), analyst(${analyst}), designer(${designer}), optimizer(${optimizer}), connector(${connector}), nurturer(${nurturer}), energizer(${energizer}), achiever(${achiever}). Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology. Please provide personalized advice that includes:
 
-1. Strategies for personal growth and learning that align with their thinking style.
-2. Tips for decision-making and problem-solving tailored to their analytic and dynamic tendencies.
-3. Recommendations for enhancing interpersonal relationships considering their pragmatic and relational scores.
+1. Strategies for personal growth and learning that align with their thinking archetype.
+2. Tips for decision-making and problem-solving tailored to their analytical and systematic tendencies.
+3. Recommendations for enhancing interpersonal relationships considering their communicative and caring scores.
 4. Ideas for managing change and uncertainty in personal and professional contexts.
-5. Techniques for maintaining motivation and energy based on the activities that best suit their thinking style.
+5. Techniques for maintaining motivation and energy based on the activities that best suit their thinking archetype.
 6. Suggestions for career development and navigating workplace dynamics.
 
 End the report with a short summary of key takeaways for maintaining balance and overall well-being.
@@ -26,7 +28,7 @@ End the report with a short summary of key takeaways for maintaining balance and
 
 export async function POST(req: Request) {
   // Extract the `prompt` from the body of the request
-  const { thinkingStyle } = (await req.json()) as { thinkingStyle: ThinkingStyle };
+  const { scores } = (await req.json()) as { scores: Score };
 
   const userId = (await getSession())?.user.id;
 
@@ -44,7 +46,7 @@ export async function POST(req: Request) {
     });
   }
 
-  const content = createReportGenerationPrompt(thinkingStyle);
+  const content = createReportGenerationPrompt(scores);
 
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY, // Replace with your API key

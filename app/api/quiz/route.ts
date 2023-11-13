@@ -1,25 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
-
-export interface ThinkingStyle {
-  analytical: number;
-  creative: number;
-  interpersonal: number;
-  logical: number;
-  practical: number;
-  reflective: number;
-}
+import { Score } from "lib/quiz";
 
 export async function POST(request: NextRequest) {
   try {
     const { scores, userId } = (await request.json()) as {
-      scores: ThinkingStyle;
+      scores: Score;
       userId: string;
     };
 
-    await sql`INSERT INTO scores (user_id, analytical, creative, practical, reflective, interpersonal, logical)
-        VALUES (${userId}, ${scores.analytical}, ${scores.creative}, ${scores.practical}, ${scores.reflective}, ${scores.interpersonal}, ${scores.logical})
-        RETURNING *`;
+    await sql`INSERT INTO scores (
+        user_id, 
+        explorer, 
+        analyst, 
+        designer, 
+        optimizer, 
+        connector, 
+        nurturer, 
+        energizer, 
+        achiever
+        ) VALUES (
+        ${userId}, 
+        ${scores.explorer}, 
+        ${scores.analyst}, 
+        ${scores.designer}, 
+        ${scores.optimizer}, 
+        ${scores.connector}, 
+        ${scores.nurturer}, 
+        ${scores.energizer}, 
+        ${scores.achiever}
+    ) RETURNING *`;
 
     return NextResponse.json({ message: "Scores added successfully." }, { status: 201 });
   } catch (error) {
@@ -48,7 +58,7 @@ export async function GET(request: NextRequest) {
 
     // Query to select the latest scores row for the given user ID
     const { rows: scores } = await sql`
-      SELECT analytical, creative, interpersonal, logical, practical, reflective 
+      SELECT * 
       FROM scores
       WHERE user_id = ${userId}
       ORDER BY created_at DESC

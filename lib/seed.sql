@@ -49,12 +49,14 @@ CREATE TABLE chat_messages (
 CREATE TABLE scores (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
-    analytical DECIMAL(3,2) CHECK (analytical >= 0 AND analytical <= 1),
-    creative DECIMAL(3,2) CHECK (creative >= 0 AND creative <= 1),
-    practical DECIMAL(3,2) CHECK (practical >= 0 AND practical <= 1),
-    reflective DECIMAL(3,2) CHECK (reflective >= 0 AND reflective <= 1),
-    interpersonal DECIMAL(3,2) CHECK (interpersonal >= 0 AND interpersonal <= 1),
-    logical DECIMAL(3,2) CHECK (logical >= 0 AND logical <= 1),
+    explorer DECIMAL(3,2) CHECK (explorer >= 0 AND explorer <= 1),
+    analyst DECIMAL(3,2) CHECK (analyst >= 0 AND analyst <= 1),
+    designer DECIMAL(3,2) CHECK (designer >= 0 AND designer <= 1),
+    optimizer DECIMAL(3,2) CHECK (optimizer >= 0 AND optimizer <= 1),
+    connector DECIMAL(3,2) CHECK (connector >= 0 AND connector <= 1),
+    nurturer DECIMAL(3,2) CHECK (nurturer >= 0 AND nurturer <= 1),
+    energizer DECIMAL(3,2) CHECK (energizer >= 0 AND energizer <= 1),
+    achiever DECIMAL(3,2) CHECK (achiever >= 0 AND achiever <= 1),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -67,4 +69,5 @@ CREATE TABLE reports (
 );
 
 -- other useful queries for development
-DELETE FROM chat_messages;
+DELETE FROM scores;
+DROP TABLE scores CASCADE;

@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { Button } from "components/ui/button";
 import { useRouter } from "next/navigation";
 
-export default function Report({ thinkingStyle, report: savedReport }: any) {
+export default function Report({ scores, report: savedReport }: any) {
   const [report, setReport] = useState(savedReport?.report || "");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function Report({ thinkingStyle, report: savedReport }: any) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ thinkingStyle }),
+          body: JSON.stringify({ scores }),
           signal: controller.signal,
         });
 
@@ -76,7 +76,7 @@ export default function Report({ thinkingStyle, report: savedReport }: any) {
       }
     }
 
-    if (!savedReport.report && thinkingStyle) {
+    if (!report && scores) {
       generateReport();
     }
 
@@ -85,7 +85,7 @@ export default function Report({ thinkingStyle, report: savedReport }: any) {
       isSubscribed = false;
       controller.abort();
     };
-  }, [thinkingStyle, savedReport.report]); // Effect only runs if thinkingStyle changes
+  }, [scores]); // Effect only runs if thinkingStyle changes
 
   function navToQuiz() {
     router.push("/quiz");
@@ -93,12 +93,12 @@ export default function Report({ thinkingStyle, report: savedReport }: any) {
 
   return (
     <div className="mx-auto my-20 max-w-4xl rounded-md bg-white">
-      {thinkingStyle && isLoading && !report ? (
+      {scores && isLoading && !report ? (
         <p>Loading report...</p>
       ) : (
         <ReactMarkdown className="prose prose-indigo prose-lg">{`${report}`}</ReactMarkdown>
       )}
-      {!thinkingStyle && (
+      {!scores && (
         <div className="mx-auto mt-5 flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <h1 className="text-2xl font-semibold tracking-tight">Nothing to see here...</h1>
           <p className="text-sm text-muted-foreground">

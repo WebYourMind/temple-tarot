@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { sql } from "@vercel/postgres";
 import Report from "./components/report";
 import { getSession } from "lib/auth";
-import { ThinkingStyle } from "app/api/quiz/route";
+import { Score } from "lib/quiz";
 
 export const metadata: Metadata = {
   title: "Merlin AI",
@@ -20,7 +20,7 @@ async function getThinkingStyle(userId: string) {
     `;
 
     if (scores.length > 0) {
-      return scores[0] as ThinkingStyle; // Return existing thread if found.
+      return scores[0] as Score; // Return existing thread if found.
     }
   } catch (error) {
     console.error("An error occurred while getting user's thinking style:", error);
@@ -49,11 +49,11 @@ async function getReport(userId: string) {
 
 export default async function Home() {
   const data = await getSession();
-  let thinkingStyle;
+  let scores;
   let report;
   if (data && data.user) {
     try {
-      thinkingStyle = (await getThinkingStyle(data.user.id)) as any;
+      scores = (await getThinkingStyle(data.user.id)) as any;
       report = (await getReport(data.user.id)) as any;
     } catch (error) {
       console.error(error);
@@ -61,7 +61,7 @@ export default async function Home() {
   }
   return (
     <div className="md:pt-16">
-      <Report thinkingStyle={thinkingStyle} report={report} />
+      <Report scores={scores} report={report} />
     </div>
   );
 }
