@@ -1,4 +1,3 @@
-// import { kv } from "@vercel/kv";
 import { sql } from "@vercel/postgres";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
@@ -13,7 +12,12 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 function createContextPrompt(scores: Score) {
-  return `The user has the following thinking style scores - explorer: ${scores.explorer}, analyst: ${scores.analyst}, designer: ${scores.designer}, optimizer: ${scores.optimizer}, connector: ${scores.connector}, nurturer: ${scores.nurturer}, energizer: ${scores.energizer}, achiever: ${scores.achiever}. Tailor your response style to the user's archetypes based on their thinking styles. Offer solutions that leverage the user's strengths within their archetypes. Base your response off the teachings of Mark Bonchek. Your response should be short, concise, and easily readable.`;
+  return `The user has the following thinking style scores - explorer: ${scores.explorer}, analyst: ${scores.analyst}, designer: ${scores.designer}, optimizer: ${scores.optimizer}, connector: ${scores.connector}, nurturer: ${scores.nurturer}, energizer: ${scores.energizer}, achiever: ${scores.achiever}.
+  Tailor your response style to the user's archetypes based on their thinking styles.
+  Offer solutions that leverage the user's strengths within their archetypes.
+  Present your advice clearly, drawing upon Mark Bonchek's framework or nature's systems as applicable.
+  Your response should be short, concise, and easily readable.
+  Conclude with a thought-provoking question when appropriate.`;
 }
 
 export async function POST(req: Request) {
@@ -34,7 +38,8 @@ export async function POST(req: Request) {
     });
   }
 
-  const message = messages[messages.length - 1];
+  const latestMessage = messages[messages.length - 1];
+  const relevantMessages = messages.slice(-2);
   const contextPrompt = createContextPrompt(score);
 
   try {
@@ -45,7 +50,7 @@ export async function POST(req: Request) {
           role: "system",
           content: contextPrompt,
         },
-        message, // user's messages follow here
+        ...relevantMessages,
       ],
       temperature: 0.2,
       stream: true,
@@ -53,18 +58,9 @@ export async function POST(req: Request) {
       user: userId.toString(),
     });
 
-    const retryAfter = res?.headers.get("Retry-After");
-    if (retryAfter) {
-      const retryAfterSeconds = parseInt(retryAfter, 10);
-      console.log(`Retrying after ${retryAfterSeconds} seconds.`);
-      // Wait for the specified number of seconds before retrying
-      await new Promise((resolve) => setTimeout(resolve, retryAfterSeconds * 1000));
-      // Consider adding logic to retry the request here
-    }
-
     const stream = OpenAIStream(res, {
       async onCompletion(completion) {
-        await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${message.content}, ${message.role})`;
+        await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${latestMessage.content}, ${latestMessage.role})`;
         await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${completion}, 'assistant')`;
       },
     });

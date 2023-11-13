@@ -47,7 +47,7 @@ async function getReport(userId: string) {
   }
 }
 
-export default async function Home() {
+export default async function ReportPage() {
   const data = await getSession();
   let scores;
   let report;

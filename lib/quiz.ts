@@ -22,6 +22,114 @@ type QuestionSection = {
   questions: string[];
 };
 
+export const initialQuestions = [
+  {
+    section: "Macro/Micro Lens",
+    questions: [
+      {
+        prompt:
+          "Considering the saying about the forest and the trees, where do you focus when faced with a new problem or situation?",
+        choices: [
+          {
+            option: "Macro (I see the forest): I focus on the big picture, looking for overarching trends and patterns",
+            archetypes: ["explorer", "designer"],
+            lens: "Macro",
+            points: 3,
+          },
+          {
+            option: "Mostly Macro: While I consider the larger context, I do pay attention to key details",
+            archetypes: ["explorer", "designer"],
+            lens: "Macro",
+            points: 2,
+          },
+          {
+            option:
+              "Balanced: (I see the forest and the trees) I like to see both the overall picture and the intricate details as needed",
+            archetypes: ["explorer", "designer", "optimizer", "analyst"],
+            lens: "Balanced",
+            points: 1,
+          },
+          {
+            option: "Mostly Micro: I tend to delve into the details, although I keep the broader implications in mind",
+            archetypes: ["optimizer", "analyst"],
+            lens: "Micro",
+            points: 2,
+          },
+          {
+            option: "Very Micro (I see the leaves): I concentrate on the specifics and fine points of the situation",
+            archetypes: ["optimizer", "analyst"],
+            lens: "Micro",
+            points: 3,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    section: "Head/Heart Lens",
+    questions: [
+      {
+        prompt: "When faced with a decision or problem, which statement aligns more with your instinctive focus?",
+        choices: [
+          {
+            option:
+              "More Head: I tend to focus on ideas, employing facts and frameworks or constructing stories to make sense of situations",
+            archetypes: ["explorer", "analyst"],
+            lens: "Head",
+            points: 3,
+          },
+          {
+            option:
+              "More Heart: I prioritize relationships, connecting people, nurturing talent, and understanding emotional dynamics",
+            archetypes: ["nurturer", "connector"],
+            lens: "Heart",
+            points: 3,
+          },
+          {
+            option:
+              "Even: I seek a balance, considering both logical narratives and the emotional dimensions of situations and relationships",
+            archetypes: ["explorer", "nurturer", "analyst", "connector"],
+            lens: "Balanced",
+            points: 1,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    section: "Means/Ends Lens",
+    questions: [
+      {
+        prompt:
+          "In a collaborative project or when solving problems, which approach do you gravitate towards naturally?",
+        choices: [
+          {
+            option:
+              "More Means (HOW and WHEN): I am drawn to crafting the process, improving efficiency, and ensuring the design is effective",
+            archetypes: ["designer", "optimizer"],
+            lens: "Means",
+            points: 3,
+          },
+          {
+            option:
+              "More Ends (WHAT and WHY): My focus is on achieving goals, driving results, and rallying the team around a shared objective for success",
+            archetypes: ["achiever", "energizer"],
+            lens: "Ends",
+            points: 3,
+          },
+          {
+            option:
+              "Blend of Both: I strike a balance, giving equal attention to design and efficiency, energy and execution",
+            archetypes: ["designer", "optimizer", "achiever", "energizer"],
+            lens: "Balanced",
+            points: 1,
+          },
+        ],
+      },
+    ],
+  },
+];
+
 export const questions: QuestionSection[] = [
   {
     section: "Macro Head",
@@ -80,6 +188,38 @@ export const questions: QuestionSection[] = [
     ],
   },
 ];
+
+export function calculateInitialResults(answers: any) {
+  // Initialize the results object with all archetypes set to 0
+  const results = {
+    explorer: 0,
+    analyst: 0,
+    designer: 0,
+    optimizer: 0,
+    connector: 0, // Assuming 'connector' is a valid archetype you want to track
+    nurturer: 0,
+    energizer: 0,
+    achiever: 0,
+  };
+
+  // Iterate over each answer
+  Object.values(answers).forEach((answer: any) => {
+    // Check if 'archetypes' is an array and iterate over it if so
+    const archetypes = answer.archetypes || (answer.archetype ? [answer.archetype] : []);
+    archetypes.forEach((key: any) => {
+      const archetype = key as Archetype;
+      // Add the points to the corresponding archetype in the results object
+      if (archetype in results) {
+        // Check if the archetype exists in the results object
+        results[archetype] += answer.points || 0; // Add points, defaulting to 0 if not specified
+      } else {
+        console.warn(`Unrecognized archetype: ${archetype}`); // Warn about unrecognized archetypes
+      }
+    });
+  });
+
+  return results;
+}
 
 export function calculateScores(answers: Answer): Score {
   // Initialize scores for each archetype

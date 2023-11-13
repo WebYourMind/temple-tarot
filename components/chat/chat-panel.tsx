@@ -17,7 +17,7 @@ export function ChatPanel({ id, isLoading, stop, append, reload, input, setInput
       <div className="mx-auto sm:max-w-2xl sm:px-4">
         <div className="flex h-10 items-center justify-center">
           {isLoading ? (
-            <Button variant="outline" onClick={() => stop()} className="bg-background">
+            <Button variant="outline" onClick={() => stop()} className="mb-5 bg-background">
               <IconStop className="mr-2" />
               Stop generating
             </Button>

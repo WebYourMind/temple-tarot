@@ -11,8 +11,16 @@ type Answer = {
 
 const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   const [answers, setAnswers] = useState<Answer>({});
+  // const [initialAnswers, setInitialAnswers] = useState<any>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+
+  // const handleInitialOptionChange = (questionPrompt: string, selectedChoice: any) => {
+  //   setInitialAnswers((prevAnswers: any) => ({
+  //     ...prevAnswers,
+  //     [questionPrompt]: selectedChoice, // Store the entire choice object
+  //   }));
+  // };
 
   const handleOptionChange = (question: string, score: number) => {
     setAnswers((prevAnswers) => ({ ...prevAnswers, [question]: score }));
@@ -22,6 +30,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     event.preventDefault();
     if (userId) {
       setIsLoading(true);
+      // const initialScores = calculateInitialResults(initialAnswers);
       const scores = calculateScores(answers);
 
       const res = await fetch("/api/quiz", {
@@ -51,38 +60,63 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   }
 
   return (
-    <div className="container mx-auto my-16 flex justify-center">
-      <form onSubmit={handleSubmit}>
-        {questions.map((section, sectionIndex) => (
+    <form onSubmit={handleSubmit}>
+      {/* {initialQuestions.map((section, sectionIndex) => (
           <div key={sectionIndex} className="mb-8">
             <h2 className="mb-4 text-xl font-bold">{section.section}</h2>
-            {section.questions.map((question: string, questionIndex: number) => (
+            {section.questions.map((question, questionIndex) => (
               <div key={questionIndex} className="mb-4">
-                <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-400">{question}</label>
-                <div className="flex gap-2">
-                  {Array.from({ length: 5 }, (_, index) => (
-                    <label key={index} className="inline-flex items-center">
+                <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-400">
+                  {question.prompt}
+                </label>
+                <div className="flex flex-col gap-4">
+                  {question.choices.map((choice, choiceIndex) => (
+                    <label key={choiceIndex} className="flex items-center">
                       <input
                         type="radio"
-                        name={question}
-                        value={index + 1}
-                        onChange={() => handleOptionChange(question, index + 1)}
-                        checked={answers[question] === index + 1}
+                        name={question.prompt} // using prompt as the name to group choices
+                        className="border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        value={choice.option}
+                        onChange={() => handleInitialOptionChange(question.prompt, choice)}
+                        checked={initialAnswers[question.prompt]?.option === choice.option}
                       />
-                      <span className="ml-2">{index + 1}</span>
+                      <span className="ml-2">{choice.option}</span>
                     </label>
                   ))}
                 </div>
               </div>
             ))}
           </div>
-        ))}
-        <Button type="submit" disabled={isLoading}>
-          {isLoading && <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />}
-          {isLoading ? "Processing" : "Submit"}
-        </Button>
-      </form>
-    </div>
+        ))} */}
+      {questions.map((section, sectionIndex) => (
+        <div key={sectionIndex} className="mb-8">
+          <h2 className="mb-4 text-xl font-bold">{section.section}</h2>
+          {section.questions.map((question: string, questionIndex: number) => (
+            <div key={questionIndex} className="mb-4">
+              <label className="mb-2 block text-sm">{question}</label>
+              <div className="flex gap-2">
+                {Array.from({ length: 5 }, (_, index) => (
+                  <label key={index} className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      name={question}
+                      value={index + 1}
+                      onChange={() => handleOptionChange(question, index + 1)}
+                      checked={answers[question] === index + 1}
+                    />
+                    <span className="ml-2">{index + 1}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+      <Button type="submit" disabled={isLoading}>
+        {isLoading && <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />}
+        {isLoading ? "Processing" : "Submit"}
+      </Button>
+    </form>
   );
 };
 
