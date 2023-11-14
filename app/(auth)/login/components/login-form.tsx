@@ -23,6 +23,7 @@ export default function LoginForm() {
     setIsLoading(true);
 
     const result = await signIn("credentials", {
+      redirect: false, // This option will prevent auto-redirects
       email,
       password,
       callbackUrl: "/api/auth/signin",

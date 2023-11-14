@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "components/ui/button";
-import { calculateScores, questions } from "lib/quiz";
+import { calculateInitialResults, calculateScores, initialQuestions, questions } from "lib/quiz";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ColorWheelIcon } from "@radix-ui/react-icons";
@@ -11,16 +11,16 @@ type Answer = {
 
 const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   const [answers, setAnswers] = useState<Answer>({});
-  // const [initialAnswers, setInitialAnswers] = useState<any>({});
+  const [initialAnswers, setInitialAnswers] = useState<any>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  // const handleInitialOptionChange = (questionPrompt: string, selectedChoice: any) => {
-  //   setInitialAnswers((prevAnswers: any) => ({
-  //     ...prevAnswers,
-  //     [questionPrompt]: selectedChoice, // Store the entire choice object
-  //   }));
-  // };
+  const handleInitialOptionChange = (questionPrompt: string, selectedChoice: any) => {
+    setInitialAnswers((prevAnswers: any) => ({
+      ...prevAnswers,
+      [questionPrompt]: selectedChoice, // Store the entire choice object
+    }));
+  };
 
   const handleOptionChange = (question: string, score: number) => {
     setAnswers((prevAnswers) => ({ ...prevAnswers, [question]: score }));
@@ -30,8 +30,8 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     event.preventDefault();
     if (userId) {
       setIsLoading(true);
-      // const initialScores = calculateInitialResults(initialAnswers);
-      const scores = calculateScores(answers);
+      const initialScores = calculateInitialResults(initialAnswers);
+      const scores = calculateScores(answers, initialScores);
 
       const res = await fetch("/api/quiz", {
         method: "POST",
@@ -61,33 +61,33 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* {initialQuestions.map((section, sectionIndex) => (
-          <div key={sectionIndex} className="mb-8">
-            <h2 className="mb-4 text-xl font-bold">{section.section}</h2>
-            {section.questions.map((question, questionIndex) => (
-              <div key={questionIndex} className="mb-4">
-                <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-400">
-                  {question.prompt}
-                </label>
-                <div className="flex flex-col gap-4">
-                  {question.choices.map((choice, choiceIndex) => (
-                    <label key={choiceIndex} className="flex items-center">
-                      <input
-                        type="radio"
-                        name={question.prompt} // using prompt as the name to group choices
-                        className="border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                        value={choice.option}
-                        onChange={() => handleInitialOptionChange(question.prompt, choice)}
-                        checked={initialAnswers[question.prompt]?.option === choice.option}
-                      />
-                      <span className="ml-2">{choice.option}</span>
-                    </label>
-                  ))}
-                </div>
+      {initialQuestions.map((section, sectionIndex) => (
+        <div key={sectionIndex} className="mb-8">
+          <h2 className="mb-4 text-xl font-bold">{section.section}</h2>
+          {section.questions.map((question, questionIndex) => (
+            <div key={questionIndex} className="mb-4">
+              <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-400">
+                {question.prompt}
+              </label>
+              <div className="flex flex-col gap-4">
+                {question.choices.map((choice, choiceIndex) => (
+                  <label key={choiceIndex} className="flex items-center">
+                    <input
+                      type="radio"
+                      name={question.prompt}
+                      className="border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      value={choice.option}
+                      onChange={() => handleInitialOptionChange(question.prompt, choice)}
+                      checked={initialAnswers[question.prompt]?.option === choice.option}
+                    />
+                    <span className="ml-2">{choice.option}</span>
+                  </label>
+                ))}
               </div>
-            ))}
-          </div>
-        ))} */}
+            </div>
+          ))}
+        </div>
+      ))}
       {questions.map((section, sectionIndex) => (
         <div key={sectionIndex} className="mb-8">
           <h2 className="mb-4 text-xl font-bold">{section.section}</h2>

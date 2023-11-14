@@ -13,18 +13,27 @@ const createReportGenerationPrompt = ({
   nurturer,
   energizer,
   achiever,
-}: Score) => `
-Generate a comprehensive insight report in markdown format for a user based on the following thinking style profile: explorer(${explorer}), analyst(${analyst}), designer(${designer}), optimizer(${optimizer}), connector(${connector}), nurturer(${nurturer}), energizer(${energizer}), achiever(${achiever}). Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology. Please provide personalized advice that includes:
+}: Score) => {
+  // Identify the dominant thinking style based on the highest score
+  const scores = { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever };
+  const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
+    scores[a] > scores[b] ? a : b
+  );
 
-1. Strategies for personal growth and learning that align with their thinking archetype.
-2. Tips for decision-making and problem-solving tailored to their analytical and systematic tendencies.
-3. Recommendations for enhancing interpersonal relationships considering their communicative and caring scores.
-4. Ideas for managing change and uncertainty in personal and professional contexts.
-5. Techniques for maintaining motivation and energy based on the activities that best suit their thinking archetype.
-6. Suggestions for career development and navigating workplace dynamics.
+  // Start the prompt with the dominant thinking style
+  return `
+Generate a comprehensive insight report titled: 'Your Thinking Style Results' in markdown format for a user primarily identified as a "${dominantStyle}". Explicitly state their dominant thinking style the beginning of the report. The user's thinking style profile is as follows: explorer(${explorer}), analyst(${analyst}), designer(${designer}), optimizer(${optimizer}), connector(${connector}), nurturer(${nurturer}), energizer(${energizer}), achiever(${achiever}). Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology. The report should:
 
-End the report with a short summary of key takeaways for maintaining balance and overall well-being.
+1. Focus primarily on the "${dominantStyle}" thinking archetype, offering detailed strategies for personal growth, learning, decision-making, problem-solving, and maintaining motivation.
+2. Include insights and personalized advice for the other thinking styles where the user scores relatively high, ensuring a comprehensive understanding of their multifaceted thinking approach.
+3. Provide recommendations for enhancing interpersonal relationships, considering their communicative and caring scores.
+4. Offer ideas for managing change and uncertainty in both personal and professional contexts.
+5. Suggest techniques for maintaining energy and motivation, specifically tailored to activities that best suit their dominant thinking archetype.
+6. Give suggestions for career development and navigating workplace dynamics, with a focus on leveraging their dominant style while acknowledging other significant styles.
+
+End the report with a short summary of key takeaways for maintaining balance and overall well-being, emphasizing the importance of their dominant thinking style in various aspects of life.
 `;
+};
 
 export async function POST(req: Request) {
   // Extract the `prompt` from the body of the request

@@ -47,7 +47,6 @@ export default function RegisterForm() {
       const data = (await res.json()) as ResponseData;
 
       if (res.status === 201) {
-        router.push("/login");
         const result = await signIn("credentials", {
           redirect: false, // This option will prevent auto-redirects
           email,
@@ -59,7 +58,7 @@ export default function RegisterForm() {
           showMessage(result.error, true);
           setIsLoading(false);
         } else {
-          router.replace("/");
+          router.replace("/quiz");
         }
       } else if (data.error) {
         showMessage(data.error, true);
