@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import toast from "react-hot-toast";
 import { Button } from "components/ui/button";
 import { useRouter } from "next/navigation";
+import { ColorWheelIcon } from "@radix-ui/react-icons";
 
 export default function Report({ scores, report: savedReport }: any) {
   const [report, setReport] = useState(savedReport?.report || "");
@@ -93,8 +94,13 @@ export default function Report({ scores, report: savedReport }: any) {
 
   return (
     <div className="mx-auto my-20 max-w-4xl rounded-md bg-white px-5">
-      {scores && isLoading && !report ? (
-        <p>Loading report...</p>
+      {scores && isLoading ? (
+        <div className="flex h-96 flex-col items-center justify-center space-y-5 text-center">
+          <p>
+            Generating your report.<br></br>Please be patient.
+          </p>
+          <ColorWheelIcon className="mr-2 h-10 w-10 animate-spin" />
+        </div>
       ) : (
         <ReactMarkdown className="prose prose-indigo md:prose-lg">{`${report}`}</ReactMarkdown>
       )}

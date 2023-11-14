@@ -48,7 +48,6 @@ export default function RegisterForm() {
 
       if (res.status === 201) {
         const result = await signIn("credentials", {
-          redirect: false, // This option will prevent auto-redirects
           email,
           password,
           callbackUrl: "/api/auth/signin",

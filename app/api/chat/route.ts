@@ -12,12 +12,15 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 function createContextPrompt(scores: Score) {
-  return `The user has the following thinking style scores - explorer: ${scores.explorer}, analyst: ${scores.analyst}, designer: ${scores.designer}, optimizer: ${scores.optimizer}, connector: ${scores.connector}, nurturer: ${scores.nurturer}, energizer: ${scores.energizer}, achiever: ${scores.achiever}.
-  Tailor your response style to the user's archetypes based on their thinking styles.
-  Offer solutions that leverage the user's strengths within their archetypes.
-  Present your advice clearly, drawing upon Mark Bonchek's framework or nature's systems as applicable.
-  Your response should be short, concise, and easily readable.
-  Conclude with a thought-provoking question when appropriate.`;
+  // Identify the dominant thinking style based on the highest score
+  const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
+    scores[a] > scores[b] ? a : b
+  );
+  return `Context: The user's thinking style scores are - explorer: ${scores.explorer}, analyst: ${scores.analyst}, designer: ${scores.designer}, optimizer: ${scores.optimizer}, connector: ${scores.connector}, nurturer: ${scores.nurturer}, energizer: ${scores.energizer}, achiever: ${scores.achiever}. The dominant thinking style is "${dominantStyle}".
+  Tailor your response to align with the characteristics of the "${dominantStyle}" archetype.
+  Adapt your language and content to resonate with the "${dominantStyle}" thinking style, offering solutions that leverage its strengths.
+  Incorporate relevant examples or analogies where appropriate, drawing upon Mark Bonchek's framework and teachings or nature's systems as applicable.
+  Ensure your response is short, concise, and easily readable. Conclude with a thought-provoking question to engage the user further, if appropriate.`;
 }
 
 export async function POST(req: Request) {
