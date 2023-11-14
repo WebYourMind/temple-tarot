@@ -43,7 +43,7 @@ export async function Header() {
         </div>
       </div>
       <div className="flex items-center justify-end space-x-2">
-        <a href="shift.to" target="_blank" className={cn(buttonVariants())}>
+        <a href="https://shift.to" target="_blank" className={cn(buttonVariants())}>
           <span className="hidden sm:block">Shift Thinking</span>
           <span className="sm:hidden">shift.to</span>
         </a>
