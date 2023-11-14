@@ -50,7 +50,7 @@ export default function RegisterForm() {
         const result = await signIn("credentials", {
           email,
           password,
-          callbackUrl: "/api/auth/signin",
+          callbackUrl: "/quiz",
         });
 
         if (result?.error) {

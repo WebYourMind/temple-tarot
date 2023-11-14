@@ -1,8 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getServerSession, type NextAuthOptions, User } from "next-auth";
-import PostgresAdapter from "@auth/pg-adapter";
 import { sql } from "@vercel/postgres";
-import { Pool } from "pg";
 import bcrypt from "bcrypt";
 
 interface ExtendedUser extends User {
@@ -11,14 +9,6 @@ interface ExtendedUser extends User {
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
-const pool = new Pool({
-  host: "localhost",
-  user: "database-user",
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
-
 export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
   pages: {
@@ -26,7 +16,6 @@ export const authOptions: NextAuthOptions = {
     verifyRequest: `/login`,
     error: "/login", // Error code passed in query string as ?error=
   },
-  adapter: PostgresAdapter(pool),
   providers: [
     CredentialsProvider({
       name: "Credentials",

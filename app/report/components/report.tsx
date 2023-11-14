@@ -93,7 +93,7 @@ export default function Report({ scores, report: savedReport }: any) {
   }
 
   return (
-    <div className="mx-auto my-20 max-w-4xl rounded-md bg-white px-5">
+    <div className="mx-auto my-20 max-w-4xl px-5">
       {scores && isLoading ? (
         <div className="flex h-96 flex-col items-center justify-center space-y-5 text-center">
           <p>

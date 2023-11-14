@@ -61,14 +61,21 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <p className="mb-2 font-semibold">
+        For this assessment, we aim to understand your natural way of thinking. This isn&apos;t about what you strive to
+        do but how you inherently process information and respond to situations, akin to being right or left-handed.
+      </p>
+      <p className="text-md mb-5 font-semibold">
+        Your Thinking Styles are viewed through three lenses: Macro or Micro, Head and Heart, and Means and Ends.
+        Initially, we&apos;ll determine your dominant style with broad questions. If you&apos;re interested, we can then
+        delve deeper for a more nuanced understanding.
+      </p>
       {initialQuestions.map((section, sectionIndex) => (
         <div key={sectionIndex} className="mb-8">
           <h2 className="mb-4 text-xl font-bold">{section.section}</h2>
           {section.questions.map((question, questionIndex) => (
             <div key={questionIndex} className="mb-4">
-              <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-400">
-                {question.prompt}
-              </label>
+              <label className="mb-2 block font-medium text-gray-900 dark:text-gray-400">{question.prompt}</label>
               <div className="flex flex-col gap-4">
                 {question.choices.map((choice, choiceIndex) => (
                   <label key={choiceIndex} className="flex items-center">
@@ -88,12 +95,16 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
           ))}
         </div>
       ))}
+      <p className="text-md mb-5 font-semibold">
+        Please rate how strongly you agree with each statement below on a scale from 1 (not at all like me) to 5 (very
+        much like me).
+      </p>
       {questions.map((section, sectionIndex) => (
         <div key={sectionIndex} className="mb-8">
           <h2 className="mb-4 text-xl font-bold">{section.section}</h2>
           {section.questions.map((question: string, questionIndex: number) => (
             <div key={questionIndex} className="mb-4">
-              <label className="mb-2 block text-sm">{question}</label>
+              <label className="mb-2 block">{question}</label>
               <div className="flex gap-2">
                 {Array.from({ length: 5 }, (_, index) => (
                   <label key={index} className="inline-flex items-center">

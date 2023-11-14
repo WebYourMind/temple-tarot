@@ -25,7 +25,7 @@ export default function LoginForm() {
     const result = await signIn("credentials", {
       email,
       password,
-      callbackUrl: "/api/auth/signin",
+      callbackUrl: "/",
     });
 
     if (result?.error) {
