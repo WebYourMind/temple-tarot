@@ -30,7 +30,7 @@ export function EmptyScreen({ setInput, scores }: Pick<UseChatHelpers, "setInput
           We&apos;re excited to have you join us. You&apos;re now part of a community that&apos;s all about
           understanding and leveraging your unique thinking style.
         </p>
-        {scores ? (
+        {!scores ? (
           <>
             <p className="mb-2 leading-normal text-muted-foreground">
               Ready to begin? Take the Thinking Style Quiz to enhance your interactions with our chatbot, Merlin and
