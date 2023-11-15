@@ -29,13 +29,16 @@ function createContextPrompt({
   return `Context: The user's thinking style scores are - explorer: ${scores.explorer}, analyst: ${scores.analyst}, designer: ${scores.designer}, optimizer: ${scores.optimizer}, connector: ${scores.connector}, nurturer: ${scores.nurturer}, energizer: ${scores.energizer}, achiever: ${scores.achiever}. The dominant thinking style is "${dominantStyle}".
   Tailor your response to align with the characteristics of the "${dominantStyle}" archetype.
   Adapt your language and content to resonate with the "${dominantStyle}" thinking style, offering solutions that leverage its strengths.
-  Incorporate relevant examples or analogies where appropriate, drawing upon Mark Bonchek's framework and teachings or nature's systems as applicable.
-  Ensure your response is short, concise, and easily readable. Conclude with a thought-provoking question to engage the user further, if appropriate.`;
+  Incorporate relevant examples or analogies where appropriate, drawing only upon Mark Bonchek's Shift Thinking framework and teachings or nature's systems as applicable explicitly stating so.
+  Ensure your response is short, concise, and easily readable. Conclude with a thought-provoking question to engage the user further, if appropriate. Politely decline to answer if a question has no relevance to the teachings of Shift Thinking.`;
 }
+
+const basicContextPrompt =
+  "Incorporate relevant examples or analogies where appropriate, drawing only upon Mark Bonchek's Shift Thinking framework and teachings or nature's systems as applicable without explicitly stating so. Ensure your response is short, concise, and easily readable. Conclude with a thought-provoking question to engage the user further, if appropriate. Politely decline to answer if a question has no relevance to the teachings of Shift Thinking.";
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { messages, score } = json as any;
+  const { messages, scores } = json as any;
   const userId = (await getSession())?.user.id;
 
   if (!userId) {
@@ -52,8 +55,8 @@ export async function POST(req: Request) {
   }
 
   const latestMessage = messages[messages.length - 1];
-  const relevantMessages = messages.slice(-2);
-  const contextPrompt = createContextPrompt(score);
+  const relevantMessages = messages.slice(-4);
+  const contextPrompt = scores ? createContextPrompt(scores) : basicContextPrompt;
 
   try {
     const res = await openai.createChatCompletion({

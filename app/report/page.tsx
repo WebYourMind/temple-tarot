@@ -62,20 +62,6 @@ type ArchetypeValues = {
   achiever: string;
 };
 
-type Scores = ArchetypeValues & {
-  id: number;
-  user_id: number;
-  created_at: Date;
-  updated_at: Date;
-};
-
-type Report = Scores & {
-  id: number;
-  report: string;
-  created_at: Date;
-  scores_id: number;
-};
-
 // Function to check if the archetype values match in scores and report objects
 function haveMatchingArchetypeValues(scores: ArchetypeValues, report: ArchetypeValues): boolean {
   const archetypes: (keyof ArchetypeValues)[] = [

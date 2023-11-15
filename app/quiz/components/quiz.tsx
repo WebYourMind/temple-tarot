@@ -64,7 +64,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
         For this assessment, we aim to understand your natural way of thinking. This isn&apos;t about what you strive to
         do but how you inherently process information and respond to situations, akin to being right or left-handed.
       </p>
-      <p className="text-md mb-5 font-semibold">
+      <p className="mb-5 font-semibold">
         Your Thinking Styles are viewed through three lenses: Macro or Micro, Head and Heart, and Means and Ends.
         Initially, we&apos;ll determine your dominant style with broad questions. If you&apos;re interested, we can then
         delve deeper for a more nuanced understanding.
@@ -94,7 +94,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
           ))}
         </div>
       ))}
-      <p className="text-md mb-5 font-semibold">
+      <p className="mb-5 font-semibold">
         Please rate how strongly you agree with each statement below on a scale from 1 (not at all like me) to 5 (very
         much like me).
       </p>

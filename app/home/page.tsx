@@ -45,18 +45,18 @@ async function getExistingMessages(userId: string) {
 export default async function Home() {
   const data = await getSession();
   let messages;
-  let score;
+  let scores;
   if (data && data.user) {
     try {
       messages = (await getExistingMessages(data.user.id)) as Message[];
-      score = (await getThinkingStyle(data.user.id)) as Score;
+      scores = (await getThinkingStyle(data.user.id)) as Score;
     } catch (error) {
       console.error(error);
     }
   }
   return (
     <div className="md:pt-16">
-      <Chat initialMessages={messages} score={score} />
+      <Chat initialMessages={messages} scores={scores} />
     </div>
   );
 }

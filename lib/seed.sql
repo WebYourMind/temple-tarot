@@ -64,6 +64,7 @@ CREATE TABLE scores (
 CREATE TABLE reports (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
+    scores_id INTEGER NOT NULL REFERENCES scores(id),
     report TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

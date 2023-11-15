@@ -25,11 +25,11 @@ import { Score } from "lib/quiz";
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 export interface ChatProps extends React.ComponentProps<"div"> {
   initialMessages?: Message[];
-  score?: Score;
+  scores?: Score;
   id?: string;
 }
 
-export function Chat({ id, initialMessages, score, className }: ChatProps) {
+export function Chat({ id, initialMessages, scores, className }: ChatProps) {
   const [previewToken, setPreviewToken] = useLocalStorage<string | null>("ai-token", null);
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW);
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? "");
@@ -37,7 +37,7 @@ export function Chat({ id, initialMessages, score, className }: ChatProps) {
     initialMessages,
     body: {
       id,
-      score,
+      scores,
       previewToken,
     },
     onResponse(response) {
@@ -61,7 +61,7 @@ export function Chat({ id, initialMessages, score, className }: ChatProps) {
             <ChatScrollAnchor trackVisibility={isLoading} />
           </>
         ) : (
-          <EmptyScreen setInput={setInput} />
+          <EmptyScreen setInput={setInput} scores={scores} />
         )}
       </div>
       <ChatPanel

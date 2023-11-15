@@ -50,14 +50,14 @@ export default function RegisterForm() {
         const result = await signIn("credentials", {
           email,
           password,
-          callbackUrl: "/quiz",
+          callbackUrl: "/",
         });
 
         if (result?.error) {
           showMessage(result.error, true);
           setIsLoading(false);
         } else {
-          router.replace("/quiz");
+          router.replace("/");
         }
       } else if (data.error) {
         showMessage(data.error, true);

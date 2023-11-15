@@ -5,25 +5,25 @@ import { Header } from "components/navigation/header";
 
 const title = "Merlin AI";
 const description = "A guide for thinking based on natural systems.";
-const image = "https://vercel.pub/thumbnail.png";
+// const image = "https://vercel.pub/thumbnail.png";
 
 export const metadata: Metadata = {
   title,
   description,
-  icons: ["https://vercel.pub/favicon.ico"],
+  // icons: ["https://vercel.pub/favicon.ico"],
   openGraph: {
     title,
     description,
-    images: [image],
+    // images: [image],
   },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-    images: [image],
-    creator: "@vercel",
-  },
-  metadataBase: new URL("https://vercel.pub"),
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title,
+  //   description,
+  //   images: [image],
+  //   creator: "@vercel",
+  // },
+  metadataBase: new URL("https://merlin-ai-fe.vercel.app"),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
