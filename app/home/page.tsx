@@ -19,7 +19,6 @@ async function getThinkingStyle(userId: string) {
       ORDER BY created_at DESC
       LIMIT 1;
     `;
-
     if (scores.length > 0) {
       return scores[0]; // Return existing thread if found.
     }

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { cn } from "lib/utils";
 import { Button, buttonVariants } from "components/ui/button";
 import { Sidebar } from "./sidebar";
-import { IconSeparator } from "../ui/icons";
+import { IconExternalLink, IconSeparator } from "../ui/icons";
 import { UserMenu } from "./user-menu";
 import { getSession } from "lib/auth";
 import { SidebarList } from "components/navigation/sidebar-list";
@@ -46,6 +46,8 @@ export async function Header() {
         <a href="https://shift.to" target="_blank" className={cn(buttonVariants())}>
           <span className="hidden sm:block">Shift Thinking</span>
           <span className="sm:hidden">shift.to</span>
+          &nbsp;
+          <IconExternalLink />
         </a>
       </div>
     </header>

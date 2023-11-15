@@ -48,7 +48,6 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
 
       if (res.status === 201) {
         router.push("/report");
-        console.log("success", data);
       } else if (data.error) {
         console.error(data.error);
       }

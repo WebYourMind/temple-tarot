@@ -11,7 +11,17 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-function createContextPrompt(scores: Score) {
+function createContextPrompt({
+  explorer,
+  analyst,
+  designer,
+  optimizer,
+  connector,
+  nurturer,
+  energizer,
+  achiever,
+}: Score) {
+  const scores = { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever };
   // Identify the dominant thinking style based on the highest score
   const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
     scores[a] > scores[b] ? a : b

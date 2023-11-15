@@ -32,9 +32,13 @@ async function getReport(userId: string) {
   try {
     // Attempt to retrieve thinking styles for the user.
     const { rows: reports } = await sql`
-      SELECT * FROM reports
-      WHERE user_id = ${userId}
-      ORDER BY created_at DESC
+      SELECT reports.*, scores.explorer, scores.analyst, scores.designer, 
+            scores.optimizer, scores.connector, scores.nurturer, 
+            scores.energizer, scores.achiever
+      FROM reports
+      INNER JOIN scores ON reports.scores_id = scores.id
+      WHERE reports.user_id = ${userId}
+      ORDER BY reports.created_at DESC
       LIMIT 1;
     `;
 
@@ -47,6 +51,53 @@ async function getReport(userId: string) {
   }
 }
 
+type ArchetypeValues = {
+  explorer: string;
+  analyst: string;
+  designer: string;
+  optimizer: string;
+  connector: string;
+  nurturer: string;
+  energizer: string;
+  achiever: string;
+};
+
+type Scores = ArchetypeValues & {
+  id: number;
+  user_id: number;
+  created_at: Date;
+  updated_at: Date;
+};
+
+type Report = Scores & {
+  id: number;
+  report: string;
+  created_at: Date;
+  scores_id: number;
+};
+
+// Function to check if the archetype values match in scores and report objects
+function haveMatchingArchetypeValues(scores: ArchetypeValues, report: ArchetypeValues): boolean {
+  const archetypes: (keyof ArchetypeValues)[] = [
+    "explorer",
+    "analyst",
+    "designer",
+    "optimizer",
+    "connector",
+    "nurturer",
+    "energizer",
+    "achiever",
+  ];
+
+  for (const archetype of archetypes) {
+    if (scores[archetype] !== report[archetype]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export default async function ReportPage() {
   const data = await getSession();
   let scores;
@@ -55,6 +106,10 @@ export default async function ReportPage() {
     try {
       scores = (await getThinkingStyle(data.user.id)) as any;
       report = (await getReport(data.user.id)) as any;
+
+      if (!haveMatchingArchetypeValues(scores, report)) {
+        report = undefined;
+      }
     } catch (error) {
       console.error(error);
     }

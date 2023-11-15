@@ -22,10 +22,10 @@ const createReportGenerationPrompt = ({
 
   // Start the prompt with the dominant thinking style
   return `
-Generate a comprehensive insight report titled: 'Your Thinking Style Results' in markdown format for a user primarily identified as a "${dominantStyle}". Explicitly state their dominant thinking style the beginning of the report. The user's thinking style profile is as follows: explorer(${explorer}), analyst(${analyst}), designer(${designer}), optimizer(${optimizer}), connector(${connector}), nurturer(${nurturer}), energizer(${energizer}), achiever(${achiever}). Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology. The report should:
+Generate a comprehensive insight report titled within the context of thinking styles and 'Shift Thinking': 'Your Thinking Style Results' in markdown format for a user primarily identified as a "${dominantStyle}". Explicitly state their dominant thinking style the beginning of the report. The user's thinking style profile is as follows: explorer(${explorer}), analyst(${analyst}), designer(${designer}), optimizer(${optimizer}), connector(${connector}), nurturer(${nurturer}), energizer(${energizer}), achiever(${achiever}). Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology. The report should:
 
 1. Focus primarily on the "${dominantStyle}" thinking archetype, offering detailed strategies for personal growth, learning, decision-making, problem-solving, and maintaining motivation.
-2. Include insights and personalized advice for the other thinking styles where the user scores relatively high, ensuring a comprehensive understanding of their multifaceted thinking approach.
+2. Include insights and personalized advice for the 3 highest scored thinking styles only, ensuring a comprehensive understanding of their multifaceted thinking approach.
 3. Provide recommendations for enhancing interpersonal relationships, considering their communicative and caring scores.
 4. Offer ideas for managing change and uncertainty in both personal and professional contexts.
 5. Suggest techniques for maintaining energy and motivation, specifically tailored to activities that best suit their dominant thinking archetype.
@@ -36,8 +36,7 @@ End the report with a short summary of key takeaways for maintaining balance and
 };
 
 export async function POST(req: Request) {
-  // Extract the `prompt` from the body of the request
-  const { scores } = (await req.json()) as { scores: Score };
+  const { scores } = (await req.json()) as { scores: Score & { id: string } };
 
   const userId = (await getSession())?.user.id;
 
@@ -78,8 +77,8 @@ export async function POST(req: Request) {
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {
       await sql`
-        INSERT INTO reports (user_id, report)
-        VALUES (${userId}, ${completion})
+        INSERT INTO reports (user_id, scores_id, report)
+        VALUES (${userId}, ${scores.id}, ${completion})
         RETURNING *;
       `;
     },

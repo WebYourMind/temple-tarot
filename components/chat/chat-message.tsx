@@ -34,34 +34,34 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
             p({ children }) {
               return <p className="mb-2 last:mb-0">{children}</p>;
             },
-            code({ inline, className, children, ...props }: any) {
-              if (children.length) {
-                if (children[0] === "▍") {
-                  return <span className="mt-1 animate-pulse cursor-default">▍</span>;
-                }
+            // code({ inline, className, children, ...props }: any) {
+            //   if (children.length) {
+            //     if (children[0] === "▍") {
+            //       return <span className="mt-1 animate-pulse cursor-default">▍</span>;
+            //     }
 
-                children[0] = (children[0] as string).replace("`▍`", "▍");
-              }
+            //     children[0] = (children[0] as string).replace("`▍`", "▍");
+            //   }
 
-              const match = /language-(\w+)/.exec(className || "");
+            //   const match = /language-(\w+)/.exec(className || "");
 
-              if (inline) {
-                return (
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                );
-              }
+            //   if (inline) {
+            //     return (
+            //       <code className={className} {...props}>
+            //         {children}
+            //       </code>
+            //     );
+            //   }
 
-              return (
-                <CodeBlock
-                  key={Math.random()}
-                  language={(match && match[1]) || ""}
-                  value={String(children).replace(/\n$/, "")}
-                  {...props}
-                />
-              );
-            },
+            //   return (
+            //     <CodeBlock
+            //       key={Math.random()}
+            //       language={(match && match[1]) || ""}
+            //       value={String(children).replace(/\n$/, "")}
+            //       {...props}
+            //     />
+            //   );
+            // },
           }}
         >
           {message.content}

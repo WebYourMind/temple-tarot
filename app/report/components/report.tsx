@@ -92,8 +92,49 @@ export default function Report({ scores, report: savedReport }: any) {
     router.push("/quiz");
   }
 
+  if (!scores) {
+    return (
+      <div className="flex items-center justify-center">
+        <div className="mt-5 flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+          <h1 className="text-2xl font-semibold tracking-tight">Nothing to see here...</h1>
+          <p className="text-sm text-muted-foreground">
+            First take the Thinking Styles Quiz and then we&apos;ll show you some insights.
+          </p>
+          <Button onClick={navToQuiz}>Take Me To The Quiz!</Button>
+        </div>
+      </div>
+    );
+  }
+
+  const { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever } = scores;
+
+  const chartConfig = {
+    type: "pie",
+    data: {
+      labels: ["Explorer", "Analyst", "Designer", "Optimizer", "Connector", "Nurturer", "Energizer", "Achiever"],
+      datasets: [
+        {
+          data: [explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever],
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          color: "white",
+          font: {
+            weight: "bold",
+          },
+        },
+      },
+    },
+  };
+
+  const encodedChartConfig = encodeURIComponent(JSON.stringify(chartConfig));
+  const chartUrl = `https://quickchart.io/chart?c=${encodedChartConfig}`;
+
   return (
-    <div className="mx-auto my-20 max-w-4xl px-5">
+    <div className="mx-auto my-20 flex max-w-4xl flex-col items-center px-5">
       {scores && isLoading ? (
         <div className="flex h-96 flex-col items-center justify-center space-y-5 text-center">
           <p>
@@ -102,16 +143,18 @@ export default function Report({ scores, report: savedReport }: any) {
           <ColorWheelIcon className="mr-2 h-10 w-10 animate-spin" />
         </div>
       ) : (
-        <ReactMarkdown className="prose prose-indigo md:prose-lg">{`${report}`}</ReactMarkdown>
-      )}
-      {!scores && (
-        <div className="mx-auto mt-5 flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <h1 className="text-2xl font-semibold tracking-tight">Nothing to see here...</h1>
-          <p className="text-sm text-muted-foreground">
-            First take the Thinking Styles Quiz and we&apos;ll show you the goods.
-          </p>
-          <Button onClick={navToQuiz}>Take Me To The Quiz</Button>
-        </div>
+        <>
+          <ReactMarkdown className="prose prose-indigo md:prose-lg">
+            {`${report}
+
+![Pie Chart](${chartUrl})
+`}
+          </ReactMarkdown>
+
+          <Button className="mt-10" onClick={navToQuiz}>
+            Retake The Quiz
+          </Button>
+        </>
       )}
     </div>
   );
