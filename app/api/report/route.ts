@@ -2,7 +2,6 @@ import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 import { Score } from "lib/quiz";
 import { sql } from "@vercel/postgres";
-import { getSession } from "lib/auth";
 
 export const runtime = "edge";
 
@@ -38,9 +37,9 @@ End the report with a short summary of key takeaways for maintaining balance and
 };
 
 export async function POST(req: Request) {
-  const { scores } = (await req.json()) as { scores: Score & { id: string } };
+  const { scores } = (await req.json()) as { scores: Score & { id: string; user_id: string } };
 
-  const userId = (await getSession())?.user.id;
+  const userId = scores.user_id;
 
   if (!userId) {
     return new Response("Unauthorized", {
