@@ -4,6 +4,9 @@ import Report from "./components/report";
 import { getSession } from "lib/auth";
 import { Score } from "lib/quiz";
 
+// Opt out of caching for all data requests in the route segment
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Merlin AI",
   description: "A guide for thinking based on natural systems.",
