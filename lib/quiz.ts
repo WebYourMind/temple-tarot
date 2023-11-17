@@ -149,7 +149,7 @@ export const initialQuestions = [
           },
           {
             option:
-              "More What (WHAT and WHY): My focus is on achieving goals, driving results, and rallying the team around a shared objective for success",
+              "More What: My focus is on achieving goals, driving results, and rallying the team around a shared objective for success",
             lens: "What",
             points: {
               achiever: 3,
