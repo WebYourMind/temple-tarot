@@ -132,7 +132,7 @@ export const initialQuestions = [
     ],
   },
   {
-    section: "Means/Ends Lens",
+    section: "How/What Lens",
     questions: [
       {
         prompt:
@@ -140,8 +140,8 @@ export const initialQuestions = [
         choices: [
           {
             option:
-              "More Means (HOW and WHEN): I am drawn to crafting the process, improving efficiency, and ensuring the design is effective",
-            lens: "Means",
+              "More How: I am drawn to crafting the process, improving efficiency, and ensuring the design is effective",
+            lens: "How",
             points: {
               designer: 3,
               optimizer: 3,
@@ -149,8 +149,8 @@ export const initialQuestions = [
           },
           {
             option:
-              "More Ends (WHAT and WHY): My focus is on achieving goals, driving results, and rallying the team around a shared objective for success",
-            lens: "Ends",
+              "More What (WHAT and WHY): My focus is on achieving goals, driving results, and rallying the team around a shared objective for success",
+            lens: "What",
             points: {
               achiever: 3,
               energizer: 3,
@@ -189,14 +189,14 @@ export const questions: QuestionSection[] = [
     ],
   },
   {
-    section: "Macro Means",
+    section: "Macro How",
     archetype: "designer",
     questions: [
       "I love to design systems and processes; I am focused on the efficiency and elegance of the overarching structure.",
     ],
   },
   {
-    section: "Micro Means",
+    section: "Micro How",
     archetype: "optimizer",
     questions: [
       "I am constantly looking for ways to make improvements and tweaks to existing systems to optimize performance.",
@@ -217,14 +217,14 @@ export const questions: QuestionSection[] = [
     ],
   },
   {
-    section: "Macro Ends",
+    section: "Macro What",
     archetype: "energizer",
     questions: [
       "I am passionate about motivating others towards a common goal; I energize and mobilize teams to achieve shared objectives.",
     ],
   },
   {
-    section: "Micro Ends",
+    section: "Micro What",
     archetype: "achiever",
     questions: [
       "I am results-driven; I set specific goals and work diligently towards achieving them, often in a hands-on manner.",

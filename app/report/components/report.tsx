@@ -108,13 +108,23 @@ export default function Report({ scores, report: savedReport }: any) {
 
   const { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever } = scores;
 
+  // Convert string values to numbers and calculate the total score
+  const totalScore = [explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever]
+    .map((score) => parseFloat(score))
+    .reduce((sum, current) => sum + current, 0);
+
+  // Calculate relative percentages
+  const relativePercentages = [explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever].map(
+    (score) => ((parseFloat(score) / totalScore) * 100).toFixed(1)
+  );
+
   const chartConfig = {
     type: "pie",
     data: {
       labels: ["Explorer", "Analyst", "Designer", "Optimizer", "Connector", "Nurturer", "Energizer", "Achiever"],
       datasets: [
         {
-          data: [explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever],
+          data: relativePercentages,
         },
       ],
     },
@@ -130,7 +140,11 @@ export default function Report({ scores, report: savedReport }: any) {
     },
   };
 
-  const encodedChartConfig = encodeURIComponent(JSON.stringify(chartConfig));
+  let stringChartConfig = JSON.stringify(chartConfig);
+  // Manually append the formatter function as a string
+  const formatterFunctionString = `,"formatter": function(value) { return value + '%' }`;
+  stringChartConfig = stringChartConfig.replace(/("datalabels"\s*:\s*\{[^}]*\})/, `$1${formatterFunctionString}`);
+  const encodedChartConfig = encodeURIComponent(stringChartConfig);
   const chartUrl = `https://quickchart.io/chart?c=${encodedChartConfig}`;
 
   return (
