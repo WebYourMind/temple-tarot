@@ -1,95 +1,166 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import toast from "react-hot-toast";
 import { Button } from "components/ui/button";
 import { useRouter } from "next/navigation";
 import { ColorWheelIcon } from "@radix-ui/react-icons";
+import { useSession } from "next-auth/react";
 
-export default function Report({ scores, report: savedReport }: any) {
-  const [report, setReport] = useState(savedReport?.report || "");
+type ArchetypeValues = {
+  explorer: string;
+  analyst: string;
+  designer: string;
+  optimizer: string;
+  connector: string;
+  nurturer: string;
+  energizer: string;
+  achiever: string;
+};
+
+type ReportType = string | undefined;
+
+// Function to check if the archetype values match in scores and report objects
+function haveMatchingArchetypeValues(scores: ArchetypeValues, report: ArchetypeValues): boolean {
+  const archetypes: (keyof ArchetypeValues)[] = [
+    "explorer",
+    "analyst",
+    "designer",
+    "optimizer",
+    "connector",
+    "nurturer",
+    "energizer",
+    "achiever",
+  ];
+
+  for (const archetype of archetypes) {
+    if (scores[archetype] !== report[archetype]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export default function Report() {
+  const [report, setReport] = useState<ReportType>();
+  const [scores, setScores] = useState<ArchetypeValues | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const session = useSession() as any;
+  const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
-    let isSubscribed = true;
-    const controller = new AbortController();
+    async function fetchScores() {
+      const response = await fetch(`/api/quiz/?userId=${session.data?.user.id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch scores.");
+      }
+      const scoresData = (await response.json()) as any;
+      setScores(scoresData.scores);
+    }
 
-    async function generateReport() {
-      setIsLoading(true);
-      try {
-        const response = await fetch("/api/report", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ scores }),
-          signal: controller.signal,
-        });
+    if (!scores && session?.data?.user) {
+      fetchScores().catch((error) => {
+        toast.error(`Error fetching scores: ${error.message}`);
+      });
+    }
+  }, [session?.data?.user, scores]);
 
-        // Check if the request was successful
-        if (!response.body) throw new Error("Failed to get the stream.");
+  useEffect(() => {
+    async function getReport() {
+      const response = await fetch(`/api/report/?userId=${session.data?.user.id}`);
 
-        const reader = response.body.getReader();
-
-        // Read the stream
-        let receivedLength = 0; // received that many bytes at the moment
-        let chunks = [] as any; // array of received binary chunks (comprises the body)
-        while (true) {
-          const { done, value } = await reader.read();
-
-          if (done) {
-            setIsLoading(false);
-            break;
-          }
-
-          chunks.push(value);
-          receivedLength += value.length;
-
-          // Decode chunks into report content as they come in
-          const chunk = new TextDecoder("utf-8").decode(value, { stream: true });
-          if (isSubscribed) {
-            setReport((prevReport: any) => prevReport + chunk);
-          }
-        }
-
-        // Concatenate chunks into single Uint8Array
-        let chunksAll = new Uint8Array(receivedLength); // (4.1)
-        let position = 0;
-        for (let chunk of chunks) {
-          chunksAll.set(chunk, position); // (4.2)
-          position += chunk.length;
-        }
-
-        // Decode into a string
-        let result = new TextDecoder("utf-8").decode(chunksAll);
-
-        // Process the result into state
-        if (isSubscribed) {
-          setReport(result);
-        }
-      } catch (error: any) {
-        if (isSubscribed) {
-          toast.error("Error fetching report: " + error.message);
-          setIsLoading(false);
+      const data = (await response.json()) as any;
+      if (response.ok) {
+        if (haveMatchingArchetypeValues(scores as ArchetypeValues, data.report)) {
+          setReport(data.report.report);
+          setPageLoading(false);
+        } else {
+          generateReport();
         }
       }
     }
-
-    if (!report && scores) {
-      generateReport();
+    if (!report && session?.data?.user && scores) {
+      getReport();
     }
+  }, [session?.data?.user, scores]);
 
-    // Cleanup function
-    return () => {
-      isSubscribed = false;
-      controller.abort();
-    };
-  }, [scores]); // Effect only runs if thinkingStyle changes
+  const generateReport = useCallback(async () => {
+    let isSubscribed = true;
+    const controller = new AbortController();
+    setPageLoading(false);
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ scores }),
+        signal: controller.signal,
+      });
 
-  function navToQuiz() {
+      // Check if the request was successful
+      if (!response.body) throw new Error("Failed to get the stream.");
+
+      const reader = response.body.getReader();
+
+      // Read the stream
+      let receivedLength = 0; // received that many bytes at the moment
+      let chunks = [] as any; // array of received binary chunks (comprises the body)
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          setIsLoading(false);
+          break;
+        }
+
+        chunks.push(value);
+        receivedLength += value.length;
+
+        // Decode chunks into report content as they come in
+        const chunk = new TextDecoder("utf-8").decode(value, { stream: true });
+        if (isSubscribed) {
+          setReport((prevReport: any) => prevReport + chunk);
+        }
+      }
+
+      // Concatenate chunks into single Uint8Array
+      let chunksAll = new Uint8Array(receivedLength); // (4.1)
+      let position = 0;
+      for (let chunk of chunks) {
+        chunksAll.set(chunk, position); // (4.2)
+        position += chunk.length;
+      }
+
+      // Decode into a string
+      let result = new TextDecoder("utf-8").decode(chunksAll);
+
+      // Process the result into state
+      if (isSubscribed) {
+        setReport(result);
+      }
+    } catch (error: any) {
+      if (isSubscribed) {
+        toast.error("Error fetching report: " + error.message);
+        setIsLoading(false);
+      }
+    }
+  }, [scores]);
+
+  const navToQuiz = useCallback(() => {
     router.push("/quiz");
+  }, [router]);
+
+  if (pageLoading) {
+    return (
+      <div className="flex items-center justify-center">
+        <ColorWheelIcon className="mr-2 h-10 w-10 animate-spin" />
+      </div>
+    );
   }
 
   if (!scores) {

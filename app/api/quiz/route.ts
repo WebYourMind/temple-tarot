@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { Score } from "lib/quiz";
 
+// Opt out of caching for all data requests in the route segment
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest) {
   try {
     const { scores, userId } = (await request.json()) as {
@@ -46,10 +49,8 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    // Extract the userId from the URL query parameters
-    const { userId } = (await request.json()) as {
-      userId: string;
-    };
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
 
     // Check if userId is not null or undefined
     if (!userId) {

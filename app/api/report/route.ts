@@ -2,8 +2,12 @@ import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 import { Score } from "lib/quiz";
 import { sql } from "@vercel/postgres";
+import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
+
+// Opt out of caching for all data requests in the route segment
+export const dynamic = "force-dynamic";
 
 const createReportGenerationPrompt = ({
   explorer,
@@ -36,7 +40,7 @@ End the report with a short summary of key takeaways for maintaining balance and
 `;
 };
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const { scores } = (await req.json()) as { scores: Score & { id: string; user_id: string } };
 
   const userId = scores.user_id;
@@ -86,4 +90,61 @@ export async function POST(req: Request) {
   });
 
   return new StreamingTextResponse(stream);
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
+
+    // Check if userId is not null or undefined
+    if (!userId) {
+      throw new Error("The user ID must be provided.");
+    }
+
+    // Query to select the latest reports row for the given user ID
+    const { rows: reports } = await sql`
+      SELECT reports.*, scores.explorer, scores.analyst, scores.designer, 
+            scores.optimizer, scores.connector, scores.nurturer, 
+            scores.energizer, scores.achiever
+      FROM reports
+      INNER JOIN scores ON reports.scores_id = scores.id
+      WHERE reports.user_id = ${userId}
+      ORDER BY reports.created_at DESC
+      LIMIT 1;
+    `;
+
+    // Check if we got a result back
+    if (reports.length === 0) {
+      return NextResponse.json(
+        {
+          error: "No report found for the given user ID.",
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+
+    // Return the latest scores row
+    return NextResponse.json(
+      {
+        message: "Latest report retrieved successfully.",
+        report: reports[0],
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    // Return an error response
+    return NextResponse.json(
+      {
+        error: "An error occurred while processing your request.",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 }
