@@ -40,6 +40,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     body: {
       id,
       scores,
+      userId: session.data?.user.id,
       previewToken,
     },
     onResponse(response) {

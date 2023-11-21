@@ -2,7 +2,6 @@ import { sql } from "@vercel/postgres";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 
-import { getSession } from "lib/auth";
 import { Score } from "lib/quiz";
 
 export const runtime = "edge";
@@ -40,8 +39,7 @@ const basicContextPrompt =
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { messages, scores } = json as any;
-  const userId = (await getSession())?.user.id;
+  const { messages, scores, userId } = json as any;
 
   if (!userId) {
     return new Response("Unauthorized", {
