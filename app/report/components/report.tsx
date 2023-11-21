@@ -149,6 +149,7 @@ export default function Report() {
       if (isSubscribed) {
         toast.error("Error fetching report: " + error.message);
         setIsLoading(false);
+        setReport("Connection lost. Please refresh.");
       }
     }
   }, [scores]);
