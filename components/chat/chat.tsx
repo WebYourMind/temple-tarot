@@ -20,19 +20,21 @@ import { useEffect, useState } from "react";
 import { Button } from "components/ui/button";
 import { Input } from "components/ui/input";
 import { toast } from "react-hot-toast";
-import { Score } from "lib/quiz";
+import { useSession } from "next-auth/react";
+import { ArchetypeValues } from "app/report/components/report";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 export interface ChatProps extends React.ComponentProps<"div"> {
   initialMessages?: Message[];
-  scores?: Score;
   id?: string;
 }
 
-export function Chat({ id, initialMessages, scores, className }: ChatProps) {
+export function Chat({ id, initialMessages, className }: ChatProps) {
   const [previewToken, setPreviewToken] = useLocalStorage<string | null>("ai-token", null);
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW);
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? "");
+  const [scores, setScores] = useState<ArchetypeValues | undefined>();
+  const session = useSession() as any;
   const { messages, append, reload, stop, isLoading, input, setInput } = useChat({
     initialMessages,
     body: {
@@ -51,6 +53,23 @@ export function Chat({ id, initialMessages, scores, className }: ChatProps) {
     // Scroll to the bottom of the page
     window.scrollTo(0, document.documentElement.scrollHeight);
   }, [messages]);
+
+  useEffect(() => {
+    async function fetchScores() {
+      const response = await fetch(`/api/quiz/?userId=${session.data?.user.id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch scores.");
+      }
+      const scoresData = (await response.json()) as any;
+      setScores(scoresData.scores);
+    }
+
+    if (!scores && session?.data?.user) {
+      fetchScores().catch((error) => {
+        toast.error(`Error fetching scores: ${error.message}`);
+      });
+    }
+  }, [session?.data?.user, scores]);
 
   return (
     <>

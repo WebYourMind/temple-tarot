@@ -3,30 +3,11 @@ import { type Message } from "ai/react";
 import { sql } from "@vercel/postgres";
 import { Chat } from "components/chat/chat";
 import { getSession } from "lib/auth";
-import { Score } from "lib/quiz";
 
 export const metadata: Metadata = {
   title: "Merlin AI",
   description: "A guide for thinking based on natural systems.",
 };
-
-async function getThinkingStyle(userId: string) {
-  try {
-    // Attempt to retrieve thinking styles for the user.
-    const { rows: scores } = await sql`
-      SELECT * FROM scores
-      WHERE user_id = ${userId}
-      ORDER BY created_at DESC
-      LIMIT 1;
-    `;
-    if (scores.length > 0) {
-      return scores[0]; // Return existing thread if found.
-    }
-  } catch (error) {
-    console.error("An error occurred while getting user's thinking style:", error);
-    throw error; // Re-throw the error to handle it in a calling function.
-  }
-}
 
 async function getExistingMessages(userId: string) {
   try {
@@ -45,18 +26,16 @@ async function getExistingMessages(userId: string) {
 export default async function Home() {
   const data = await getSession();
   let messages;
-  let scores;
   if (data && data.user) {
     try {
       messages = (await getExistingMessages(data.user.id)) as Message[];
-      scores = (await getThinkingStyle(data.user.id)) as Score;
     } catch (error) {
       console.error(error);
     }
   }
   return (
     <div className="md:pt-16">
-      <Chat initialMessages={messages} scores={scores} />
+      <Chat initialMessages={messages} />
     </div>
   );
 }

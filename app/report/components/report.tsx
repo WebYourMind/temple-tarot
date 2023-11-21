@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { ColorWheelIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 
-type ArchetypeValues = {
+export type ArchetypeValues = {
   explorer: string;
   analyst: string;
   designer: string;
