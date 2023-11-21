@@ -80,6 +80,8 @@ export default function Report() {
         } else {
           generateReport();
         }
+      } else {
+        generateReport();
       }
     }
     if (!report && session?.data?.user && scores) {
