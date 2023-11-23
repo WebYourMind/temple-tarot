@@ -60,6 +60,7 @@ export function Chat({ id, className }: ChatProps) {
   useEffect(() => {
     async function fetchData() {
       setInitLoading(true);
+      console.log("fetching data");
       try {
         const messagesResponse = fetch(`/api/chat/?userId=${session.data?.user.id}`);
         const scoresResponse = fetch(`/api/quiz/?userId=${session.data?.user.id}`);
@@ -88,7 +89,7 @@ export function Chat({ id, className }: ChatProps) {
     if (session?.data?.user) {
       fetchData();
     }
-  }, [session?.data?.user]);
+  }, [session?.data?.user.id]);
 
   if (initLoading) {
     return (
