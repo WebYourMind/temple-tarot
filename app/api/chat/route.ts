@@ -3,6 +3,7 @@ import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 
 import { Score } from "lib/quiz";
+import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
@@ -30,12 +31,12 @@ function createContextPrompt({
   return `Context: The user's thinking style scores are - explorer: ${scores.explorer}, analyst: ${scores.analyst}, designer: ${scores.designer}, optimizer: ${scores.optimizer}, connector: ${scores.connector}, nurturer: ${scores.nurturer}, energizer: ${scores.energizer}, achiever: ${scores.achiever}. The dominant thinking style is "${dominantStyle}".
   Tailor your response to align with the characteristics of the "${dominantStyle}" archetype.
   Adapt your language and content to resonate with the "${dominantStyle}" thinking style, offering solutions that leverage its strengths.
-  Incorporate relevant examples or analogies where appropriate, drawing only upon Mark Bonchek's Shift Thinking framework and teachings or nature's systems as applicable explicitly stating so.
-  Ensure your response is short, concise, and easily readable. Conclude with a thought-provoking question to engage the user further, if appropriate. Politely decline to answer if a question has no relevance to the teachings of Shift Thinking.`;
+  Incorporate relevant examples or analogies where appropriate, drawing only upon Mark Bonchek's Shift Thinking framework and teachings or nature's systems as applicable but do not explicitly Mark Boncheck when doing so.
+  Ensure your response is short, concise, and easily readable. Conclude with a thought-provoking question to engage the user further, if appropriate.`; //  Politely decline to answer if a question has no relevance to the teachings of Shift Thinking.
 }
 
 const basicContextPrompt =
-  "Incorporate relevant examples or analogies where appropriate, drawing only upon Mark Bonchek's Shift Thinking framework and teachings or nature's systems as applicable without explicitly stating so. Ensure your response is short, concise, and easily readable. Conclude with a thought-provoking question to engage the user further, if appropriate. Politely decline to answer if a question has no relevance to the teachings of Shift Thinking.";
+  "Incorporate relevant examples or analogies where appropriate, drawing only upon Mark Bonchek's Shift Thinking framework and teachings or nature's systems as applicable without explicitly stating so. Ensure your response is short, concise, and easily readable. Conclude with a thought-provoking question to engage the user further"; // , if appropriate. Politely decline to answer if a question has no relevance to the teachings of Shift Thinking.";
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
@@ -101,5 +102,57 @@ export async function POST(req: Request) {
     if (!error.response || error.response.status !== 429) {
       throw error;
     }
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
+
+    // Check if userId is not null or undefined
+    if (!userId) {
+      throw new Error("The user ID must be provided.");
+    }
+
+    // Query to select the latest reports row for the given user ID
+    const { rows: existingMessages } = await sql`
+    SELECT * FROM chat_messages 
+    WHERE user_id=${userId} 
+    ORDER BY created_at ASC;
+`;
+
+    // Check if we got a result back
+    if (existingMessages.length === 0) {
+      return NextResponse.json(
+        {
+          error: "No chat found for the given user ID.",
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+
+    // Return the latest scores row
+    return NextResponse.json(
+      {
+        message: "Chat retrieved successfully.",
+        existingMessages,
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    // Return an error response
+    return NextResponse.json(
+      {
+        error: "An error occurred while processing your request.",
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }

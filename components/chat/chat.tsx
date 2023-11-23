@@ -21,19 +21,21 @@ import { Button } from "components/ui/button";
 import { Input } from "components/ui/input";
 import { toast } from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { ArchetypeValues } from "app/report/components/report";
+import { ArchetypeValues } from "lib/types";
+import { ColorWheelIcon } from "@radix-ui/react-icons";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 export interface ChatProps extends React.ComponentProps<"div"> {
-  initialMessages?: Message[];
   id?: string;
 }
 
-export function Chat({ id, initialMessages, className }: ChatProps) {
+export function Chat({ id, className }: ChatProps) {
   const [previewToken, setPreviewToken] = useLocalStorage<string | null>("ai-token", null);
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW);
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? "");
   const [scores, setScores] = useState<ArchetypeValues | undefined>();
+  const [initLoading, setInitLoading] = useState(true);
+  const [initialMessages, setInitialMessages] = useState<Message[] | undefined>();
   const session = useSession() as any;
   const { messages, append, reload, stop, isLoading, input, setInput } = useChat({
     initialMessages,
@@ -56,21 +58,45 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   }, [messages]);
 
   useEffect(() => {
-    async function fetchScores() {
-      const response = await fetch(`/api/quiz/?userId=${session.data?.user.id}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch scores.");
+    async function fetchData() {
+      setInitLoading(true);
+      try {
+        const messagesResponse = fetch(`/api/chat/?userId=${session.data?.user.id}`);
+        const scoresResponse = fetch(`/api/quiz/?userId=${session.data?.user.id}`);
+
+        const [messagesRes, scoresRes] = await Promise.all([messagesResponse, scoresResponse]);
+
+        if (!messagesRes.ok) {
+          throw new Error("Failed to fetch messages.");
+        }
+        if (!scoresRes.ok) {
+          throw new Error("Failed to fetch scores.");
+        }
+
+        const chatData = (await messagesRes.json()) as any;
+        const scoresData = (await scoresRes.json()) as any;
+
+        setInitialMessages(chatData.existingMessages);
+        setScores(scoresData.scores);
+        setInitLoading(false);
+      } catch (error: any) {
+        toast.error(`Error: ${error.message}`);
+        setInitLoading(false);
       }
-      const scoresData = (await response.json()) as any;
-      setScores(scoresData.scores);
     }
 
-    if (!scores && session?.data?.user) {
-      fetchScores().catch((error) => {
-        toast.error(`Error fetching scores: ${error.message}`);
-      });
+    if (session?.data?.user) {
+      fetchData();
     }
-  }, [session?.data?.user, scores]);
+  }, [session?.data?.user]);
+
+  if (initLoading) {
+    return (
+      <div className="mt-5 flex grow items-center justify-center">
+        <ColorWheelIcon className="mr-2 h-10 w-10 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <>
