@@ -1,12 +1,5 @@
 "use client";
 
-export type UserProfile = {
-  name: string;
-  email: string;
-  address: string;
-  phone: string;
-};
-
 import {
   EnvelopeClosedIcon,
   ExclamationTriangleIcon,
@@ -18,12 +11,15 @@ import {
 import Loading from "components/loading";
 import { getUserInitials } from "components/navigation/user-menu";
 import { Button } from "components/ui/button";
+import { UserProfile } from "lib/types";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ViewProfile() {
   const { data: session } = useSession() as any;
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const route = useRouter();
 
   useEffect(() => {
     if (session) {
@@ -63,7 +59,7 @@ export default function ViewProfile() {
             <Pencil2Icon className="mr-2" />
             Edit Profile
           </Button>
-          <Button variant={"outline"}>
+          <Button variant={"outline"} onClick={() => route.push("/change-password")}>
             <LockClosedIcon className="mr-2" />
             Change Password
           </Button>

@@ -24,7 +24,7 @@ export default function InputField({
   error,
 }: InputFieldProps) {
   return (
-    <div className="grid gap-1">
+    <div className="grid gap-2">
       <Label htmlFor={id}>{label}</Label>
       <Input
         id={id}

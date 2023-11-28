@@ -5,6 +5,7 @@ import InputField from "app/(auth)/components/input-field";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useResponseMessage } from "lib/hooks/use-response-message";
+import { isPasswordComplex } from "lib/utils";
 
 interface ResponseData {
   ok: boolean;
@@ -28,45 +29,54 @@ export default function RegisterForm() {
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
 
-    if (password === confirmPassword) {
-      setIsLoading(true);
+    if (!isPasswordComplex(password)) {
+      showMessage(
+        "Password must be at least 8 characters long and include uppercase and lowercase letters, numbers, and special characters.",
+        true
+      );
+      return;
+    }
 
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          confirmPassword,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+    if (password !== confirmPassword) {
+      showMessage("Passwords don't match.", true);
+      return;
+    }
+
+    setIsLoading(true);
+
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+        confirmPassword,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = (await res.json()) as ResponseData;
+
+    if (res.status === 201) {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        callbackUrl: "/",
       });
 
-      const data = (await res.json()) as ResponseData;
-
-      if (res.status === 201) {
-        const result = await signIn("credentials", {
-          email,
-          password,
-          callbackUrl: "/",
-        });
-
-        if (result?.error) {
-          showMessage(result.error, true);
-          setIsLoading(false);
-        } else {
-          router.replace("/");
-        }
-      } else if (data.error) {
-        showMessage(data.error, true);
+      if (result?.error) {
+        showMessage(result.error, true);
+        setIsLoading(false);
+      } else {
+        router.replace("/");
       }
-
-      setIsLoading(false);
-    } else {
-      showMessage("Passwords don't match.", true);
+    } else if (data.error) {
+      showMessage(data.error, true);
     }
+
+    setIsLoading(false);
   }
 
   return (
