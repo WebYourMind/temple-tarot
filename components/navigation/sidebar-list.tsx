@@ -1,4 +1,4 @@
-import { ChatBubbleIcon, EyeOpenIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
+import { ChatBubbleIcon, EyeOpenIcon, PersonIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { SidebarItem } from "./sidebar-item";
 
 const menuItems = [
@@ -6,6 +6,11 @@ const menuItems = [
     name: "Chat with Merlin",
     path: "/",
     icon: <ChatBubbleIcon />,
+  },
+  {
+    name: "My Profile",
+    path: "/profile",
+    icon: <PersonIcon />,
   },
   {
     name: "My Thinking Style Report",

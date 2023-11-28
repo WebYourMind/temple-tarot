@@ -30,7 +30,7 @@ const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
             return (
               <label
                 key={index}
-                className={`flex cursor-pointer items-center justify-between rounded-sm border bg-orange-50 p-2 text-orange-800 hover:bg-orange-100 ${
+                className={`flex cursor-pointer items-center justify-between rounded-sm border bg-orange-50 p-2  hover:bg-orange-100 ${
                   selected ? "border-orange-500" : "border-orange-200"
                 }`}
               >

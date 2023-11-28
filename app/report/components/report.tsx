@@ -4,11 +4,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "components/ui/button";
 import { useRouter } from "next/navigation";
-import { ColorWheelIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 import { useScores } from "lib/hooks/use-scores";
 import { useReport } from "lib/hooks/use-report";
 import getPieChart from "lib/getPieChart";
+import Loading from "components/loading";
 
 export default function Report() {
   const router = useRouter();
@@ -31,11 +31,7 @@ export default function Report() {
   }, [router]);
 
   if (pageLoading) {
-    return (
-      <div className="mt-5 flex items-center justify-center">
-        <ColorWheelIcon className="mr-2 h-10 w-10 animate-spin" />
-      </div>
-    );
+    return <Loading message="Finding report..." />;
   }
 
   if (!scores) {
@@ -53,30 +49,27 @@ export default function Report() {
     );
   }
 
+  if (scores && isLoading) {
+    return (
+      <Loading
+        message={`Your personalized report is currently being crafted!
+          Please stay on this page while we work our magic.`}
+      />
+    );
+  }
+
   return (
     <div className="mx-auto my-20 flex max-w-4xl flex-col items-center px-5">
-      {scores && isLoading ? (
-        <div className="flex h-96 flex-col items-center justify-center space-y-5 text-center">
-          <p>
-            Your personalized report is currently being crafted!<br></br>Please stay on this page while we work our
-            magic.
-          </p>
-          <ColorWheelIcon className="mr-2 h-10 w-10 animate-spin" />
-        </div>
-      ) : (
-        <>
-          <ReactMarkdown className="prose prose-indigo md:prose-lg">
-            {`${report}
+      <ReactMarkdown className="prose prose-indigo md:prose-lg">
+        {`${report}
 
 ${getPieChart(scores)}
 `}
-          </ReactMarkdown>
+      </ReactMarkdown>
 
-          <Button className="mt-10" onClick={navToQuiz}>
-            Retake The Quiz
-          </Button>
-        </>
-      )}
+      <Button className="mt-10" onClick={navToQuiz}>
+        Retake The Quiz
+      </Button>
     </div>
   );
 }
