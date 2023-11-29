@@ -1,17 +1,17 @@
 "use client";
 
 import React, { SyntheticEvent, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import InputField from "app/(auth)/components/input-field";
 import { useResponseMessage } from "lib/hooks/use-response-message";
 import AuthForm from "app/(auth)/components/auth-form";
 import { isPasswordComplex } from "lib/utils";
 
-export default function ResetPasswordForm() {
-  const searchParams = useSearchParams();
+export default function ChangePasswordForm() {
   const route = useRouter();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { responseMessage, showMessage } = useResponseMessage({
     message: "",
@@ -21,7 +21,7 @@ export default function ResetPasswordForm() {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    if (!isPasswordComplex(password)) {
+    if (!isPasswordComplex(newPassword)) {
       showMessage(
         "Password must be at least 8 characters long and include uppercase and lowercase letters, numbers, and special characters.",
         true
@@ -29,7 +29,7 @@ export default function ResetPasswordForm() {
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (newPassword !== confirmNewPassword) {
       showMessage("Passwords do not match.", true);
       return;
     }
@@ -37,13 +37,11 @@ export default function ResetPasswordForm() {
     setIsLoading(true);
 
     try {
-      const token = searchParams?.get("token");
-
-      const res = await fetch("/api/auth/reset-password", {
+      const res = await fetch("/api/auth/change-password", {
         method: "POST",
         body: JSON.stringify({
-          token,
-          password,
+          oldPassword,
+          newPassword,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +50,7 @@ export default function ResetPasswordForm() {
 
       const data = (await res.json()) as { message: string; error: string };
       if (res.status === 200) {
-        route.push("/login");
+        route.push("/profile");
       } else {
         throw new Error(data.error);
       }
@@ -65,13 +63,22 @@ export default function ResetPasswordForm() {
   return (
     <AuthForm isLoading={isLoading} onSubmit={handleSubmit} responseMessage={responseMessage}>
       <InputField
+        id="old-password"
+        placeholder="Enter your current password"
+        type="password"
+        disabled={isLoading}
+        label="Current Password"
+        value={oldPassword}
+        onChange={(e) => setOldPassword(e.target.value)}
+      />
+      <InputField
         id="new-password"
         placeholder="Enter a new password"
         type="password"
         disabled={isLoading}
         label="New Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
       />
       <InputField
         id="confirm-password"
@@ -79,8 +86,8 @@ export default function ResetPasswordForm() {
         type="password"
         disabled={isLoading}
         label="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        value={confirmNewPassword}
+        onChange={(e) => setConfirmNewPassword(e.target.value)}
       />
     </AuthForm>
   );

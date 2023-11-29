@@ -3,10 +3,6 @@ import { getServerSession, type NextAuthOptions, User } from "next-auth";
 import { sql } from "@vercel/postgres";
 import bcrypt from "bcrypt";
 
-interface ExtendedUser extends User {
-  id: string;
-}
-
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
 export const authOptions: NextAuthOptions = {
@@ -74,14 +70,29 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     session: async ({ session, token }) => {
-      if (session.user) {
-        const user = session.user as ExtendedUser;
-        user.id = token.id as string;
+      if (token.id) {
+        const user = await fetchUserData(token.id as string);
+        if (user) {
+          session.user = user;
+        }
       }
       return session;
     },
   },
 };
+
+async function fetchUserData(userId: string) {
+  const result = await sql`SELECT * FROM users WHERE id = ${userId}`;
+  if (result.rows.length > 0) {
+    const user = result.rows[0];
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
+  }
+  return null;
+}
 
 export function getSession() {
   return getServerSession(authOptions) as Promise<{

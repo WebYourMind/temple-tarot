@@ -2,6 +2,7 @@ import "styles/tailwind.css";
 import { Metadata } from "next";
 import { Providers } from "app/providers";
 import { Header } from "components/navigation/header";
+import { Toaster } from "react-hot-toast";
 
 const title = "Merlin AI";
 const description = "A guide for thinking based on natural systems.";
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <div className="flex min-h-screen flex-col">
+            <Toaster />
             <Header />
             {children}
           </div>

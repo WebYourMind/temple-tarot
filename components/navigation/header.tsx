@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
 
@@ -6,11 +8,11 @@ import { Button, buttonVariants } from "components/ui/button";
 import { Sidebar } from "./sidebar";
 import { IconExternalLink, IconSeparator } from "../ui/icons";
 import { UserMenu } from "./user-menu";
-import { getSession } from "lib/auth";
 import { SidebarList } from "components/navigation/sidebar-list";
+import { useSession } from "next-auth/react";
 
-export async function Header() {
-  const session = await getSession();
+export function Header() {
+  const { data: session } = useSession() as any;
   return (
     <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-white px-4">
       <div className="flex items-center">

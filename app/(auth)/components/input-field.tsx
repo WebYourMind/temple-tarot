@@ -6,15 +6,17 @@ interface InputFieldProps {
   id: string;
   placeholder: string;
   type: string;
-  disabled: boolean;
+  disabled?: boolean;
   label: string;
   value?: string;
+  name?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string | null;
 }
 
 export default function InputField({
   id,
+  name,
   placeholder,
   type,
   disabled,
@@ -22,9 +24,10 @@ export default function InputField({
   value,
   onChange,
   error,
+  ...props
 }: InputFieldProps) {
   return (
-    <div className="grid gap-1">
+    <div className="grid w-full gap-2">
       <Label htmlFor={id}>{label}</Label>
       <Input
         id={id}
@@ -34,6 +37,8 @@ export default function InputField({
         value={value}
         onChange={onChange}
         className={error ? "border-red-500" : ""}
+        name={name}
+        {...props}
       />
       {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>

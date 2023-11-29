@@ -14,13 +14,7 @@ const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
 
   return (
     <>
-      {isDeepQuestion && (
-        <p className="mb-2 font-semibold">
-          Please rate how strongly you agree with the statement below a scale from 1 (not at all like me) to 5 (very
-          much like me).
-        </p>
-      )}
-      <label className="mb-5 block">{question.prompt || question}</label>
+      <label className="mb-5 block text-lg">{question.prompt || question}</label>
       <div className="flex flex-col gap-2">
         {(isDeepQuestion ? Array.from({ length: 5 }, (_, i) => ({ option: i + 1 })) : question.choices).map(
           (choice: any, index: any) => {
@@ -30,8 +24,8 @@ const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
             return (
               <label
                 key={index}
-                className={`flex cursor-pointer items-center justify-between rounded-sm border bg-orange-50 p-2 text-orange-800 hover:bg-orange-100 ${
-                  selected ? "border-orange-500" : "border-orange-200"
+                className={`flex cursor-pointer items-center justify-between rounded-sm border bg-orange-50 p-2  hover:bg-orange-100 ${
+                  selected ? "border-orange-400" : "border-orange-200"
                 }`}
               >
                 <input
@@ -44,7 +38,7 @@ const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
                 />
                 <span className="ml-2">{isDeepQuestion ? choice.option : choice.option}</span>
                 <div className="w-8">
-                  {selected && <CheckCircledIcon width="25" height="25" className="text-orange-500" />}
+                  {selected && <CheckCircledIcon width="25" height="25" className="text-orange-400" />}
                 </div>
               </label>
             );
@@ -58,7 +52,13 @@ const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
 const Question = ({ section, answers, handleOptionChange, initial }: any) => {
   return (
     <div className="mb-8">
-      <h2 className="mb-4 text-xl font-bold">{section.section}</h2>
+      {!initial && (
+        <p className="mb-5 text-sm  italic">
+          Please rate how strongly you agree with the statement below a scale from 1 (not at all like me) to 5 (very
+          much like me).
+        </p>
+      )}
+      <h2 className="mb-2 text-xl font-bold">{section.section}</h2>
       {section.questions.map((question: any, questionIndex: number) => (
         <div key={questionIndex} className="mb-4">
           <QuestionItem

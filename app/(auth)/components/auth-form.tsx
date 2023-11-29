@@ -17,7 +17,7 @@ export default function AuthForm({ isLoading, onSubmit, children, responseMessag
   return (
     <div className="grid gap-6">
       <form onSubmit={onSubmit} method="POST">
-        <div className="grid gap-2">
+        <div className="grid gap-4">
           {children}
           {responseMessage?.message && <Message error={true}>{responseMessage?.message}</Message>}
           <Button disabled={isLoading}>

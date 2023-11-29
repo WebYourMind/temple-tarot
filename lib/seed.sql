@@ -4,7 +4,9 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     hashed_password TEXT NOT NULL,
     email_verified TIMESTAMPTZ,
-    image TEXT
+    image TEXT,
+    address VARCHAR(255),
+    phone VARCHAR(20)
 );
 
 CREATE TABLE sessions (

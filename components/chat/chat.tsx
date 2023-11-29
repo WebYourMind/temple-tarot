@@ -22,7 +22,7 @@ import { Input } from "components/ui/input";
 import { toast } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import { ArchetypeValues } from "lib/types";
-import { ColorWheelIcon } from "@radix-ui/react-icons";
+import Loading from "components/loading";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 export interface ChatProps extends React.ComponentProps<"div"> {
@@ -92,11 +92,7 @@ export function Chat({ id, className }: ChatProps) {
   }, [session?.data?.user.id]);
 
   if (initLoading) {
-    return (
-      <div className="mt-5 flex grow items-center justify-center">
-        <ColorWheelIcon className="mr-2 h-10 w-10 animate-spin" />
-      </div>
-    );
+    return <Loading message="Loading chat..." />;
   }
 
   return (
