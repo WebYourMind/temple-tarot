@@ -1,8 +1,8 @@
 import { UseChatHelpers } from "ai/react";
-import { ArchetypeValues } from "app/report/components/report";
 
 import { Button } from "components/ui/button";
 import { IconArrowRight } from "components/ui/icons";
+import { ArchetypeValues } from "lib/types";
 import { useRouter } from "next/navigation";
 
 const exampleMessages = [
