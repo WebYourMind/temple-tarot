@@ -14,6 +14,7 @@ export type ReportType = string | undefined;
 export type UserProfile = {
   name: string;
   email: string;
+  id?: string;
   address?: string;
   phone?: string;
 };

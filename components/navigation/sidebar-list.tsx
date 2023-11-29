@@ -1,3 +1,5 @@
+"use client";
+
 import { ChatBubbleIcon, EyeOpenIcon, PersonIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { SidebarItem } from "./sidebar-item";
 

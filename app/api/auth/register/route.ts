@@ -4,7 +4,7 @@ import crypto from "crypto";
 import bcrypt from "bcrypt";
 import sgMail from "@sendgrid/mail";
 
-interface CustomBody {
+interface RegisterUser {
   email: string;
   password: string;
   name?: string;
@@ -12,7 +12,7 @@ interface CustomBody {
 
 export async function POST(request: NextRequest) {
   try {
-    const user = (await request.json()) as CustomBody;
+    const user = (await request.json()) as RegisterUser;
 
     // Validation
     if (!user.email || !user.password) {

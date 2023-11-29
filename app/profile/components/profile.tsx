@@ -55,7 +55,7 @@ export default function ViewProfile() {
           <p className="flex items-center">
             <HomeIcon className="mr-2 h-5 w-5 text-gray-500" /> {profile.address}
           </p>
-          <Button variant={"outline"}>
+          <Button variant={"outline"} onClick={() => route.push("/profile/edit")}>
             <Pencil2Icon className="mr-2" />
             Edit Profile
           </Button>
