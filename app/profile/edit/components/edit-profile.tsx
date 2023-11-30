@@ -64,7 +64,6 @@ export default function EditProfile() {
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const formattedPhoneNumber = new AsYouType().input(e.target.value);
-    console.log(formattedPhoneNumber);
     setUserInfo((prev) => ({ ...prev, phone: formattedPhoneNumber }));
   };
 

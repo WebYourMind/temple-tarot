@@ -1,5 +1,6 @@
 "use client";
 
+import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import {
   EnvelopeClosedIcon,
   ExclamationTriangleIcon,
@@ -15,6 +16,7 @@ import { UserProfile } from "lib/types";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import DeactivateAccount from "../edit/components/deactivate-account";
 
 export default function ViewProfile() {
   const { data: session } = useSession() as any;
@@ -78,10 +80,15 @@ export default function ViewProfile() {
             <LockClosedIcon className="mr-2" />
             Change Password
           </Button>
-          <Button variant={"destructive"}>
-            <ExclamationTriangleIcon className="mr-2" />
-            Deactivate Account
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant={"destructive"}>
+                <ExclamationTriangleIcon className="mr-2" />
+                Deactivate Account
+              </Button>
+            </DialogTrigger>
+            <DeactivateAccount />
+          </Dialog>
         </div>
       </div>
     </div>

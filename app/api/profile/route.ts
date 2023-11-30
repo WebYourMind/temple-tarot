@@ -3,6 +3,7 @@ import { sql } from "@vercel/postgres";
 import sgMail from "@sendgrid/mail";
 import crypto from "crypto";
 import { UserProfile } from "lib/types";
+import { getSession } from "lib/auth";
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -91,6 +92,55 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ message: successMessage, updatedUser: users[0] }, { status: 200 });
   } catch (error) {
     console.error(error);
+    return NextResponse.json(
+      {
+        error: "An error occurred while processing your request.",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const userId = (await getSession())?.user.id;
+
+    // Check if userId is not null or undefined
+    if (!userId) {
+      throw new Error("The user ID must be provided.");
+    }
+
+    // Start a transaction
+    await sql`BEGIN`;
+
+    // Deleting dependent data
+    await sql`DELETE FROM chat_messages WHERE user_id = ${userId}`;
+    await sql`DELETE FROM password_reset_tokens WHERE user_id = ${userId}`;
+    await sql`DELETE FROM verification_tokens WHERE identifier = (SELECT email FROM users WHERE id = ${userId})`;
+    await sql`DELETE FROM accounts WHERE user_id = ${userId}`;
+    await sql`DELETE FROM sessions WHERE user_id = ${userId}`;
+    await sql`DELETE FROM reports WHERE user_id = ${userId}`;
+    await sql`DELETE FROM scores WHERE user_id = ${userId}`;
+    await sql`DELETE FROM addresses WHERE id = (SELECT address_id FROM users WHERE id = ${userId})`;
+
+    // Finally, delete the user
+    await sql`DELETE FROM users WHERE id = ${userId}`;
+
+    // Commit the transaction
+    await sql`COMMIT`;
+
+    return NextResponse.json(
+      {
+        message: "User and associated data deleted successfully.",
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    // Return an error response
     return NextResponse.json(
       {
         error: "An error occurred while processing your request.",
