@@ -18,6 +18,28 @@ export async function PATCH(request: NextRequest) {
       user: UserProfile;
     };
 
+    const { street, city, state, postalCode, country } = user.address;
+    const isAddressProvided = street || city || state || postalCode || country;
+    const { rows: existingAddress } = await sql`SELECT address_id FROM users WHERE id = ${userId}`;
+
+    if (isAddressProvided) {
+      if (existingAddress[0].address_id) {
+        // Update existing address
+        await sql`UPDATE addresses SET street = ${street}, city = ${city}, state = ${state}, postal_code = ${postalCode}, country = ${country} WHERE id = ${existingAddress[0].address_id}`;
+      } else {
+        // Insert new address and update user record with new address_id
+        const { rows: newAddress } =
+          await sql`INSERT INTO addresses (street, city, state, postal_code, country) VALUES (${street}, ${city}, ${state}, ${postalCode}, ${country}) RETURNING id`;
+        await sql`UPDATE users SET address_id = ${newAddress[0].id} WHERE id = ${userId}`;
+      }
+      // If there is an address stored but the user intentionally deletes their address fields
+    } else if (existingAddress[0] && existingAddress[0].address_id) {
+      // Delete the existing address record
+      await sql`DELETE FROM addresses WHERE id = ${existingAddress[0].address_id}`;
+      // Set the user's address_id to NULL
+      await sql`UPDATE users SET address_id = NULL WHERE id = ${userId}`;
+    }
+
     // Validate email and name
     if (!user.email || !user.email.includes("@")) {
       return NextResponse.json({ error: "Invalid email provided." }, { status: 400 });
@@ -64,7 +86,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const { rows: users } =
-      await sql`UPDATE users SET email = ${user.email}, name = ${user.name} WHERE id = ${userId} RETURNING *`;
+      await sql`UPDATE users SET email = ${user.email}, name = ${user.name}, phone = ${user.phone} WHERE id = ${userId} RETURNING *`;
 
     return NextResponse.json({ message: successMessage, updatedUser: users[0] }, { status: 200 });
   } catch (error) {

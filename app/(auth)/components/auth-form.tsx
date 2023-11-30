@@ -5,7 +5,7 @@ import Message from "components/ui/message";
 
 interface AuthFormProps {
   isLoading: boolean;
-  onSubmit: (event: SyntheticEvent) => Promise<void>;
+  onSubmit: (event: SyntheticEvent) => Promise<void | false | undefined>;
   children: ReactNode;
   responseMessage?: {
     message: string;

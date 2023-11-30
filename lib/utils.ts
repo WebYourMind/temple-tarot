@@ -76,3 +76,17 @@ export function isPasswordComplex(password: string) {
 
   return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar;
 }
+
+export function isValidPhoneNumber(phoneNumber: string) {
+  // Remove common characters (spaces, dashes, parentheses)
+  const cleanedNumber = phoneNumber.replace(/[\s-()]/g, "");
+
+  // Check if the number contains only digits (and optional leading +)
+  const regex = /^\+?\d{7,15}$/;
+  return regex.test(cleanedNumber);
+}
+
+export function isValidEmail(email: string) {
+  const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  return regex.test(email);
+}

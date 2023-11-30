@@ -5,7 +5,7 @@ import InputField from "app/(auth)/components/input-field";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useResponseMessage } from "lib/hooks/use-response-message";
-import { isPasswordComplex } from "lib/utils";
+import { isPasswordComplex, isValidEmail } from "lib/utils";
 
 interface ResponseData {
   ok: boolean;
@@ -28,6 +28,11 @@ export default function RegisterForm() {
 
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
+
+    if (!email || !isValidEmail(email)) {
+      showMessage("Please enter a valid email.", true);
+      return false;
+    }
 
     if (!isPasswordComplex(password)) {
       showMessage(
