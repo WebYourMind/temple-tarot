@@ -3,8 +3,8 @@ import ResetPasswordForm from "./components/change-password-form";
 import AuthPage from "../components/auth-page";
 
 export const metadata: Metadata = {
-  title: "Change password - Merlin AI",
-  description: "Merlin AI change password page.",
+  title: "Change password - Ibis AI",
+  description: "Ibis AI change password page.",
 };
 
 export default function ChangePassword() {

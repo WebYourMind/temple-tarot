@@ -16,7 +16,7 @@ export default function Loading({ message }: LoadingProps) {
           ))}
         </div>
       )}
-      <ColorWheelIcon className="h-10 w-10 animate-spin" />
+      <ColorWheelIcon className="h-10 w-10 animate-spin text-orange-600" />
     </div>
   );
 }

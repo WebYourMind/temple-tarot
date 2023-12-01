@@ -3,8 +3,8 @@ import ForgotPasswordForm from "./components/forgot-password-form";
 import AuthPage from "../components/auth-page";
 
 export const metadata: Metadata = {
-  title: "Forgot password - Merlin AI",
-  description: "Merlin AI forgot password page.",
+  title: "Forgot password - Ibis AI",
+  description: "Ibis AI forgot password page.",
 };
 
 export default function ForgotPassword() {

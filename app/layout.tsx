@@ -4,14 +4,14 @@ import { Providers } from "app/providers";
 import { Header } from "components/navigation/header";
 import { Toaster } from "react-hot-toast";
 
-const title = "Merlin AI";
+const title = "Ibis AI";
 const description = "A guide for thinking based on natural systems.";
 // const image = "https://vercel.pub/thumbnail.png";
 
 export const metadata: Metadata = {
   title,
   description,
-  // icons: ["https://vercel.pub/favicon.ico"],
+  icons: ["./favicon.ico"],
   openGraph: {
     title,
     description,

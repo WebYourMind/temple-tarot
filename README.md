@@ -1,4 +1,4 @@
-# Merlin-AI FE built on Next.js
+# Ibis-AI built on Next.js
 
 ## 📚 Built in Features
 
@@ -29,7 +29,7 @@ From the original template, we get all of these:
 
 ## Table of Contents
 
-- [Merlin-AI-FE](#-Merlin-AI-FE-built-on-Next.js)
+- [Ibis-AI](#-Ibis-AI-built-on-Next.js)
   - [📚 Features](#-features)
   - [Table of Contents](#table-of-contents)
   - [🎯 Getting Started](#-getting-started)

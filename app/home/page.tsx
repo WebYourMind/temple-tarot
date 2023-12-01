@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Chat } from "components/chat/chat";
 
 export const metadata: Metadata = {
-  title: "Merlin AI",
+  title: "Ibis AI",
   description: "A guide for thinking based on natural systems.",
 };
 

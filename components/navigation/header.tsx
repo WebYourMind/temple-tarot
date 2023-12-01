@@ -24,7 +24,7 @@ export function Header() {
           </Sidebar>
         ) : (
           <Link href="/" target="_blank" rel="nofollow" className="mr-1">
-            Merlin AI
+            Ibis AI
           </Link>
         )}
         <div className="flex items-center">

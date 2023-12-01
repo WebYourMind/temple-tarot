@@ -15,7 +15,7 @@ test.describe("Authentication Tests", () => {
     await page.fill('input[id="confirm-password"]', "password");
     await Promise.all([page.click("text=Submit"), page.waitForURL("/")]);
 
-    await page.waitForSelector("text=Merlin AI", { timeout: 60000 });
+    await page.waitForSelector("text=Ibis AI", { timeout: 60000 });
     await expect(page).toHaveURL("http://localhost:3000/");
   });
 
@@ -25,7 +25,7 @@ test.describe("Authentication Tests", () => {
     await page.fill('input[id="email"]', "janedoe@example.com");
     await page.fill('input[id="password"]', "password");
     await Promise.all([page.click("text=Submit"), page.waitForURL("/")]);
-    await page.waitForSelector("text=Merlin AI", { timeout: 60000 });
+    await page.waitForSelector("text=Ibis AI", { timeout: 60000 });
     await expect(page).toHaveURL("http://localhost:3000/");
   });
 });

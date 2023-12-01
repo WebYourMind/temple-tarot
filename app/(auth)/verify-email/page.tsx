@@ -3,8 +3,8 @@ import Verify from "./components/verify";
 import AuthPage from "../components/auth-page";
 
 export const metadata: Metadata = {
-  title: "Email verification - Merlin AI",
-  description: "Merlin AI email verification page.",
+  title: "Email verification - Ibis AI",
+  description: "Ibis AI email verification page.",
 };
 
 export default function VerifyEmailPage() {

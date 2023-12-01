@@ -31,12 +31,12 @@ function createContextPrompt({
   return `Context: The user's thinking style scores are - explorer: ${scores.explorer}, analyst: ${scores.analyst}, designer: ${scores.designer}, optimizer: ${scores.optimizer}, connector: ${scores.connector}, nurturer: ${scores.nurturer}, energizer: ${scores.energizer}, achiever: ${scores.achiever}. The dominant thinking style is "${dominantStyle}".
   Tailor your response to align with the characteristics of the "${dominantStyle}" archetype.
   Adapt your language and content to resonate with the "${dominantStyle}" thinking style, offering solutions that leverage its strengths.
-  Incorporate relevant examples or analogies where appropriate, drawing only upon Mark Bonchek's Shift Thinking framework and teachings or nature's systems as applicable but do not explicitly Mark Boncheck when doing so.
-  Ensure your response is short, concise, and easily readable. Conclude with a thought-provoking question to engage the user further, if appropriate.`; //  Politely decline to answer if a question has no relevance to the teachings of Shift Thinking.
+  Incorporate relevant examples or analogies if necessary, drawing mainly upon Mark Bonchek's Shift Thinking framework or nature's systems if explaining a complex topic. Do not explicitly mention Mark Boncheck when doing so.
+  Ensure your response is friendly and easily readable. Conclude with a thought-provoking question to engage the user further, if necessary.`; //  Politely decline to answer if a question has no relevance to the teachings of Shift Thinking.
 }
 
 const basicContextPrompt =
-  "Incorporate relevant examples or analogies where appropriate, drawing only upon Mark Bonchek's Shift Thinking framework and teachings or nature's systems as applicable without explicitly stating so. Ensure your response is short, concise, and easily readable. Conclude with a thought-provoking question to engage the user further"; // , if appropriate. Politely decline to answer if a question has no relevance to the teachings of Shift Thinking.";
+  "Incorporate relevant examples or analogies if necessary, drawing mainly upon Mark Bonchek's Shift Thinking framework or nature's systems if explaining a complex topic. Do not explicitly mention Mark Boncheck when doing so. Ensure your response is friendly and easily readable. Conclude with a thought-provoking question to engage the user further, if necessary."; // , if appropriate. Politely decline to answer if a question has no relevance to the teachings of Shift Thinking.";
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;

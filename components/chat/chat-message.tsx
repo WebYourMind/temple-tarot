@@ -10,6 +10,8 @@ import { cn } from "lib/utils";
 import { MemoizedReactMarkdown } from "components/chat/markdown";
 import { IconOpenAI, IconUser } from "components/ui/icons";
 import { ChatMessageActions } from "components/chat/chat-message-actions";
+import Image from "next/image";
+import Ibis from "../../app/ibis.webp";
 
 export interface ChatMessageProps {
   message: Message;
@@ -21,10 +23,14 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
       <div
         className={cn(
           "flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-3xl border shadow",
-          message.role === "user" ? "bg-background" : "bg-primary text-primary-foreground"
+          message.role === "user" ? "bg-primary text-primary-foreground" : "bg-background text-orange-500"
         )}
       >
-        {message.role === "user" ? <IconUser /> : <IconOpenAI />}
+        {message.role === "user" ? (
+          <IconUser />
+        ) : (
+          <Image className="rounded-3xl" src={Ibis} alt="Ibis" width={45} height={45} />
+        )}
       </div>
       <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
         <MemoizedReactMarkdown

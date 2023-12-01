@@ -1,11 +1,9 @@
 {
-  "projectName": "Merlin-AI-FE",
+  "projectName": "Ibis-AI",
   "projectOwner": "Web Your Mind",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "files": [
-    "README.md"
-  ],
+  "files": ["README.md"],
   "imageSize": 100,
   "commit": true,
   "commitConvention": "angular",
@@ -13,9 +11,7 @@
     {
       "login": "adamwebyourmind",
       "name": "Adam O'Neill",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     }
   ],
   "contributorsPerLine": 7,

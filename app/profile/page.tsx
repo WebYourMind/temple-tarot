@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Profile from "./components/profile";
 
 export const metadata: Metadata = {
-  title: "Merlin AI",
+  title: "Ibis AI",
   description: "A guide for thinking based on natural systems.",
 };
 

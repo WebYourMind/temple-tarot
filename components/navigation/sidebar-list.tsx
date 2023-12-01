@@ -5,7 +5,7 @@ import { SidebarItem } from "./sidebar-item";
 
 const menuItems = [
   {
-    name: "Chat with Merlin",
+    name: "Chat with Ibis",
     path: "/",
     icon: <ChatBubbleIcon />,
   },
