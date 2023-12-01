@@ -1,5 +1,6 @@
 "use client";
 
+import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import {
   EnvelopeClosedIcon,
   ExclamationTriangleIcon,
@@ -15,6 +16,7 @@ import { UserProfile } from "lib/types";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import DeactivateAccount from "../edit/components/deactivate-account";
 
 export default function ViewProfile() {
   const { data: session } = useSession() as any;
@@ -26,7 +28,7 @@ export default function ViewProfile() {
       setProfile({
         name: session.user?.name || "",
         email: session.user?.email || "",
-        address: session.user?.address || "None",
+        address: session.user?.address || null,
         phone: session.user?.phone || "None",
       });
     }
@@ -52,9 +54,24 @@ export default function ViewProfile() {
           <p className="flex items-center">
             <MobileIcon className="mr-2 h-5 w-5 text-gray-500" /> {profile.phone}
           </p>
-          <p className="flex items-center">
-            <HomeIcon className="mr-2 h-5 w-5 text-gray-500" /> {profile.address}
-          </p>
+          {profile.address && (
+            <div className="flex flex-col">
+              <p className="flex items-center">
+                <HomeIcon className="mr-2 h-5 w-5 text-gray-500" /> {profile.address.street}
+              </p>
+              <div className="ml-7">
+                <p>
+                  {profile.address.city}, {profile.address.state} {profile.address.postalCode}
+                </p>
+                <p>{profile.address.country}</p>
+              </div>
+            </div>
+          )}
+          {!profile.address && (
+            <p className="flex items-center">
+              <HomeIcon className="mr-2 h-5 w-5 text-gray-500" /> No address provided
+            </p>
+          )}
           <Button variant={"outline"} onClick={() => route.push("/profile/edit")}>
             <Pencil2Icon className="mr-2" />
             Edit Profile
@@ -63,10 +80,15 @@ export default function ViewProfile() {
             <LockClosedIcon className="mr-2" />
             Change Password
           </Button>
-          <Button variant={"destructive"}>
-            <ExclamationTriangleIcon className="mr-2" />
-            Deactivate Account
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant={"destructive"}>
+                <ExclamationTriangleIcon className="mr-2" />
+                Deactivate Account
+              </Button>
+            </DialogTrigger>
+            <DeactivateAccount />
+          </Dialog>
         </div>
       </div>
     </div>

@@ -5,8 +5,17 @@ CREATE TABLE users (
     hashed_password TEXT NOT NULL,
     email_verified TIMESTAMPTZ,
     image TEXT,
-    address VARCHAR(255),
+    address_id INTEGER REFERENCES addresses(id),
     phone VARCHAR(20)
+);
+
+CREATE TABLE addresses (
+    id SERIAL PRIMARY KEY,
+    street VARCHAR(255),
+    city VARCHAR(255),
+    state VARCHAR(255),
+    postal_code VARCHAR(20),
+    country VARCHAR(255)
 );
 
 CREATE TABLE sessions (

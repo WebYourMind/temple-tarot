@@ -60,17 +60,16 @@ export function Chat({ id, className }: ChatProps) {
   useEffect(() => {
     async function fetchData() {
       setInitLoading(true);
-      console.log("fetching data");
       try {
         const messagesResponse = fetch(`/api/chat/?userId=${session.data?.user.id}`);
         const scoresResponse = fetch(`/api/quiz/?userId=${session.data?.user.id}`);
 
         const [messagesRes, scoresRes] = await Promise.all([messagesResponse, scoresResponse]);
 
-        if (!messagesRes.ok) {
+        if (!messagesRes.ok && messagesRes.status !== 404) {
           throw new Error("Failed to fetch messages.");
         }
-        if (!scoresRes.ok) {
+        if (!scoresRes.ok && messagesRes.status !== 404) {
           throw new Error("Failed to fetch scores.");
         }
 

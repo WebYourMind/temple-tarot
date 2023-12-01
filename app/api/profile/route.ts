@@ -3,6 +3,7 @@ import { sql } from "@vercel/postgres";
 import sgMail from "@sendgrid/mail";
 import crypto from "crypto";
 import { UserProfile } from "lib/types";
+import { getSession } from "lib/auth";
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -17,6 +18,28 @@ export async function PATCH(request: NextRequest) {
     const { user } = (await request.json()) as {
       user: UserProfile;
     };
+
+    const { street, city, state, postalCode, country } = user.address;
+    const isAddressProvided = street || city || state || postalCode || country;
+    const { rows: existingAddress } = await sql`SELECT address_id FROM users WHERE id = ${userId}`;
+
+    if (isAddressProvided) {
+      if (existingAddress[0].address_id) {
+        // Update existing address
+        await sql`UPDATE addresses SET street = ${street}, city = ${city}, state = ${state}, postal_code = ${postalCode}, country = ${country} WHERE id = ${existingAddress[0].address_id}`;
+      } else {
+        // Insert new address and update user record with new address_id
+        const { rows: newAddress } =
+          await sql`INSERT INTO addresses (street, city, state, postal_code, country) VALUES (${street}, ${city}, ${state}, ${postalCode}, ${country}) RETURNING id`;
+        await sql`UPDATE users SET address_id = ${newAddress[0].id} WHERE id = ${userId}`;
+      }
+      // If there is an address stored but the user intentionally deletes their address fields
+    } else if (existingAddress[0] && existingAddress[0].address_id) {
+      // Delete the existing address record
+      await sql`DELETE FROM addresses WHERE id = ${existingAddress[0].address_id}`;
+      // Set the user's address_id to NULL
+      await sql`UPDATE users SET address_id = NULL WHERE id = ${userId}`;
+    }
 
     // Validate email and name
     if (!user.email || !user.email.includes("@")) {
@@ -64,11 +87,60 @@ export async function PATCH(request: NextRequest) {
     }
 
     const { rows: users } =
-      await sql`UPDATE users SET email = ${user.email}, name = ${user.name} WHERE id = ${userId} RETURNING *`;
+      await sql`UPDATE users SET email = ${user.email}, name = ${user.name}, phone = ${user.phone} WHERE id = ${userId} RETURNING *`;
 
     return NextResponse.json({ message: successMessage, updatedUser: users[0] }, { status: 200 });
   } catch (error) {
     console.error(error);
+    return NextResponse.json(
+      {
+        error: "An error occurred while processing your request.",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const userId = (await getSession())?.user.id;
+
+    // Check if userId is not null or undefined
+    if (!userId) {
+      throw new Error("The user ID must be provided.");
+    }
+
+    // Start a transaction
+    await sql`BEGIN`;
+
+    // Deleting dependent data
+    await sql`DELETE FROM chat_messages WHERE user_id = ${userId}`;
+    await sql`DELETE FROM password_reset_tokens WHERE user_id = ${userId}`;
+    await sql`DELETE FROM verification_tokens WHERE identifier = (SELECT email FROM users WHERE id = ${userId})`;
+    await sql`DELETE FROM accounts WHERE user_id = ${userId}`;
+    await sql`DELETE FROM sessions WHERE user_id = ${userId}`;
+    await sql`DELETE FROM reports WHERE user_id = ${userId}`;
+    await sql`DELETE FROM scores WHERE user_id = ${userId}`;
+    await sql`DELETE FROM addresses WHERE id = (SELECT address_id FROM users WHERE id = ${userId})`;
+
+    // Finally, delete the user
+    await sql`DELETE FROM users WHERE id = ${userId}`;
+
+    // Commit the transaction
+    await sql`COMMIT`;
+
+    return NextResponse.json(
+      {
+        message: "User and associated data deleted successfully.",
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    // Return an error response
     return NextResponse.json(
       {
         error: "An error occurred while processing your request.",

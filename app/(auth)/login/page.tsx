@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <AuthPage
-      heading="Welcome back"
+      heading="Welcome"
       paragraph="Enter your login details below to sign in to your account"
       formComponent={<LoginForm />}
     />

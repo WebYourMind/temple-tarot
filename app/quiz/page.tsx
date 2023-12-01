@@ -1,4 +1,3 @@
-// pages/index.tsx
 import ThinkingStyleQuiz from "./components/quiz";
 import { getSession } from "lib/auth";
 

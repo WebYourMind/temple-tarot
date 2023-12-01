@@ -82,13 +82,43 @@ export const authOptions: NextAuthOptions = {
 };
 
 async function fetchUserData(userId: string) {
-  const result = await sql`SELECT * FROM users WHERE id = ${userId}`;
+  const result = await sql`
+    SELECT users.*, 
+           addresses.street, 
+           addresses.city, 
+           addresses.state, 
+           addresses.postal_code, 
+           addresses.country 
+    FROM users 
+    LEFT JOIN addresses ON users.address_id = addresses.id
+    WHERE users.id = ${userId}
+  `;
+
   if (result.rows.length > 0) {
     const user = result.rows[0];
+
+    // Check if the user has an address
+    const hasAddress =
+      user.street !== null ||
+      user.city !== null ||
+      user.state !== null ||
+      user.postal_code !== null ||
+      user.country !== null;
+
     return {
       id: user.id,
       name: user.name,
       email: user.email,
+      phone: user.phone,
+      address: hasAddress
+        ? {
+            street: user.street,
+            city: user.city,
+            state: user.state,
+            postalCode: user.postal_code,
+            country: user.country,
+          }
+        : null,
     };
   }
   return null;

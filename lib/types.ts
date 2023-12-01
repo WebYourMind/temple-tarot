@@ -11,10 +11,18 @@ export type ArchetypeValues = {
 
 export type ReportType = string | undefined;
 
+export type Address = {
+  street: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+};
+
 export type UserProfile = {
   name: string;
   email: string;
   id?: string;
-  address?: string;
+  address: Address;
   phone?: string;
 };
