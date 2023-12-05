@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 
 export function useReport(session: any, scores?: ArchetypeValues) {
   const [report, setReport] = useState<string | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function getReport() {
@@ -16,12 +16,19 @@ export function useReport(session: any, scores?: ArchetypeValues) {
       if (response.ok) {
         if (haveMatchingArchetypeValues(scores as unknown as ArchetypeValues, data.report)) {
           setReport(data.report.report);
+          setIsLoading(false);
+        } else {
+          generateReport();
         }
+      } else if (scores) {
+        generateReport();
+      } else {
+        setIsLoading(false);
       }
     }
 
     if (session?.data?.user && scores) {
-      getReport().finally(() => setIsLoading(false));
+      getReport();
     }
   }, [session?.data?.user, scores]);
 
@@ -89,5 +96,5 @@ export function useReport(session: any, scores?: ArchetypeValues) {
     }
   }, [scores]);
 
-  return { report, generateReport, isLoading };
+  return { report, isLoading };
 }

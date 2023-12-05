@@ -14,15 +14,9 @@ export default function Report() {
   const router = useRouter();
   const session = useSession() as any;
   const { scores, isLoading: scoresLoading } = useScores(session);
-  const { report, isLoading: reportLoading, generateReport } = useReport(session, scores);
+  const { report, isLoading: reportLoading } = useReport(session, scores);
 
   const isLoading = scoresLoading || reportLoading;
-
-  useEffect(() => {
-    if (!report && scores && !isLoading) {
-      generateReport();
-    }
-  }, [report, scores, isLoading, generateReport]);
 
   const navToQuiz = useCallback(() => {
     router.push("/quiz");
