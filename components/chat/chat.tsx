@@ -69,15 +69,17 @@ export function Chat({ id, className }: ChatProps) {
         if (!messagesRes.ok && messagesRes.status !== 404) {
           throw new Error("Failed to fetch messages.");
         }
-        if (!scoresRes.ok && messagesRes.status !== 404) {
+
+        const chatData = (await messagesRes.json()) as any;
+        setInitialMessages(chatData.existingMessages);
+
+        if (!scoresRes.ok && scoresRes.status !== 404) {
           throw new Error("Failed to fetch scores.");
         }
 
-        const chatData = (await messagesRes.json()) as any;
         const scoresData = (await scoresRes.json()) as any;
-
-        setInitialMessages(chatData.existingMessages);
         setScores(scoresData.scores);
+
         setInitLoading(false);
       } catch (error: any) {
         toast.error(`Error: ${error.message}`);

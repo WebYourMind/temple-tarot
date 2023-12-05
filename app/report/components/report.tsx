@@ -13,24 +13,31 @@ import Loading from "components/loading";
 export default function Report() {
   const router = useRouter();
   const session = useSession() as any;
-  const scores = useScores(session);
-  const [isLoading, setIsLoading] = useState(false);
-  const [pageLoading, setPageLoading] = useState(true);
-  const { report, shouldGenerateReport, generateReport } = useReport(session, setIsLoading, setPageLoading, scores);
+  const { scores, isLoading: scoresLoading } = useScores(session);
+  const { report, isLoading: reportLoading, generateReport } = useReport(session, scores);
+
+  const isLoading = scoresLoading || reportLoading;
 
   useEffect(() => {
-    if (report) {
-      setPageLoading(false);
-    } else if (shouldGenerateReport) {
+    if (!report && scores && !isLoading) {
       generateReport();
     }
-  }, [report, shouldGenerateReport]);
+  }, [report, scores, isLoading, generateReport]);
 
   const navToQuiz = useCallback(() => {
     router.push("/quiz");
   }, [router]);
 
-  if (pageLoading) {
+  if (scores && isLoading) {
+    return (
+      <Loading
+        message={`Your personalized report is currently being crafted!
+          Please stay on this page while we work our magic.`}
+      />
+    );
+  }
+
+  if (isLoading) {
     return <Loading message="Finding report..." />;
   }
 
@@ -49,15 +56,6 @@ export default function Report() {
     );
   }
 
-  if (scores && isLoading) {
-    return (
-      <Loading
-        message={`Your personalized report is currently being crafted!
-          Please stay on this page while we work our magic.`}
-      />
-    );
-  }
-
   return (
     <div className="mx-auto my-20 flex max-w-4xl flex-col items-center px-5">
       <ReactMarkdown className="prose prose-indigo md:prose-lg">
@@ -67,9 +65,13 @@ ${getPieChart(scores)}
 `}
       </ReactMarkdown>
 
-      <Button className="mt-10" onClick={navToQuiz}>
-        Retake The Quiz
-      </Button>
+      <div className="flex flex-col space-y-5">
+        <Button onClick={() => router.push("/")}>Chat With Ibis</Button>
+
+        <Button variant={"outline"} onClick={navToQuiz}>
+          Retake The Quiz
+        </Button>
+      </div>
     </div>
   );
 }

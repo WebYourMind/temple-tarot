@@ -26,7 +26,11 @@ export function SidebarItem({ menuItem }: SidebarItemProps) {
       <SheetClose asChild>
         <Link
           href={menuItem.path}
-          className={cn(buttonVariants({ variant: "ghost" }), "group w-full pl-4 pr-4", isActive && "bg-accent")}
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            "group w-full appearance-none pl-4 pr-4",
+            isActive && "bg-accent"
+          )}
         >
           <div
             className="relative flex max-h-5 flex-1 select-none flex-row items-center overflow-hidden text-ellipsis break-all"

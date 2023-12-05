@@ -42,9 +42,12 @@ export async function POST(request: NextRequest) {
     };
     await sgMail.send(msg as any);
 
-    return NextResponse.json({
-      message: "Password reset email sent successfully 🎉",
-    });
+    return NextResponse.json(
+      {
+        message: "Password reset email sent successfully 🎉",
+      },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(
       {

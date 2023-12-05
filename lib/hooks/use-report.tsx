@@ -3,40 +3,31 @@ import { haveMatchingArchetypeValues } from "lib/utils";
 import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 
-export function useReport(
-  session: any,
-  setIsLoading: (b: boolean) => void,
-  setPageLoading: (b: boolean) => void,
-  scores?: ArchetypeValues
-) {
+export function useReport(session: any, scores?: ArchetypeValues) {
   const [report, setReport] = useState<string | undefined>(undefined);
-  const [shouldGenerateReport, setShouldGenerateReport] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function getReport() {
+      setIsLoading(true);
       const response = await fetch(`/api/report/?userId=${session.data?.user.id}`);
       const data = (await response.json()) as any;
 
       if (response.ok) {
         if (haveMatchingArchetypeValues(scores as unknown as ArchetypeValues, data.report)) {
           setReport(data.report.report);
-        } else {
-          setShouldGenerateReport(true);
         }
-      } else {
-        setShouldGenerateReport(true);
       }
     }
 
     if (session?.data?.user && scores) {
-      getReport();
+      getReport().finally(() => setIsLoading(false));
     }
   }, [session?.data?.user, scores]);
 
   const generateReport = useCallback(async () => {
     let isSubscribed = true;
     const controller = new AbortController();
-    setPageLoading(false);
     setIsLoading(true);
     try {
       const response = await fetch("/api/report", {
@@ -98,5 +89,5 @@ export function useReport(
     }
   }, [scores]);
 
-  return { report, shouldGenerateReport, generateReport };
+  return { report, generateReport, isLoading };
 }

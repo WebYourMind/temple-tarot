@@ -3,8 +3,8 @@ import AuthPage from "app/(auth)/components/auth-page";
 import LoginForm from "app/(auth)/login/components/login-form";
 
 export const metadata: Metadata = {
-  title: "Login -  AI",
-  description: " AI login page.",
+  title: "Login - Ibis AI",
+  description: "Ibis AI login page.",
 };
 
 export default function LoginPage() {

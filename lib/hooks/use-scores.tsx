@@ -3,23 +3,32 @@ import toast from "react-hot-toast";
 
 export function useScores(session: any) {
   const [scores, setScores] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchAttempted, setFetchAttempted] = useState(false);
 
   useEffect(() => {
     async function fetchScores() {
+      setIsLoading(true);
       const response = await fetch(`/api/quiz/?userId=${session.data?.user.id}`);
-      if (!response.ok) {
+      if (!response.ok && response.status !== 404) {
         throw new Error("Failed to fetch scores.");
       }
       const scoresData = (await response.json()) as any;
       setScores(scoresData.scores);
+      setIsLoading(false);
     }
 
-    if (!scores && session?.data?.user) {
-      fetchScores().catch((error) => {
-        toast.error(`Error fetching scores: ${error.message}`);
-      });
+    if (!fetchAttempted && session?.data?.user) {
+      fetchScores()
+        .catch((error) => {
+          toast.error(`Error fetching scores: ${error.message}`);
+        })
+        .finally(() => {
+          setIsLoading(false);
+          setFetchAttempted(true);
+        });
     }
-  }, [session?.data?.user, scores]);
+  }, [session?.data?.user, fetchAttempted]);
 
-  return scores;
+  return { scores, isLoading };
 }
