@@ -18,7 +18,7 @@ export function useScores(session: any) {
       setIsLoading(false);
     }
 
-    if (!fetchAttempted && session?.data?.user) {
+    if (!fetchAttempted && session?.data?.user && !scores) {
       fetchScores()
         .catch((error) => {
           toast.error(`Error fetching scores: ${error.message}`);
@@ -28,7 +28,7 @@ export function useScores(session: any) {
           setFetchAttempted(true);
         });
     }
-  }, [session?.data?.user, fetchAttempted]);
+  }, [session?.data?.user, fetchAttempted, scores]);
 
   return { scores, isLoading };
 }

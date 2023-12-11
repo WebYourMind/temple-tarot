@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "components/ui/button";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,7 @@ export default function Report() {
   const router = useRouter();
   const session = useSession() as any;
   const { scores, isLoading: scoresLoading } = useScores(session);
-  const { report, isLoading: reportLoading } = useReport(session, scores);
+  const { report, isLoading: reportLoading, isGenerating } = useReport(session, scores);
 
   const isLoading = scoresLoading || reportLoading;
 
@@ -22,20 +22,11 @@ export default function Report() {
     router.push("/quiz");
   }, [router]);
 
-  if (scores && isLoading) {
-    return (
-      <Loading
-        message={`Your personalized report is currently being crafted!
-          Please stay on this page while we work our magic.`}
-      />
-    );
-  }
-
   if (isLoading) {
     return <Loading message="Finding report..." />;
   }
 
-  if (!scores) {
+  if (!scores && !scoresLoading) {
     return (
       <div className="flex items-center justify-center">
         <div className="mt-5 flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -52,20 +43,23 @@ export default function Report() {
 
   return (
     <div className="mx-auto my-20 flex max-w-4xl flex-col items-center px-5">
-      <ReactMarkdown className="prose prose-indigo text-foreground md:prose-lg">
-        {`${report}
+      {report && scores && (
+        <ReactMarkdown className="prose prose-indigo text-foreground md:prose-lg">
+          {`${report}
 
-${getPieChart(scores)}
+${!isGenerating ? getPieChart(scores) : ""}
 `}
-      </ReactMarkdown>
+        </ReactMarkdown>
+      )}
+      {!isGenerating && (
+        <div className="flex flex-col space-y-5">
+          <Button onClick={() => router.push("/")}>Chat With Ibis</Button>
 
-      <div className="flex flex-col space-y-5">
-        <Button onClick={() => router.push("/")}>Chat With Ibis</Button>
-
-        <Button variant={"outline"} onClick={navToQuiz}>
-          Retake The Quiz
-        </Button>
-      </div>
+          <Button variant={"outline"} onClick={navToQuiz}>
+            Retake The Quiz
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

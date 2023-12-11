@@ -60,6 +60,7 @@ End the report with a short summary of key takeaways for maintaining balance and
 };
 
 export async function POST(req: NextRequest) {
+  console.log("generating");
   const { scores } = (await req.json()) as { scores: ArchetypeValues & { id: string; user_id: string } };
 
   const userId = scores.user_id;

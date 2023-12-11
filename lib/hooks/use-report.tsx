@@ -1,38 +1,18 @@
 import { ArchetypeValues } from "lib/types";
 import { haveMatchingArchetypeValues } from "lib/utils";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import toast from "react-hot-toast";
 
 export function useReport(session: any, scores?: ArchetypeValues) {
-  const [report, setReport] = useState<string | undefined>(undefined);
+  const [report, setReport] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    async function getReport() {
-      setIsLoading(true);
-      const response = await fetch(`/api/report/?userId=${session.data?.user.id}`);
-      const data = (await response.json()) as any;
-
-      if (response.ok) {
-        if (haveMatchingArchetypeValues(scores as unknown as ArchetypeValues, data.report)) {
-          setReport(data.report.report);
-          setIsLoading(false);
-        } else {
-          generateReport();
-        }
-      } else if (scores) {
-        generateReport();
-      } else {
-        setIsLoading(false);
-      }
-    }
-
-    if (session?.data?.user && scores) {
-      getReport();
-    }
-  }, [session?.data?.user, scores]);
+  const isGeneratingRef = useRef(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const generateReport = useCallback(async () => {
+    if (isGeneratingRef.current || report) return;
+    isGeneratingRef.current = true;
+    setIsGenerating(true);
     let isSubscribed = true;
     const controller = new AbortController();
     setIsLoading(true);
@@ -46,55 +26,66 @@ export function useReport(session: any, scores?: ArchetypeValues) {
         signal: controller.signal,
       });
 
-      // Check if the request was successful
       if (!response.body) throw new Error("Failed to get the stream.");
 
       const reader = response.body.getReader();
 
-      // Read the stream
-      let receivedLength = 0; // received that many bytes at the moment
-      let chunks = [] as any; // array of received binary chunks (comprises the body)
+      let receivedLength = 0;
+      let chunks = [];
       while (true) {
         const { done, value } = await reader.read();
 
         if (done) {
-          setIsLoading(false);
+          setIsGenerating(false);
           break;
         }
 
         chunks.push(value);
         receivedLength += value.length;
 
-        // Decode chunks into report content as they come in
         const chunk = new TextDecoder("utf-8").decode(value, { stream: true });
         if (isSubscribed) {
-          setReport((prevReport: any) => prevReport + chunk);
+          setReport((prevReport) => prevReport + chunk);
         }
-      }
-
-      // Concatenate chunks into single Uint8Array
-      let chunksAll = new Uint8Array(receivedLength); // (4.1)
-      let position = 0;
-      for (let chunk of chunks) {
-        chunksAll.set(chunk, position); // (4.2)
-        position += chunk.length;
-      }
-
-      // Decode into a string
-      let result = new TextDecoder("utf-8").decode(chunksAll);
-
-      // Process the result into state
-      if (isSubscribed) {
-        setReport(result);
       }
     } catch (error: any) {
       if (isSubscribed) {
         toast.error("Error fetching report: " + error.message);
-        setIsLoading(false);
+        setIsGenerating(false);
         setReport("Connection lost. Please refresh.");
       }
     }
-  }, [scores]);
 
-  return { report, isLoading };
+    return () => {
+      isSubscribed = false;
+      controller.abort();
+    };
+  }, [scores, report]);
+
+  useEffect(() => {
+    async function getReport() {
+      if (report || isGeneratingRef.current) return;
+      setIsLoading(true);
+      const response = await fetch(`/api/report/?userId=${session.data?.user.id}`);
+      const data = (await response.json()) as any;
+
+      if (response.ok) {
+        if (haveMatchingArchetypeValues(scores as unknown as ArchetypeValues, data.report)) {
+          setReport(data.report.report);
+        } else {
+          generateReport();
+        }
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        toast.error("Failed to fetch the report.");
+      }
+    }
+
+    if (scores && !report) {
+      getReport();
+    }
+  }, [scores, report]);
+
+  return { report, isLoading, isGenerating };
 }
