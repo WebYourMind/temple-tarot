@@ -52,7 +52,7 @@ export default function Report() {
 
   return (
     <div className="mx-auto my-20 flex max-w-4xl flex-col items-center px-5">
-      <ReactMarkdown className="prose prose-indigo md:prose-lg">
+      <ReactMarkdown className="prose prose-indigo text-foreground md:prose-lg">
         {`${report}
 
 ${getPieChart(scores)}

@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import { Chat } from "components/chat/chat";
+import appConfig from "app.config";
 
 export const metadata: Metadata = {
-  title: "Ibis AI",
-  description: "A guide for thinking based on natural systems.",
+  title: appConfig.appName,
+  description: appConfig.description,
 };
 
 export default async function Home() {

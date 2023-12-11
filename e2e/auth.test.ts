@@ -4,6 +4,7 @@
 // Will come back to this.
 
 import { expect, test } from "@playwright/test";
+import appConfig from "app.config";
 
 test.describe("Authentication Tests", () => {
   test("should register a new user", async ({ page }) => {
@@ -15,7 +16,7 @@ test.describe("Authentication Tests", () => {
     await page.fill('input[id="confirm-password"]', "password");
     await Promise.all([page.click("text=Submit"), page.waitForURL("/")]);
 
-    await page.waitForSelector("text=Ibis AI", { timeout: 60000 });
+    await page.waitForSelector(`text=${appConfig.appName}`, { timeout: 60000 });
     await expect(page).toHaveURL("http://localhost:3000/");
   });
 
@@ -25,7 +26,7 @@ test.describe("Authentication Tests", () => {
     await page.fill('input[id="email"]', "janedoe@example.com");
     await page.fill('input[id="password"]', "password");
     await Promise.all([page.click("text=Submit"), page.waitForURL("/")]);
-    await page.waitForSelector("text=Ibis AI", { timeout: 60000 });
+    await page.waitForSelector(`text=${appConfig.appName}`, { timeout: 60000 });
     await expect(page).toHaveURL("http://localhost:3000/");
   });
 });

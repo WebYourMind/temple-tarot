@@ -29,7 +29,7 @@ export function SidebarItem({ menuItem }: SidebarItemProps) {
           className={cn(
             buttonVariants({ variant: "ghost" }),
             "group w-full appearance-none pl-4 pr-4",
-            isActive && "bg-accent"
+            isActive && "bg-primary text-primary-foreground"
           )}
         >
           <div

@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import Report from "./components/report";
+import appConfig from "app.config";
 
 export const metadata: Metadata = {
-  title: "Ibis AI",
-  description: "A guide for thinking based on natural systems.",
+  title: `Insights - ${appConfig.appName}`,
+  description: `${appConfig.appName} insight report page.`,
 };
 
 export default async function ReportPage() {

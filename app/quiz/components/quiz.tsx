@@ -14,7 +14,7 @@ const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
 
   return (
     <>
-      <label className="mb-5 block text-lg">{question.prompt || question}</label>
+      <label className="mb-5 block text-lg text-foreground">{question.prompt || question}</label>
       <div className="flex flex-col gap-2">
         {(isDeepQuestion ? Array.from({ length: 5 }, (_, i) => ({ option: i + 1 })) : question.choices).map(
           (choice: any, index: any) => {
@@ -24,9 +24,11 @@ const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
             return (
               <label
                 key={index}
-                className={`flex cursor-pointer items-center justify-between rounded-sm border bg-orange-50 p-2  hover:bg-orange-100 ${
-                  selected ? "border-orange-400" : "border-orange-200"
-                }`}
+                className={`flex cursor-pointer items-center justify-between rounded-sm border p-2 ${
+                  selected
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-card bg-card text-card-foreground"
+                } hover:bg-accent hover:text-accent-foreground`}
               >
                 <input
                   type="radio"
@@ -36,9 +38,9 @@ const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
                   onChange={() => handleOptionChange(question.prompt || question, choice.option)}
                   checked={selected}
                 />
-                <span className="ml-2">{isDeepQuestion ? choice.option : choice.option}</span>
+                <span className="ml-2">{choice.option}</span>
                 <div className="w-8">
-                  {selected && <CheckCircledIcon width="25" height="25" className="text-orange-400" />}
+                  {selected && <CheckCircledIcon width="25" height="25" className="text-primary-foreground" />}
                 </div>
               </label>
             );
@@ -227,10 +229,15 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
         )}
       </form>
       <div className="">
-        <Button className={currentPage <= 0 ? "hidden" : ""} onClick={() => handlePageChange(currentPage - 1)}>
+        <Button
+          variant={"outline"}
+          className={currentPage <= 0 ? "hidden" : ""}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
           <ArrowLeftIcon />
         </Button>
         <Button
+          variant={"outline"}
           className={currentPage >= totalPages - 1 ? "hidden" : " float-right"}
           onClick={() => handlePageChange(currentPage + 1)}
         >

@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import ResetPasswordForm from "./components/reset-password-form";
 import AuthPage from "../components/auth-page";
+import appConfig from "app.config";
 
 export const metadata: Metadata = {
-  title: "Reset password - Ibis AI",
-  description: "Ibis AI reset password page.",
+  title: `Reset password - ${appConfig.appName}`,
+  description: `${appConfig.appName} reset password page.`,
 };
 
 export default function ForgotPassword() {

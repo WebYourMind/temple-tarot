@@ -1,4 +1,5 @@
 import { UseChatHelpers } from "ai/react";
+import appConfig from "app.config";
 
 import { Button } from "components/ui/button";
 import { IconArrowRight } from "components/ui/icons";
@@ -25,7 +26,7 @@ export function EmptyScreen({ setInput, scores }: Pick<UseChatHelpers, "setInput
   return (
     <div className="mx-auto max-w-2xl px-4">
       <div className="rounded-lg border bg-background p-8">
-        <h1 className="mb-2 text-lg font-semibold">Welcome to Ibis AI!</h1>
+        <h1 className="mb-2 text-lg font-semibold">Welcome to {appConfig.appName}!</h1>
         <p className="mb-2 leading-normal text-muted-foreground">
           We&apos;re excited to have you join us. You&apos;re now part of a community that&apos;s all about
           understanding and leveraging your unique thinking style.

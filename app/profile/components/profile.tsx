@@ -40,24 +40,24 @@ export default function ViewProfile() {
 
   return (
     <div className="container mx-auto flex justify-center p-4">
-      <div className="w-full max-w-md rounded-lg border bg-white p-6">
+      <div className="w-full max-w-md rounded-lg border p-6">
         <div className="mb-6 flex items-center space-x-4">
-          <div className="flex h-16 w-16 shrink-0 select-none items-center justify-center rounded-full bg-muted/50 text-lg font-medium uppercase text-muted-foreground">
+          <div className="flex h-16 w-16 shrink-0 select-none items-center justify-center rounded-full bg-muted text-lg font-medium uppercase text-muted-foreground">
             {profile?.name ? getUserInitials(profile?.name) : null}
           </div>
           <h2 className="text-2xl font-semibold">{profile.name}</h2>
         </div>
         <div className="grid space-y-3">
           <p className="flex items-center">
-            <EnvelopeClosedIcon className="mr-2 h-5 w-5 text-gray-500" /> {profile.email}
+            <EnvelopeClosedIcon className="mr-2 h-5 w-5" /> {profile.email}
           </p>
           <p className="flex items-center">
-            <MobileIcon className="mr-2 h-5 w-5 text-gray-500" /> {profile.phone}
+            <MobileIcon className="mr-2 h-5 w-5" /> {profile.phone}
           </p>
-          {profile.address && (
+          {profile.address ? (
             <div className="flex flex-col">
               <p className="flex items-center">
-                <HomeIcon className="mr-2 h-5 w-5 text-gray-500" /> {profile.address.street}
+                <HomeIcon className="mr-2 h-5 w-5" /> {profile.address.street}
               </p>
               <div className="ml-7">
                 <p>
@@ -66,10 +66,9 @@ export default function ViewProfile() {
                 <p>{profile.address.country}</p>
               </div>
             </div>
-          )}
-          {!profile.address && (
+          ) : (
             <p className="flex items-center">
-              <HomeIcon className="mr-2 h-5 w-5 text-gray-500" /> No address provided
+              <HomeIcon className="mr-2 h-5 w-5" /> No address provided
             </p>
           )}
           <Button variant={"outline"} onClick={() => route.push("/profile/edit")}>

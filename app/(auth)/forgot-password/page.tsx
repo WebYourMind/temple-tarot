@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import ForgotPasswordForm from "./components/forgot-password-form";
 import AuthPage from "../components/auth-page";
+import appConfig from "app.config";
 
 export const metadata: Metadata = {
-  title: "Forgot password - Ibis AI",
-  description: "Ibis AI forgot password page.",
+  title: `Forgot password - ${appConfig.appName}`,
+  description: `${appConfig.appName} forgot password page.`,
 };
 
 export default function ForgotPassword() {

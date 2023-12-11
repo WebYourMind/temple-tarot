@@ -3,9 +3,10 @@ import { Metadata } from "next";
 import { Providers } from "app/providers";
 import { Header } from "components/navigation/header";
 import { Toaster } from "react-hot-toast";
+import appConfig from "app.config";
 
-const title = "Ibis AI";
-const description = "A guide for thinking based on natural systems.";
+const title = appConfig.appName;
+const description = appConfig.description;
 // const image = "https://vercel.pub/thumbnail.png";
 
 export const metadata: Metadata = {
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
   //   images: [image],
   //   creator: "@vercel",
   // },
-  metadataBase: new URL("https://merlin-ai-fe.vercel.app"),
+  metadataBase: new URL("https://ibis-ai.vercel.app"),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -32,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          <div className="flex min-h-screen flex-col">
+          <div className="flex min-h-screen flex-col bg-background text-foreground">
             <Toaster />
             <Header />
             {children}

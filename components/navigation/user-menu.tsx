@@ -37,14 +37,14 @@ export function UserMenu({ user }: UserMenuProps) {
                 width={48}
               />
             ) : (
-              <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full bg-muted/50 text-xs font-medium uppercase text-muted-foreground">
+              <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full bg-muted text-xs font-medium uppercase text-foreground">
                 {user?.name ? getUserInitials(user?.name) : null}
               </div>
             )}
             <span className="ml-2">{user?.name}</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent sideOffset={8} align="start" className="w-[180px]">
+        <DropdownMenuContent sideOffset={8} align="start" className="w-[180px] bg-background text-foreground">
           <DropdownMenuItem className="flex-col items-start">
             <div className="text-xs font-medium">{user?.name}</div>
             <div className="text-xs text-zinc-500">{user?.email}</div>

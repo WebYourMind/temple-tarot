@@ -10,11 +10,15 @@ import { IconExternalLink, IconSeparator } from "../ui/icons";
 import { UserMenu } from "./user-menu";
 import { SidebarList } from "components/navigation/sidebar-list";
 import { useSession } from "next-auth/react";
+import appConfig from "app.config";
+import { Half2Icon } from "@radix-ui/react-icons";
+import { useTheme } from "app/theme";
 
 export function Header() {
   const { data: session } = useSession() as any;
+  const { toggleTheme } = useTheme();
   return (
-    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-white px-4">
+    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-background px-4">
       <div className="flex items-center">
         {session?.user ? (
           <Sidebar>
@@ -24,11 +28,11 @@ export function Header() {
           </Sidebar>
         ) : (
           <Link href="/" target="_blank" rel="nofollow" className="mr-1">
-            Ibis AI
+            {appConfig.appName}
           </Link>
         )}
         <div className="flex items-center">
-          <IconSeparator className="h-6 w-6 text-muted-foreground/50" />
+          <IconSeparator className="text-muted-foreground/50 h-6 w-6" />
           {session?.user ? (
             <UserMenu user={session.user} />
           ) : (
@@ -44,7 +48,10 @@ export function Header() {
           )}
         </div>
       </div>
-      <div className="flex items-center justify-end space-x-2">
+      <div className="flex items-center justify-end space-x-4">
+        <button onClick={toggleTheme}>
+          <Half2Icon />
+        </button>
         <a href="https://shift.to" target="_blank" rel="noreferrer" className={cn(buttonVariants())}>
           <span className="hidden sm:block">Shift Thinking</span>
           <span className="sm:hidden">shift.to</span>

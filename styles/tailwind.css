@@ -4,65 +4,13 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 25 85% 48%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 33.3, 100%, 96.5%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 27, 96%, 61%;
-    --input: 27, 96%, 61%;
-    --ring: 32.1, 97.7%, 83.1%;
-
-    --radius: 0.5rem;
+    --background: #ffffff;
+    --foreground: #333333;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 25 85% 48%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 33.3, 100%, 96.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 27, 96%, 61;
-    --input: 27, 96%, 61%;
-    --ring: 32.1, 97.7%, 83.1%;
+    --background: #111827;
+    --foreground: #ffffff;
   }
 }
 
@@ -99,4 +47,19 @@
 
 .anim-fade-out {
   animation: fadeOut 0.5s ease-out;
+}
+
+.prose.text-foreground,
+.prose.text-foreground h1,
+.prose.text-foreground h2,
+.prose.text-foreground h3,
+.prose.text-foreground h4,
+.prose.text-foreground h5,
+.prose.text-foreground blockquote,
+.prose.text-foreground strong {
+  color: var(--color-foreground); /* Set the main text color */
+}
+
+.prose.text-foreground a {
+  color: var(--color-primary); /* Set the color for links */
 }

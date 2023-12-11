@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import EditProfile from "./components/edit-profile";
+import appConfig from "app.config";
 
 export const metadata: Metadata = {
-  title: "Ibis AI",
-  description: "A guide for thinking based on natural systems.",
+  title: `Edit Profile - ${appConfig.appName}`,
+  description: `${appConfig.appName} edit profile page.`,
 };
 
 export default async function ReportPage() {

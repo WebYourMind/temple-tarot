@@ -119,7 +119,7 @@ export default function EditProfile() {
         <ArrowLeftIcon className="mr-2" />
         Back to profile
       </Button>
-      <div className="w-full max-w-md rounded-lg border bg-white p-6">
+      <div className="w-full max-w-md rounded-lg border p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <InputField
             placeholder="Jane Doe"
