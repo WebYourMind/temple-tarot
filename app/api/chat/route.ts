@@ -139,6 +139,7 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
+    console.error(error);
     // Return an error response
     return NextResponse.json(
       {

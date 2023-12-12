@@ -6,7 +6,7 @@ import { env } from "./env.mjs";
  * @type {import('next').NextConfig}
  */
 const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
-  reactStrictMode: true,
+  reactStrictMode: false,
   experimental: { instrumentationHook: true },
   output: "standalone",
   rewrites() {

@@ -12,29 +12,15 @@ import {
 import Loading from "components/loading";
 import { getUserInitials } from "components/navigation/user-menu";
 import { Button } from "components/ui/button";
-import { UserProfile } from "lib/types";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import DeactivateAccount from "../edit/components/deactivate-account";
+import { useProfile } from "lib/hooks/use-profile";
 
 export default function ViewProfile() {
-  const { data: session } = useSession() as any;
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const { profile, isLoading, emptyProfile } = useProfile();
   const route = useRouter();
 
-  useEffect(() => {
-    if (session) {
-      setProfile({
-        name: session.user?.name || "",
-        email: session.user?.email || "",
-        address: session.user?.address || null,
-        phone: session.user?.phone || "None",
-      });
-    }
-  }, [session]);
-
-  if (!profile) {
+  if (isLoading || !profile) {
     return <Loading />;
   }
 
@@ -42,7 +28,7 @@ export default function ViewProfile() {
     <div className="container mx-auto flex justify-center p-4">
       <div className="w-full max-w-md rounded-lg border p-6">
         <div className="mb-6 flex items-center space-x-4">
-          <div className="flex h-16 w-16 shrink-0 select-none items-center justify-center rounded-full bg-muted text-lg font-medium uppercase text-muted-foreground">
+          <div className="flex h-16 w-16 shrink-0 select-none items-center justify-center rounded-full bg-muted text-lg font-medium uppercase text-foreground">
             {profile?.name ? getUserInitials(profile?.name) : null}
           </div>
           <h2 className="text-2xl font-semibold">{profile.name}</h2>
@@ -52,9 +38,9 @@ export default function ViewProfile() {
             <EnvelopeClosedIcon className="mr-2 h-5 w-5" /> {profile.email}
           </p>
           <p className="flex items-center">
-            <MobileIcon className="mr-2 h-5 w-5" /> {profile.phone}
+            <MobileIcon className="mr-2 h-5 w-5" /> {profile.phone || "None"}
           </p>
-          {profile.address ? (
+          {profile.address === emptyProfile.address ? (
             <div className="flex flex-col">
               <p className="flex items-center">
                 <HomeIcon className="mr-2 h-5 w-5" /> {profile.address.street}
@@ -68,7 +54,7 @@ export default function ViewProfile() {
             </div>
           ) : (
             <p className="flex items-center">
-              <HomeIcon className="mr-2 h-5 w-5" /> No address provided
+              <HomeIcon className="mr-2 h-5 w-5" /> None
             </p>
           )}
           <Button variant={"outline"} onClick={() => route.push("/profile/edit")}>

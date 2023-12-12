@@ -72,7 +72,7 @@ export default {
         primary: "#e26912",
         primaryForeground: "#ffffff",
         secondary: "#fff",
-        secondaryForeground: "#f7f9fb",
+        secondaryForeground: "#333333",
         muted: "#94a3b7",
         mutedForeground: "#64748B",
         accent: "#fff",

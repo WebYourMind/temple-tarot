@@ -27,13 +27,13 @@ export function EmptyScreen({ setInput, scores }: Pick<UseChatHelpers, "setInput
     <div className="mx-auto max-w-2xl px-4">
       <div className="rounded-lg border bg-background p-8">
         <h1 className="mb-2 text-lg font-semibold">Welcome to {appConfig.appName}!</h1>
-        <p className="mb-2 leading-normal text-muted-foreground">
+        <p className="mb-2 leading-normal">
           We&apos;re excited to have you join us. You&apos;re now part of a community that&apos;s all about
           understanding and leveraging your unique thinking style.
         </p>
         {!scores ? (
           <>
-            <p className="mb-2 leading-normal text-muted-foreground">
+            <p className="mb-2 leading-normal">
               Ready to begin? Take the Thinking Style Quiz to enhance your interactions with our chatbot, Ibis and learn
               valuable insights.
             </p>

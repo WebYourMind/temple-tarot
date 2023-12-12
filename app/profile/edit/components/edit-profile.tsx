@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { UserProfile } from "lib/types";
 import { Button } from "components/ui/button";
 import InputField from "app/(auth)/components/input-field";
 import toast from "react-hot-toast";
@@ -11,51 +10,29 @@ import { AsYouType } from "libphonenumber-js";
 import AddressInput from "./address-input";
 import { useRouter } from "next/navigation";
 import { isValidEmail, isValidPhoneNumber } from "lib/utils";
+import { useProfile } from "lib/hooks/use-profile";
+import Loading from "components/loading";
 
 export default function EditProfile() {
   const route = useRouter();
   const { data: session, update } = useSession() as any;
   const [isLoading, setIsLoading] = useState(false);
-  const [userInfo, setUserInfo] = useState<UserProfile>({
-    name: "",
-    email: "",
-    phone: "",
-    address: {
-      street: "",
-      city: "",
-      state: "",
-      postalCode: "",
-      country: "",
-    },
-  });
 
-  useEffect(() => {
-    if (session) {
-      setUserInfo((prev) => ({
-        ...prev,
-        name: session.user?.name || "",
-        email: session.user?.email || "",
-        phone: session.user?.phone || "",
-        address: {
-          street: session.user?.address?.street || "",
-          city: session.user?.address?.city || "",
-          state: session.user?.address?.state || "",
-          postalCode: session.user?.address?.postalCode || "",
-          country: session.user?.address?.country || "",
-        },
-      }));
-    }
-  }, [session?.user]);
+  const { profile, setProfile, isLoading: profileLoading } = useProfile();
+
+  if (isLoading || !profile) {
+    return <Loading />;
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    if (name in userInfo.address) {
-      setUserInfo((prev) => ({
+    if (name in profile.address) {
+      setProfile((prev) => ({
         ...prev,
         address: { ...prev.address, [name]: value },
       }));
     } else {
-      setUserInfo((prev) => ({
+      setProfile((prev) => ({
         ...prev,
         [name]: value,
       }));
@@ -64,20 +41,20 @@ export default function EditProfile() {
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const formattedPhoneNumber = new AsYouType().input(e.target.value);
-    setUserInfo((prev) => ({ ...prev, phone: formattedPhoneNumber }));
+    setProfile((prev) => ({ ...prev, phone: formattedPhoneNumber }));
   };
 
   const validateInput = () => {
-    if (!userInfo.email || !isValidEmail(userInfo.email)) {
+    if (!profile.email || !isValidEmail(profile.email)) {
       toast.error("Please enter a valid email.");
       return false;
     }
-    if (!userInfo.name || userInfo.name.trim().length === 0) {
+    if (!profile.name || profile.name.trim().length === 0) {
       toast.error("Please enter your name.");
       return false;
     }
 
-    if (userInfo.phone && !isValidPhoneNumber(userInfo.phone)) {
+    if (profile.phone && !isValidPhoneNumber(profile.phone)) {
       toast.error("Please enter a valid phone number.");
       return false;
     }
@@ -94,7 +71,7 @@ export default function EditProfile() {
       const response = await fetch(`/api/profile/?userId=${session?.user.id}`, {
         method: "PATCH",
         body: JSON.stringify({
-          user: userInfo,
+          user: profile,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +104,7 @@ export default function EditProfile() {
             name="name"
             type="text"
             id="name"
-            value={userInfo.name}
+            value={profile.name}
             onChange={handleChange}
           />
           <InputField
@@ -136,7 +113,7 @@ export default function EditProfile() {
             name="email"
             type="email"
             id="email"
-            value={userInfo.email}
+            value={profile.email}
             onChange={handleChange}
           />
           <InputField
@@ -145,10 +122,10 @@ export default function EditProfile() {
             name="phone"
             type="tel"
             id="phone"
-            value={userInfo.phone}
+            value={profile.phone}
             onChange={handlePhoneChange}
           />
-          <AddressInput address={userInfo.address} setAddress={handleChange} />
+          <AddressInput address={profile.address} setAddress={handleChange} />
           <Button type="submit">
             {" "}
             {isLoading && <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />}

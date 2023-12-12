@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import AuthPage from "app/(auth)/components/auth-page";
 import RegisterForm from "app/(auth)/register/components/register-form";
+import appConfig from "app.config";
 
 export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
+  title: `Register - ${appConfig.appName}`,
+  description: `${appConfig.appName} registration page.`,
 };
 
 export default function RegistrationPage() {

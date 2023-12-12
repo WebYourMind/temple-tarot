@@ -164,11 +164,16 @@ export async function GET(request: NextRequest) {
 
     // Query to select the latest scores row for the given user ID
     const { rows: users } = await sql`
-      SELECT * 
-      FROM users
-      WHERE user_id = ${userId}
-      LIMIT 1;
-    `;
+    SELECT users.*, 
+           addresses.street, 
+           addresses.city, 
+           addresses.state, 
+           addresses.postal_code, 
+           addresses.country 
+    FROM users 
+    LEFT JOIN addresses ON users.address_id = addresses.id
+    WHERE users.id = ${userId}
+  `;
 
     // Check if we got a result back
     if (users.length === 0) {
@@ -182,11 +187,35 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Return the latest scores row
+    const user = users[0];
+
+    const hasAddress =
+      user.street !== null ||
+      user.city !== null ||
+      user.state !== null ||
+      user.postal_code !== null ||
+      user.country !== null;
+
+    const userWithAddress = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: hasAddress
+        ? {
+            street: user.street,
+            city: user.city,
+            state: user.state,
+            postalCode: user.postal_code,
+            country: user.country,
+          }
+        : null,
+    };
+
     return NextResponse.json(
       {
         message: "User info retrieved successfully.",
-        scores: users[0],
+        user: userWithAddress,
       },
       {
         status: 200,
