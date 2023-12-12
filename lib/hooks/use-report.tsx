@@ -75,11 +75,12 @@ export function useReport(session: any, scores?: ArchetypeValues) {
         } else {
           generateReport();
         }
-        setIsLoading(false);
+      } else if (response.status === 404) {
+        generateReport();
       } else {
-        setIsLoading(false);
         toast.error("Failed to fetch the report.");
       }
+      setIsLoading(false);
     }
 
     if (scores && !report) {

@@ -7,11 +7,12 @@ type LoadingProps = {
 export default function Loading({ message }: LoadingProps) {
   const messageParts = message?.split("\n");
   return (
-    <div className="-m-32 flex h-screen grow flex-col items-center justify-center space-y-5">
+    // negative margin to account for header
+    <div className="-mt-32 flex h-screen grow flex-col items-center justify-center space-y-5">
       {messageParts && (
         <div>
           {messageParts.map((part, index) => (
-            // Rendering each part as a separate paragraph
+            // Rendering each part of loading message as a separate line
             <p key={index}>{part}</p>
           ))}
         </div>
