@@ -25,4 +25,5 @@ export type UserProfile = {
   id?: string;
   address: Address;
   phone?: string;
+  role?: string;
 };

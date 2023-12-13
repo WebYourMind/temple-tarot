@@ -7,6 +7,7 @@ CREATE TABLE users (
     image TEXT,
     address_id INTEGER REFERENCES addresses(id),
     phone VARCHAR(20)
+    role VARCHAR(50) DEFAULT 'user';
 );
 
 CREATE TABLE addresses (
