@@ -20,7 +20,7 @@ export default async function middleware(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams.toString();
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""}`;
 
-  const session = await getToken({ req, secret: process.env.SECRET });
+  const session = (await getToken({ req, secret: process.env.SECRET })) as any;
   // redirect if not logged in
   if (
     !session &&
@@ -33,6 +33,10 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
     // if logged in, redirect away from login pages
   } else if (session && (path == "/login" || path == "/register")) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  if (path === "/team" && session?.user?.role !== "admin") {
     return NextResponse.redirect(new URL("/", req.url));
   }
 

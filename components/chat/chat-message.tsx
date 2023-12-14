@@ -29,7 +29,7 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
         {message.role === "user" ? (
           <IconUser />
         ) : (
-          <Image className="rounded-3xl" src={Ibis} alt="Ibis" width={45} height={45} />
+          <Image className="rounded-3xl" src={Ibis} alt="IBIS" width={45} height={45} />
         )}
       </div>
       <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">

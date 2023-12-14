@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default async function ReportPage() {
   return (
-    <div className="md:pt-16">
+    <div className="pt-8 md:pt-16">
       <Report />
     </div>
   );

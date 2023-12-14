@@ -1,5 +1,5 @@
 export default {
-  appName: "Ibis AI",
+  appName: "IBIS AI",
   description: "A guide for thinking based on natural systems.",
   chatbot: {
     prompts: {

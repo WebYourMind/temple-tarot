@@ -81,6 +81,17 @@ CREATE TABLE reports (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE teams (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    invite_token VARCHAR(255),
+    invite_token_expiry TIMESTAMPTZ,
+    admin_id INTEGER NOT NULL REFERENCES users(id),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    image TEXT
+);
+
 -- other useful queries for development
 DELETE FROM scores;
 DROP TABLE scores CASCADE;

@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 
 const menuItems = [
   {
-    name: "Chat with Ibis",
+    name: "Chat with IBIS",
     path: "/",
     icon: <ChatBubbleIcon />,
   },
@@ -30,7 +30,7 @@ const menuItems = [
 
 const teamItem = {
   name: "Teams",
-  path: "/teams",
+  path: "/team",
   icon: <IconUsers />,
 };
 

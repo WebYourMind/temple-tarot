@@ -27,3 +27,10 @@ export type UserProfile = {
   phone?: string;
   role?: string;
 };
+
+export type Team = {
+  id?: string;
+  name: string;
+  description: string;
+  inviteUrl?: string;
+};

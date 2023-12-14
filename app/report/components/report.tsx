@@ -28,7 +28,7 @@ export default function Report() {
 
   if (!scores && !scoresLoading) {
     return (
-      <div className="flex items-center justify-center">
+      <div className="container flex items-center justify-center">
         <div className="mt-5 flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <h1 className="text-2xl font-semibold tracking-tight">Ready to Discover Your Thinking Style?</h1>
           <p className="text-sm text-muted-foreground">
@@ -53,7 +53,7 @@ ${!isGenerating ? getPieChart(scores) : ""}
       )}
       {!isGenerating && (
         <div className="flex flex-col space-y-5">
-          <Button onClick={() => router.push("/")}>Chat With Ibis</Button>
+          <Button onClick={() => router.push("/")}>Chat With IBIS</Button>
 
           <Button variant={"outline"} onClick={navToQuiz}>
             Retake The Quiz
