@@ -1,4 +1,4 @@
-import { Team } from "lib/types";
+import { Team, TeamForm } from "lib/types";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 export function useTeam() {
   const { data: session } = useSession() as any;
   const [team, setTeam] = useState<Team | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [error, setError] = useState(null);
 
@@ -28,7 +28,7 @@ export function useTeam() {
     }
   }
 
-  async function createTeam(teamData: Team) {
+  async function createTeam(teamData: TeamForm) {
     setIsLoading(true);
     setLoadingMessage(`Creating ${teamData.name}...`);
     try {

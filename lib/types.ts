@@ -1,3 +1,8 @@
+export type ApiResponse = {
+  message?: string;
+  error?: string;
+};
+
 export type ArchetypeValues = {
   explorer: string;
   analyst: string;
@@ -28,9 +33,12 @@ export type UserProfile = {
   role?: string;
 };
 
-export type Team = {
-  id?: string;
+export type TeamForm = {
   name: string;
   description: string;
-  inviteUrl?: string;
 };
+
+export type Team = {
+  id: string;
+  inviteToken: string;
+} & TeamForm;

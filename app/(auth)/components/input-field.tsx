@@ -3,7 +3,7 @@ import { Input } from "components/ui/input";
 import { Label } from "components/ui/label";
 
 interface InputFieldProps {
-  label: string;
+  label?: string;
   error?: string | null;
 }
 
@@ -21,7 +21,7 @@ export default function InputField({
 }: InputFieldProps & InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div className="grid w-full gap-2">
-      <Label htmlFor={id}>{label}</Label>
+      {label && <Label htmlFor={id}>{label}</Label>}
       <Input
         id={id}
         placeholder={placeholder}

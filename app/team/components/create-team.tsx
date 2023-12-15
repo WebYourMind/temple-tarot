@@ -6,11 +6,11 @@ import InputField from "app/(auth)/components/input-field";
 import toast from "react-hot-toast";
 import { ColorWheelIcon } from "@radix-ui/react-icons";
 import AuthPage from "app/(auth)/components/auth-page";
-import { Team } from "lib/types";
+import { TeamForm } from "lib/types";
 
 type CreateTeamProps = {
   isLoading: boolean;
-  createTeam: (team: Team) => void;
+  createTeam: (team: TeamForm) => void;
 };
 
 export default function CreateTeam({ isLoading, createTeam }: CreateTeamProps) {

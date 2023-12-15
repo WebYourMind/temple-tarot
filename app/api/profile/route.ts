@@ -66,7 +66,7 @@ export async function PATCH(request: NextRequest) {
         sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
         const msg = {
           to: user.email,
-          from: "adam@webyourmind.com", // TODO: change later
+          from: process.env.SENDGRID_EMAIL_ADDRESS,
           template_id: process.env.SENDGRID_VERIFY,
           personalizations: [
             {

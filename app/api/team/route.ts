@@ -1,20 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import crypto from "crypto";
-import { Team } from "lib/types";
+import { Team, TeamForm } from "lib/types";
 
-function sanitizeTeamData(team: Team) {
+function sanitizeTeamData(team: any) {
   return {
     id: team.id,
     name: team.name,
     description: team.description,
+    inviteToken: team.invite_token,
   };
 }
 
 export async function POST(request: NextRequest) {
   try {
     const { team, userId } = (await request.json()) as {
-      team: Team;
+      team: TeamForm;
       userId: string;
     };
 
