@@ -6,6 +6,7 @@ import InputField from "app/(auth)/components/input-field";
 import { useResponseMessage } from "lib/hooks/use-response-message";
 import AuthForm from "app/(auth)/components/auth-form";
 import { isPasswordComplex } from "lib/utils";
+import toast from "react-hot-toast";
 
 export default function ChangePasswordForm() {
   const route = useRouter();
@@ -13,24 +14,19 @@ export default function ChangePasswordForm() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { responseMessage, showMessage } = useResponseMessage({
-    message: "",
-    error: false,
-  });
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
     if (!isPasswordComplex(newPassword)) {
-      showMessage(
-        "Password must be at least 8 characters long and include uppercase and lowercase letters, numbers, and special characters.",
-        true
+      toast.error(
+        "Password must be at least 8 characters long and include uppercase and lowercase letters, numbers, and special characters."
       );
       return;
     }
 
     if (newPassword !== confirmNewPassword) {
-      showMessage("Passwords do not match.", true);
+      toast.error("Passwords do not match.");
       return;
     }
 
@@ -50,18 +46,19 @@ export default function ChangePasswordForm() {
 
       const data = (await res.json()) as { message: string; error: string };
       if (res.status === 200) {
+        toast.success(data.message);
         route.push("/profile");
       } else {
         throw new Error(data.error);
       }
     } catch (error) {
-      showMessage("An error occurred while processing your request.", true);
+      toast.error("An error occurred while processing your request.");
     }
     setIsLoading(false);
   };
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={handleSubmit} responseMessage={responseMessage}>
+    <AuthForm isLoading={isLoading} onSubmit={handleSubmit}>
       <InputField
         id="old-password"
         placeholder="Enter your current password"
