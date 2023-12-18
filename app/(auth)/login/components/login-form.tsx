@@ -5,16 +5,12 @@ import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useResponseMessage } from "lib/hooks/use-response-message";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { responseMessage, showMessage } = useResponseMessage({
-    message: "",
-    error: false,
-  });
 
   const router = useRouter();
 
@@ -29,7 +25,7 @@ export default function LoginForm() {
     });
 
     if (result?.error) {
-      showMessage(result.error, true);
+      toast.error(result.error);
       setIsLoading(false);
     } else {
       router.replace("/");
@@ -37,7 +33,7 @@ export default function LoginForm() {
   }
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={onSubmit} responseMessage={responseMessage}>
+    <AuthForm isLoading={isLoading} onSubmit={onSubmit}>
       <InputField
         id="email"
         placeholder="name@example.com"

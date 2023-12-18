@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useResponseMessage } from "lib/hooks/use-response-message";
 import { isPasswordComplex, isValidEmail } from "lib/utils";
+import toast from "react-hot-toast";
 
 interface ResponseData {
   ok: boolean;
@@ -15,10 +16,6 @@ interface ResponseData {
 
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { responseMessage, showMessage } = useResponseMessage({
-    message: "",
-    error: false,
-  });
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -30,20 +27,19 @@ export default function RegisterForm() {
     event.preventDefault();
 
     if (!email || !isValidEmail(email)) {
-      showMessage("Please enter a valid email.", true);
+      toast.error("Please enter a valid email.");
       return false;
     }
 
     if (!isPasswordComplex(password)) {
-      showMessage(
-        "Password must be at least 8 characters long and include uppercase and lowercase letters, numbers, and special characters.",
-        true
+      toast.error(
+        "Password must be at least 8 characters long and include uppercase and lowercase letters, numbers, and special characters."
       );
       return;
     }
 
     if (password !== confirmPassword) {
-      showMessage("Passwords don't match.", true);
+      toast.error("Passwords don't match.");
       return;
     }
 
@@ -72,20 +68,20 @@ export default function RegisterForm() {
       });
 
       if (result?.error) {
-        showMessage(result.error, true);
+        toast.error(result.error);
         setIsLoading(false);
       } else {
         router.replace("/");
       }
     } else if (data.error) {
-      showMessage(data.error, true);
+      toast.error(data.error);
     }
 
     setIsLoading(false);
   }
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={onSubmit} responseMessage={responseMessage}>
+    <AuthForm isLoading={isLoading} onSubmit={onSubmit}>
       <InputField
         id="name"
         placeholder="Jane Doe"
