@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
 
-    const {token, teamId, userId} = await request.json();
+    const {token, teamId, userId} = await request.json() as any;
 
     // Check if token is not null or undefined
     if (!token) {
