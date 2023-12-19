@@ -26,7 +26,7 @@ const DividerWithText = () => {
 };
 
 export default function InviteLink({ team, inviterName }: InviteLinkProps) {
-  const inviteUrl = process.env.NEXT_PUBLIC_ROOT_DOMAIN + "/team-invite/?token=" + team.inviteToken;
+  const inviteUrl = process.env.NEXT_PUBLIC_ROOT_DOMAIN + "/accept-invite/?token=" + team.inviteToken;
 
   const [invitees, setInvitees] = useState([{ email: "", name: "" }]);
   const [inviteButtonText, setInviteButtonText] = useState("Invite");
