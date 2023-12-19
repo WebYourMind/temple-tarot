@@ -13,10 +13,21 @@ import { useSession } from "next-auth/react";
 import appConfig from "app.config";
 import { Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "app/theme";
+import { useSearchParams } from "next/navigation";
 
 export function Header() {
   const { data: session } = useSession() as any;
   const { toggleTheme } = useTheme();
+  const searchParams = useSearchParams();
+
+  const createAuthUrl = (path: string) => {
+    const currentPath = searchParams.get("redirect") || "/";
+    return `${path}?redirect=${encodeURIComponent(currentPath)}`;
+  };
+
+  const registerUrl = createAuthUrl("/register");
+  const loginUrl = createAuthUrl("/login");
+
   return (
     <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-background px-4">
       <div className="flex items-center">
@@ -38,11 +49,11 @@ export function Header() {
           ) : (
             <>
               <Button variant="link" asChild className="-ml-2">
-                <Link href="/sign-in?callbackUrl=/">Login</Link>
+                <Link href={loginUrl}>Login</Link>
               </Button>
 
               <Button variant="link" asChild className="-ml-2">
-                <Link href="/register">Register</Link>
+                <Link href={registerUrl}>Register</Link>
               </Button>
             </>
           )}

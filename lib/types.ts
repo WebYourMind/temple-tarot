@@ -1,6 +1,6 @@
 export type ApiResponse = {
-  message?: string;
-  error?: string;
+  message: string;
+  error: string;
 };
 
 export type ArchetypeValues = {

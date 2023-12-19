@@ -2,7 +2,7 @@
 import { useState, SyntheticEvent } from "react";
 import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { isPasswordComplex, isValidEmail } from "lib/utils";
 import toast from "react-hot-toast";
@@ -21,6 +21,7 @@ export default function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
@@ -44,6 +45,8 @@ export default function RegisterForm() {
 
     setIsLoading(true);
 
+    const redirectUrl = searchParams?.get("redirect");
+
     const res = await fetch("/api/auth/register", {
       method: "POST",
       body: JSON.stringify({
@@ -63,12 +66,14 @@ export default function RegisterForm() {
       const result = await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/",
+        redirect: false,
       });
 
       if (result?.error) {
         toast.error(result.error);
         setIsLoading(false);
+      } else if (redirectUrl) {
+        router.replace(redirectUrl);
       } else {
         router.replace("/");
       }
