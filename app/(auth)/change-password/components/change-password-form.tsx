@@ -3,7 +3,6 @@
 import React, { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import InputField from "app/(auth)/components/input-field";
-import { useResponseMessage } from "lib/hooks/use-response-message";
 import AuthForm from "app/(auth)/components/auth-form";
 import { isPasswordComplex } from "lib/utils";
 import toast from "react-hot-toast";

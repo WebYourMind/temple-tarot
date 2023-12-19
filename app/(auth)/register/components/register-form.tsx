@@ -4,7 +4,6 @@ import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { useResponseMessage } from "lib/hooks/use-response-message";
 import { isPasswordComplex, isValidEmail } from "lib/utils";
 import toast from "react-hot-toast";
 
