@@ -7,13 +7,21 @@ import { Button } from "components/ui/button";
 import Card from "components/card";
 import toast from "react-hot-toast";
 import { ApiResponse, Team } from "lib/types";
+import { useProfile } from "lib/hooks/use-profile";
 
 const AcceptInvite = () => {
   const searchParams = useSearchParams();
   const { data: session, status } = useSession() as any;
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { profile } = useProfile();
   const [team, setTeam] = useState<Team | null>(null);
+
+  useEffect(() => {
+    if (profile?.teamId === team?.id) {
+      router.replace("/team");
+    }
+  }, [profile, team]);
 
   useEffect(() => {
     async function getTeamPreview() {
@@ -42,7 +50,7 @@ const AcceptInvite = () => {
       // User is logged in, proceed to show team preview
       getTeamPreview();
     }
-  }, [session, status, searchParams]);
+  }, [session?.user?.id, status, searchParams]);
 
   if (loading || !team) {
     return <Loading />;
@@ -64,7 +72,6 @@ const AcceptInvite = () => {
         throw new Error("Failed to join team.");
       } else {
         const responseData = (await response.json()) as unknown as ApiResponse;
-        console.log(responseData);
         toast.success(responseData.message);
         router.push("/team");
       }
@@ -78,13 +85,14 @@ const AcceptInvite = () => {
   return (
     <div className="mx-auto my-16 max-w-md">
       <Card>
-        <div className=" align-center flex flex-col ">
-          <h1 className="mb-4 text-center text-2xl font-bold">You&apos;re invited to join.</h1>
-          <div className="mb-6 text-center">
+        <div className="align-center flex flex-col space-y-4">
+          <h1 className="text-center text-2xl font-bold">You&apos;re invited to join.</h1>
+          <div className="text-center">
             <h2 className="text-lg font-semibold">{team?.name}</h2>
             <p className="text-muted-foreground">{team?.description}</p>
           </div>
           <Button onClick={handleJoinTeam}>Join Team</Button>
+          {profile.teamId && <p className="text-muted-foreground">(This will cause you to leave your current team)</p>}
         </div>
       </Card>
     </div>

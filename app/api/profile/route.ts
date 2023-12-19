@@ -201,6 +201,7 @@ export async function GET(request: NextRequest) {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      teamId: user.team_id,
       address: hasAddress
         ? {
             street: user.street,

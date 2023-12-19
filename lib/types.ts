@@ -31,6 +31,7 @@ export type UserProfile = {
   address: Address;
   phone?: string;
   role?: string;
+  teamId?: string;
 };
 
 export type TeamForm = {
