@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import crypto from "crypto";
 import { Team, TeamForm } from "lib/types";
+import { deleteTeamById, getTeamById, getTeamScore, updateTeamByAdminID } from "../../../lib/database/team.database";
 
 function sanitizeTeamData(team: any) {
   return {
@@ -63,40 +64,77 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    const teamId = searchParams.get("teamId");
 
     // Check if userId is not null or undefined
-    if (!userId) {
-      throw new Error("The user ID must be provided.");
-    }
-
-    // select team associated with user
-    const { rows: teams } = await sql`
-      SELECT teams.* 
-      FROM teams
-      JOIN users ON users.team_id = teams.id
-      WHERE users.id = ${userId}
-      ORDER BY teams.created_at DESC
-      LIMIT 1;
-    `;
-
-    // Check if we got a result back
-    if (teams.length === 0) {
+    if (!teamId) {
       return NextResponse.json(
         {
-          error: "No teams found for the given user ID.",
+          error: "The team ID must be provided.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const team = await getTeamById(parseInt(teamId));
+    // select team associated with user
+    const rows = await getTeamScore(parseInt(teamId));
+
+    // Check if we got a result back
+    if (team === null) {
+      return NextResponse.json(
+        {
+          error: "No teams found for the given team ID.",
         },
         {
           status: 404,
         }
       );
     }
+    const score = [];
+    const user = [];
+
+    if (rows !== null) {
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        score.push({
+          id: row.score_id,
+          explorer: row.explorer,
+          analyst: row.analyst,
+          designer: row.designer,
+          optimizer: row.optimizer,
+          connector: row.connector,
+          nurturer: row.nurturer,
+          energizer: row.energizer,
+          achiever: row.achiever,
+        });
+        user.push({
+          id: row.user_id,
+          name: row.user_name,
+          email: row.user_email,
+          phone: row.user_phone,
+          role: row.user_role,
+          score: score[i],
+        });
+      }
+    }
+
+    const teamData = {
+      id: team.id,
+      name: team.name,
+      description: team.description,
+      adminId: team.admin_id,
+      image: team.image,
+      user: user,
+    };
 
     // Return the team row
     return NextResponse.json(
       {
         message: "Team retrieved successfully.",
-        team: sanitizeTeamData(teams[0] as Team),
+        team: teamData,
       },
       {
         status: 200,
@@ -112,5 +150,63 @@ export async function GET(request: NextRequest) {
         status: 500,
       }
     );
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const { adminId, team } = (await request.json()) as any;
+
+    if (!adminId || !team) {
+      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    }
+
+    const isUpdated = await updateTeamByAdminID(team, parseInt(adminId));
+
+    if (isUpdated === null || !isUpdated) {
+      return NextResponse.json({ error: "Not able to update team" }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: "Team Updated successfully." }, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { adminId, teamId } = (await request.json()) as any;
+
+    if (!adminId || !teamId) {
+      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    }
+    const team = await getTeamById(parseInt(teamId));
+
+    if (team === null) {
+      return NextResponse.json(
+        {
+          error: "No teams found for the given team ID.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (team.admin_id !== parseInt(adminId)) {
+      return NextResponse.json({ error: "You are not authorized to delete this team." }, { status: 403 });
+    }
+
+    const isDeleted = await deleteTeamById(parseInt(teamId));
+
+    if (isDeleted === null || !isDeleted) {
+      return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: "Team deleted successfully." }, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
   }
 }
