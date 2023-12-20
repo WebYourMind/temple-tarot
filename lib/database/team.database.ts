@@ -35,6 +35,19 @@ export const getTeamById = async (teamId: number) => {
   }
 };
 
+export const deleteTeamById = async (teamId: number) => {
+  try {
+    const result = await sql`
+            DELETE FROM teams WHERE id = ${teamId}
+        `;
+
+    return result.rowCount > 0;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 export const getTeamScore = async (teamId: number) => {
   try {
     const { rows } = await sql`            
@@ -74,6 +87,19 @@ export const getTeamScore = async (teamId: number) => {
       return rows;
     }
     return null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const updateTeamByAdminID = async (team: any, adminId: number) => {
+  try {
+    const result = await sql`
+        UPDATE teams SET name = COALESCE(${team?.name},name), description = COALESCE(${team?.description}, description), 
+        image = COALESCE(${team?.image}, image) WHERE admin_id = ${adminId}
+      `;
+    return result.rowCount > 0;
   } catch (error) {
     console.error(error);
     return null;

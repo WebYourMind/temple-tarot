@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import crypto from "crypto";
 import { Team, TeamForm } from "lib/types";
-import { getTeamById, getTeamScore } from "../../../lib/database/team.database";
+import { deleteTeamById, getTeamById, getTeamScore, updateTeamByAdminID } from "../../../lib/database/team.database";
 
 function sanitizeTeamData(team: any) {
   return {
@@ -150,5 +150,63 @@ export async function GET(request: NextRequest) {
         status: 500,
       }
     );
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const { adminId, team } = (await request.json()) as any;
+
+    if (!adminId || !team) {
+      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    }
+
+    const isUpdated = await updateTeamByAdminID(team, parseInt(adminId));
+
+    if (isUpdated === null || !isUpdated) {
+      return NextResponse.json({ error: "Not able to update team" }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: "Team Updated successfully." }, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { adminId, teamId } = (await request.json()) as any;
+
+    if (!adminId || !teamId) {
+      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    }
+    const team = await getTeamById(parseInt(teamId));
+
+    if (team === null) {
+      return NextResponse.json(
+        {
+          error: "No teams found for the given team ID.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (team.admin_id !== parseInt(adminId)) {
+      return NextResponse.json({ error: "You are not authorized to delete this team." }, { status: 403 });
+    }
+
+    const isDeleted = await deleteTeamById(parseInt(teamId));
+
+    if (isDeleted === null || !isDeleted) {
+      return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: "Team deleted successfully." }, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
   }
 }
