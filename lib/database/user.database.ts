@@ -1,6 +1,6 @@
 import { sql } from "@vercel/postgres";
 
-export const updateUserTeam = async (userId: number, teamId: number) => {
+export const updateUserTeam = async (userId: number, teamId: number | null) => {
   try {
     const result = await sql`
         UPDATE users SET team_id = ${teamId} WHERE id = ${userId}
