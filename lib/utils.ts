@@ -61,7 +61,7 @@ export function getRelativePercentages({
 
   // Calculate relative percentages
   const relativePercentages = [explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever].map(
-    (score) => ((parseFloat(score) / totalScore) * 100).toFixed(1)
+    (score) => parseFloat(((parseFloat(score) / totalScore) * 100).toFixed(1))
   );
 
   return relativePercentages;

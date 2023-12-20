@@ -14,6 +14,16 @@ export type ArchetypeValues = {
   achiever: string;
 };
 
+export type ThinkingStyle =
+  | "Explorer"
+  | "Analyst"
+  | "Designer"
+  | "Optimizer"
+  | "Connector"
+  | "Nurturer"
+  | "Energizer"
+  | "Achiever";
+
 export type ReportType = string | undefined;
 
 export type Address = {
@@ -42,4 +52,5 @@ export type TeamForm = {
 export type Team = {
   id: string;
   inviteToken: string;
+  adminId: string;
 } & TeamForm;

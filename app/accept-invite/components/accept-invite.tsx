@@ -84,7 +84,7 @@ const AcceptInvite = () => {
 
   return (
     <div className="mx-auto my-16 max-w-md">
-      <Card>
+      <Card className="max-w-md">
         <div className="align-center flex flex-col space-y-4">
           <h1 className="text-center text-2xl font-bold">You&apos;re invited to join.</h1>
           <div className="text-center">

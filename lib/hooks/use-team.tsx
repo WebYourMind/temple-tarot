@@ -42,10 +42,33 @@ export function useTeam() {
       }
       const data = (await response.json()) as any;
       setTeam(data.team);
-      toast.success("Team created successfully");
+      toast.success("Team created successfully.");
     } catch (err: any) {
       setError(err.message);
-      toast.error(`Error creating team: ${err.message}`);
+      toast.error(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function updateTeam(updatedTeam: Team) {
+    setIsLoading(true);
+    setLoadingMessage(`Updating team info...`);
+    try {
+      const response = await fetch("/api/team", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ team: updatedTeam, adminId: session.user.id }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update team info.");
+      }
+      const data = (await response.json()) as any;
+      setTeam(data.team);
+      toast.success("Team updated successfully.");
+    } catch (err: any) {
+      setError(err.message);
+      toast.error(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -57,5 +80,5 @@ export function useTeam() {
     }
   }, [session?.user.id]);
 
-  return { team, isLoading, error, fetchTeam, createTeam, loadingMessage };
+  return { team, isLoading, error, fetchTeam, createTeam, loadingMessage, updateTeam };
 }
