@@ -6,6 +6,7 @@ import { VectorDBQAChain } from "langchain/chains";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
 import { TextLoader } from "langchain/document_loaders/fs/text";
+import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 
 const pinecone = new Pinecone();
 
@@ -13,10 +14,15 @@ const pineconeIndex = pinecone.index(process.env.PINECONE_INDEX);
 
 const embeddings = new OpenAIEmbeddings();
 
-export const storeDocument = async (document: string, source: string) => {
-  const splitter = new RecursiveCharacterTextSplitter({ chunkSize: 1000, chunkOverlap: 200 });
+export const readWebBaseContent = async (url: string) => {
+  const loader = new CheerioWebBaseLoader(url);
+  return await loader.load();
+};
 
-  const splitDocs = await splitter.createDocuments([document], [{ source }]);
+export const storeDocuments = async (documents: string[], sources: string[]) => {
+  const splitter = new RecursiveCharacterTextSplitter({ chunkSize: 1000, chunkOverlap: 200 });
+  const sourcesList = sources.map((source) => ({ source }));
+  const splitDocs = await splitter.createDocuments(documents, sourcesList);
 
   return await PineconeStore.fromDocuments(splitDocs, embeddings, { pineconeIndex, maxConcurrency: 10 });
 };
@@ -24,9 +30,7 @@ export const storeDocument = async (document: string, source: string) => {
 export const queryDocument = async (query: string) => {
   const vectorStore = await PineconeStore.fromExistingIndex(embeddings, { pineconeIndex });
 
-  const results = await vectorStore.similaritySearch(query, 3);
-
-  return results;
+  return await vectorStore.similaritySearch(query, 3);
 };
 
 export const queryDocumentChain = async (query: string) => {
@@ -37,9 +41,7 @@ export const queryDocumentChain = async (query: string) => {
     k: 1,
     returnSourceDocuments: true,
   });
-  const response = await chain.call({ query: query });
-
-  return response;
+  return await chain.call({ query: query });
 };
 
 export const readFolderFiles = async (folderPath: string) => {
@@ -47,6 +49,5 @@ export const readFolderFiles = async (folderPath: string) => {
   const loader = new DirectoryLoader(folderPath, {
     ".txt": (path) => new TextLoader(path),
   });
-  const docs = await loader.load();
-  return docs;
+  return await loader.load();
 };
