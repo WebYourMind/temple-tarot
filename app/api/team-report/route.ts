@@ -1,22 +1,13 @@
-import { OpenAIStream, StreamingTextResponse } from "ai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { BytesOutputParser } from "langchain/schema/output_parser";
 import { PromptTemplate } from "langchain/prompts";
-import { Configuration, OpenAIApi } from "openai-edge";
-import { sql } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
-import { getRelativePercentages } from "lib/utils";
-import { ArchetypeValues } from "lib/types";
 import { getTeamReport, insertTeamReport } from "../../../lib/database/teamReport.database";
 import { teamMemberTemplate, teamReportTemplate } from "../../../lib/templates/team.templates";
 import { getTeamById } from "../../../lib/database/team.database";
-import { util } from "protobufjs";
-import float = util.float;
+import { StreamingTextResponse } from "ai";
 
 export const runtime = "edge";
-
-// Opt out of caching for all data requests in the route segment
-export const dynamic = "force-dynamic";
 
 const getScoresUpdateMessage = (name: string, scores: { [key: string]: number }) => {
   return `
@@ -99,49 +90,6 @@ export async function POST(req: NextRequest) {
 
   return new StreamingTextResponse(chainStream);
 }
-
-/*
-const model = process.env.GPT_MODEL;
-
-if (!model) {
-  return new Response("No GPT model set", {
-    status: 500,
-  });
-}
-
-const content = createReportGenerationPrompt(scores);
-const scoresUpdate = getScoresUpdateMessage(getRelativePercentages(scores as ArchetypeValues));
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY, // Replace with your API key
-});
-const openai = new OpenAIApi(configuration);
-
-// Request the OpenAI API for the response based on the prompt
-const response = await openai.createChatCompletion({
-  model,
-  stream: true,
-  messages: [
-    {
-      role: "user",
-      content,
-    },
-  ],
-  temperature: 0.2,
-});
-
-const stream = OpenAIStream(response, {
-  async onCompletion(completion) {
-    await sql`
-        INSERT INTO reports (user_id, scores_id, report)
-        VALUES (${userId}, ${scores.id}, ${completion})
-        RETURNING *;
-      `;
-    await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${scoresUpdate}, 'assistant')`;
-  },
-});
-
-return new StreamingTextResponse(stream);*/
 
 export async function GET(request: NextRequest) {
   try {
