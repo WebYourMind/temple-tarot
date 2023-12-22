@@ -3,7 +3,7 @@ import { BytesOutputParser } from "langchain/schema/output_parser";
 import { PromptTemplate } from "langchain/prompts";
 import { NextRequest, NextResponse } from "next/server";
 import { getTeamReport, insertTeamReport } from "../../../lib/database/teamReport.database";
-import { teamMemberTemplate, teamReportTemplate } from "../../../lib/templates/team.templates";
+import { teamReportTemplate } from "../../../lib/templates/team.templates";
 import { getTeamById } from "../../../lib/database/team.database";
 import { StreamingTextResponse } from "ai";
 
