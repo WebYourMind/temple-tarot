@@ -1,0 +1,61 @@
+source{https://www.shift.to/articles/what-kind-of-thinker-are-you?rq=thinker%20are%20you}
+
+We all aspire to work better together. Technology is making some of that effort easier. But digital tools are only part of the answer. It’s people who ultimately make the difference.
+
+The problem is that technologies for collaboration are improving faster than people’s ability to learn to use them. What can be done to close that gap? A year ago we set out to find the answer, drawing on the collective experience of dozens of collaborative communities and learning organizations. Here’s what we found.
+
+In most organizations, there’s a standard set of tools we use to form, lead, and manage teams. These include personality tests, skill profiles, and team roles. When you put a team together, you consider people’s personalities: are they an introvert or extrovert, risk-taker or risk-avoider, analytical or intuitive? You consider their skills: What is their specific area of talent, experience, or expertise? And you consider their potential role on the team: What will their contribution be to the team’s purpose?
+
+We normally think of roles as being about what people do, such as team leader, project manager, or researcher. When you need a decision, you go to the team leader. When you want a status update, you go to the project manager. When you need something investigated, you go to the researcher.
+
+But in today’s marketplace, the smartest companies aren’t those that necessarily out-produce the competition. Instead, it’s the organizations that out-think them. This shows that it is ultimately how teams think together that most determines their performance. And while there are plenty of tools that help us quickly understand what our teammates do, it’s harder to tell how they think.
+
+We therefore propose that just as team members today have assigned doing roles, there should also be thinking roles. By knowing how other members of your team and organization think — and by others knowing how you think — everyone can be more energized, more engaged, more creative, and more productive.
+
+One aspect of collaboration is about getting people aligned in what they do. But there is another dimension about getting people aligned in how they think.
+
+So how should you evaluate about how you and your team think? There are frameworks for how you personally think or how you influence others one-on-one. But we didn’t find any simple assessments that would help people connect, communicate, and collaborate based on how they think. So after a lot of co-creation and trial-and-error, we developed a three-step method that delivers practical and meaningful results.
+
+Focus. The first step is to identify the focus of your thinking in a particular context or setting. Do you tend to pay the most attention to ideas, process, action, or relationships? For example, in the morning as you contemplate the day ahead, do you tend to think about the problems you need to solve, the plans you need to make, the actions you need to take, or the people you need to see?
+
+This isn’t about picking one to the exclusion of the other. It’s about where your focus naturally lands. Just like when you consider watching a movie or reading a book, do you tend to go for action, romance, drama, or mystery?
+
+Orientation. The next step is to notice whether your orientation in that setting swings toward the micro or the macro — the big picture or the details. A good way to identify this orientation is by thinking about what tends to bother you in meetings. Are you more likely to complain about getting dragged into the weeds or about things being too general and not specific enough?
+
+These dimensions are complementary to personality, skills, and traditional roles. Some project managers are more inclined to focus on process and others on people. And some extraverts are big picture and others more detail oriented.
+
+The third step is to combine these two dimensions and see the thinking style at work in whatever context or setting you chose.
+
+For example, on the big picture or macro orientation:
+
+Explorer thinking is about generating creative ideas.
+
+Planner thinking is about designing effective systems.
+
+Energizer thinking is about mobilizing people into action.
+
+Connector thinking is about building and strengthening relationships.
+
+Across the micro or detail orientation:
+
+Expert thinking is about achieving objectivity and insight.
+
+Optimizer thinking is about improving productivity and efficiency.
+
+Producer thinking is about achieving completion and momentum.
+
+Coach thinking is about cultivating people and potential.
+
+When you know your thinking style, you know what naturally energizes you, why certain types of problems are challenging or boring, and what you can do to improve in areas that are important to reaching your goals.
+
+Once you know your style, it helps to share it with others, and have others share theirs with you. In this way, your thinking style becomes a useful tool — a kind of social currency — for the team. Imagine you put together a team to work on a new initiative. Wouldn’t you like to know who is energized by big-picture strategy discussions and who finds them frustrating? Who likes to work on the details of the execution? And who is energized by managing the team dynamics?
+
+As a real-world demonstration, one company had their entire leadership team identify their thinking styles as managers and leaders. Looking at a heat map of the results, they realized they had a lot of big-picture Explorer thinking and a lot of Action thinking (Energizer and Producer), but very little Process thinking (Planner and Optimizer). The team was strong at coming up with big ideas and mobilizing everyone into action, but weak at working out the details and making things run efficiently.
+
+With this new information in hand, they started giving more voice to those whose detailed thinking often seemed like a buzz kill to the big picture explorers and energizers. They also shifted the culture and recruiting strategies to create a more balanced and diverse thinking style.
+
+At an individual level, one specific leader had always operated in idea-rich environments like consulting and marketing. But by identifying her thinking style, she realized that she was more energized by relationships than ideas. Her orientation was more towards Connector thinking than Explorer thinking. She used ideas to nurture relationships, rather than relationships to nurture ideas. This insight led her to shift the focus of her work toward account management and business development, leading to much higher levels of energy and engagement.
+
+The landscape of business is changing rapidly, and we have to find new and better ways to connect and communicate. We all aspire to work better together; the challenge is actually making it happen. Understanding collaboration through the lens of thinking rather than doing is a practical and powerful step forward.
+
+Originally published in HBR by Mark Bonchek and Elisa Steele
