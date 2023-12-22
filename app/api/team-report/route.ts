@@ -50,19 +50,6 @@ export async function POST(req: NextRequest) {
     const name = users[i].name;
     const userTemplate = getScoresUpdateMessage(name, users[i].scores);
 
-    const { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever } = users[i].scores;
-
-    const tempPrompt = teamMemberTemplate
-      .replace("{memberNumber}", name)
-      .replace("{explorer}", explorer)
-      .replace("{analyst}", analyst)
-      .replace("{designer}", designer)
-      .replace("{optimizer}", optimizer)
-      .replace("{connector}", connector)
-      .replace("{nurturer}", nurturer)
-      .replace("{energizer}", energizer)
-      .replace("{achiever}", achiever);
-
     teamMemberTemplateList.push(userTemplate);
   }
 
