@@ -10,7 +10,9 @@ import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 
 const pinecone = new Pinecone();
 
-const pineconeIndex = pinecone.index(process.env.PINECONE_INDEX);
+const pineconeIndexName = "webyourmind-index";
+
+const pineconeIndex = pinecone.index(pineconeIndexName);
 
 const embeddings = new OpenAIEmbeddings();
 
