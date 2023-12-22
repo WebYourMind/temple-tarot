@@ -1,26 +1,49 @@
 export const teamReportTemplate = `
-Generate a comprehensive insight report titled within the context of thinking styles and 'Shift Thinking': 
-'Your Thinking Style Results' in markdown format. 
+Generate a comprehensive report in markdown format analyzing a team's dynamics based on the thinking styles of its members. Consider how these styles interact, their strengths and weaknesses, and provide recommendations for optimizing team performance.
 
-### Team Overview: 
-The team comprises individuals with diverse thinking styles, contributing varied perspectives and approaches:
+The team consists of the following members and their respective thinking styles:
 {teamMembers}
+
+List each team member in bullet points with their single highest ranked thinking style.
 
 Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology.
 
-The report should:
+Thinking style definitions for reference:
+    Explorer: Focused on generating creative ideas and big-picture thinking.
+    Planner: Concerned with designing effective systems and processes.
+    Energizer: Aims to mobilize people into action and inspire enthusiasm.
+    Connector: Builds and strengthens relationships, focusing on the interpersonal aspects.
+    Expert: Seeks to achieve objectivity and insight, often delving into the details.
+    Optimizer: Strives to improve productivity and efficiency, fine-tuning processes.
+    Producer: Driven to achieve completion and maintain momentum, often action-oriented.
+    Coach: Dedicated to cultivating people and potential, focusing on personal development.
 
-1. Focus primarily on the thinking archetype, offering detailed strategies for personal growth, learning, decision-making, problem-solving, and maintaining motivation.
-2. Include insights and personalized advice for the highest scored thinking styles, ensuring a comprehensive understanding of the user's multifaceted thinking approach.
-3. Provide recommendations for enhancing interpersonal relationships, considering their communicative and caring scores.
-4. Offer ideas for managing change and uncertainty in both personal and professional contexts.
-5. Suggest techniques for maintaining energy and motivation, specifically tailored to activities that best suit their dominant thinking archetype.
-6. Give suggestions for career development and navigating workplace dynamics, with a focus on leveraging their dominant style while acknowledging other significant styles.
-7. Outline the risks, pitfalls, and anything else the user should be aware of based on their thinking style scores.
+Analysis Sections:
 
-End the report with a short summary of key takeaways for maintaining balance and overall well-being, emphasizing the importance of their dominant thinking style in various aspects of life.
+Overview of Team Composition:
+"Begin by providing an overview of the team's composition in terms of thinking styles. Identify any predominant or lacking styles and discuss how this balance may affect team dynamics."
+
+Strengths and Synergies:
+"Highlight the strengths of the team's current thinking style mix. Discuss how different styles complement each other and can lead to effective collaboration and innovation."
+
+Potential Challenges:
+"Identify potential challenges or conflicts that might arise from the mix of thinking styles. Discuss how certain styles might clash and suggest strategies to mitigate these risks."
+
+Role Alignment Recommendations:
+"Provide recommendations for aligning team members with roles or tasks that suit their thinking styles. Suggest how to leverage each member's strengths for optimal team performance."
+
+Enhancing Communication:
+"Offer advice on enhancing communication and understanding between different thinking styles. Suggest communication strategies and team-building activities that respect and utilize the diversity of thought."
+
+Development Opportunities:
+"Recommend areas for development, both at an individual and team level, to build a more balanced and versatile team. Suggest training or experiences that could benefit the team."
+
+Conclusion:
+"Conclude the report with a summary of the key findings and final recommendations for the team to enhance its dynamics and performance."
 `;
 
 export const teamMemberTemplate = `
-    - Team Member {memberNumber}: explorer({explorer}), analyst({analyst}), designer({designer}), optimizer({optimizer}), connector({connector}), nurturer({nurturer}), energizer({energizer}), achiever({achiever}). 
+    - {memberNumber}: 
+        Dominant Thinking Style: {dominantStyle}, 
+        All scores: explorer({explorer}), analyst({analyst}), designer({designer}), optimizer({optimizer}), connector({connector}), nurturer({nurturer}), energizer({energizer}), achiever({achiever}). 
 `;

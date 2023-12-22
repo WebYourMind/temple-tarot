@@ -1,33 +1,14 @@
-import { ChatOpenAI } from "langchain/chat_models/openai";
-import { BytesOutputParser } from "langchain/schema/output_parser";
-import { PromptTemplate } from "langchain/prompts";
 import { NextRequest, NextResponse } from "next/server";
 import { getTeamReport, insertTeamReport } from "../../../lib/database/teamReport.database";
-import { teamReportTemplate } from "../../../lib/templates/team.templates";
+import { teamMemberTemplate, teamReportTemplate } from "../../../lib/templates/team.templates";
 import { getTeamById } from "../../../lib/database/team.database";
 import { StreamingTextResponse } from "ai";
+import { PromptTemplate } from "@langchain/core/prompts";
+import { ChatOpenAI } from "@langchain/openai";
+import { BytesOutputParser } from "@langchain/core/output_parsers";
+import { getDominantStyle } from "../../../lib/utils";
 
 export const runtime = "edge";
-
-const getScoresUpdateMessage = (name: string, scores: { [key: string]: number }) => {
-  return `
-  - Team Member ${name}: 
-  
-  🌟 Thinking Styles Reassessed! 🌟
-
-    Your journey of self-discovery continues with fresh insights. Here's how your thinking styles now align:
-    
-    - Explorer: ${scores.explorer}%
-    - Analyst: ${scores.analyst}%
-    - Designer: ${scores.designer}%
-    - Optimizer: ${scores.optimizer}%
-    - Connector: ${scores.connector}%
-    - Nurturer: ${scores.nurturer}%
-    - Energizer: ${scores.energizer}%
-    - Achiever: ${scores.achiever}%
-    
-    Embrace these insights and continue to explore the unique facets of your thought processes!`;
-};
 
 export async function POST(req: NextRequest) {
   const { users, team } = (await req.json()) as any;
@@ -48,9 +29,23 @@ export async function POST(req: NextRequest) {
   const teamMemberTemplateList = [];
   for (let i = 0; i < users.length; i++) {
     const name = users[i].name;
-    const userTemplate = getScoresUpdateMessage(name, users[i].scores);
 
-    teamMemberTemplateList.push(userTemplate);
+    const dominantStyle = getDominantStyle(users[i].scores);
+
+    const { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever } = users[i].scores;
+
+    const tempPrompt = teamMemberTemplate
+      .replace("{dominantStyle}", dominantStyle)
+      .replace("{memberNumber}", name)
+      .replace("{explorer}", explorer)
+      .replace("{analyst}", analyst)
+      .replace("{designer}", designer)
+      .replace("{optimizer}", optimizer)
+      .replace("{connector}", connector)
+      .replace("{nurturer}", nurturer)
+      .replace("{energizer}", energizer)
+      .replace("{achiever}", achiever);
+    teamMemberTemplateList.push(tempPrompt);
   }
 
   const teamReportTemplatePrompt = PromptTemplate.fromTemplate(teamReportTemplate);
@@ -66,7 +61,7 @@ export async function POST(req: NextRequest) {
     {
       callbacks: [
         {
-          async handleLLMEnd(output) {
+          async handleLLMEnd(output: any) {
             const report = output["generations"][0][0].text ?? "";
             await insertTeamReport(team.id, report);
           },
