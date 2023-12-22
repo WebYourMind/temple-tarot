@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
 
-        let score = {
+        const score = {
           id: row.score_id,
           explorer: row.explorer,
           analyst: row.analyst,
@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
           achiever: row.achiever,
         };
 
-        let dominantStyle = getDominantStyle(score);
+        const dominantStyle = getDominantStyle(score);
         users.push({
           id: row.user_id,
           name: row.user_name,
