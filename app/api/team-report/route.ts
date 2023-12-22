@@ -10,59 +10,32 @@ import { ArchetypeValues } from "lib/types";
 import { getTeamReport, insertTeamReport } from "../../../lib/database/teamReport.database";
 import { teamMemberTemplate, teamReportTemplate } from "../../../lib/templates/team.templates";
 import { getTeamById } from "../../../lib/database/team.database";
+import { util } from "protobufjs";
+import float = util.float;
 
 export const runtime = "edge";
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = "force-dynamic";
 
-const getScoresUpdateMessage = (scores: string[]) => {
-  return `🌟 Thinking Styles Reassessed! 🌟
-
-Your journey of self-discovery continues with fresh insights. Here's how your thinking styles now align:
-
-- Explorer: ${scores[0]}%
-- Analyst: ${scores[1]}%
-- Designer: ${scores[2]}%
-- Optimizer: ${scores[3]}%
-- Connector: ${scores[4]}%
-- Nurturer: ${scores[5]}%
-- Energizer: ${scores[6]}%
-- Achiever: ${scores[7]}%
-
-Embrace these insights and continue to explore the unique facets of your thought processes!`;
-};
-
-const createReportGenerationPrompt = ({
-  explorer,
-  analyst,
-  designer,
-  optimizer,
-  connector,
-  nurturer,
-  energizer,
-  achiever,
-}: ArchetypeValues) => {
-  // Identify the dominant thinking style based on the highest score
-  const scores = { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever };
-  const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
-    scores[a] > scores[b] ? a : b
-  );
-
-  // Start the prompt with the dominant thinking style
+const getScoresUpdateMessage = (name: string, scores: { [key: string]: number }) => {
   return `
-Generate a comprehensive insight report titled within the context of thinking styles and 'Shift Thinking': 'Your Thinking Style Results' in markdown format for a user primarily identified as a "${dominantStyle}". Explicitly state their dominant thinking style the beginning of the report. The user's thinking style profile is as follows: explorer(${explorer}), analyst(${analyst}), designer(${designer}), optimizer(${optimizer}), connector(${connector}), nurturer(${nurturer}), energizer(${energizer}), achiever(${achiever}). Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology. The report should:
+  - Team Member ${name}: 
+  
+  🌟 Thinking Styles Reassessed! 🌟
 
-1. Focus primarily on the "${dominantStyle}" thinking archetype, offering detailed strategies for personal growth, learning, decision-making, problem-solving, and maintaining motivation.
-2. Include insights and personalized advice for the highest scored thinking styles, ensuring a comprehensive understanding of the user's multifaceted thinking approach.
-3. Provide recommendations for enhancing interpersonal relationships, considering their communicative and caring scores.
-4. Offer ideas for managing change and uncertainty in both personal and professional contexts.
-5. Suggest techniques for maintaining energy and motivation, specifically tailored to activities that best suit their dominant thinking archetype.
-6. Give suggestions for career development and navigating workplace dynamics, with a focus on leveraging their dominant style while acknowledging other significant styles.
-7. Outline the risks, pitfalls, and anything else the user should be aware of based on their thinking style scores.
-
-End the report with a short summary of key takeaways for maintaining balance and overall well-being, emphasizing the importance of their dominant thinking style in various aspects of life.
-`;
+    Your journey of self-discovery continues with fresh insights. Here's how your thinking styles now align:
+    
+    - Explorer: ${scores.explorer}%
+    - Analyst: ${scores.analyst}%
+    - Designer: ${scores.designer}%
+    - Optimizer: ${scores.optimizer}%
+    - Connector: ${scores.connector}%
+    - Nurturer: ${scores.nurturer}%
+    - Energizer: ${scores.energizer}%
+    - Achiever: ${scores.achiever}%
+    
+    Embrace these insights and continue to explore the unique facets of your thought processes!`;
 };
 
 export async function POST(req: NextRequest) {
@@ -84,6 +57,7 @@ export async function POST(req: NextRequest) {
   const teamMemberTemplateList = [];
   for (let i = 0; i < users.length; i++) {
     const name = users[i].name;
+    const userTemplate = getScoresUpdateMessage(name, users[i].scores);
 
     const { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever } = users[i].scores;
 
@@ -97,7 +71,8 @@ export async function POST(req: NextRequest) {
       .replace("{nurturer}", nurturer)
       .replace("{energizer}", energizer)
       .replace("{achiever}", achiever);
-    teamMemberTemplateList.push(tempPrompt);
+
+    teamMemberTemplateList.push(userTemplate);
   }
 
   const teamReportTemplatePrompt = PromptTemplate.fromTemplate(teamReportTemplate);
