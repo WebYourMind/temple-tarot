@@ -10,6 +10,7 @@ function sanitizeTeamData(team: any) {
     name: team.name,
     description: team.description,
     inviteToken: team.invite_token,
+    adminId: team.adminId,
   };
 }
 

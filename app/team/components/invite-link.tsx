@@ -102,7 +102,7 @@ export default function InviteLink({ team, inviterName }: InviteLinkProps) {
       <div className="w-full space-y-4">
         <h2 className="text-xl">Invite people to your team</h2>
         <div className="flex space-x-2">
-          <InputField value={inviteUrl} className="overflow-hidden text-ellipsis whitespace-nowrap" />
+          <InputField value={inviteUrl} readOnly className="overflow-hidden text-ellipsis whitespace-nowrap" />
           <Button onClick={onCopy}>{isCopied ? <IconCheck /> : "Copy"}</Button>
         </div>
         <DividerWithText />

@@ -7,8 +7,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useScores } from "lib/hooks/use-scores";
 import { useReport } from "lib/hooks/use-report";
-import getPieChart from "lib/getPieChart";
 import Loading from "components/loading";
+import ArchetypePieChart from "lib/ArchetypePieChart";
 
 export default function Report() {
   const router = useRouter();
@@ -44,12 +44,13 @@ export default function Report() {
   return (
     <div className="mx-auto my-20 flex max-w-4xl flex-col items-center px-5">
       {report && scores && (
-        <ReactMarkdown className="prose prose-indigo text-foreground md:prose-lg">
-          {`${report}
-
-${!isGenerating ? getPieChart(scores) : ""}
+        <div>
+          <ReactMarkdown className="prose prose-indigo text-foreground md:prose-lg">
+            {`${report}
 `}
-        </ReactMarkdown>
+          </ReactMarkdown>
+          {!isGenerating && <ArchetypePieChart scores={scores} />}
+        </div>
       )}
       {!isGenerating && (
         <div className="flex flex-col space-y-5">

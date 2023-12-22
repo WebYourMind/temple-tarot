@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
-import { ArchetypeValues } from "./types";
+import { ArchetypeValues, ThinkingStyle } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -61,7 +61,7 @@ export function getRelativePercentages({
 
   // Calculate relative percentages
   const relativePercentages = [explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever].map(
-    (score) => ((parseFloat(score) / totalScore) * 100).toFixed(1)
+    (score) => parseFloat(((parseFloat(score) / totalScore) * 100).toFixed(1))
   );
 
   return relativePercentages;
@@ -87,4 +87,31 @@ export function isValidPhoneNumber(phoneNumber: string) {
 export function isValidEmail(email: string) {
   const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   return regex.test(email);
+}
+
+export function getDominantStyle({
+  explorer,
+  analyst,
+  designer,
+  optimizer,
+  connector,
+  nurturer,
+  energizer,
+  achiever,
+}: ArchetypeValues) {
+  const scores = {
+    explorer,
+    analyst,
+    designer,
+    optimizer,
+    connector,
+    nurturer,
+    energizer,
+    achiever,
+  };
+  const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
+    scores[a] > scores[b] ? a : b
+  );
+  const capitalizedStyle = dominantStyle[0].toUpperCase() + dominantStyle.slice(1);
+  return capitalizedStyle as ThinkingStyle;
 }

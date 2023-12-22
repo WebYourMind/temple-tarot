@@ -1,6 +1,7 @@
 export type ApiResponse = {
   message: string;
   error: string;
+  data: any;
 };
 
 export type ArchetypeValues = {
@@ -13,6 +14,16 @@ export type ArchetypeValues = {
   energizer: string;
   achiever: string;
 };
+
+export type ThinkingStyle =
+  | "Explorer"
+  | "Analyst"
+  | "Designer"
+  | "Optimizer"
+  | "Connector"
+  | "Nurturer"
+  | "Energizer"
+  | "Achiever";
 
 export type ReportType = string | undefined;
 
@@ -32,6 +43,8 @@ export type UserProfile = {
   phone?: string;
   role?: string;
   teamId?: string;
+  scores?: ArchetypeValues;
+  thinkingStyle?: ThinkingStyle;
 };
 
 export type TeamForm = {
@@ -42,4 +55,6 @@ export type TeamForm = {
 export type Team = {
   id: string;
   inviteToken: string;
+  adminId: string;
+  users?: UserProfile[];
 } & TeamForm;
