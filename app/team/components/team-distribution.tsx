@@ -2,7 +2,16 @@ import Card from "components/card";
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#a4de6c", "#d0ed57", "#ffc658"];
+const COLORS = [
+  "#0088FE", // Blue
+  "#00C49F", // Greenish
+  "#FFBB28", // Yellow
+  "#FF8042", // Orange
+  "#a4de6c", // Light Green
+  "#d0ed57", // Lime Green
+  "#ffc658", // Gold
+  "#A569BD", // Purple
+];
 
 const ThinkingStyleDistribution = ({ teamMembers }: any) => {
   // Calculate the distribution of thinking styles
