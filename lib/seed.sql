@@ -92,6 +92,27 @@ CREATE TABLE teams (
     image TEXT
 );
 
+CREATE SEQUENCE team_report_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NO MAXVALUE
+    CACHE 1;
+
+ create table team_reports
+ (
+     id integer default nextval('team_report_id_seq'::regclass) not null
+         constraint table_name_pk
+             primary key,
+     report     text,
+     created_at timestamp with time zone default CURRENT_TIMESTAMP,
+     team_id    integer
+         constraint table_name_teams_id_fk
+             references teams
+ );
+
 -- other useful queries for development
+
+
 DELETE FROM scores;
 DROP TABLE scores CASCADE;

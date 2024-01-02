@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TeamForm } from "../../../../lib/types";
-import crypto from "crypto";
 import { sql } from "@vercel/postgres";
 import { getTeamById } from "../../../../lib/database/team.database";
 import { getUserById, updateUserTeam } from "../../../../lib/database/user.database";
