@@ -3,6 +3,16 @@ export type ApiResponse = {
   error: string;
 };
 
+export type ReportType = string | undefined;
+
+export type Address = {
+  street: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+};
+
 export type ArchetypeValues = {
   explorer: string;
   analyst: string;
@@ -14,24 +24,15 @@ export type ArchetypeValues = {
   achiever: string;
 };
 
-export type ReportType = string | undefined;
-
-export type Address = {
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-};
-
 export type UserProfile = {
   name: string;
   email: string;
   id?: string;
-  address: Address;
+  address?: Address;
   phone?: string;
   role?: string;
   teamId?: string;
+  scores?: ArchetypeValues;
 };
 
 export type TeamForm = {
@@ -42,4 +43,5 @@ export type TeamForm = {
 export type Team = {
   id: string;
   inviteToken: string;
+  users: UserProfile[];
 } & TeamForm;
