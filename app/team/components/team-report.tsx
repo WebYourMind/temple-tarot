@@ -54,7 +54,7 @@ export default function TeamReport({ team }: Props) {
           <p className="font-bold">Waiting on Thinking Style results from the following team members:</p>
           <ul>
             {usersWithoutDominantStyle.map((user) => (
-              <li>- {user.name}</li>
+              <li key={user.id}>- {user.name}</li>
             ))}
           </ul>
         </div>
