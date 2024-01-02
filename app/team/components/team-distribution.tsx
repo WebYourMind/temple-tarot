@@ -16,7 +16,7 @@ const COLORS = [
 const ThinkingStyleDistribution = ({ teamMembers }: any) => {
   // Calculate the distribution of thinking styles
   const styleCounts = teamMembers.reduce((acc: any, member: any) => {
-    acc[member.thinkingStyle] = (acc[member.thinkingStyle] || 0) + 1;
+    acc[member.dominantStyle] = (acc[member.dominantStyle] || 0) + 1;
     return acc;
   }, {});
 

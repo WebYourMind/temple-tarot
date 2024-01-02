@@ -39,12 +39,12 @@ export type UserProfile = {
   name: string;
   email: string;
   id?: string;
-  address?: Address;
+  address: Address;
   phone?: string;
   role?: string;
   teamId?: string;
   scores?: ArchetypeValues;
-  thinkingStyle?: ThinkingStyle;
+  dominantStyle?: ThinkingStyle;
 };
 
 export type TeamForm = {

@@ -75,7 +75,7 @@ export function useTeam() {
   }
 
   useEffect(() => {
-    if (session?.user?.id && session?.user?.teamId && !team) {
+    if (session?.user?.id && !team) {
       fetchTeam();
     } else {
       setIsLoading(false);

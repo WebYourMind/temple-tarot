@@ -2,19 +2,18 @@ import { Team, UserProfile } from "lib/types";
 import { useState, useEffect, useCallback, useRef } from "react";
 import toast from "react-hot-toast";
 
-export function useTeamReport(users: UserProfile[], team: Team) {
+export function useTeamReport(users: UserProfile[] | undefined, team: Team) {
   const [teamReport, setTeamReport] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const isGeneratingRef = useRef(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const generateReport = useCallback(async () => {
-    if (isGeneratingRef.current || teamReport) return;
+    if (isGeneratingRef.current) return;
     isGeneratingRef.current = true;
     setIsGenerating(true);
     let isSubscribed = true;
     const controller = new AbortController();
-    setIsLoading(true);
     try {
       const response = await fetch("/api/team-report", {
         method: "POST",
@@ -27,6 +26,8 @@ export function useTeamReport(users: UserProfile[], team: Team) {
 
       if (!response.body) throw new Error("Failed to get the stream.");
 
+      setTeamReport("");
+
       const reader = response.body.getReader();
 
       let receivedLength = 0;
@@ -36,6 +37,7 @@ export function useTeamReport(users: UserProfile[], team: Team) {
 
         if (done) {
           setIsGenerating(false);
+          isGeneratingRef.current = false;
           break;
         }
 
@@ -69,10 +71,8 @@ export function useTeamReport(users: UserProfile[], team: Team) {
       const data = (await response.json()) as any;
 
       if (response.ok) {
-        setTeamReport(data.report.report);
-      } else if (response.status === 404) {
-        generateReport();
-      } else {
+        setTeamReport(data.data.report);
+      } else if (response.status !== 404) {
         toast.error("Failed to fetch the report.");
       }
       setIsLoading(false);
@@ -83,5 +83,5 @@ export function useTeamReport(users: UserProfile[], team: Team) {
     }
   }, [team, users, teamReport]);
 
-  return { teamReport, isLoading, isGenerating };
+  return { teamReport, isLoading, isGenerating, generateReport };
 }

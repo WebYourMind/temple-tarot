@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
       description: team.description,
       adminId: team.admin_id,
       image: team.image,
-      invite_token: team.invite_token,
+      inviteToken: team.invite_token,
       users: users,
     };
 
