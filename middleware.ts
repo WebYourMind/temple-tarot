@@ -27,7 +27,6 @@ export default async function middleware(req: NextRequest) {
 
   // Redirect unauthenticated users away from protected paths
   if (!session && !openPaths.some((openPath) => path.startsWith(openPath))) {
-    console.log("Redirecting to login.");
     return NextResponse.redirect(new URL("/login", req.url));
   }
 

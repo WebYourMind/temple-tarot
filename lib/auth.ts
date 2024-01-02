@@ -35,6 +35,7 @@ export const authOptions: NextAuthOptions = {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                teamId: user.team_id,
               };
             }
           }
@@ -74,6 +75,10 @@ export const authOptions: NextAuthOptions = {
         token.role = session.role;
         // @ts-expect-error
         token.user.role = session.role;
+      }
+      if (trigger === "update" && session?.teamId) {
+        // @ts-expect-error
+        token.user.teamId = session.teamId;
       }
       return token;
     },

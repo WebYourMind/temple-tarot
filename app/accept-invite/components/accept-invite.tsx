@@ -11,14 +11,14 @@ import { useProfile } from "lib/hooks/use-profile";
 
 const AcceptInvite = () => {
   const searchParams = useSearchParams();
-  const { data: session, status } = useSession() as any;
+  const { data: session, status, update } = useSession() as any;
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { profile } = useProfile();
   const [team, setTeam] = useState<Team | null>(null);
 
   useEffect(() => {
-    if (profile?.teamId === team?.id) {
+    if (team?.id && profile?.teamId === team?.id) {
       router.replace("/team");
     }
   }, [profile, team]);
@@ -72,6 +72,7 @@ const AcceptInvite = () => {
         throw new Error("Failed to join team.");
       } else {
         const responseData = (await response.json()) as unknown as ApiResponse;
+        update({ teamId: team.id });
         toast.success(responseData.message);
         router.push("/team");
       }
@@ -84,7 +85,7 @@ const AcceptInvite = () => {
 
   return (
     <div className="mx-auto my-16 max-w-md">
-      <Card>
+      <Card className="max-w-md">
         <div className="align-center flex flex-col space-y-4">
           <h1 className="text-center text-2xl font-bold">You&apos;re invited to join.</h1>
           <div className="text-center">
