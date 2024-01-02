@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import crypto from "crypto";
-import { Team, TeamForm } from "lib/types";
-import { deleteTeamById, getTeamById, getTeamScore, updateTeamByAdminID } from "../../../lib/database/team.database";
-
-function sanitizeTeamData(team: any) {
-  return {
-    id: team.id,
-    name: team.name,
-    description: team.description,
-    inviteToken: team.invite_token,
-    adminId: team.adminId,
-  };
-}
+import { TeamForm } from "lib/types";
+import {
+  deleteTeamById,
+  getTeamById,
+  getTeamByUser,
+  getTeamScore,
+  updateTeamByAdminID,
+} from "../../../lib/database/team.database";
+import { getDominantStyle } from "../../../lib/utils";
 
 export async function POST(request: NextRequest) {
   try {
@@ -65,13 +62,13 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const teamId = searchParams.get("teamId");
+    const userId = searchParams.get("userId");
 
     // Check if userId is not null or undefined
-    if (!teamId) {
+    if (!userId) {
       return NextResponse.json(
         {
-          error: "The team ID must be provided.",
+          error: "The user ID must be provided.",
         },
         {
           status: 400,
@@ -79,28 +76,23 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const team = await getTeamById(parseInt(teamId));
+    const team = await getTeamByUser(parseInt(userId));
     // select team associated with user
-    const rows = await getTeamScore(parseInt(teamId));
 
     // Check if we got a result back
     if (team === null) {
-      return NextResponse.json(
-        {
-          error: "No teams found for the given team ID.",
-        },
-        {
-          status: 404,
-        }
-      );
+      return NextResponse.json({ error: "No teams found for the given user ID." }, { status: 404 });
     }
-    const score = [];
-    const user = [];
+
+    const rows = await getTeamScore(parseInt(team.id));
+
+    const users = [];
 
     if (rows !== null) {
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
-        score.push({
+
+        const score = {
           id: row.score_id,
           explorer: row.explorer,
           analyst: row.analyst,
@@ -110,14 +102,17 @@ export async function GET(request: NextRequest) {
           nurturer: row.nurturer,
           energizer: row.energizer,
           achiever: row.achiever,
-        });
-        user.push({
+        };
+
+        const dominantStyle = getDominantStyle(score);
+        users.push({
           id: row.user_id,
           name: row.user_name,
           email: row.user_email,
           phone: row.user_phone,
           role: row.user_role,
-          score: score[i],
+          dominantStyle: dominantStyle,
+          scores: score,
         });
       }
     }
@@ -128,7 +123,8 @@ export async function GET(request: NextRequest) {
       description: team.description,
       adminId: team.admin_id,
       image: team.image,
-      user: user,
+      invite_token: team.invite_token,
+      users: users,
     };
 
     // Return the team row
