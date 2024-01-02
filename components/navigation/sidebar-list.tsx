@@ -34,7 +34,7 @@ const teamItem = {
   icon: <IconUsers />,
 };
 
-export async function SidebarList() {
+export function SidebarList() {
   const { data: session } = useSession() as any;
   return (
     <div className="flex-1 overflow-auto">

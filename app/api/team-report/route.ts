@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
     const tempPrompt = teamMemberTemplate
       .replace("{dominantStyle}", dominantStyle)
-      .replace("{memberNumber}", name)
+      .replace("{memberName}", name)
       .replace("{explorer}", explorer)
       .replace("{analyst}", analyst)
       .replace("{designer}", designer)
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 
   const teamReportTemplatePrompt = PromptTemplate.fromTemplate(teamReportTemplate);
 
-  const langChainChatModel = new ChatOpenAI({ temperature: 0.8 });
+  const langChainChatModel = new ChatOpenAI({ temperature: 0.2 });
 
   const outputParser = new BytesOutputParser();
 

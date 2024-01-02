@@ -16,6 +16,7 @@ import GenericDialog from "./generic-dialog";
 import toast from "react-hot-toast";
 import { Dialog } from "@radix-ui/react-dialog";
 import { ApiResponse } from "lib/types";
+import TeamReport from "./team-report";
 
 export default function Team() {
   const { team, isLoading, createTeam, updateTeam, loadingMessage, setTeam } = useTeam();
@@ -209,6 +210,11 @@ export default function Team() {
             />
           )}
           <InviteLink team={team} inviterName={session?.user?.name} />
+        </div>
+        <div className="md:col-span-2">
+          <Card>
+            <TeamReport team={team} />
+          </Card>
         </div>
       </div>
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

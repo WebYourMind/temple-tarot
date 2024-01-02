@@ -27,7 +27,7 @@ const TeamMemberList = ({ members, isAdmin, adminId, handleRemove }: Props) => {
                 )}
               </div>
               <span className="inline-flex items-center rounded-full bg-secondary px-3 py-0.5 text-sm font-medium text-secondary-foreground">
-                {member.thinkingStyle}
+                {member.dominantStyle}
               </span>
             </li>
           ))}

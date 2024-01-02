@@ -4,6 +4,16 @@ export type ApiResponse = {
   data: any;
 };
 
+export type ReportType = string | undefined;
+
+export type Address = {
+  street: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+};
+
 export type ArchetypeValues = {
   explorer: string;
   analyst: string;
@@ -25,16 +35,6 @@ export type ThinkingStyle =
   | "Energizer"
   | "Achiever";
 
-export type ReportType = string | undefined;
-
-export type Address = {
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-};
-
 export type UserProfile = {
   name: string;
   email: string;
@@ -44,7 +44,7 @@ export type UserProfile = {
   role?: string;
   teamId?: string;
   scores?: ArchetypeValues;
-  thinkingStyle?: ThinkingStyle;
+  dominantStyle?: ThinkingStyle;
 };
 
 export type TeamForm = {

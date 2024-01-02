@@ -43,7 +43,7 @@ Conclusion:
 `;
 
 export const teamMemberTemplate = `
-    - {memberNumber}: 
+    - {memberName}: 
         Dominant Thinking Style: {dominantStyle}, 
         All scores: explorer({explorer}), analyst({analyst}), designer({designer}), optimizer({optimizer}), connector({connector}), nurturer({nurturer}), energizer({energizer}), achiever({achiever}). 
 `;
