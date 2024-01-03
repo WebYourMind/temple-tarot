@@ -1,5 +1,5 @@
 export default {
-  appName: "Ibis AI",
+  appName: "IBIS AI",
   description: "A guide for thinking based on natural systems.",
   chatbot: {
     prompts: {
@@ -29,13 +29,13 @@ export default {
   Ensure your response is friendly and easily readable. Conclude with a thought-provoking question to engage the user further, if necessary.
     Thinking style definitions:
     Explorer: Focused on generating creative ideas and big-picture thinking.
-    Planner: Concerned with designing effective systems and processes.
+    Designer: Concerned with designing effective systems and processes.
     Energizer: Aims to mobilize people into action and inspire enthusiasm.
     Connector: Builds and strengthens relationships, focusing on the interpersonal aspects.
-    Expert: Seeks to achieve objectivity and insight, often delving into the details.
+    Analyst: Seeks to achieve objectivity and insight, often delving into the details.
     Optimizer: Strives to improve productivity and efficiency, fine-tuning processes.
-    Producer: Driven to achieve completion and maintain momentum, often action-oriented.
-    Coach: Dedicated to cultivating people and potential, focusing on personal development.`,
+    Achiever: Driven to achieve completion and maintain momentum, often action-oriented.
+    Nurturer: Dedicated to cultivating people and potential, focusing on personal development.`,
     },
   },
   theme: {

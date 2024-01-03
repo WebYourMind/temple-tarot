@@ -21,7 +21,7 @@ export default function ViewProfile() {
   const route = useRouter();
 
   if (isLoading || !profile) {
-    return <Loading />;
+    return <Loading message="Fetching profile..." />;
   }
 
   return (

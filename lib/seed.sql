@@ -7,6 +7,7 @@ CREATE TABLE users (
     image TEXT,
     address_id INTEGER REFERENCES addresses(id),
     phone VARCHAR(20)
+    role VARCHAR(50) DEFAULT 'user';
 );
 
 CREATE TABLE addresses (
@@ -80,6 +81,38 @@ CREATE TABLE reports (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE teams (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    invite_token VARCHAR(255),
+    invite_token_expiry TIMESTAMPTZ,
+    admin_id INTEGER NOT NULL REFERENCES users(id),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    image TEXT
+);
+
+CREATE SEQUENCE team_report_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NO MAXVALUE
+    CACHE 1;
+
+ create table team_reports
+ (
+     id integer default nextval('team_report_id_seq'::regclass) not null
+         constraint table_name_pk
+             primary key,
+     report     text,
+     created_at timestamp with time zone default CURRENT_TIMESTAMP,
+     team_id    integer
+         constraint table_name_teams_id_fk
+             references teams
+ );
+
 -- other useful queries for development
+
+
 DELETE FROM scores;
 DROP TABLE scores CASCADE;

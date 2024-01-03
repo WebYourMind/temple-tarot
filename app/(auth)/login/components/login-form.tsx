@@ -3,41 +3,42 @@ import { useState, type SyntheticEvent } from "react";
 import { signIn } from "next-auth/react";
 import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useResponseMessage } from "lib/hooks/use-response-message";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { responseMessage, showMessage } = useResponseMessage({
-    message: "",
-    error: false,
-  });
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
 
+    const redirectUrl = searchParams?.get("redirect");
+
     const result = await signIn("credentials", {
       email,
       password,
-      callbackUrl: "/",
+      redirect: false,
     });
 
     if (result?.error) {
-      showMessage(result.error, true);
+      toast.error(result.error);
       setIsLoading(false);
+    } else if (redirectUrl) {
+      router.replace(redirectUrl);
     } else {
       router.replace("/");
     }
   }
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={onSubmit} responseMessage={responseMessage}>
+    <AuthForm isLoading={isLoading} onSubmit={onSubmit}>
       <InputField
         id="email"
         placeholder="name@example.com"

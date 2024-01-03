@@ -16,6 +16,7 @@ export function useProfile() {
       postalCode: "",
       country: "",
     },
+    team: null,
   };
   const [profile, setProfile] = useState<UserProfile>(emptyProfile);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,6 +40,7 @@ export function useProfile() {
             postalCode: data.user?.address?.postalCode || "",
             country: data.user?.address?.country || "",
           },
+          teamId: data.user?.teamId,
         }));
       } else {
         toast.error(`Failed to fetch profile.`);

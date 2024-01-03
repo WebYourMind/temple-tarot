@@ -34,7 +34,7 @@ export function EmptyScreen({ setInput, scores }: Pick<UseChatHelpers, "setInput
         {!scores ? (
           <>
             <p className="mb-2 leading-normal">
-              Ready to begin? Take the Thinking Style Quiz to enhance your interactions with our chatbot, Ibis and learn
+              Ready to begin? Take the Thinking Style Quiz to enhance your interactions with our chatbot, IBIS and learn
               valuable insights.
             </p>
             <Button variant="link" className="h-auto p-0 text-base" onClick={() => router.push("/quiz")}>

@@ -7,9 +7,9 @@ export const metadata: Metadata = {
   description: `${appConfig.appName} user profile.`,
 };
 
-export default async function ReportPage() {
+export default async function ProfilePage() {
   return (
-    <div className="md:pt-16">
+    <div className="pt-8 md:pt-16">
       <Profile />
     </div>
   );

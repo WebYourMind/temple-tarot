@@ -10,7 +10,7 @@ export const runtime = "edge";
 // Opt out of caching for all data requests in the route segment
 export const dynamic = "force-dynamic";
 
-const getScoresUpdateMessage = (scores: string[]) => {
+const getScoresUpdateMessage = (scores: number[]) => {
   return `🌟 Thinking Styles Reassessed! 🌟
 
 Your journey of self-discovery continues with fresh insights. Here's how your thinking styles now align:

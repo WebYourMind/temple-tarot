@@ -2,10 +2,10 @@
 import { useState, SyntheticEvent } from "react";
 import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { useResponseMessage } from "lib/hooks/use-response-message";
 import { isPasswordComplex, isValidEmail } from "lib/utils";
+import toast from "react-hot-toast";
 
 interface ResponseData {
   ok: boolean;
@@ -15,39 +15,37 @@ interface ResponseData {
 
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { responseMessage, showMessage } = useResponseMessage({
-    message: "",
-    error: false,
-  });
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
 
     if (!email || !isValidEmail(email)) {
-      showMessage("Please enter a valid email.", true);
+      toast.error("Please enter a valid email.");
       return false;
     }
 
     if (!isPasswordComplex(password)) {
-      showMessage(
-        "Password must be at least 8 characters long and include uppercase and lowercase letters, numbers, and special characters.",
-        true
+      toast.error(
+        "Password must be at least 8 characters long and include uppercase and lowercase letters, numbers, and special characters."
       );
       return;
     }
 
     if (password !== confirmPassword) {
-      showMessage("Passwords don't match.", true);
+      toast.error("Passwords don't match.");
       return;
     }
 
     setIsLoading(true);
+
+    const redirectUrl = searchParams?.get("redirect");
 
     const res = await fetch("/api/auth/register", {
       method: "POST",
@@ -68,24 +66,26 @@ export default function RegisterForm() {
       const result = await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/",
+        redirect: false,
       });
 
       if (result?.error) {
-        showMessage(result.error, true);
+        toast.error(result.error);
         setIsLoading(false);
+      } else if (redirectUrl) {
+        router.replace(redirectUrl);
       } else {
         router.replace("/");
       }
     } else if (data.error) {
-      showMessage(data.error, true);
+      toast.error(data.error);
     }
 
     setIsLoading(false);
   }
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={onSubmit} responseMessage={responseMessage}>
+    <AuthForm isLoading={isLoading} onSubmit={onSubmit}>
       <InputField
         id="name"
         placeholder="Jane Doe"

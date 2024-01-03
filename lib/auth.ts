@@ -34,6 +34,8 @@ export const authOptions: NextAuthOptions = {
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                role: user.role,
+                teamId: user.team_id,
               };
             }
           }
@@ -64,9 +66,19 @@ export const authOptions: NextAuthOptions = {
     },
   },
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, user, trigger, session }) => {
       if (user) {
         token.user = user;
+      }
+      if (trigger === "update" && session?.role) {
+        // Note, that `session` can be any arbitrary object, remember to validate it!
+        token.role = session.role;
+        // @ts-expect-error
+        token.user.role = session.role;
+      }
+      if (trigger === "update" && session?.teamId) {
+        // @ts-expect-error
+        token.user.teamId = session.teamId;
       }
       return token;
     },
@@ -88,6 +100,7 @@ export function getSession() {
       id: string;
       name: string;
       email: string;
+      role?: string;
     };
   } | null>;
 }

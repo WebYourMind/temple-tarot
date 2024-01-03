@@ -1,46 +1,54 @@
 "use client";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Message from "components/ui/message";
-import { useResponseMessage } from "lib/hooks/use-response-message";
+import toast from "react-hot-toast";
+import Loading from "components/loading";
 
 const Verify = () => {
   const searchParams = useSearchParams();
-  const { responseMessage, showMessage } = useResponseMessage({
-    message: "Verifying...",
-    error: false,
-  });
+  const [result, setResult] = useState("");
 
-  const verifyEmail = useCallback(
-    async (token: string) => {
-      try {
-        const response = await fetch("/api/auth/verify-email", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        });
+  const verifyEmail = useCallback(async (token: string) => {
+    try {
+      const response = await fetch("/api/auth/verify-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
 
-        const data = (await response.json()) as { message: string; error: string };
-        showMessage(data.message || data.error, data.error !== null); // TODO
-      } catch (error) {
-        showMessage("Verification failed. Please try again later.", true);
+      const data = (await response.json()) as { message: string; error: string };
+      if (response.ok) {
+        setResult("Verified!");
+        toast.success(data.message);
+      } else {
+        throw new Error(data.error);
       }
-    },
-    [showMessage]
-  );
+    } catch (error: any) {
+      toast.error("Verification failed. Please try again later.");
+      setResult(error.message);
+    }
+  }, []);
 
   useEffect(() => {
     const token = searchParams?.get("token");
     if (token) {
       verifyEmail(token);
     } else {
-      showMessage("No verification token found.", true);
+      toast.error("No verification token found.");
     }
-  }, [searchParams, showMessage, verifyEmail]);
+  }, [searchParams, verifyEmail]);
 
-  return <>{responseMessage.message && <Message error={responseMessage.error}>{responseMessage.message}</Message>}</>;
+  if (result) {
+    return (
+      <div className="-mt-32 flex h-screen grow flex-col items-center justify-center">
+        <p>{result}</p>
+      </div>
+    );
+  }
+
+  return <Loading message="Verifying email..." />;
 };
 
 export default Verify;
