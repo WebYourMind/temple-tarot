@@ -63,8 +63,7 @@ export function useTeam() {
       if (!response.ok) {
         throw new Error("Failed to update team info.");
       }
-      const data = (await response.json()) as any;
-      setTeam(data.team);
+      setTeam(updatedTeam);
       toast.success("Team updated successfully.");
     } catch (err: any) {
       setError(err.message);
