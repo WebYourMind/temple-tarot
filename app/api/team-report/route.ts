@@ -31,21 +31,22 @@ export async function POST(req: NextRequest) {
     const name = users[i].name;
 
     const dominantStyle = getDominantStyle(users[i].scores);
+    if (dominantStyle) {
+      const { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever } = users[i].scores;
 
-    const { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever } = users[i].scores;
-
-    const tempPrompt = teamMemberTemplate
-      .replace("{dominantStyle}", dominantStyle)
-      .replace("{memberName}", name)
-      .replace("{explorer}", explorer)
-      .replace("{analyst}", analyst)
-      .replace("{designer}", designer)
-      .replace("{optimizer}", optimizer)
-      .replace("{connector}", connector)
-      .replace("{nurturer}", nurturer)
-      .replace("{energizer}", energizer)
-      .replace("{achiever}", achiever);
-    teamMemberTemplateList.push(tempPrompt);
+      const tempPrompt = teamMemberTemplate
+        .replace("{dominantStyle}", dominantStyle)
+        .replace("{memberName}", name)
+        .replace("{explorer}", explorer)
+        .replace("{analyst}", analyst)
+        .replace("{designer}", designer)
+        .replace("{optimizer}", optimizer)
+        .replace("{connector}", connector)
+        .replace("{nurturer}", nurturer)
+        .replace("{energizer}", energizer)
+        .replace("{achiever}", achiever);
+      teamMemberTemplateList.push(tempPrompt);
+    }
   }
 
   const teamReportTemplatePrompt = PromptTemplate.fromTemplate(teamReportTemplate);
