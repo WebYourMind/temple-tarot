@@ -109,6 +109,11 @@ export function getDominantStyle({
     energizer,
     achiever,
   };
+  // Check if any score is null
+  const hasNullScore = Object.values(scores).some((score) => score === null);
+  if (hasNullScore) {
+    return null;
+  }
   const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
     scores[a] > scores[b] ? a : b
   );

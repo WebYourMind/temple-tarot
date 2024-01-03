@@ -21,7 +21,8 @@ type Props = {
 const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
   // Calculate the distribution of thinking styles
   const styleCounts = teamMembers.reduce((acc: any, member: UserProfile) => {
-    acc[member.dominantStyle as ThinkingStyle] = (acc[member.dominantStyle as ThinkingStyle] || 0) + 1;
+    acc[(member.dominantStyle as ThinkingStyle) || "Assessment Pending"] =
+      (acc[member.dominantStyle as ThinkingStyle] || 0) + 1;
     return acc;
   }, {});
 

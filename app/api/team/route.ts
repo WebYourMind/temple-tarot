@@ -11,6 +11,49 @@ import {
 } from "../../../lib/database/team.database";
 import { getDominantStyle } from "../../../lib/utils";
 
+const sanitizeTeamData = (teamScores: any, team: any) => {
+  const users = [];
+  if (teamScores !== null) {
+    for (let i = 0; i < teamScores.length; i++) {
+      const row = teamScores[i];
+
+      const score = {
+        id: row.score_id,
+        explorer: row.explorer,
+        analyst: row.analyst,
+        designer: row.designer,
+        optimizer: row.optimizer,
+        connector: row.connector,
+        nurturer: row.nurturer,
+        energizer: row.energizer,
+        achiever: row.achiever,
+      };
+
+      const dominantStyle = getDominantStyle(score);
+      users.push({
+        id: row.user_id,
+        name: row.user_name,
+        email: row.user_email,
+        phone: row.user_phone,
+        role: row.user_role,
+        dominantStyle: dominantStyle,
+        scores: score,
+      });
+    }
+  }
+
+  const teamData = {
+    id: team.id,
+    name: team.name,
+    description: team.description,
+    adminId: team.admin_id,
+    image: team.image,
+    inviteToken: team.invite_token,
+    users: users,
+  };
+  return teamData;
+};
+
 export async function POST(request: NextRequest) {
   try {
     const { team, userId } = (await request.json()) as {
@@ -48,7 +91,11 @@ export async function POST(request: NextRequest) {
     // Commit transaction
     await sql`COMMIT`;
 
-    return NextResponse.json({ message: "Team created successfully.", team: teams[0] }, { status: 201 });
+    const rows = await getTeamScore(parseInt(teams[0].id));
+
+    const teamData = sanitizeTeamData(rows, teams[0]);
+
+    return NextResponse.json({ message: "Team created successfully.", team: teamData }, { status: 201 });
   } catch (error) {
     console.error(error); // Log the error for debugging purposes
 
@@ -86,46 +133,7 @@ export async function GET(request: NextRequest) {
 
     const rows = await getTeamScore(parseInt(team.id));
 
-    const users = [];
-
-    if (rows !== null) {
-      for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
-
-        const score = {
-          id: row.score_id,
-          explorer: row.explorer,
-          analyst: row.analyst,
-          designer: row.designer,
-          optimizer: row.optimizer,
-          connector: row.connector,
-          nurturer: row.nurturer,
-          energizer: row.energizer,
-          achiever: row.achiever,
-        };
-
-        const dominantStyle = getDominantStyle(score);
-        users.push({
-          id: row.user_id,
-          name: row.user_name,
-          email: row.user_email,
-          phone: row.user_phone,
-          role: row.user_role,
-          dominantStyle: dominantStyle,
-          scores: score,
-        });
-      }
-    }
-
-    const teamData = {
-      id: team.id,
-      name: team.name,
-      description: team.description,
-      adminId: team.admin_id,
-      image: team.image,
-      inviteToken: team.invite_token,
-      users: users,
-    };
+    const teamData = sanitizeTeamData(rows, team);
 
     // Return the team row
     return NextResponse.json(
