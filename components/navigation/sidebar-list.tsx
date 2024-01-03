@@ -22,7 +22,7 @@ const menuItems = [
     icon: <EyeOpenIcon />,
   },
   {
-    name: "Retake Thinking Style Quiz",
+    name: "Thinking Style Quiz",
     path: "/quiz",
     icon: <QuestionMarkCircledIcon />,
   },
