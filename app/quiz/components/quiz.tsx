@@ -1,12 +1,30 @@
 "use client";
 import { Button } from "components/ui/button";
-import { calculateInitialResults, calculateScores, initialQuestions, questions } from "lib/quiz";
+import { Score, calculateInitialResults, calculateScores, initialQuestions, questions } from "lib/quiz";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircledIcon, ColorWheelIcon } from "@radix-ui/react-icons";
 
 type Answer = {
   [question: string]: number;
+};
+
+const archetypeStatements = {
+  explorer: "I am always looking for new experiences and ideas.",
+  analyst: "I seek to achieve objectivity and insight, often delving into the details.", // Expert equivalent
+  designer: "I am concerned with designing effective systems and processes.", // Planner equivalent
+  optimizer: "I constantly seek to improve productivity and efficiency, fine-tuning processes.",
+  connector: "I focus on building and strengthening relationships, emphasizing interpersonal aspects.",
+  nurturer: "I am dedicated to cultivating people and potential, focusing on personal development.", // Coach equivalent
+  energizer: "I aim to mobilize people into action and inspire enthusiasm.",
+  achiever: "I am driven to achieve completion and maintain momentum, often being action-oriented.", // Producer equivalent
+};
+
+type ArchetypeKey = keyof typeof archetypeStatements;
+
+type FinalQuestionOption = {
+  style: ArchetypeKey;
+  statement: string;
 };
 
 const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
@@ -55,7 +73,7 @@ const Question = ({ section, answers, handleOptionChange, initial }: any) => {
   return (
     <div className="mb-8">
       {!initial && (
-        <p className="mb-5 text-sm  italic">
+        <p className="mb-5 text-sm italic">
           Please rate how strongly you agree with the statement below a scale from 1 (not at all like me) to 5 (very
           much like me).
         </p>
@@ -81,6 +99,11 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [contentVisible, setContentVisible] = useState(true);
+
+  const [finalQuestionVisible, setFinalQuestionVisible] = useState(false);
+  const [finalQuestionOptions, setFinalQuestionOptions] = useState<FinalQuestionOption[]>([]);
+
+  const [quizScores, setQuizScores] = useState<any>();
 
   const animationClasses = contentVisible ? "anim-fade-in" : "anim-fade-out";
 
@@ -123,6 +146,14 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     }
   };
 
+  function getHighestRankingArchetypes(scores: any) {
+    // Find the highest score value
+    const highestScore = Math.max(...(Object.values(scores) as number[]));
+
+    // Filter and return the archetypes with the highest score
+    return Object.keys(scores).filter((key) => scores[key] === highestScore);
+  }
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!areAllQuestionsAnswered()) {
@@ -131,34 +162,46 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     }
 
     if (userId) {
-      setIsLoading(true);
       const initialScores = calculateInitialResults(initialAnswers);
       const scores = calculateScores(answers, initialScores);
+      setQuizScores(scores);
 
-      const res = await fetch("/api/quiz", {
-        method: "POST",
-        body: JSON.stringify({
-          scores,
-          userId,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = (await res.json()) as any;
-
-      if (res.status === 201) {
-        router.push("/report");
-      } else if (data.error) {
-        console.error(data.error);
+      const highscores = getHighestRankingArchetypes(scores) as ArchetypeKey[];
+      if (highscores.length > 1) {
+        askFinalQuestion(highscores);
+      } else {
+        await saveResults(scores);
       }
-
-      setIsLoading(false);
     } else {
       console.error("No user");
     }
   }
+
+  async function saveResults(scores: Score) {
+    setIsLoading(true);
+    const res = await fetch("/api/quiz", {
+      method: "POST",
+      body: JSON.stringify({
+        scores,
+        userId,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = (await res.json()) as any;
+    if (res.status === 201) {
+      router.push("/report");
+    } else if (data.error) {
+      console.error(data.error);
+    }
+    setIsLoading(false);
+  }
+
+  const handleFinalQuestionResponse = async (selectedStyle: ArchetypeKey) => {
+    const updatedScores = { ...quizScores, [selectedStyle]: quizScores[selectedStyle] + 0.1 };
+    await saveResults(updatedScores);
+  };
 
   const InitialInfo = () => (
     <div className="grid gap-2">
@@ -192,6 +235,36 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     }
   };
 
+  const renderFinalQuestion = () => (
+    <div className="mb-8">
+      <h2 className="mb-5 text-xl font-bold">Select the statement you identify with most:</h2>
+      {finalQuestionOptions.map((option, index) => (
+        <label
+          key={index}
+          className="mb-2 flex cursor-pointer items-center justify-between rounded-sm border border-card bg-card p-2 text-card-foreground hover:bg-accent hover:text-accent-foreground"
+        >
+          <input
+            type="radio"
+            name="finalQuestion"
+            className="hidden"
+            value={option.style}
+            onChange={() => handleFinalQuestionResponse(option.style)}
+          />
+          {option.statement}
+        </label>
+      ))}
+    </div>
+  );
+
+  const askFinalQuestion = (highscores: ArchetypeKey[]) => {
+    const statements = highscores.map((style) => ({
+      style,
+      statement: archetypeStatements[style],
+    }));
+    setFinalQuestionOptions(statements);
+    setFinalQuestionVisible(true);
+  };
+
   const areAllQuestionsAnswered = () => {
     for (let section of initialQuestions) {
       for (let question of section.questions) {
@@ -213,9 +286,9 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   return (
     <div className="fad flex grow flex-col justify-between">
       <form onSubmit={handleSubmit} className={animationClasses}>
-        {renderCurrentQuestions()}
+        {finalQuestionVisible ? renderFinalQuestion() : renderCurrentQuestions()}
 
-        {currentPage === totalPages - 1 && (
+        {currentPage === totalPages - 1 && !finalQuestionVisible && (
           <Button type="submit" disabled={isLoading || !areAllQuestionsAnswered()} className="float-right">
             {isLoading ? (
               <>
@@ -228,22 +301,24 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
           </Button>
         )}
       </form>
-      <div className="">
-        <Button
-          variant={"outline"}
-          className={currentPage <= 0 ? "hidden" : ""}
-          onClick={() => handlePageChange(currentPage - 1)}
-        >
-          <ArrowLeftIcon />
-        </Button>
-        <Button
-          variant={"outline"}
-          className={currentPage >= totalPages - 1 ? "hidden" : " float-right"}
-          onClick={() => handlePageChange(currentPage + 1)}
-        >
-          <ArrowRightIcon />
-        </Button>
-      </div>
+      {!finalQuestionVisible && (
+        <div>
+          <Button
+            variant={"outline"}
+            className={currentPage <= 0 ? "hidden" : ""}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            <ArrowLeftIcon />
+          </Button>
+          <Button
+            variant={"outline"}
+            className={currentPage >= totalPages - 1 ? "hidden" : " float-right"}
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            <ArrowRightIcon />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
