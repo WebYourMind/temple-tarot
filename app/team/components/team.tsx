@@ -197,7 +197,7 @@ export default function Team() {
             </div>
           </Card>
 
-          <ThinkingStyleDistribution teamMembers={team.users} />
+          {team.users && <ThinkingStyleDistribution teamMembers={team.users} />}
         </div>
 
         <div className="space-y-4 md:col-span-1">

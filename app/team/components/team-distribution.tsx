@@ -1,4 +1,5 @@
 import Card from "components/card";
+import { ThinkingStyle, UserProfile } from "lib/types";
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
@@ -13,10 +14,14 @@ const COLORS = [
   "#A569BD", // Purple
 ];
 
-const ThinkingStyleDistribution = ({ teamMembers }: any) => {
+type Props = {
+  teamMembers: UserProfile[];
+};
+
+const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
   // Calculate the distribution of thinking styles
-  const styleCounts = teamMembers.reduce((acc: any, member: any) => {
-    acc[member.dominantStyle] = (acc[member.dominantStyle] || 0) + 1;
+  const styleCounts = teamMembers.reduce((acc: any, member: UserProfile) => {
+    acc[member.dominantStyle as ThinkingStyle] = (acc[member.dominantStyle as ThinkingStyle] || 0) + 1;
     return acc;
   }, {});
 
