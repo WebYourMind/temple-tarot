@@ -33,8 +33,7 @@ export default async function middleware(req: NextRequest) {
   if (session && (path.startsWith("/login") || path.startsWith("/register"))) {
     return NextResponse.redirect(new URL("/", req.url));
   }
-
-  if (path === "/team" && session?.user?.role !== "admin") {
+  if (path === "/team" && session?.user?.role !== "admin" && !session?.user?.teamId) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 

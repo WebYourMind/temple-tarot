@@ -41,7 +41,7 @@ export function SidebarList() {
       {menuItems?.length ? (
         <div className="space-y-2 px-2">
           {menuItems.map((item) => item && <SidebarItem key={item?.path} menuItem={item} />)}
-          {session?.user?.role === "admin" && <SidebarItem menuItem={teamItem} />}
+          {(session?.user?.role === "admin" || session?.user?.teamId) && <SidebarItem menuItem={teamItem} />}
         </div>
       ) : (
         <div className="p-8 text-center">
