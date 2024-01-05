@@ -5,7 +5,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { getRelativePercentages } from "./utils";
 import { ArchetypeValues, ThinkingStyle } from "./types";
 
-const thinkingStyleDescriptions = {
+export const thinkingStyleDescriptions = {
   Explorer: "Focused on generating creative ideas and big-picture thinking.",
   Analyst: "Seeks to achieve objectivity and insight, often delving into the details.",
   Designer: "Concerned with designing effective systems and processes.",
@@ -56,26 +56,30 @@ const ArchetypePieChart = ({ scores }: Props) => {
   ];
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <PieChart>
-        <Pie
-          data={data}
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          label={({ name, value, desc }) => `${name}: ${value}%`}
-          outerRadius={80}
-          fill="#8884d8"
-          dataKey="value"
-        >
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Tooltip content={<CustomTooltip />} />
-        {/* <Legend /> */}
-      </PieChart>
-    </ResponsiveContainer>
+    <div className="my-20 flex flex-col items-center">
+      <h3 className="text-xl">Total Scoring</h3>
+      <p>(Hover for more info)</p>
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            label={({ name, value, desc }) => `${name}: ${value}%`}
+            outerRadius={80}
+            fill="#8884d8"
+            dataKey="value"
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip content={<CustomTooltip />} />
+          {/* <Legend /> */}
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
 

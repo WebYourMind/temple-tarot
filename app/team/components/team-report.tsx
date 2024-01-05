@@ -33,7 +33,7 @@ export default function TeamReport({ team }: Props) {
   const isWithoutTS = usersWithoutDominantStyle.length > 0;
 
   return (
-    <div className="mx-auto my-20 flex max-w-4xl flex-col items-center space-y-10 px-5">
+    <div className="mx-auto my-20 flex max-w-4xl flex-col items-center space-y-10">
       {teamReport && (
         <>
           <ReactMarkdown className="prose prose-indigo text-foreground md:prose-lg">{`${teamReport}`}</ReactMarkdown>
