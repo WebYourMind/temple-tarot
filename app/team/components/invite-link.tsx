@@ -4,11 +4,15 @@ import InputField from "app/(auth)/components/input-field";
 import Card from "components/card";
 import { Button } from "components/ui/button";
 import { IconCheck, IconClose, IconPlus } from "components/ui/icons";
+import { Label } from "components/ui/label";
 import { useCopyToClipboard } from "lib/hooks/use-copy-to-clipboard";
 import { ApiResponse, Team } from "lib/types";
 import { isValidEmail } from "lib/utils";
 import { useState } from "react";
 import toast from "react-hot-toast";
+
+const defaultInvite =
+  "I'm thrilled to invite you to join our team on the IBIS AI platform, a dynamic tool that's transforming how we collaborate and grow. Discover your unique thinking style, understand our team's diverse perspectives, and engage in more effective collaboration. It's quick to set up and offers valuable insights for both personal development and team dynamics.";
 
 type InviteLinkProps = {
   team: Team;
@@ -30,6 +34,7 @@ export default function InviteLink({ team, inviterName }: InviteLinkProps) {
 
   const [invitees, setInvitees] = useState([{ email: "", name: "" }]);
   const [inviteButtonText, setInviteButtonText] = useState("Invite");
+  const [inviteMessage, setInviteMessage] = useState(defaultInvite);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
@@ -58,7 +63,7 @@ export default function InviteLink({ team, inviterName }: InviteLinkProps) {
     setIsButtonDisabled(true); // Disable the button when sending starts
     setInviteButtonText("Sending...");
     try {
-      const response = await fetch("/api/invite-team", {
+      const response = await fetch("/api/accept-invite", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,6 +72,7 @@ export default function InviteLink({ team, inviterName }: InviteLinkProps) {
           invitees, // The array of invitees in state
           inviteUrl,
           inviterName,
+          inviteMessage,
           teamName: team.name,
         }),
       });
@@ -107,6 +113,13 @@ export default function InviteLink({ team, inviterName }: InviteLinkProps) {
         </div>
         <DividerWithText />
         <div className="space-y-4">
+          <Label htmlFor="invite-message">Invite Message:</Label>
+          <textarea
+            id="invite-message"
+            className="h-40 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:h-28"
+            value={inviteMessage}
+            onChange={({ target: { value } }) => setInviteMessage(value)}
+          />
           {invitees.map((invitee, index) => (
             <div key={index} className="flex space-x-2">
               <InputField
@@ -132,7 +145,7 @@ export default function InviteLink({ team, inviterName }: InviteLinkProps) {
               &nbsp;Add another person
             </Button>
             <Button disabled={areInvitesValid || isButtonDisabled} onClick={sendInvites}>
-              Invite
+              {inviteButtonText}
             </Button>
           </div>
         </div>

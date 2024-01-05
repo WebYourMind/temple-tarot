@@ -12,6 +12,7 @@ type SendInvitesRequest = {
   invitees: Invitee[];
   inviteUrl: string;
   inviterName: string;
+  inviteMessage: string;
   teamName: string;
 };
 
@@ -19,7 +20,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    const { invitees, inviteUrl, inviterName, teamName } = (await req.json()) as SendInvitesRequest;
+    const { invitees, inviteUrl, inviterName, teamName, inviteMessage } = (await req.json()) as SendInvitesRequest;
 
     for (const invitee of invitees) {
       const msg = {
@@ -33,6 +34,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
               inviteUrl,
               teamName,
               inviterName,
+              inviteMessage,
               inviteeName: invitee.name,
             },
           },
