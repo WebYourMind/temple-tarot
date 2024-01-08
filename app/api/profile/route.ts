@@ -122,7 +122,7 @@ export async function DELETE(request: NextRequest) {
     await sql`DELETE FROM accounts WHERE user_id = ${userId}`;
     await sql`DELETE FROM sessions WHERE user_id = ${userId}`;
     await sql`DELETE FROM reports WHERE user_id = ${userId}`;
-    await sql`DELETE FROM scores WHERE user_id = ${userId}`;
+    await sql`DELETE FROM thinking_style_scores WHERE user_id = ${userId}`;
     await sql`DELETE FROM addresses WHERE id = (SELECT address_id FROM users WHERE id = ${userId})`;
 
     // Finally, delete the user
@@ -162,7 +162,6 @@ export async function GET(request: NextRequest) {
       throw new Error("The user ID must be provided.");
     }
 
-    // Query to select the latest scores row for the given user ID
     const { rows: users } = await sql`
     SELECT users.*, 
            addresses.street, 

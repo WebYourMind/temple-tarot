@@ -45,5 +45,5 @@ Conclusion:
 export const teamMemberTemplate = `
     - {memberName}: 
         Dominant Thinking Style: {dominantStyle}, 
-        All scores: explorer({explorer}), analyst({analyst}), designer({designer}), optimizer({optimizer}), connector({connector}), nurturer({nurturer}), energizer({energizer}), achiever({achiever}). 
+        All scores: explorer({explorer}), expert({expert}), planner({planner}), optimizer({optimizer}), connector({connector}), coach({coach}), energizer({energizer}), producer({producer}). 
 `;

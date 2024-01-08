@@ -1,7 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
-import { ArchetypeValues, ThinkingStyle } from "./types";
+import { ThinkingStyle } from "./types";
+import { Score } from "./quiz";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -23,16 +24,16 @@ export function absoluteUrl(path: string) {
 }
 
 // Function to check if the archetype values match in scores and report objects
-export function haveMatchingArchetypeValues(scores: ArchetypeValues, report: ArchetypeValues): boolean {
-  const archetypes: (keyof ArchetypeValues)[] = [
+export function haveMatchingArchetypeValues(scores: Score, report: Score): boolean {
+  const archetypes: (keyof Score)[] = [
     "explorer",
-    "analyst",
-    "designer",
+    "expert",
+    "planner",
     "optimizer",
     "connector",
-    "nurturer",
+    "coach",
     "energizer",
-    "achiever",
+    "producer",
   ];
 
   for (const archetype of archetypes) {
@@ -46,22 +47,22 @@ export function haveMatchingArchetypeValues(scores: ArchetypeValues, report: Arc
 
 export function getRelativePercentages({
   explorer,
-  analyst,
-  designer,
+  expert,
+  planner,
   optimizer,
   connector,
-  nurturer,
+  coach,
   energizer,
-  achiever,
-}: ArchetypeValues) {
+  producer,
+}: Score) {
   // Convert string values to numbers and calculate the total score
-  const totalScore = [explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever]
-    .map((score) => parseFloat(score))
+  const totalScore = [explorer, expert, planner, optimizer, connector, coach, energizer, producer]
+    .map((score) => score)
     .reduce((sum, current) => sum + current, 0);
 
   // Calculate relative percentages
-  const relativePercentages = [explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever].map(
-    (score) => parseFloat(((parseFloat(score) / totalScore) * 100).toFixed(1))
+  const relativePercentages = [explorer, expert, planner, optimizer, connector, coach, energizer, producer].map(
+    (score) => parseFloat(((score / totalScore) * 100).toFixed(1))
   );
 
   return relativePercentages;
@@ -91,23 +92,23 @@ export function isValidEmail(email: string) {
 
 export function getDominantStyle({
   explorer,
-  analyst,
-  designer,
+  expert,
+  planner,
   optimizer,
   connector,
-  nurturer,
+  coach,
   energizer,
-  achiever,
-}: ArchetypeValues) {
+  producer,
+}: Score) {
   const scores = {
     explorer,
-    analyst,
-    designer,
+    expert,
+    planner,
     optimizer,
     connector,
-    nurturer,
+    coach,
     energizer,
-    achiever,
+    producer,
   };
   // Check if any score is null
   const hasNullScore = Object.values(scores).some((score) => score === null);

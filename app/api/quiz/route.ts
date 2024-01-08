@@ -1,9 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { Score } from "lib/quiz";
+import { getRelativePercentages } from "lib/utils";
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = "force-dynamic";
+
+const getScoresUpdateMessage = (scores: number[]) => {
+  const styleNames = ["Explorer", "Expert", "Planner", "Optimizer", "Connector", "Coach", "Energizer", "Producer"];
+  const sortedStyles = styleNames
+    .map((style, index) => ({ style, score: scores[index] }))
+    .sort((a, b) => b.score - a.score) // Sorting in descending order of scores
+    .map(({ style, score }) => `- ${style}: ${score}%`);
+
+  return `🌟 Thinking Styles Reassessed! 🌟
+
+Your journey of self-discovery continues with fresh insights. Here's how your thinking styles now align:
+
+${sortedStyles.join("\n")}
+
+Embrace these insights and continue to explore the unique facets of your thought processes!`;
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,27 +29,29 @@ export async function POST(request: NextRequest) {
       userId: string;
     };
 
-    await sql`INSERT INTO scores (
+    await sql`INSERT INTO thinking_style_scores (
         user_id, 
         explorer, 
-        analyst, 
-        designer, 
+        expert, 
+        planner, 
         optimizer, 
         connector, 
-        nurturer, 
+        coach, 
         energizer, 
-        achiever
+        producer
         ) VALUES (
         ${userId}, 
         ${scores.explorer}, 
-        ${scores.analyst}, 
-        ${scores.designer}, 
+        ${scores.expert}, 
+        ${scores.planner}, 
         ${scores.optimizer}, 
         ${scores.connector}, 
-        ${scores.nurturer}, 
+        ${scores.coach}, 
         ${scores.energizer}, 
-        ${scores.achiever}
+        ${scores.producer}
     ) RETURNING *`;
+    const scoresUpdate = getScoresUpdateMessage(getRelativePercentages(scores));
+    await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${scoresUpdate}, 'assistant')`;
 
     return NextResponse.json({ message: "Scores added successfully." }, { status: 201 });
   } catch (error) {
@@ -58,16 +77,16 @@ export async function GET(request: NextRequest) {
     }
 
     // Query to select the latest scores row for the given user ID
-    const { rows: scores } = await sql`
+    const { rows } = await sql`
       SELECT * 
-      FROM scores
+      FROM thinking_style_scores
       WHERE user_id = ${userId}
       ORDER BY created_at DESC
       LIMIT 1;
     `;
 
     // Check if we got a result back
-    if (scores.length === 0) {
+    if (rows.length === 0) {
       return NextResponse.json(
         {
           error: "No scores found for the given user ID.",
@@ -78,11 +97,29 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Convert decimal string values to numbers
+    const convertedScores = rows.map((row) => ({
+      ...row,
+      explorer: parseFloat(row.explorer),
+      planner: parseFloat(row.planner),
+      energizer: parseFloat(row.energizer),
+      connector: parseFloat(row.connector),
+      expert: parseFloat(row.expert),
+      optimizer: parseFloat(row.optimizer),
+      producer: parseFloat(row.producer),
+      coach: parseFloat(row.coach),
+      // Assuming id and user_id are integers, they don't need conversion
+    }));
+
+    // If you're expecting only one row (due to LIMIT 1), you can directly access the first element
+    const scores = convertedScores[0];
+
+    console.log(scores);
     // Return the latest scores row
     return NextResponse.json(
       {
         message: "Latest scores retrieved successfully.",
-        scores: scores[0],
+        scores: scores,
       },
       {
         status: 200,

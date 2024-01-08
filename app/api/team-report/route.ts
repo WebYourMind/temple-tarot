@@ -32,19 +32,19 @@ export async function POST(req: NextRequest) {
 
     const dominantStyle = getDominantStyle(users[i].scores);
     if (dominantStyle) {
-      const { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever } = users[i].scores;
+      const { explorer, expert, planner, optimizer, connector, coach, energizer, producer } = users[i].scores;
 
       const tempPrompt = teamMemberTemplate
         .replace("{dominantStyle}", dominantStyle)
         .replace("{memberName}", name)
         .replace("{explorer}", explorer)
-        .replace("{analyst}", analyst)
-        .replace("{designer}", designer)
+        .replace("{expert}", expert)
+        .replace("{planner}", planner)
         .replace("{optimizer}", optimizer)
         .replace("{connector}", connector)
-        .replace("{nurturer}", nurturer)
+        .replace("{coach}", coach)
         .replace("{energizer}", energizer)
-        .replace("{achiever}", achiever);
+        .replace("{producer}", producer);
       teamMemberTemplateList.push(tempPrompt);
     }
   }

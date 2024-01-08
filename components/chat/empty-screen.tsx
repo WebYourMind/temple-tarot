@@ -3,7 +3,7 @@ import appConfig from "app.config";
 
 import { Button } from "components/ui/button";
 import { IconArrowRight } from "components/ui/icons";
-import { ArchetypeValues } from "lib/types";
+import { Score } from "lib/quiz";
 import { useRouter } from "next/navigation";
 
 const exampleMessages = [
@@ -21,7 +21,7 @@ const exampleMessages = [
   },
 ];
 
-export function EmptyScreen({ setInput, scores }: Pick<UseChatHelpers, "setInput"> & { scores?: ArchetypeValues }) {
+export function EmptyScreen({ setInput, scores }: Pick<UseChatHelpers, "setInput"> & { scores?: Score }) {
   const router = useRouter();
   return (
     <div className="mx-auto max-w-2xl px-4">

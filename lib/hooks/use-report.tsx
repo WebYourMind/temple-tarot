@@ -1,9 +1,9 @@
-import { ArchetypeValues } from "lib/types";
+import { Score } from "lib/quiz";
 import { haveMatchingArchetypeValues } from "lib/utils";
 import { useState, useEffect, useCallback, useRef } from "react";
 import toast from "react-hot-toast";
 
-export function useReport(session: any, scores?: ArchetypeValues) {
+export function useReport(session: any, scores?: Score) {
   const [report, setReport] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const isGeneratingRef = useRef(false);
@@ -70,15 +70,13 @@ export function useReport(session: any, scores?: ArchetypeValues) {
       const data = (await response.json()) as any;
 
       if (response.ok) {
-        if (haveMatchingArchetypeValues(scores as unknown as ArchetypeValues, data.report)) {
+        if (haveMatchingArchetypeValues(scores as Score, data.report)) {
           setReport(data.report.report);
         } else {
           generateReport();
         }
-      } else if (response.status === 404) {
-        generateReport();
       } else {
-        toast.error("Failed to fetch the report.");
+        generateReport();
       }
       setIsLoading(false);
     }

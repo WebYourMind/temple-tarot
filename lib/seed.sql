@@ -58,17 +58,17 @@ CREATE TABLE chat_messages (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE scores (
+CREATE TABLE thinking_style_scores (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
     explorer DECIMAL(3,2) CHECK (explorer >= 0 AND explorer <= 1),
-    analyst DECIMAL(3,2) CHECK (analyst >= 0 AND analyst <= 1),
-    designer DECIMAL(3,2) CHECK (designer >= 0 AND designer <= 1),
-    optimizer DECIMAL(3,2) CHECK (optimizer >= 0 AND optimizer <= 1),
-    connector DECIMAL(3,2) CHECK (connector >= 0 AND connector <= 1),
-    nurturer DECIMAL(3,2) CHECK (nurturer >= 0 AND nurturer <= 1),
+    planner DECIMAL(3,2) CHECK (planner >= 0 AND planner <= 1),
     energizer DECIMAL(3,2) CHECK (energizer >= 0 AND energizer <= 1),
-    achiever DECIMAL(3,2) CHECK (achiever >= 0 AND achiever <= 1),
+    connector DECIMAL(3,2) CHECK (connector >= 0 AND connector <= 1),
+    expert DECIMAL(3,2) CHECK (expert >= 0 AND expert <= 1),
+    optimizer DECIMAL(3,2) CHECK (optimizer >= 0 AND optimizer <= 1),
+    producer DECIMAL(3,2) CHECK (producer >= 0 AND producer <= 1),
+    coach DECIMAL(3,2) CHECK (coach >= 0 AND coach <= 1),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -77,6 +77,7 @@ CREATE TABLE reports (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
     scores_id INTEGER NOT NULL REFERENCES scores(id),
+    ts_scores_id INTEGER NOT NULL REFERENCES thinking_style_scores(id),
     report TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
