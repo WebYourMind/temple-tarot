@@ -133,7 +133,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     setTimeout(() => {
       setCurrentPage(newPage);
       setContentVisible(true);
-    }, 500); // Adjust the timeout to match your animation duration
+    }, 400);
   };
 
   const handleInitialOptionChange = (questionPrompt: string, selectedChoice: any) => {
