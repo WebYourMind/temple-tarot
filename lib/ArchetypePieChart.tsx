@@ -3,17 +3,18 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { getRelativePercentages } from "./utils";
-import { ArchetypeValues, ThinkingStyle } from "./types";
+import { ThinkingStyle } from "./types";
+import { Score } from "./quiz";
 
 export const thinkingStyleDescriptions = {
   Explorer: "Focused on generating creative ideas and big-picture thinking.",
-  Analyst: "Seeks to achieve objectivity and insight, often delving into the details.",
-  Designer: "Concerned with designing effective systems and processes.",
+  Expert: "Seeks to achieve objectivity and insight, often delving into the details.",
+  Planner: "Concerned with designing effective systems and processes.",
   Optimizer: "Strives to improve productivity and efficiency, fine-tuning processes.",
   Connector: "Builds and strengthens relationships, focusing on the interpersonal aspects.",
-  Nurturer: "Dedicated to cultivating people and potential, focusing on personal development.",
+  Coach: "Dedicated to cultivating people and potential, focusing on personal development.",
   Energizer: "Aims to mobilize people into action and inspire enthusiasm.",
-  Achiever: "Driven to achieve completion and maintain momentum, often action-oriented.",
+  Producer: "Driven to achieve completion and maintain momentum, often action-oriented.",
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -35,7 +36,7 @@ const CustomTooltip = ({ active, payload }: any) => {
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#a4de6c", "#d0ed57", "#ffc658", "#8884d8"];
 
 type Props = {
-  scores: ArchetypeValues;
+  scores: Score;
 };
 
 const ArchetypePieChart = ({ scores }: Props) => {
@@ -46,13 +47,13 @@ const ArchetypePieChart = ({ scores }: Props) => {
       value: relativePercentages[0],
       desc: "Focused on generating creative ideas and big-picture thinking.",
     },
-    { name: "Analyst", value: relativePercentages[1] },
-    { name: "Designer", value: relativePercentages[2] },
+    { name: "Expert", value: relativePercentages[1] },
+    { name: "Planner", value: relativePercentages[2] },
     { name: "Optimizer", value: relativePercentages[3] },
     { name: "Connector", value: relativePercentages[4] },
-    { name: "Nurturer", value: relativePercentages[5] },
+    { name: "Coach", value: relativePercentages[5] },
     { name: "Energizer", value: relativePercentages[6] },
-    { name: "Achiever", value: relativePercentages[7] },
+    { name: "Producer", value: relativePercentages[7] },
   ];
 
   return (
