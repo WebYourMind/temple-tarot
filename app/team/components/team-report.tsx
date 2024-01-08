@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function TeamReport({ team }: Props) {
-  const { teamReport, isLoading: reportLoading, isGenerating, generateReport } = useTeamReport(team.users, team);
+  const { teamReport, isLoading: reportLoading, isGenerating, generateReport } = useTeamReport(team.id);
 
   const isLoading = reportLoading;
 
@@ -38,7 +38,7 @@ export default function TeamReport({ team }: Props) {
         <>
           <ReactMarkdown className="prose prose-indigo text-foreground md:prose-lg">{`${teamReport}`}</ReactMarkdown>
           {!isGenerating && (
-            <Button className="mt-10" onClick={generateReport}>
+            <Button className="mt-10" onClick={generateReport} disabled={isWithoutTS}>
               Generate Another
             </Button>
           )}

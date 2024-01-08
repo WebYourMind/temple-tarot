@@ -35,6 +35,21 @@ export const getTeamById = async (teamId: number) => {
   }
 };
 
+export const getTeamMemberByTeamId = async (teamId: number) => {
+  try {
+    const { rows } = await sql`
+      SELECT id,name,email,image,phone,role from users where team_id = ${teamId};
+    `;
+
+    if (rows.length > 0) {
+      return rows;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 export const getTeamByUser = async (userId: number) => {
   try {
     const { rows } = await sql`
@@ -46,33 +61,6 @@ export const getTeamByUser = async (userId: number) => {
     }
     return null;
   } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
-export const deleteTeamById = async (teamId: number) => {
-  try {
-    // Start transaction
-    await sql`BEGIN`;
-
-    // Reset team_id in users table
-    await sql`
-      UPDATE users SET team_id = NULL WHERE team_id = ${teamId}
-    `;
-
-    // Delete the team
-    const result = await sql`
-      DELETE FROM teams WHERE id = ${teamId}
-    `;
-
-    // Commit the transaction
-    await sql`COMMIT`;
-
-    return result.rowCount > 0;
-  } catch (error) {
-    // Rollback the transaction in case of an error
-    await sql`ROLLBACK`;
     console.error(error);
     return null;
   }
@@ -126,6 +114,55 @@ export const getTeamScore = async (teamId: number) => {
     }
     return null;
   } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const checkTeamThinkingStyleScore = async (teamMembers: number[]) => {
+  try {
+    const placeholders = teamMembers.map((_, index) => `$${index + 1}`).join(", ");
+    const query = `
+  SELECT DISTINCT user_id 
+  FROM thinking_style_scores 
+  WHERE user_id IN (${placeholders})
+`;
+
+    const { rows } = await sql.query(query, teamMembers);
+
+    if (rows.length > 0 && rows.length === teamMembers.length) {
+      return rows;
+    }
+    return null;
+  } catch (error) {
+    console.error("errrr");
+    console.error(error);
+    return null;
+  }
+};
+
+export const deleteTeamById = async (teamId: number) => {
+  try {
+    // Start transaction
+    await sql`BEGIN`;
+
+    // Reset team_id in users table
+    await sql`
+      UPDATE users SET team_id = NULL WHERE team_id = ${teamId}
+    `;
+
+    // Delete the team
+    const result = await sql`
+      DELETE FROM teams WHERE id = ${teamId}
+    `;
+
+    // Commit the transaction
+    await sql`COMMIT`;
+
+    return result.rowCount > 0;
+  } catch (error) {
+    // Rollback the transaction in case of an error
+    await sql`ROLLBACK`;
     console.error(error);
     return null;
   }

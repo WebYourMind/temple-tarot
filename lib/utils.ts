@@ -55,17 +55,30 @@ export function getRelativePercentages({
   energizer,
   producer,
 }: Score) {
-  // Convert string values to numbers and calculate the total score
-  const totalScore = [explorer, expert, planner, optimizer, connector, coach, energizer, producer]
-    .map((score) => score)
-    .reduce((sum, current) => sum + current, 0);
+  const scores = [explorer, expert, planner, optimizer, connector, coach, energizer, producer];
+
+  // Calculate the total score
+  const totalScore = scores.reduce((sum, current) => sum + current, 0);
+
+  // Check if the total score is zero to avoid division by zero
+  if (totalScore === 0) {
+    // If totalScore is 0, return an array with 0s or handle it as needed
+    return scores.map(() => 0);
+  }
 
   // Calculate relative percentages
-  const relativePercentages = [explorer, expert, planner, optimizer, connector, coach, energizer, producer].map(
-    (score) => parseFloat(((score / totalScore) * 100).toFixed(1))
-  );
+  const relativePercentages = scores.map((score) => parseFloat(((score / totalScore) * 100).toFixed(1)));
 
   return relativePercentages;
+}
+
+export function getSortedStyles(scores: number[]) {
+  const styleNames = ["Explorer", "Expert", "Planner", "Optimizer", "Connector", "Coach", "Energizer", "Producer"];
+  const sortedStyles = styleNames
+    .map((style, index) => ({ style, score: scores[index] }))
+    .sort((a, b) => b.score - a.score) // Sorting in descending order of scores
+    .map(({ style, score }) => `- ${style}: ${score}%`);
+  return sortedStyles;
 }
 
 export function isPasswordComplex(password: string) {

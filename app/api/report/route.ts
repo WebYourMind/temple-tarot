@@ -3,6 +3,7 @@ import { Configuration, OpenAIApi } from "openai-edge";
 import { sql } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 import { Score } from "lib/quiz";
+import { getRelativePercentages, getSortedStyles } from "lib/utils";
 
 export const runtime = "edge";
 
@@ -21,13 +22,17 @@ const createReportGenerationPrompt = ({
 }: Score) => {
   // Identify the dominant thinking style based on the highest score
   const scores = { explorer, expert, planner, optimizer, connector, coach, energizer, producer };
+  const sortedStyles = getSortedStyles(getRelativePercentages(scores));
+
   const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
     scores[a] > scores[b] ? a : b
   );
 
   // Start the prompt with the dominant thinking style
   return `
-Generate a comprehensive insight report titled within the context of thinking styles and 'Shift Thinking': 'Your Thinking Style Results' in markdown format for a user primarily identified as a "${dominantStyle}". Explicitly state their dominant thinking style the beginning of the report. The user's thinking style profile is as follows: explorer(${explorer}), expert(${expert}), planner(${planner}), optimizer(${optimizer}), connector(${connector}), coach(${coach}), energizer(${energizer}), producer(${producer}). Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology. The report should:
+Generate a comprehensive insight report titled within the context of thinking styles and 'Shift Thinking': 'Your Thinking Style Results' in markdown format for a user primarily identified as a "${dominantStyle}". Explicitly state their dominant thinking style the beginning of the report. The user's thinking style profile is as follows: ${sortedStyles.join(
+    ", "
+  )}. Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology. The report should:
 
 1. Focus primarily on the "${dominantStyle}" thinking archetype, offering detailed strategies for personal growth, learning, decision-making, problem-solving, and maintaining motivation.
 2. Include insights and personalized advice for the highest scored thinking styles, ensuring a comprehensive understanding of the user's multifaceted thinking approach.
@@ -107,7 +112,7 @@ export async function GET(request: NextRequest) {
     const { rows: reports } = await sql`
       SELECT reports.*, thinking_style_scores.explorer, thinking_style_scores.expert, thinking_style_scores.planner, 
             thinking_style_scores.optimizer, thinking_style_scores.connector, thinking_style_scores.coach, 
-            scores.energizer, scores.producer
+            thinking_style_scores.energizer, thinking_style_scores.producer
       FROM reports
       INNER JOIN thinking_style_scores ON reports.ts_scores_id = thinking_style_scores.id
       WHERE reports.user_id = ${userId}
@@ -127,11 +132,23 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const convertedReports = reports.map((row) => ({
+      ...row,
+      explorer: parseFloat(row.explorer),
+      planner: parseFloat(row.planner),
+      energizer: parseFloat(row.energizer),
+      connector: parseFloat(row.connector),
+      expert: parseFloat(row.expert),
+      optimizer: parseFloat(row.optimizer),
+      producer: parseFloat(row.producer),
+      coach: parseFloat(row.coach),
+    }));
+
     // Return the latest scores row
     return NextResponse.json(
       {
         message: "Latest report retrieved successfully.",
-        report: reports[0],
+        report: convertedReports[0],
       },
       {
         status: 200,
