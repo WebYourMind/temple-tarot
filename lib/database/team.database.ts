@@ -121,15 +121,21 @@ export const getTeamScore = async (teamId: number) => {
 
 export const checkTeamThinkingStyleScore = async (teamMembers: number[]) => {
   try {
-    const { rows } = await sql.query("select distinct user_id from thinking_style_scores where user_id in (?)", [
-      teamMembers,
-    ]);
+    const placeholders = teamMembers.map((_, index) => `$${index + 1}`).join(", ");
+    const query = `
+  SELECT DISTINCT user_id 
+  FROM thinking_style_scores 
+  WHERE user_id IN (${placeholders})
+`;
+
+    const { rows } = await sql.query(query, teamMembers);
 
     if (rows.length > 0 && rows.length === teamMembers.length) {
       return rows;
     }
     return null;
   } catch (error) {
+    console.error("errrr");
     console.error(error);
     return null;
   }

@@ -103,7 +103,6 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   const [contentVisible, setContentVisible] = useState(true);
   const { data: session } = useSession() as any;
   const { generateReport } = useTeamReport(session?.user?.teamId);
-  console.log(session?.user);
 
   const [finalQuestionVisible, setFinalQuestionVisible] = useState(false);
   const [finalQuestionOptions, setFinalQuestionOptions] = useState<FinalQuestionOption[]>([]);
@@ -207,6 +206,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   }
 
   const handleFinalQuestionResponse = async (selectedStyle: ArchetypeKey) => {
+    setIsLoading(true);
     const updatedScores = { ...quizScores, [selectedStyle]: quizScores[selectedStyle] + 0.1 };
     await saveResults(updatedScores);
   };

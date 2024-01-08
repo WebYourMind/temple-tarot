@@ -1,17 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { Score } from "lib/quiz";
-import { getRelativePercentages } from "lib/utils";
+import { getRelativePercentages, getSortedStyles } from "lib/utils";
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = "force-dynamic";
 
 const getScoresUpdateMessage = (scores: number[]) => {
-  const styleNames = ["Explorer", "Expert", "Planner", "Optimizer", "Connector", "Coach", "Energizer", "Producer"];
-  const sortedStyles = styleNames
-    .map((style, index) => ({ style, score: scores[index] }))
-    .sort((a, b) => b.score - a.score) // Sorting in descending order of scores
-    .map(({ style, score }) => `- ${style}: ${score}%`);
+  const sortedStyles = getSortedStyles(scores);
 
   return `🌟 Thinking Styles Reassessed! 🌟
 
@@ -108,13 +104,11 @@ export async function GET(request: NextRequest) {
       optimizer: parseFloat(row.optimizer),
       producer: parseFloat(row.producer),
       coach: parseFloat(row.coach),
-      // Assuming id and user_id are integers, they don't need conversion
     }));
 
     // If you're expecting only one row (due to LIMIT 1), you can directly access the first element
     const scores = convertedScores[0];
 
-    console.log(scores);
     // Return the latest scores row
     return NextResponse.json(
       {
