@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
   const isAllMembers = await checkTeamThinkingStyleScore(teamMemberIds);
 
   if (!isAllMembers) {
-    return new Response("All team members should have thinking style score", { status: 400 });
+    return new Response("All team members' thinking styles are required.", { status: 400 });
   }
 
   const teamScore = await getTeamScore(teamId);
