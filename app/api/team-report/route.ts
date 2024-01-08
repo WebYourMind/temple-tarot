@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTeamReport, insertTeamReport } from "../../../lib/database/teamReport.database";
 import { teamMemberTemplate, teamReportTemplate } from "../../../lib/templates/team.templates";
-import { getTeamById } from "../../../lib/database/team.database";
+import {
+  checkTeamThinkingStyleScore,
+  getTeamById,
+  getTeamMemberByTeamId,
+  getTeamScore,
+} from "../../../lib/database/team.database";
 import { StreamingTextResponse } from "ai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
@@ -11,28 +16,55 @@ import { getDominantStyle } from "../../../lib/utils";
 export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
-  const { users, team } = (await req.json()) as any;
+  const { teamId } = (await req.json()) as any;
 
-  if (!users || !team) {
+  if (!teamId) {
     return new Response("Invalid request body", { status: 400 });
   }
-  if (!team.id) {
-    return new Response("Unauthorized", { status: 401 });
-  }
 
-  const teamData = await getTeamById(team.id);
+  const teamData = await getTeamById(teamId);
 
   if (!teamData) {
     return new Response("Team not found", { status: 404 });
   }
 
-  const teamMemberTemplateList = [];
-  for (let i = 0; i < users.length; i++) {
-    const name = users[i].name;
+  const teamMembers = await getTeamMemberByTeamId(teamId);
 
-    const dominantStyle = getDominantStyle(users[i].scores);
+  if (!teamMembers) {
+    return new Response("Team members not found", { status: 404 });
+  }
+
+  const teamMemberIds = teamMembers.map((member) => member.id);
+
+  const isAllMembers = await checkTeamThinkingStyleScore(teamMemberIds);
+
+  if (!isAllMembers) {
+    return new Response("All team members should have thinking style score", { status: 400 });
+  }
+
+  const teamScore = await getTeamScore(teamId);
+
+  if (!teamScore) {
+    return new Response("Team score not found", { status: 404 });
+  }
+
+  const teamMemberTemplateList = [];
+  for (let i = 0; i < teamScore.length; i++) {
+    const name = teamMembers[i].name;
+    const score = {
+      explorer: teamScore[i].explorer,
+      expert: teamScore[i].expert,
+      planner: teamScore[i].planner,
+      optimizer: teamScore[i].optimizer,
+      connector: teamScore[i].connector,
+      coach: teamScore[i].coach,
+      energizer: teamScore[i].energizer,
+      producer: teamScore[i].producer,
+    };
+
+    const dominantStyle = getDominantStyle(score);
     if (dominantStyle) {
-      const { explorer, expert, planner, optimizer, connector, coach, energizer, producer } = users[i].scores;
+      const { explorer, expert, planner, optimizer, connector, coach, energizer, producer } = score;
 
       const tempPrompt = teamMemberTemplate
         .replace("{dominantStyle}", dominantStyle)
@@ -64,7 +96,7 @@ export async function POST(req: NextRequest) {
         {
           async handleLLMEnd(output: any) {
             const report = output["generations"][0][0].text ?? "";
-            await insertTeamReport(team.id, report);
+            await insertTeamReport(teamId, report);
           },
         },
       ],
