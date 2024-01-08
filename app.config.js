@@ -21,8 +21,10 @@ export default {
 
       chatScoresContext: (
         dominantStyle,
-        scores
-      ) => `Context: The user's thinking style scores are - explorer: ${scores.explorer}, expert: ${scores.expert}, planner: ${scores.planner}, optimizer: ${scores.optimizer}, connector: ${scores.connector}, coach: ${scores.coach}, energizer: ${scores.energizer}, producer: ${scores.producer}. The dominant thinking style is "${dominantStyle}".
+        sortedStyles
+      ) => `Context: The user's thinking style scores are - ${sortedStyles.join(
+        ", "
+      )}. The dominant thinking style is "${dominantStyle}".
   Tailor your response to align with the characteristics of the "${dominantStyle}" archetype while still considering each of the higher scored thinking styles.
   Adapt your language and content to resonate with the "${dominantStyle}" thinking style, offering solutions that leverage its strengths.
   Incorporate relevant examples or analogies if necessary, drawing mainly upon Mark Bonchek's Shift Thinking framework or nature's systems if explaining a complex topic. Do not explicitly mention Mark Boncheck when doing so.

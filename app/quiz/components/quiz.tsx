@@ -4,6 +4,8 @@ import { Score, calculateInitialResults, calculateScores, initialQuestions, ques
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircledIcon, ColorWheelIcon } from "@radix-ui/react-icons";
+import { useSession } from "next-auth/react";
+import { useTeamReport } from "lib/hooks/use-team-report";
 
 type Answer = {
   [question: string]: number;
@@ -99,6 +101,8 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [contentVisible, setContentVisible] = useState(true);
+  const { data: session } = useSession() as any;
+  const { generateReport } = useTeamReport(session?.user?.teamId);
 
   const [finalQuestionVisible, setFinalQuestionVisible] = useState(false);
   const [finalQuestionOptions, setFinalQuestionOptions] = useState<FinalQuestionOption[]>([]);
@@ -128,7 +132,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     setTimeout(() => {
       setCurrentPage(newPage);
       setContentVisible(true);
-    }, 500); // Adjust the timeout to match your animation duration
+    }, 400);
   };
 
   const handleInitialOptionChange = (questionPrompt: string, selectedChoice: any) => {
@@ -191,6 +195,9 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     });
     const data = (await res.json()) as any;
     if (res.status === 201) {
+      if (session?.user?.teamId) {
+        generateReport();
+      }
       router.push("/report");
     } else if (data.error) {
       console.error(data.error);
@@ -199,6 +206,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   }
 
   const handleFinalQuestionResponse = async (selectedStyle: ArchetypeKey) => {
+    setIsLoading(true);
     const updatedScores = { ...quizScores, [selectedStyle]: quizScores[selectedStyle] + 0.1 };
     await saveResults(updatedScores);
   };

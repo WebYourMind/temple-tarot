@@ -1,8 +1,7 @@
-import { Team, UserProfile } from "lib/types";
 import { useState, useEffect, useCallback, useRef } from "react";
 import toast from "react-hot-toast";
 
-export function useTeamReport(users: UserProfile[] | undefined, team: Team) {
+export function useTeamReport(teamId: string) {
   const [teamReport, setTeamReport] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const isGeneratingRef = useRef(false);
@@ -20,11 +19,11 @@ export function useTeamReport(users: UserProfile[] | undefined, team: Team) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ users, team }),
+        body: JSON.stringify({ teamId }),
         signal: controller.signal,
       });
 
-      if (!response.body) throw new Error("Failed to get the stream.");
+      if (!response.ok || !response.body) throw new Error(`Failed to generate team report: ${response.statusText}`);
 
       setTeamReport("");
 
@@ -38,6 +37,9 @@ export function useTeamReport(users: UserProfile[] | undefined, team: Team) {
         if (done) {
           setIsGenerating(false);
           isGeneratingRef.current = false;
+          if (isSubscribed) {
+            toast.success("New team report generated.");
+          }
           break;
         }
 
@@ -51,7 +53,7 @@ export function useTeamReport(users: UserProfile[] | undefined, team: Team) {
       }
     } catch (error: any) {
       if (isSubscribed) {
-        toast.error("Error fetching report: " + error.message);
+        // toast.error("Error fetching team report: " + error.message);
         setIsGenerating(false);
         setTeamReport("Connection lost. Please refresh.");
       }
@@ -61,13 +63,13 @@ export function useTeamReport(users: UserProfile[] | undefined, team: Team) {
       isSubscribed = false;
       controller.abort();
     };
-  }, [users, team, teamReport]);
+  }, [teamReport]);
 
   useEffect(() => {
     async function getReport() {
       if (teamReport || isGeneratingRef.current) return;
       setIsLoading(true);
-      const response = await fetch(`/api/team-report/?teamId=${team.id}`);
+      const response = await fetch(`/api/team-report/?teamId=${teamId}`);
       const data = (await response.json()) as any;
 
       if (response.ok) {
@@ -78,10 +80,10 @@ export function useTeamReport(users: UserProfile[] | undefined, team: Team) {
       setIsLoading(false);
     }
 
-    if (team && users && !teamReport) {
+    if (teamId && !teamReport) {
       getReport();
     }
-  }, [team, users, teamReport]);
+  }, [teamReport, teamId]);
 
   return { teamReport, isLoading, isGenerating, generateReport };
 }
