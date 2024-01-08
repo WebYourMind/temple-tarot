@@ -90,31 +90,31 @@ export const getTeamScore = async (teamId: number) => {
                 users.team_id AS user_team_id,
             
                 latest_scores.explorer,
-                latest_scores.analyst,
-                latest_scores.designer,
+                latest_scores.expert,
+                latest_scores.planner,
                 latest_scores.optimizer,
                 latest_scores.connector,
-                latest_scores.nurturer,
+                latest_scores.coach,
                 latest_scores.energizer,
-                latest_scores.achiever
+                latest_scores.producer
             
             FROM users
             
             LEFT JOIN (
                 SELECT
-                    scores.user_id,
-                    scores.explorer,
-                    scores.analyst,
-                    scores.designer,
-                    scores.optimizer,
-                    scores.connector,
-                    scores.nurturer,
-                    scores.energizer,
-                    scores.achiever,
-                    scores.created_at,
-                    scores.updated_at,
-                    ROW_NUMBER() OVER(PARTITION BY scores.user_id ORDER BY scores.created_at DESC) AS rn
-                FROM scores
+                    thinking_style_scores.user_id,
+                    thinking_style_scores.explorer,
+                    thinking_style_scores.expert,
+                    thinking_style_scores.planner,
+                    thinking_style_scores.optimizer,
+                    thinking_style_scores.connector,
+                    thinking_style_scores.coach,
+                    thinking_style_scores.energizer,
+                    thinking_style_scores.producer,
+                    thinking_style_scores.created_at,
+                    thinking_style_scores.updated_at,
+                    ROW_NUMBER() OVER(PARTITION BY thinking_style_scores.user_id ORDER BY thinking_style_scores.created_at DESC) AS rn
+                FROM thinking_style_scores
             ) AS latest_scores ON users.id = latest_scores.user_id AND latest_scores.rn = 1
             
             where users.team_id = ${teamId}

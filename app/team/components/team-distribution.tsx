@@ -40,8 +40,8 @@ export const CustomTooltip = ({ active, payload }: any) => {
 const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
   // Calculate the distribution of thinking styles
   const styleCounts = teamMembers.reduce((acc: any, member: UserProfile) => {
-    acc[(member.dominantStyle as ThinkingStyle) || "Assessment Pending"] =
-      (acc[member.dominantStyle as ThinkingStyle] || 0) + 1;
+    const styleKey = member?.dominantStyle ? member.dominantStyle : "Assessment Pending";
+    acc[styleKey] = (acc[styleKey] || 0) + 1;
     return acc;
   }, {});
 

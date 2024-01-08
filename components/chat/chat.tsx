@@ -21,8 +21,8 @@ import { Button } from "components/ui/button";
 import { Input } from "components/ui/input";
 import { toast } from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { ArchetypeValues } from "lib/types";
 import Loading from "components/loading";
+import { Score } from "lib/quiz";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 export interface ChatProps extends React.ComponentProps<"div"> {
@@ -33,7 +33,7 @@ export function Chat({ id, className }: ChatProps) {
   const [previewToken, setPreviewToken] = useLocalStorage<string | null>("ai-token", null);
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW);
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? "");
-  const [scores, setScores] = useState<ArchetypeValues | undefined>();
+  const [scores, setScores] = useState<Score | undefined>();
   const [initLoading, setInitLoading] = useState(true);
   const [initialMessages, setInitialMessages] = useState<Message[] | undefined>();
   const session = useSession() as any;

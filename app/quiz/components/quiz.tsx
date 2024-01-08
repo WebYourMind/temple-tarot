@@ -11,13 +11,13 @@ type Answer = {
 
 const archetypeStatements = {
   explorer: "I am always looking for new experiences and ideas.",
-  analyst: "I seek to achieve objectivity and insight, often delving into the details.", // Expert equivalent
-  designer: "I am concerned with designing effective systems and processes.", // Planner equivalent
+  expert: "I seek to achieve objectivity and insight, often delving into the details.", // Expert equivalent
+  planner: "I am concerned with designing effective systems and processes.", // Planner equivalent
   optimizer: "I constantly seek to improve productivity and efficiency, fine-tuning processes.",
   connector: "I focus on building and strengthening relationships, emphasizing interpersonal aspects.",
-  nurturer: "I am dedicated to cultivating people and potential, focusing on personal development.", // Coach equivalent
+  coach: "I am dedicated to cultivating people and potential, focusing on personal development.", // Coach equivalent
   energizer: "I aim to mobilize people into action and inspire enthusiasm.",
-  achiever: "I am driven to achieve completion and maintain momentum, often being action-oriented.", // Producer equivalent
+  producer: "I am driven to achieve completion and maintain momentum, often being action-oriented.", // Producer equivalent
 };
 
 type ArchetypeKey = keyof typeof archetypeStatements;

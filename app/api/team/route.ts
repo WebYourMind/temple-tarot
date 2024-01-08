@@ -20,13 +20,13 @@ const sanitizeTeamData = (teamScores: any, team: any) => {
       const score = {
         id: row.score_id,
         explorer: row.explorer,
-        analyst: row.analyst,
-        designer: row.designer,
+        expert: row.expert,
+        planner: row.planner,
         optimizer: row.optimizer,
         connector: row.connector,
-        nurturer: row.nurturer,
+        coach: row.coach,
         energizer: row.energizer,
-        achiever: row.achiever,
+        producer: row.producer,
       };
 
       const dominantStyle = getDominantStyle(score);
