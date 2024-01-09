@@ -37,11 +37,11 @@ export default function TeamReport({ team }: Props) {
       {teamReport && (
         <>
           <ReactMarkdown className="prose prose-indigo text-foreground md:prose-lg">{`${teamReport}`}</ReactMarkdown>
-          {!isGenerating && (
+          {/* {!isGenerating && (
             <Button className="mt-10" onClick={generateReport} disabled={isWithoutTS}>
               Generate Another
             </Button>
-          )}
+          )} */}
         </>
       )}
       {!teamReport && (
