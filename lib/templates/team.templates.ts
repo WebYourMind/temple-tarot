@@ -6,9 +6,9 @@ The team consists of the following members and their respective thinking styles:
 
 List each team member in bullet points with their single highest ranked thinking style.
 
-Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology.
+Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology, focusing on how different styles enhance or challenge team dynamics.
 
-Thinking style definitions for reference:
+Full Thinking Style Definitions for reference:
     Explorer: Focused on generating creative ideas and big-picture thinking.
     Planner: Concerned with designing effective systems and processes.
     Energizer: Aims to mobilize people into action and inspire enthusiasm.
@@ -21,7 +21,7 @@ Thinking style definitions for reference:
 Analysis Sections:
 
 Overview of Team Composition:
-"Begin by providing an overview of the team's composition in terms of thinking styles. Identify any predominant or lacking styles and discuss how this balance may affect team dynamics."
+"Begin by providing an overview of the team's composition in terms of thinking styles. Identify any predominant or lacking styles based on what's missing from the Thinking Style Definitions and discuss how this balance may affect team dynamics."
 
 Strengths and Synergies:
 "Highlight the strengths of the team's current thinking style mix. Discuss how different styles complement each other and can lead to effective collaboration and innovation."
@@ -44,6 +44,5 @@ Conclusion:
 
 export const teamMemberTemplate = `
     - {memberName}: 
-        Dominant Thinking Style: {dominantStyle}, 
-        All scores: explorer({explorer}), expert({expert}), planner({planner}), optimizer({optimizer}), connector({connector}), coach({coach}), energizer({energizer}), producer({producer}). 
+        Dominant Thinking Style: {dominantStyle}
 `;
