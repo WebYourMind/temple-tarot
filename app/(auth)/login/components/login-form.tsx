@@ -24,17 +24,16 @@ export default function LoginForm() {
     const result = await signIn("credentials", {
       email,
       password,
-      redirect: false, // Prevent automatic redirection
+      callbackUrl: redirectUrl || "/",
     });
 
     if (result?.error) {
-      // Handle error without redirection
-      console.log(result.error);
       toast.error(result.error);
       setIsLoading(false);
+    } else if (redirectUrl) {
+      router.replace(redirectUrl);
     } else {
-      // Manually redirect on successful login
-      router.push(redirectUrl || "/");
+      router.replace("/");
     }
   }
 
