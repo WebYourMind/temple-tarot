@@ -28,7 +28,6 @@ export const authOptions: NextAuthOptions = {
           if (result.rows.length > 0) {
             const user = result.rows[0];
             const passwordMatch = await bcrypt.compare(password, user.hashed_password);
-
             if (passwordMatch) {
               return {
                 id: user.id,
@@ -41,7 +40,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           // If no user is found, or the password doesn't match, throw an error.
-          throw new Error("Invalid username or password");
+          throw new Error("Invalid email or password");
         } catch (error: any) {
           throw new Error(error.message || "An unknown error occurred during authentication");
         }
