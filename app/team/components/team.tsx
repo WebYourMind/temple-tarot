@@ -71,7 +71,7 @@ export default function Team() {
       const data = (await res.json()) as ApiResponse;
       if (res.ok) {
         toast.success("Successfully left the team.");
-        update();
+        await update({ teamId: "remove" });
         setTeam(null);
       } else {
         throw new Error(data.error);

@@ -77,8 +77,13 @@ export const authOptions: NextAuthOptions = {
         token.user.role = session.role;
       }
       if (trigger === "update" && session?.teamId) {
-        // @ts-expect-error
-        token.user.teamId = session.teamId;
+        if (session.teamId === "remove") {
+          // @ts-expect-error
+          token.user.teamId = null;
+        } else {
+          // @ts-expect-error
+          token.user.teamId = session.teamId;
+        }
       }
       return token;
     },

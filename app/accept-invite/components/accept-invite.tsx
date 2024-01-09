@@ -72,7 +72,7 @@ const AcceptInvite = () => {
         throw new Error("Failed to join team.");
       } else {
         const responseData = (await response.json()) as unknown as ApiResponse;
-        update({ teamId: team.id });
+        await update({ teamId: team.id });
         toast.success(responseData.message);
         router.push("/team");
       }
