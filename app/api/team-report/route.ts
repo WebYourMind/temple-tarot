@@ -83,8 +83,6 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  console.log(teamMemberTemplateList.join("\n"));
-
   const teamReportTemplatePrompt = PromptTemplate.fromTemplate(teamReportTemplate);
 
   const langChainChatModel = new ChatOpenAI({ temperature: 0.2 });
