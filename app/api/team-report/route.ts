@@ -54,7 +54,6 @@ export async function POST(req: NextRequest) {
 
   const teamMemberTemplateList = [];
   for (let i = 0; i < teamScore.length; i++) {
-    const name = teamMembers[i].name;
     const score = {
       explorer: teamScore[i].explorer,
       expert: teamScore[i].expert,
@@ -72,7 +71,6 @@ export async function POST(req: NextRequest) {
 
       const tempPrompt = teamMemberTemplate
         .replace("{dominantStyle}", dominantStyle)
-        .replace("{memberName}", name)
         .replace("{explorer}", explorer)
         .replace("{expert}", expert)
         .replace("{planner}", planner)
@@ -84,6 +82,8 @@ export async function POST(req: NextRequest) {
       teamMemberTemplateList.push(tempPrompt);
     }
   }
+
+  console.log(teamMemberTemplateList.join("\n"));
 
   const teamReportTemplatePrompt = PromptTemplate.fromTemplate(teamReportTemplate);
 
