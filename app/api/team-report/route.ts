@@ -11,7 +11,7 @@ import { StreamingTextResponse } from "ai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
-import { getDominantStyle, getTopTwoStyles } from "../../../lib/utils";
+import { getTopTwoStyles } from "../../../lib/utils";
 
 export const runtime = "edge";
 
