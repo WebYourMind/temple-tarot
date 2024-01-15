@@ -36,10 +36,14 @@ export async function POST(req: NextRequest) {
 
   const teamMemberIds = teamMembers.map((member) => member.id);
 
+  if (teamMemberIds.length < 3) {
+    return new Response("Team must have at least 3 members", { status: 400 });
+  }
+
   const isAllMembers = await checkTeamThinkingStyleScore(teamMemberIds);
 
   if (!isAllMembers) {
-    return new Response("All team members' thinking styles are required.", { status: 400 });
+    return new Response("At least 3 team members thinking styles are required.", { status: 400 });
   }
 
   const teamScore = await getTeamScore(teamId);
