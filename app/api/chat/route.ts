@@ -5,7 +5,7 @@ import { Configuration, OpenAIApi } from "openai-edge";
 import { Score } from "lib/quiz";
 import { NextRequest, NextResponse } from "next/server";
 import config from "app.config";
-import { getRelativePercentages, getSortedStyles } from "lib/utils";
+import { getScoresArray, getSortedStyles } from "lib/utils";
 
 export const runtime = "edge";
 
@@ -22,7 +22,7 @@ function createContextPrompt({ explorer, expert, planner, optimizer, connector, 
     scores[a] > scores[b] ? a : b
   );
 
-  const sortedStyles = getSortedStyles(getRelativePercentages(scores));
+  const sortedStyles = getSortedStyles(getScoresArray(scores));
   return config.chatbot.prompts.chatScoresContext(dominantStyle, sortedStyles);
 }
 

@@ -209,7 +209,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
 
   const handleFinalQuestionResponse = async (selectedStyle: ArchetypeKey) => {
     setIsLoading(true);
-    const updatedScores = { ...quizScores, [selectedStyle]: quizScores[selectedStyle] + 0.1 };
+    const updatedScores = { ...quizScores, [selectedStyle]: quizScores[selectedStyle] + 7 };
     await saveResults(updatedScores);
   };
 

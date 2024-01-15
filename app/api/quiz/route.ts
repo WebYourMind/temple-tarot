@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { Score } from "lib/quiz";
-import { getRelativePercentages, getSortedStyles } from "lib/utils";
+import { getScoresArray, getSortedStyles } from "lib/utils";
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = "force-dynamic";
@@ -46,11 +46,12 @@ export async function POST(request: NextRequest) {
         ${scores.energizer}, 
         ${scores.producer}
     ) RETURNING *`;
-    const scoresUpdate = getScoresUpdateMessage(getRelativePercentages(scores));
+    const scoresUpdate = getScoresUpdateMessage(getScoresArray(scores));
     await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${scoresUpdate}, 'assistant')`;
 
     return NextResponse.json({ message: "Scores added successfully." }, { status: 201 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       {
         error: "An error occurred while processing your request.",
@@ -120,6 +121,7 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
+    console.error(error);
     // Return an error response
     return NextResponse.json(
       {
