@@ -58,17 +58,32 @@ CREATE TABLE chat_messages (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE scores (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    explorer NUMERIC(5,2),
+    analyst NUMERIC(5,2),
+    designer NUMERIC(5,2),
+    optimizer NUMERIC(5,2),
+    connector NUMERIC(5,2),
+    nurturer NUMERIC(5,2),
+    energizer NUMERIC(5,2),
+    achiever NUMERIC(5,2),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE thinking_style_scores (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
-    explorer DECIMAL(3,2) CHECK (explorer >= 0 AND explorer <= 1),
-    planner DECIMAL(3,2) CHECK (planner >= 0 AND planner <= 1),
-    energizer DECIMAL(3,2) CHECK (energizer >= 0 AND energizer <= 1),
-    connector DECIMAL(3,2) CHECK (connector >= 0 AND connector <= 1),
-    expert DECIMAL(3,2) CHECK (expert >= 0 AND expert <= 1),
-    optimizer DECIMAL(3,2) CHECK (optimizer >= 0 AND optimizer <= 1),
-    producer DECIMAL(3,2) CHECK (producer >= 0 AND producer <= 1),
-    coach DECIMAL(3,2) CHECK (coach >= 0 AND coach <= 1),
+    explorer NUMERIC(5,2),
+    planner NUMERIC(5,2),
+    energizer NUMERIC(5,2),
+    connector NUMERIC(5,2),
+    expert NUMERIC(5,2),
+    optimizer NUMERIC(5,2),
+    producer NUMERIC(5,2),
+    coach NUMERIC(5,2),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
