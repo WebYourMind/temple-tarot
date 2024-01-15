@@ -11,7 +11,7 @@ import { StreamingTextResponse } from "ai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
-import { getDominantStyle } from "../../../lib/utils";
+import { getDominantStyle, getTopTwoStyles } from "../../../lib/utils";
 
 export const runtime = "edge";
 
@@ -65,12 +65,12 @@ export async function POST(req: NextRequest) {
       producer: teamScore[i].producer,
     };
 
-    const dominantStyle = getDominantStyle(score);
+    const dominantStyle = getTopTwoStyles(score);
     if (dominantStyle) {
       const { explorer, expert, planner, optimizer, connector, coach, energizer, producer } = score;
 
       const tempPrompt = teamMemberTemplate
-        .replace("{dominantStyle}", dominantStyle)
+        .replace("{dominantStyle}", dominantStyle.join(", "))
         .replace("{explorer}", explorer)
         .replace("{expert}", expert)
         .replace("{planner}", planner)

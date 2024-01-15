@@ -134,3 +134,36 @@ export function getDominantStyle({
   const capitalizedStyle = dominantStyle[0].toUpperCase() + dominantStyle.slice(1);
   return capitalizedStyle as ThinkingStyle;
 }
+
+export function getTopTwoStyles({
+  explorer,
+  expert,
+  planner,
+  optimizer,
+  connector,
+  coach,
+  energizer,
+  producer,
+}: Score): ThinkingStyle[] | null {
+  const scores = {
+    explorer,
+    expert,
+    planner,
+    optimizer,
+    connector,
+    coach,
+    energizer,
+    producer,
+  };
+
+  // Check if any score is null
+  const hasNullScore = Object.values(scores).some((score) => score === null);
+  if (hasNullScore) {
+    return null;
+  }
+
+  const sortedStyles = (Object.keys(scores) as (keyof typeof scores)[]).sort((a, b) => scores[b] - scores[a]);
+
+  const topTwoStyles = sortedStyles.slice(0, 2);
+  return topTwoStyles.map((style) => style[0].toUpperCase() + style.slice(1)) as ThinkingStyle[];
+}

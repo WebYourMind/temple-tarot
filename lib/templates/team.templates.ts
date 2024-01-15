@@ -47,7 +47,7 @@ Conclude the report with a summary of key findings, emphasizing the importance o
 `;
 
 export const teamMemberTemplate = `
-    Dominant Thinking Style: {dominantStyle}
+    Top 2 Dominant Thinking Style: {dominantStyle}
     Explorer: {explorer}
     Expert: {expert}
     Planner: {planner}

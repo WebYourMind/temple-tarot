@@ -3,7 +3,7 @@ import { Configuration, OpenAIApi } from "openai-edge";
 import { sql } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 import { Score } from "lib/quiz";
-import { getRelativePercentages, getSortedStyles } from "lib/utils";
+import { getRelativePercentages, getSortedStyles, getTopTwoStyles } from "lib/utils";
 
 export const runtime = "edge";
 
@@ -24,9 +24,7 @@ const createReportGenerationPrompt = ({
   const scores = { explorer, expert, planner, optimizer, connector, coach, energizer, producer };
   const sortedStyles = getSortedStyles(getRelativePercentages(scores));
 
-  const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
-    scores[a] > scores[b] ? a : b
-  );
+  const dominantStyle = getTopTwoStyles(scores)?.join(" and ");
 
   // Start the prompt with the dominant thinking style
   return `
