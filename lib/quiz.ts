@@ -265,7 +265,7 @@ export function calculateInitialResults(answers: any) {
 }
 
 export function calculateScores(answers: Answer, scores: Score): Score {
-  const maxScorePerQuestion = 12;
+  const maxScorePerQuestion = 6;
 
   // Build questionToArchetypeMap and counters dynamically from the questions array
   questions.forEach((section) => {
@@ -277,7 +277,7 @@ export function calculateScores(answers: Answer, scores: Score): Score {
   // Normalize scores by dividing by the count of questions for each archetype
   Object.keys(scores).forEach((key) => {
     const archetype = key as Archetype;
-    scores[archetype] = Number((scores[archetype] / maxScorePerQuestion).toFixed(2)); // Adjusted to 2 decimal places for consistency with database precision
+    scores[archetype] = Number((scores[archetype] / maxScorePerQuestion).toFixed(2)) * 100; // Adjusted to 2 decimal places for consistency with database precision
   });
 
   // Return the normalized scores

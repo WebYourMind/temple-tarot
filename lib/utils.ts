@@ -45,31 +45,8 @@ export function haveMatchingArchetypeValues(scores: Score, report: Score): boole
   return true;
 }
 
-export function getRelativePercentages({
-  explorer,
-  expert,
-  planner,
-  optimizer,
-  connector,
-  coach,
-  energizer,
-  producer,
-}: Score) {
-  const scores = [explorer, expert, planner, optimizer, connector, coach, energizer, producer];
-
-  // Calculate the total score
-  const totalScore = scores.reduce((sum, current) => sum + current, 0);
-
-  // Check if the total score is zero to avoid division by zero
-  if (totalScore === 0) {
-    // If totalScore is 0, return an array with 0s or handle it as needed
-    return scores.map(() => 0);
-  }
-
-  // Calculate relative percentages
-  const relativePercentages = scores.map((score) => parseFloat(((score / totalScore) * 100).toFixed(1)));
-
-  return relativePercentages;
+export function getScoresArray({ explorer, expert, planner, optimizer, connector, coach, energizer, producer }: Score) {
+  return [explorer, expert, planner, optimizer, connector, coach, energizer, producer];
 }
 
 export function getSortedStyles(scores: number[]) {
@@ -77,7 +54,7 @@ export function getSortedStyles(scores: number[]) {
   const sortedStyles = styleNames
     .map((style, index) => ({ style, score: scores[index] }))
     .sort((a, b) => b.score - a.score) // Sorting in descending order of scores
-    .map(({ style, score }) => `- ${style}: ${score}%`);
+    .map(({ style, score }) => `- ${style}: ${score}/100`);
   return sortedStyles;
 }
 

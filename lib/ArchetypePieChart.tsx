@@ -2,7 +2,7 @@
 
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { getRelativePercentages } from "./utils";
+import { getScoresArray } from "./utils";
 import { ThinkingStyle } from "./types";
 import { Score } from "./quiz";
 
@@ -24,7 +24,7 @@ const CustomTooltip = ({ active, payload }: any) => {
     return (
       <div className="rounded-lg border bg-background p-2">
         <p className="font-bold">{name}</p>
-        <p>{value}%</p>
+        <p>{value}/100</p>
         <p className="text-sm">{description}</p>
       </div>
     );
@@ -40,20 +40,19 @@ type Props = {
 };
 
 const ArchetypePieChart = ({ scores }: Props) => {
-  const relativePercentages = getRelativePercentages(scores);
+  const scoresArray = getScoresArray(scores);
   const data = [
     {
       name: "Explorer",
-      value: relativePercentages[0],
-      desc: "Focused on generating creative ideas and big-picture thinking.",
+      value: scoresArray[0],
     },
-    { name: "Expert", value: relativePercentages[1] },
-    { name: "Planner", value: relativePercentages[2] },
-    { name: "Optimizer", value: relativePercentages[3] },
-    { name: "Connector", value: relativePercentages[4] },
-    { name: "Coach", value: relativePercentages[5] },
-    { name: "Energizer", value: relativePercentages[6] },
-    { name: "Producer", value: relativePercentages[7] },
+    { name: "Expert", value: scoresArray[1] },
+    { name: "Planner", value: scoresArray[2] },
+    { name: "Optimizer", value: scoresArray[3] },
+    { name: "Connector", value: scoresArray[4] },
+    { name: "Coach", value: scoresArray[5] },
+    { name: "Energizer", value: scoresArray[6] },
+    { name: "Producer", value: scoresArray[7] },
   ];
 
   return (
@@ -67,7 +66,7 @@ const ArchetypePieChart = ({ scores }: Props) => {
             cx="50%"
             cy="50%"
             labelLine={false}
-            label={({ name, value, desc }) => `${name}: ${value}%`}
+            label={({ name, value, desc }) => `${name}: ${value}`}
             outerRadius={80}
             fill="#8884d8"
             dataKey="value"
