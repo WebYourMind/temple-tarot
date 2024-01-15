@@ -130,7 +130,7 @@ export const checkTeamThinkingStyleScore = async (teamMembers: number[]) => {
 
     const { rows } = await sql.query(query, teamMembers);
 
-    if (rows.length > 0 && rows.length === teamMembers.length) {
+    if (rows.length >= 3) {
       return rows;
     }
     return null;
