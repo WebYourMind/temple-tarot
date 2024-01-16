@@ -3,7 +3,9 @@ import appConfig from "app.config";
 import Card from "components/card";
 import { Button } from "components/ui/button";
 import { thinkingStyleDescriptions } from "lib/ArchetypePieChart";
+import { Score } from "lib/quiz";
 import { ThinkingStyle, UserProfile } from "lib/types";
+import { capitalizeFirstLetter } from "lib/utils";
 import React, { useState } from "react";
 import {
   PieChart,
@@ -34,7 +36,9 @@ type Props = {
   teamMembers: UserProfile[];
 };
 
-export const CustomTooltip = ({ active, payload }: any) => {
+type ArchetypeKey = keyof Score;
+
+export const CustomTooltip = ({ active, payload, teamMembers }: any) => {
   if (active && payload && payload.length) {
     const { name, value } = payload[0] as { name: ThinkingStyle; value: string };
     const description = name in thinkingStyleDescriptions ? thinkingStyleDescriptions[name] : null;
@@ -42,7 +46,7 @@ export const CustomTooltip = ({ active, payload }: any) => {
       <div className="rounded-lg border bg-background p-2">
         <p className="font-bold">{name}</p>
         <p>
-          {value} member{parseFloat(value) > 1 && "s"}
+          {value} / {teamMembers.length * 100} point{parseFloat(value) > 1 && "s"}
         </p>
         <p className="text-sm">{description}</p>
       </div>
@@ -54,15 +58,19 @@ export const CustomTooltip = ({ active, payload }: any) => {
 
 const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
   const [currentPage, setCurrentPage] = useState(0);
+
   // Calculate the distribution of thinking styles
   const styleCounts = teamMembers.reduce((acc: any, member: UserProfile) => {
-    const styleKey = member?.dominantStyle ? member.dominantStyle : "Assessment Pending";
-    acc[styleKey] = (acc[styleKey] || 0) + 1;
+    Object.keys(member.scores as Score).forEach((key: string) => {
+      const capKey = capitalizeFirstLetter(key);
+      acc[capKey] = (acc[capKey] || 0) + (member.scores as Score)[key as ArchetypeKey];
+    });
+
     return acc;
   }, {});
 
   const data = Object.keys(styleCounts).map((key) => ({ name: key, value: styleCounts[key] }));
-  const radarData = data.map((d) => ({ ...d, value: (d.value / data.length) * 100 }));
+  const radarData = data.map((d) => ({ ...d, value: d.value / data.length }));
 
   return (
     <Card>
@@ -102,7 +110,7 @@ const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={<CustomTooltip teamMembers={teamMembers} />} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>

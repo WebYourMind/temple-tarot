@@ -1,3 +1,5 @@
+import { Score } from "./quiz";
+
 export type ApiResponse = {
   message: string;
   error: string;
@@ -43,7 +45,7 @@ export type UserProfile = {
   phone?: string;
   role?: string;
   teamId?: string;
-  scores?: ArchetypeValues;
+  scores?: Score;
   dominantStyle?: ThinkingStyle;
 };
 
