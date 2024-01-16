@@ -111,3 +111,13 @@ export function getDominantStyle({
   const capitalizedStyle = dominantStyle[0].toUpperCase() + dominantStyle.slice(1);
   return capitalizedStyle as ThinkingStyle;
 }
+
+export function capitalizeFirstLetter(str: string) {
+  // Check if the input string is not empty
+  if (str.length === 0) {
+    return str;
+  }
+
+  // Capitalize the first letter and concatenate it with the rest of the string
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
