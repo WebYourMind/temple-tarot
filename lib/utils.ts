@@ -92,9 +92,7 @@ export function getDominantStyle({ explore, analyze, design, optimize, connect, 
     achieve,
   };
   // Check if any score is null
-  console.log(scores);
   const hasNullScore = Object.values(scores).some((score) => score === null || Number.isNaN(score));
-  console.log(hasNullScore);
   if (hasNullScore) {
     return null;
   }

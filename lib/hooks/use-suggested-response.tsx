@@ -26,7 +26,6 @@ export function useSuggestedResponses() {
           throw new Error(`Failed to generate suggested responses: ${response.statusText}`);
 
         const data = (await response.json()) as any;
-        console.log(data.suggestedResponses);
         setSuggestedResponses(data.suggestedResponses);
 
         // const reader = response.body.getReader();
