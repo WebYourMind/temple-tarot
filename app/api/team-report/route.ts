@@ -55,30 +55,30 @@ export async function POST(req: NextRequest) {
   const teamMemberTemplateList = [];
   for (let i = 0; i < teamScore.length; i++) {
     const score = {
-      explorer: teamScore[i].explorer,
-      analyst: teamScore[i].analyst,
-      designer: teamScore[i].designer,
-      optimizer: teamScore[i].optimizer,
-      connector: teamScore[i].connector,
-      nurturer: teamScore[i].nurturer,
-      energizer: teamScore[i].energizer,
-      achiever: teamScore[i].achiever,
+      explore: teamScore[i].explore,
+      analyze: teamScore[i].analyze,
+      design: teamScore[i].design,
+      optimize: teamScore[i].optimize,
+      connect: teamScore[i].connect,
+      nurture: teamScore[i].nurture,
+      energize: teamScore[i].energize,
+      achieve: teamScore[i].achieve,
     };
 
     const dominantStyle = getDominantStyle(score);
     if (dominantStyle) {
-      const { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever } = score;
+      const { explore, analyze, design, optimize, connect, nurture, energize, achieve } = score;
 
       const tempPrompt = teamMemberTemplate
         .replace("{dominantStyle}", dominantStyle)
-        .replace("{explorer}", explorer)
-        .replace("{analyst}", analyst)
-        .replace("{designer}", designer)
-        .replace("{optimizer}", optimizer)
-        .replace("{connector}", connector)
-        .replace("{nurturer}", nurturer)
-        .replace("{energizer}", energizer)
-        .replace("{achiever}", achiever);
+        .replace("{explore}", explore)
+        .replace("{analyze}", analyze)
+        .replace("{design}", design)
+        .replace("{optimize}", optimize)
+        .replace("{connect}", connect)
+        .replace("{nurture}", nurture)
+        .replace("{energize}", energize)
+        .replace("{achieve}", achieve);
       teamMemberTemplateList.push(tempPrompt);
     }
   }

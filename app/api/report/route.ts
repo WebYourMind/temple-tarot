@@ -11,17 +11,17 @@ export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 const createReportGenerationPrompt = ({
-  explorer,
-  analyst,
-  designer,
-  optimizer,
-  connector,
-  nurturer,
-  energizer,
-  achiever,
+  explore,
+  analyze,
+  design,
+  optimize,
+  connect,
+  nurture,
+  energize,
+  achieve,
 }: Score) => {
   // Identify the dominant thinking style based on the highest score
-  const scores = { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever };
+  const scores = { explore, analyze, design, optimize, connect, nurture, energize, achieve };
   const sortedStyles = getSortedStyles(getScoresArray(scores));
 
   const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {
       await sql`
-        INSERT INTO reports (user_id, ts_scores_id, report)
+        INSERT INTO reports (user_id, scores_id, report)
         VALUES (${userId}, ${scores.id}, ${completion})
         RETURNING *;
       `;
@@ -110,11 +110,11 @@ export async function GET(request: NextRequest) {
 
     // Query to select the latest reports row for the given user ID
     const { rows: reports } = await sql`
-      SELECT reports.*, scores.explorer, scores.analyst, scores.designer, 
-            scores.optimizer, scores.connector, scores.nurturer, 
-            scores.energizer, scores.achiever
+      SELECT reports.*, scores.explore, scores.analyze, scores.design, 
+            scores.optimize, scores.connect, scores.nurture, 
+            scores.energize, scores.achieve
       FROM reports
-      INNER JOIN scores ON reports.ts_scores_id = scores.id
+      INNER JOIN scores ON reports.scores_id = scores.id
       WHERE reports.user_id = ${userId}
       ORDER BY reports.created_at DESC
       LIMIT 1;
@@ -134,14 +134,14 @@ export async function GET(request: NextRequest) {
 
     const convertedReports = reports.map((row) => ({
       ...row,
-      explorer: parseFloat(row.explorer),
-      designer: parseFloat(row.designer),
-      energizer: parseFloat(row.energizer),
-      connector: parseFloat(row.connector),
-      analyst: parseFloat(row.analyst),
-      optimizer: parseFloat(row.optimizer),
-      achiever: parseFloat(row.achiever),
-      nurturer: parseFloat(row.nurturer),
+      explore: parseFloat(row.explore),
+      design: parseFloat(row.design),
+      energize: parseFloat(row.energize),
+      connect: parseFloat(row.connect),
+      analyze: parseFloat(row.analyze),
+      optimize: parseFloat(row.optimize),
+      achieve: parseFloat(row.achieve),
+      nurture: parseFloat(row.nurture),
     }));
 
     // Return the latest scores row

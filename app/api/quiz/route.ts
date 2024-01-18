@@ -27,24 +27,24 @@ export async function POST(request: NextRequest) {
 
     await sql`INSERT INTO scores (
         user_id, 
-        explorer, 
-        analyst, 
-        designer, 
-        optimizer, 
-        connector, 
-        nurturer, 
-        energizer, 
-        achiever
+        explore, 
+        "analyze", 
+        design, 
+        optimize, 
+        "connect", 
+        nurture, 
+        energize, 
+        achieve
         ) VALUES (
         ${userId}, 
-        ${scores.explorer}, 
-        ${scores.analyst}, 
-        ${scores.designer}, 
-        ${scores.optimizer}, 
-        ${scores.connector}, 
-        ${scores.nurturer}, 
-        ${scores.energizer}, 
-        ${scores.achiever}
+        ${scores.explore}, 
+        ${scores.analyze}, 
+        ${scores.design}, 
+        ${scores.optimize}, 
+        ${scores.connect}, 
+        ${scores.nurture}, 
+        ${scores.energize}, 
+        ${scores.achieve}
     ) RETURNING *`;
     const scoresUpdate = getScoresUpdateMessage(getScoresArray(scores));
     await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${scoresUpdate}, 'assistant')`;
@@ -97,14 +97,14 @@ export async function GET(request: NextRequest) {
     // Convert decimal string values to numbers
     const convertedScores = rows.map((row) => ({
       ...row,
-      explorer: parseFloat(row.explorer),
-      designer: parseFloat(row.designer),
-      energizer: parseFloat(row.energizer),
-      connector: parseFloat(row.connector),
-      analyst: parseFloat(row.analyst),
-      optimizer: parseFloat(row.optimizer),
-      achiever: parseFloat(row.achiever),
-      nurturer: parseFloat(row.nurturer),
+      explore: parseFloat(row.explore),
+      design: parseFloat(row.design),
+      energize: parseFloat(row.energize),
+      connect: parseFloat(row.connect),
+      analyze: parseFloat(row.analyze),
+      optimize: parseFloat(row.optimize),
+      achieve: parseFloat(row.achieve),
+      nurture: parseFloat(row.nurture),
     }));
 
     // If you're expecting only one row (due to LIMIT 1), you can directly access the first element

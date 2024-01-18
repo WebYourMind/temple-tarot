@@ -17,25 +17,25 @@ export type Address = {
 };
 
 export type ArchetypeValues = {
-  explorer: string;
-  analyst: string;
-  designer: string;
-  optimizer: string;
-  connector: string;
-  nurturer: string;
-  energizer: string;
-  achiever: string;
+  explore: string;
+  analyze: string;
+  design: string;
+  optimize: string;
+  connect: string;
+  nurture: string;
+  energize: string;
+  achieve: string;
 };
 
 export type ThinkingStyle =
-  | "Explorer"
-  | "Analyst"
-  | "Designer"
-  | "Optimizer"
-  | "Connector"
-  | "Nurturer"
-  | "Energizer"
-  | "Achiever";
+  | "Explore"
+  | "Analyze"
+  | "Design"
+  | "Optimize"
+  | "Connect"
+  | "Nurture"
+  | "Energize"
+  | "Achieve";
 
 export type UserProfile = {
   name: string;

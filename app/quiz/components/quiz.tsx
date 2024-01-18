@@ -13,14 +13,14 @@ type Answer = {
 };
 
 const archetypeStatements = {
-  explorer: "I am always looking for new experiences and ideas.",
-  analyst: "I seek to achieve objectivity and insight, often delving into the details.", // Analyst equivalent
-  designer: "I am concerned with designing effective systems and processes.", // Designer equivalent
-  optimizer: "I constantly seek to improve productivity and efficiency, fine-tuning processes.",
-  connector: "I focus on building and strengthening relationships, emphasizing interpersonal aspects.",
-  nurturer: "I am dedicated to cultivating people and potential, focusing on personal development.", // Nurturer equivalent
-  energizer: "I aim to mobilize people into action and inspire enthusiasm.",
-  achiever: "I am driven to achieve completion and maintain momentum, often being action-oriented.", // Achiever equivalent
+  explore: "I am always looking for new experiences and ideas.",
+  analyze: "I seek to achieve objectivity and insight, often delving into the details.", // Analyze equivalent
+  design: "I am concerned with designing effective systems and processes.", // Design equivalent
+  optimize: "I constantly seek to improve productivity and efficiency, fine-tuning processes.",
+  connect: "I focus on building and strengthening relationships, emphasizing interpersonal aspects.",
+  nurture: "I am dedicated to cultivating people and potential, focusing on personal development.", // Nurture equivalent
+  energize: "I aim to mobilize people into action and inspire enthusiasm.",
+  achieve: "I am driven to achieve completion and maintain momentum, often being action-oriented.", // Achieve equivalent
 };
 
 type ArchetypeKey = keyof typeof archetypeStatements;

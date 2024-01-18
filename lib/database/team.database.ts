@@ -77,28 +77,28 @@ export const getTeamScore = async (teamId: number) => {
                 users.role AS user_role,
                 users.team_id AS user_team_id,
             
-                latest_scores.explorer,
-                latest_scores.analyst,
-                latest_scores.designer,
-                latest_scores.optimizer,
-                latest_scores.connector,
-                latest_scores.nurturer,
-                latest_scores.energizer,
-                latest_scores.achiever
+                latest_scores.explore,
+                latest_scores.analyze,
+                latest_scores.design,
+                latest_scores.optimize,
+                latest_scores.connect,
+                latest_scores.nurture,
+                latest_scores.energize,
+                latest_scores.achieve
             
             FROM users
             
             LEFT JOIN (
                 SELECT
                     scores.user_id,
-                    scores.explorer,
-                    scores.analyst,
-                    scores.designer,
-                    scores.optimizer,
-                    scores.connector,
-                    scores.nurturer,
-                    scores.energizer,
-                    scores.achiever,
+                    scores.explore,
+                    scores.analyze,
+                    scores.design,
+                    scores.optimize,
+                    scores.connect,
+                    scores.nurture,
+                    scores.energize,
+                    scores.achieve,
                     scores.created_at,
                     scores.updated_at,
                     ROW_NUMBER() OVER(PARTITION BY scores.user_id ORDER BY scores.created_at DESC) AS rn

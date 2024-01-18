@@ -26,14 +26,14 @@ export function absoluteUrl(path: string) {
 // Function to check if the archetype values match in scores and report objects
 export function haveMatchingArchetypeValues(scores: Score, report: Score): boolean {
   const archetypes: (keyof Score)[] = [
-    "explorer",
-    "analyst",
-    "designer",
-    "optimizer",
-    "connector",
-    "nurturer",
-    "energizer",
-    "achiever",
+    "explore",
+    "analyze",
+    "design",
+    "optimize",
+    "connect",
+    "nurture",
+    "energize",
+    "achieve",
   ];
 
   for (const archetype of archetypes) {
@@ -45,21 +45,12 @@ export function haveMatchingArchetypeValues(scores: Score, report: Score): boole
   return true;
 }
 
-export function getScoresArray({
-  explorer,
-  analyst,
-  designer,
-  optimizer,
-  connector,
-  nurturer,
-  energizer,
-  achiever,
-}: Score) {
-  return [explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever];
+export function getScoresArray({ explore, analyze, design, optimize, connect, nurture, energize, achieve }: Score) {
+  return [explore, analyze, design, optimize, connect, nurture, energize, achieve];
 }
 
 export function getSortedStyles(scores: number[]) {
-  const styleNames = ["Explorer", "Analyst", "Designer", "Optimizer", "Connector", "Nurturer", "Energizer", "Achiever"];
+  const styleNames = ["Explore", "Analyze", "Design", "Optimize", "Connect", "Nurture", "Energize", "Achieve"];
   const sortedStyles = styleNames
     .map((style, index) => ({ style, score: scores[index] }))
     .sort((a, b) => b.score - a.score) // Sorting in descending order of scores
@@ -89,28 +80,21 @@ export function isValidEmail(email: string) {
   return regex.test(email);
 }
 
-export function getDominantStyle({
-  explorer,
-  analyst,
-  designer,
-  optimizer,
-  connector,
-  nurturer,
-  energizer,
-  achiever,
-}: Score) {
+export function getDominantStyle({ explore, analyze, design, optimize, connect, nurture, energize, achieve }: Score) {
   const scores = {
-    explorer,
-    analyst,
-    designer,
-    optimizer,
-    connector,
-    nurturer,
-    energizer,
-    achiever,
+    explore,
+    analyze,
+    design,
+    optimize,
+    connect,
+    nurture,
+    energize,
+    achieve,
   };
   // Check if any score is null
-  const hasNullScore = Object.values(scores).some((score) => score === null);
+  console.log(scores);
+  const hasNullScore = Object.values(scores).some((score) => score === null || Number.isNaN(score));
+  console.log(hasNullScore);
   if (hasNullScore) {
     return null;
   }
