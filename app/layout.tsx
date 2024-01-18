@@ -4,6 +4,7 @@ import { Providers } from "app/providers";
 import { Header } from "components/navigation/header";
 import { Toaster } from "react-hot-toast";
 import appConfig from "app.config";
+import FeedbackWidget from "components/feedback/feedback-widget";
 
 const title = appConfig.appName;
 const description = appConfig.description;
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Toaster />
             <Header />
             {children}
+            <FeedbackWidget />
           </div>
         </Providers>
       </body>
