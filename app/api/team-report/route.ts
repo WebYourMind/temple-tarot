@@ -36,10 +36,14 @@ export async function POST(req: NextRequest) {
 
   const teamMemberIds = teamMembers.map((member) => member.id);
 
+  if (teamMemberIds.length < 3) {
+    return new Response("Team must have at least 3 members", { status: 400 });
+  }
+
   const isAllMembers = await checkTeamThinkingStyleScore(teamMemberIds);
 
   if (!isAllMembers) {
-    return new Response("All team members' thinking styles are required.", { status: 400 });
+    return new Response("At least 3 team members thinking styles are required.", { status: 400 });
   }
 
   const teamScore = await getTeamScore(teamId);
@@ -50,33 +54,31 @@ export async function POST(req: NextRequest) {
 
   const teamMemberTemplateList = [];
   for (let i = 0; i < teamScore.length; i++) {
-    const name = teamMembers[i].name;
     const score = {
-      explorer: teamScore[i].explorer,
-      expert: teamScore[i].expert,
-      planner: teamScore[i].planner,
-      optimizer: teamScore[i].optimizer,
-      connector: teamScore[i].connector,
-      coach: teamScore[i].coach,
-      energizer: teamScore[i].energizer,
-      producer: teamScore[i].producer,
+      explore: teamScore[i].explore,
+      analyze: teamScore[i].analyze,
+      design: teamScore[i].design,
+      optimize: teamScore[i].optimize,
+      connect: teamScore[i].connect,
+      nurture: teamScore[i].nurture,
+      energize: teamScore[i].energize,
+      achieve: teamScore[i].achieve,
     };
 
     const dominantStyle = getDominantStyle(score);
     if (dominantStyle) {
-      const { explorer, expert, planner, optimizer, connector, coach, energizer, producer } = score;
+      const { explore, analyze, design, optimize, connect, nurture, energize, achieve } = score;
 
       const tempPrompt = teamMemberTemplate
         .replace("{dominantStyle}", dominantStyle)
-        .replace("{memberName}", name)
-        .replace("{explorer}", explorer)
-        .replace("{expert}", expert)
-        .replace("{planner}", planner)
-        .replace("{optimizer}", optimizer)
-        .replace("{connector}", connector)
-        .replace("{coach}", coach)
-        .replace("{energizer}", energizer)
-        .replace("{producer}", producer);
+        .replace("{explore}", explore)
+        .replace("{analyze}", analyze)
+        .replace("{design}", design)
+        .replace("{optimize}", optimize)
+        .replace("{connect}", connect)
+        .replace("{nurture}", nurture)
+        .replace("{energize}", energize)
+        .replace("{achieve}", achieve);
       teamMemberTemplateList.push(tempPrompt);
     }
   }

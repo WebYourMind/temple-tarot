@@ -3,7 +3,7 @@ import { Configuration, OpenAIApi } from "openai-edge";
 import { sql } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 import { Score } from "lib/quiz";
-import { getRelativePercentages, getSortedStyles } from "lib/utils";
+import { getScoresArray, getSortedStyles } from "lib/utils";
 
 export const runtime = "edge";
 
@@ -11,18 +11,18 @@ export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 const createReportGenerationPrompt = ({
-  explorer,
-  expert,
-  planner,
-  optimizer,
-  connector,
-  coach,
-  energizer,
-  producer,
+  explore,
+  analyze,
+  design,
+  optimize,
+  connect,
+  nurture,
+  energize,
+  achieve,
 }: Score) => {
   // Identify the dominant thinking style based on the highest score
-  const scores = { explorer, expert, planner, optimizer, connector, coach, energizer, producer };
-  const sortedStyles = getSortedStyles(getRelativePercentages(scores));
+  const scores = { explore, analyze, design, optimize, connect, nurture, energize, achieve };
+  const sortedStyles = getSortedStyles(getScoresArray(scores));
 
   const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
     scores[a] > scores[b] ? a : b
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {
       await sql`
-        INSERT INTO reports (user_id, ts_scores_id, report)
+        INSERT INTO reports (user_id, scores_id, report)
         VALUES (${userId}, ${scores.id}, ${completion})
         RETURNING *;
       `;
@@ -110,11 +110,11 @@ export async function GET(request: NextRequest) {
 
     // Query to select the latest reports row for the given user ID
     const { rows: reports } = await sql`
-      SELECT reports.*, thinking_style_scores.explorer, thinking_style_scores.expert, thinking_style_scores.planner, 
-            thinking_style_scores.optimizer, thinking_style_scores.connector, thinking_style_scores.coach, 
-            thinking_style_scores.energizer, thinking_style_scores.producer
+      SELECT reports.*, scores.explore, scores.analyze, scores.design, 
+            scores.optimize, scores.connect, scores.nurture, 
+            scores.energize, scores.achieve
       FROM reports
-      INNER JOIN thinking_style_scores ON reports.ts_scores_id = thinking_style_scores.id
+      INNER JOIN scores ON reports.scores_id = scores.id
       WHERE reports.user_id = ${userId}
       ORDER BY reports.created_at DESC
       LIMIT 1;
@@ -134,14 +134,14 @@ export async function GET(request: NextRequest) {
 
     const convertedReports = reports.map((row) => ({
       ...row,
-      explorer: parseFloat(row.explorer),
-      planner: parseFloat(row.planner),
-      energizer: parseFloat(row.energizer),
-      connector: parseFloat(row.connector),
-      expert: parseFloat(row.expert),
-      optimizer: parseFloat(row.optimizer),
-      producer: parseFloat(row.producer),
-      coach: parseFloat(row.coach),
+      explore: parseFloat(row.explore),
+      design: parseFloat(row.design),
+      energize: parseFloat(row.energize),
+      connect: parseFloat(row.connect),
+      analyze: parseFloat(row.analyze),
+      optimize: parseFloat(row.optimize),
+      achieve: parseFloat(row.achieve),
+      nurture: parseFloat(row.nurture),
     }));
 
     // Return the latest scores row

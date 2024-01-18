@@ -2,19 +2,19 @@
 
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { getRelativePercentages } from "./utils";
+import { getScoresArray } from "./utils";
 import { ThinkingStyle } from "./types";
 import { Score } from "./quiz";
 
 export const thinkingStyleDescriptions = {
-  Explorer: "Focused on generating creative ideas and big-picture thinking.",
-  Expert: "Seeks to achieve objectivity and insight, often delving into the details.",
-  Planner: "Concerned with designing effective systems and processes.",
-  Optimizer: "Strives to improve productivity and efficiency, fine-tuning processes.",
-  Connector: "Builds and strengthens relationships, focusing on the interpersonal aspects.",
-  Coach: "Dedicated to cultivating people and potential, focusing on personal development.",
-  Energizer: "Aims to mobilize people into action and inspire enthusiasm.",
-  Producer: "Driven to achieve completion and maintain momentum, often action-oriented.",
+  Explore: "Focused on generating creative ideas and big-picture thinking.",
+  Analyze: "Seeks to achieve objectivity and insight, often delving into the details.",
+  Design: "Concerned with designing effective systems and processes.",
+  Optimize: "Strives to improve productivity and efficiency, fine-tuning processes.",
+  Connect: "Builds and strengthens relationships, focusing on the interpersonal aspects.",
+  Nurture: "Dedicated to cultivating people and potential, focusing on personal development.",
+  Energize: "Aims to mobilize people into action and inspire enthusiasm.",
+  Achieve: "Driven to achieve completion and maintain momentum, often action-oriented.",
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -24,7 +24,7 @@ const CustomTooltip = ({ active, payload }: any) => {
     return (
       <div className="rounded-lg border bg-background p-2">
         <p className="font-bold">{name}</p>
-        <p>{value}%</p>
+        <p>{value}/100</p>
         <p className="text-sm">{description}</p>
       </div>
     );
@@ -40,20 +40,19 @@ type Props = {
 };
 
 const ArchetypePieChart = ({ scores }: Props) => {
-  const relativePercentages = getRelativePercentages(scores);
+  const scoresArray = getScoresArray(scores);
   const data = [
     {
-      name: "Explorer",
-      value: relativePercentages[0],
-      desc: "Focused on generating creative ideas and big-picture thinking.",
+      name: "Explore",
+      value: scoresArray[0],
     },
-    { name: "Expert", value: relativePercentages[1] },
-    { name: "Planner", value: relativePercentages[2] },
-    { name: "Optimizer", value: relativePercentages[3] },
-    { name: "Connector", value: relativePercentages[4] },
-    { name: "Coach", value: relativePercentages[5] },
-    { name: "Energizer", value: relativePercentages[6] },
-    { name: "Producer", value: relativePercentages[7] },
+    { name: "Analyze", value: scoresArray[1] },
+    { name: "Design", value: scoresArray[2] },
+    { name: "Optimize", value: scoresArray[3] },
+    { name: "Connect", value: scoresArray[4] },
+    { name: "Nurture", value: scoresArray[5] },
+    { name: "Energize", value: scoresArray[6] },
+    { name: "Achieve", value: scoresArray[7] },
   ];
 
   return (
@@ -67,7 +66,7 @@ const ArchetypePieChart = ({ scores }: Props) => {
             cx="50%"
             cy="50%"
             labelLine={false}
-            label={({ name, value, desc }) => `${name}: ${value}%`}
+            label={({ name, value, desc }) => `${name}: ${value}`}
             outerRadius={80}
             fill="#8884d8"
             dataKey="value"

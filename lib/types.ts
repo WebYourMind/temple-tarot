@@ -1,3 +1,5 @@
+import { Score } from "./quiz";
+
 export type ApiResponse = {
   message: string;
   error: string;
@@ -15,25 +17,25 @@ export type Address = {
 };
 
 export type ArchetypeValues = {
-  explorer: string;
-  expert: string;
-  planner: string;
-  optimizer: string;
-  connector: string;
-  coach: string;
-  energizer: string;
-  producer: string;
+  explore: string;
+  analyze: string;
+  design: string;
+  optimize: string;
+  connect: string;
+  nurture: string;
+  energize: string;
+  achieve: string;
 };
 
 export type ThinkingStyle =
-  | "Explorer"
-  | "Expert"
-  | "Planner"
-  | "Optimizer"
-  | "Connector"
-  | "Coach"
-  | "Energizer"
-  | "Producer";
+  | "Explore"
+  | "Analyze"
+  | "Design"
+  | "Optimize"
+  | "Connect"
+  | "Nurture"
+  | "Energize"
+  | "Achieve";
 
 export type UserProfile = {
   name: string;
@@ -43,7 +45,7 @@ export type UserProfile = {
   phone?: string;
   role?: string;
   teamId?: string;
-  scores?: ArchetypeValues;
+  scores?: Score;
   dominantStyle?: ThinkingStyle;
 };
 

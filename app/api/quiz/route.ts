@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { Score } from "lib/quiz";
-import { getRelativePercentages, getSortedStyles } from "lib/utils";
+import { getScoresArray, getSortedStyles } from "lib/utils";
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = "force-dynamic";
@@ -25,32 +25,33 @@ export async function POST(request: NextRequest) {
       userId: string;
     };
 
-    await sql`INSERT INTO thinking_style_scores (
+    await sql`INSERT INTO scores (
         user_id, 
-        explorer, 
-        expert, 
-        planner, 
-        optimizer, 
-        connector, 
-        coach, 
-        energizer, 
-        producer
+        explore, 
+        "analyze", 
+        design, 
+        optimize, 
+        "connect", 
+        nurture, 
+        energize, 
+        achieve
         ) VALUES (
         ${userId}, 
-        ${scores.explorer}, 
-        ${scores.expert}, 
-        ${scores.planner}, 
-        ${scores.optimizer}, 
-        ${scores.connector}, 
-        ${scores.coach}, 
-        ${scores.energizer}, 
-        ${scores.producer}
+        ${scores.explore}, 
+        ${scores.analyze}, 
+        ${scores.design}, 
+        ${scores.optimize}, 
+        ${scores.connect}, 
+        ${scores.nurture}, 
+        ${scores.energize}, 
+        ${scores.achieve}
     ) RETURNING *`;
-    const scoresUpdate = getScoresUpdateMessage(getRelativePercentages(scores));
+    const scoresUpdate = getScoresUpdateMessage(getScoresArray(scores));
     await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${scoresUpdate}, 'assistant')`;
 
     return NextResponse.json({ message: "Scores added successfully." }, { status: 201 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       {
         error: "An error occurred while processing your request.",
@@ -75,7 +76,7 @@ export async function GET(request: NextRequest) {
     // Query to select the latest scores row for the given user ID
     const { rows } = await sql`
       SELECT * 
-      FROM thinking_style_scores
+      FROM scores
       WHERE user_id = ${userId}
       ORDER BY created_at DESC
       LIMIT 1;
@@ -96,14 +97,14 @@ export async function GET(request: NextRequest) {
     // Convert decimal string values to numbers
     const convertedScores = rows.map((row) => ({
       ...row,
-      explorer: parseFloat(row.explorer),
-      planner: parseFloat(row.planner),
-      energizer: parseFloat(row.energizer),
-      connector: parseFloat(row.connector),
-      expert: parseFloat(row.expert),
-      optimizer: parseFloat(row.optimizer),
-      producer: parseFloat(row.producer),
-      coach: parseFloat(row.coach),
+      explore: parseFloat(row.explore),
+      design: parseFloat(row.design),
+      energize: parseFloat(row.energize),
+      connect: parseFloat(row.connect),
+      analyze: parseFloat(row.analyze),
+      optimize: parseFloat(row.optimize),
+      achieve: parseFloat(row.achieve),
+      nurture: parseFloat(row.nurture),
     }));
 
     // If you're expecting only one row (due to LIMIT 1), you can directly access the first element
@@ -120,6 +121,7 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
+    console.error(error);
     // Return an error response
     return NextResponse.json(
       {

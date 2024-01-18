@@ -198,6 +198,7 @@ export default function Team() {
           </Card>
 
           {team.users && <ThinkingStyleDistribution teamMembers={team.users} />}
+          <InviteLink team={team} inviterName={session?.user?.name} />
         </div>
 
         <div className="space-y-4 md:col-span-1">
@@ -209,7 +210,6 @@ export default function Team() {
               adminId={team.adminId}
             />
           )}
-          <InviteLink team={team} inviterName={session?.user?.name} />
         </div>
         <div className="md:col-span-2">
           <Card>
