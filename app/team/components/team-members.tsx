@@ -37,7 +37,7 @@ const TeamMemberList = ({ members, isAdmin, adminId, handleRemove }: Props) => {
               </div>
               <span
                 className={`inline-flex items-center rounded-full bg-muted px-3 py-0.5 text-sm font-medium text-secondary-foreground ${
-                  member.dominantStyle ? "text-green-900" : "text-red-900"
+                  member.dominantStyle ? "text-green-800" : "text-red-800"
                 }`}
               >
                 {member.dominantStyle ? "Assessment Complete" : "Assessment Pending"}

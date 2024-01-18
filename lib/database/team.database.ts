@@ -77,32 +77,32 @@ export const getTeamScore = async (teamId: number) => {
                 users.role AS user_role,
                 users.team_id AS user_team_id,
             
-                latest_scores.explorer,
-                latest_scores.expert,
-                latest_scores.planner,
-                latest_scores.optimizer,
-                latest_scores.connector,
-                latest_scores.coach,
-                latest_scores.energizer,
-                latest_scores.producer
+                latest_scores.explore,
+                latest_scores.analyze,
+                latest_scores.design,
+                latest_scores.optimize,
+                latest_scores.connect,
+                latest_scores.nurture,
+                latest_scores.energize,
+                latest_scores.achieve
             
             FROM users
             
             LEFT JOIN (
                 SELECT
-                    thinking_style_scores.user_id,
-                    thinking_style_scores.explorer,
-                    thinking_style_scores.expert,
-                    thinking_style_scores.planner,
-                    thinking_style_scores.optimizer,
-                    thinking_style_scores.connector,
-                    thinking_style_scores.coach,
-                    thinking_style_scores.energizer,
-                    thinking_style_scores.producer,
-                    thinking_style_scores.created_at,
-                    thinking_style_scores.updated_at,
-                    ROW_NUMBER() OVER(PARTITION BY thinking_style_scores.user_id ORDER BY thinking_style_scores.created_at DESC) AS rn
-                FROM thinking_style_scores
+                    scores.user_id,
+                    scores.explore,
+                    scores.analyze,
+                    scores.design,
+                    scores.optimize,
+                    scores.connect,
+                    scores.nurture,
+                    scores.energize,
+                    scores.achieve,
+                    scores.created_at,
+                    scores.updated_at,
+                    ROW_NUMBER() OVER(PARTITION BY scores.user_id ORDER BY scores.created_at DESC) AS rn
+                FROM scores
             ) AS latest_scores ON users.id = latest_scores.user_id AND latest_scores.rn = 1
             
             where users.team_id = ${teamId}
@@ -124,7 +124,7 @@ export const checkTeamThinkingStyleScore = async (teamMembers: number[]) => {
     const placeholders = teamMembers.map((_, index) => `$${index + 1}`).join(", ");
     const query = `
   SELECT DISTINCT user_id 
-  FROM thinking_style_scores 
+  FROM scores 
   WHERE user_id IN (${placeholders})
 `;
 

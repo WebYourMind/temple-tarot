@@ -68,7 +68,6 @@ const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
 
     return acc;
   }, {});
-
   const data = Object.keys(styleCounts).map((key) => ({ name: key, value: styleCounts[key] }));
   const radarData = data.map((d) => ({ ...d, value: d.value / data.length }));
 

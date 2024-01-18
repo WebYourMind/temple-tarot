@@ -11,14 +11,14 @@ List each team member in bullet points with their single highest ranked thinking
 Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology, focusing on how different styles enhance or challenge team dynamics.
 
 Full Thinking Style Definitions for reference:
-    Explorer: Focused on generating creative ideas and big-picture thinking.
-    Planner: Concerned with designing effective systems and processes.
-    Energizer: Aims to mobilize people into action and inspire enthusiasm.
-    Connector: Builds and strengthens relationships, focusing on the interpersonal aspects.
-    Expert: Seeks to achieve objectivity and insight, often delving into the details.
-    Optimizer: Strives to improve productivity and efficiency, fine-tuning processes.
-    Producer: Driven to achieve completion and maintain momentum, often action-oriented.
-    Coach: Dedicated to cultivating people and potential, focusing on personal development.
+    Explore: Focused on generating creative ideas and big-picture thinking.
+    Design: Concerned with designing effective systems and processes.
+    Energize: Aims to mobilize people into action and inspire enthusiasm.
+    Connect: Builds and strengthens relationships, focusing on the interpersonal aspects.
+    Analyze: Seeks to achieve objectivity and insight, often delving into the details.
+    Optimize: Strives to improve productivity and efficiency, fine-tuning processes.
+    Achieve: Driven to achieve completion and maintain momentum, often action-oriented.
+    Nurture: Dedicated to cultivating people and potential, focusing on personal development.
 
 Analysis Sections:
 
@@ -48,12 +48,12 @@ Conclude the report with a summary of key findings, emphasizing the importance o
 
 export const teamMemberTemplate = `
     Dominant Thinking Style: {dominantStyle}
-    Explorer: {explorer}
-    Expert: {expert}
-    Planner: {planner}
-    Optimizer: {optimizer}
-    Connector: {connector}
-    Coach: {coach}
-    Energizer: {energizer}
-    Producer: {producer}
+    Explore: {explore}
+    Analyze: {analyze}
+    Design: {design}
+    Optimize: {optimize}
+    Connect: {connect}
+    Nurture: {nurture}
+    Energize: {energize}
+    Achieve: {achieve}
 `;
