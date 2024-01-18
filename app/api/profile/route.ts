@@ -122,7 +122,7 @@ export async function DELETE(request: NextRequest) {
     await sql`DELETE FROM accounts WHERE user_id = ${userId}`;
     await sql`DELETE FROM sessions WHERE user_id = ${userId}`;
     await sql`DELETE FROM reports WHERE user_id = ${userId}`;
-    await sql`DELETE FROM thinking_style_scores WHERE user_id = ${userId}`;
+    await sql`DELETE FROM scores WHERE user_id = ${userId}`;
     await sql`DELETE FROM addresses WHERE id = (SELECT address_id FROM users WHERE id = ${userId})`;
 
     // Finally, delete the user

@@ -12,16 +12,16 @@ export const dynamic = "force-dynamic";
 
 const createReportGenerationPrompt = ({
   explorer,
-  expert,
-  planner,
+  analyst,
+  designer,
   optimizer,
   connector,
-  coach,
+  nurturer,
   energizer,
-  producer,
+  achiever,
 }: Score) => {
   // Identify the dominant thinking style based on the highest score
-  const scores = { explorer, expert, planner, optimizer, connector, coach, energizer, producer };
+  const scores = { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever };
   const sortedStyles = getSortedStyles(getScoresArray(scores));
 
   const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
@@ -110,11 +110,11 @@ export async function GET(request: NextRequest) {
 
     // Query to select the latest reports row for the given user ID
     const { rows: reports } = await sql`
-      SELECT reports.*, thinking_style_scores.explorer, thinking_style_scores.expert, thinking_style_scores.planner, 
-            thinking_style_scores.optimizer, thinking_style_scores.connector, thinking_style_scores.coach, 
-            thinking_style_scores.energizer, thinking_style_scores.producer
+      SELECT reports.*, scores.explorer, scores.analyst, scores.designer, 
+            scores.optimizer, scores.connector, scores.nurturer, 
+            scores.energizer, scores.achiever
       FROM reports
-      INNER JOIN thinking_style_scores ON reports.ts_scores_id = thinking_style_scores.id
+      INNER JOIN scores ON reports.ts_scores_id = scores.id
       WHERE reports.user_id = ${userId}
       ORDER BY reports.created_at DESC
       LIMIT 1;
@@ -135,13 +135,13 @@ export async function GET(request: NextRequest) {
     const convertedReports = reports.map((row) => ({
       ...row,
       explorer: parseFloat(row.explorer),
-      planner: parseFloat(row.planner),
+      designer: parseFloat(row.designer),
       energizer: parseFloat(row.energizer),
       connector: parseFloat(row.connector),
-      expert: parseFloat(row.expert),
+      analyst: parseFloat(row.analyst),
       optimizer: parseFloat(row.optimizer),
-      producer: parseFloat(row.producer),
-      coach: parseFloat(row.coach),
+      achiever: parseFloat(row.achiever),
+      nurturer: parseFloat(row.nurturer),
     }));
 
     // Return the latest scores row

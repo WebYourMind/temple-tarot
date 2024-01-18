@@ -12,13 +12,13 @@ Without explicitly stating it, align the report on the teachings of Mark Bonchek
 
 Full Thinking Style Definitions for reference:
     Explorer: Focused on generating creative ideas and big-picture thinking.
-    Planner: Concerned with designing effective systems and processes.
+    Designer: Concerned with designing effective systems and processes.
     Energizer: Aims to mobilize people into action and inspire enthusiasm.
     Connector: Builds and strengthens relationships, focusing on the interpersonal aspects.
-    Expert: Seeks to achieve objectivity and insight, often delving into the details.
+    Analyst: Seeks to achieve objectivity and insight, often delving into the details.
     Optimizer: Strives to improve productivity and efficiency, fine-tuning processes.
-    Producer: Driven to achieve completion and maintain momentum, often action-oriented.
-    Coach: Dedicated to cultivating people and potential, focusing on personal development.
+    Achiever: Driven to achieve completion and maintain momentum, often action-oriented.
+    Nurturer: Dedicated to cultivating people and potential, focusing on personal development.
 
 Analysis Sections:
 
@@ -49,11 +49,11 @@ Conclude the report with a summary of key findings, emphasizing the importance o
 export const teamMemberTemplate = `
     Dominant Thinking Style: {dominantStyle}
     Explorer: {explorer}
-    Expert: {expert}
-    Planner: {planner}
+    Analyst: {analyst}
+    Designer: {designer}
     Optimizer: {optimizer}
     Connector: {connector}
-    Coach: {coach}
+    Nurturer: {nurturer}
     Energizer: {energizer}
-    Producer: {producer}
+    Achiever: {achiever}
 `;

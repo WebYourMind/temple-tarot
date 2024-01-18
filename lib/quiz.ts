@@ -4,13 +4,13 @@ type Answer = {
 
 export type Archetype =
   | "explorer"
-  | "expert"
-  | "planner"
+  | "analyst"
+  | "designer"
   | "optimizer"
   | "connector"
-  | "coach"
+  | "nurturer"
   | "energizer"
-  | "producer";
+  | "achiever";
 
 export type Score = {
   [key in Archetype]: number;
@@ -34,7 +34,7 @@ export const initialQuestions = [
             option: "Macro (I see the forest): I focus on the big picture, looking for overarching trends and patterns",
             points: {
               explorer: 3,
-              planner: 3,
+              designer: 3,
               connector: 3,
               energizer: 3,
             },
@@ -43,13 +43,13 @@ export const initialQuestions = [
             option: "Mostly Macro: While I consider the larger context, I do pay attention to key details",
             points: {
               explorer: 2,
-              planner: 2,
+              designer: 2,
               connector: 2,
               energizer: 2,
               optimizer: 1,
-              expert: 1,
-              coach: 1,
-              producer: 1,
+              analyst: 1,
+              nurturer: 1,
+              achiever: 1,
             },
           },
           {
@@ -57,35 +57,35 @@ export const initialQuestions = [
               "Balanced: (I see the forest and the trees) I like to see both the overall picture and the intricate details as needed",
             points: {
               explorer: 1,
-              planner: 1,
+              designer: 1,
               connector: 1,
               energizer: 1,
               optimizer: 1,
-              expert: 1,
-              coach: 1,
-              producer: 1,
+              analyst: 1,
+              nurturer: 1,
+              achiever: 1,
             },
           },
           {
             option: "Mostly Micro: I tend to delve into the details, although I keep the broader implications in mind",
             points: {
               explorer: 1,
-              planner: 1,
+              designer: 1,
               connector: 1,
               energizer: 1,
               optimizer: 2,
-              expert: 2,
-              coach: 2,
-              producer: 2,
+              analyst: 2,
+              nurturer: 2,
+              achiever: 2,
             },
           },
           {
             option: "Very Micro (I see the leaves): I concentrate on the specifics and fine points of the situation",
             points: {
               optimizer: 3,
-              expert: 3,
-              coach: 3,
-              producer: 3,
+              analyst: 3,
+              nurturer: 3,
+              achiever: 3,
             },
           },
         ],
@@ -104,7 +104,7 @@ export const initialQuestions = [
             lens: "Head",
             points: {
               explorer: 3,
-              expert: 3,
+              analyst: 3,
             },
           },
           {
@@ -113,7 +113,7 @@ export const initialQuestions = [
             lens: "Heart",
             points: {
               connector: 3,
-              coach: 3,
+              nurturer: 3,
             },
           },
           {
@@ -123,8 +123,8 @@ export const initialQuestions = [
             points: {
               explorer: 1,
               connector: 1,
-              expert: 1,
-              coach: 1,
+              analyst: 1,
+              nurturer: 1,
             },
           },
         ],
@@ -143,7 +143,7 @@ export const initialQuestions = [
               "More How: I am drawn to crafting the process, improving efficiency, and ensuring the design is effective",
             lens: "How",
             points: {
-              planner: 3,
+              designer: 3,
               optimizer: 3,
             },
           },
@@ -152,7 +152,7 @@ export const initialQuestions = [
               "More What: My focus is on achieving goals, driving results, and rallying the team around a shared objective for success",
             lens: "What",
             points: {
-              producer: 3,
+              achiever: 3,
               energizer: 3,
             },
           },
@@ -161,10 +161,10 @@ export const initialQuestions = [
               "Blend of Both: I strike a balance, giving equal attention to design and efficiency, energy and execution",
             lens: "Balanced",
             points: {
-              planner: 1,
+              designer: 1,
               energizer: 1,
               optimizer: 1,
-              producer: 1,
+              achiever: 1,
             },
           },
         ],
@@ -183,14 +183,14 @@ export const questions: QuestionSection[] = [
   },
   {
     section: "Micro Head",
-    archetype: "expert",
+    archetype: "analyst",
     questions: [
       "I am drawn to data and analysis; I enjoy delving into the details to understand the mechanics of how things work.",
     ],
   },
   {
     section: "Macro How",
-    archetype: "planner",
+    archetype: "designer",
     questions: [
       "I love to design systems and processes; I am focused on the efficiency and elegance of the overarching structure.",
     ],
@@ -211,7 +211,7 @@ export const questions: QuestionSection[] = [
   },
   {
     section: "Micro Heart",
-    archetype: "coach",
+    archetype: "nurturer",
     questions: [
       "I focus on the individual; I am attentive to personal development and emotional well-being in my approach to relationships.",
     ],
@@ -225,7 +225,7 @@ export const questions: QuestionSection[] = [
   },
   {
     section: "Micro What",
-    archetype: "producer",
+    archetype: "achiever",
     questions: [
       "I am results-driven; I set specific goals and work diligently towards achieving them, often in a hands-on manner.",
     ],
@@ -236,13 +236,13 @@ export function calculateInitialResults(answers: any) {
   // Initialize the results object with all archetypes set to 0
   const results = {
     explorer: 0,
-    expert: 0,
-    planner: 0,
+    analyst: 0,
+    designer: 0,
     optimizer: 0,
     connector: 0,
-    coach: 0,
+    nurturer: 0,
     energizer: 0,
-    producer: 0,
+    achiever: 0,
   };
 
   // Iterate over each answer

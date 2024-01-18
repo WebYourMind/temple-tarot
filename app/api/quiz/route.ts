@@ -25,26 +25,26 @@ export async function POST(request: NextRequest) {
       userId: string;
     };
 
-    await sql`INSERT INTO thinking_style_scores (
+    await sql`INSERT INTO scores (
         user_id, 
         explorer, 
-        expert, 
-        planner, 
+        analyst, 
+        designer, 
         optimizer, 
         connector, 
-        coach, 
+        nurturer, 
         energizer, 
-        producer
+        achiever
         ) VALUES (
         ${userId}, 
         ${scores.explorer}, 
-        ${scores.expert}, 
-        ${scores.planner}, 
+        ${scores.analyst}, 
+        ${scores.designer}, 
         ${scores.optimizer}, 
         ${scores.connector}, 
-        ${scores.coach}, 
+        ${scores.nurturer}, 
         ${scores.energizer}, 
-        ${scores.producer}
+        ${scores.achiever}
     ) RETURNING *`;
     const scoresUpdate = getScoresUpdateMessage(getScoresArray(scores));
     await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${scoresUpdate}, 'assistant')`;
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
     // Query to select the latest scores row for the given user ID
     const { rows } = await sql`
       SELECT * 
-      FROM thinking_style_scores
+      FROM scores
       WHERE user_id = ${userId}
       ORDER BY created_at DESC
       LIMIT 1;
@@ -98,13 +98,13 @@ export async function GET(request: NextRequest) {
     const convertedScores = rows.map((row) => ({
       ...row,
       explorer: parseFloat(row.explorer),
-      planner: parseFloat(row.planner),
+      designer: parseFloat(row.designer),
       energizer: parseFloat(row.energizer),
       connector: parseFloat(row.connector),
-      expert: parseFloat(row.expert),
+      analyst: parseFloat(row.analyst),
       optimizer: parseFloat(row.optimizer),
-      producer: parseFloat(row.producer),
-      coach: parseFloat(row.coach),
+      achiever: parseFloat(row.achiever),
+      nurturer: parseFloat(row.nurturer),
     }));
 
     // If you're expecting only one row (due to LIMIT 1), you can directly access the first element

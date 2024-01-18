@@ -18,24 +18,24 @@ export type Address = {
 
 export type ArchetypeValues = {
   explorer: string;
-  expert: string;
-  planner: string;
+  analyst: string;
+  designer: string;
   optimizer: string;
   connector: string;
-  coach: string;
+  nurturer: string;
   energizer: string;
-  producer: string;
+  achiever: string;
 };
 
 export type ThinkingStyle =
   | "Explorer"
-  | "Expert"
-  | "Planner"
+  | "Analyst"
+  | "Designer"
   | "Optimizer"
   | "Connector"
-  | "Coach"
+  | "Nurturer"
   | "Energizer"
-  | "Producer";
+  | "Achiever";
 
 export type UserProfile = {
   name: string;

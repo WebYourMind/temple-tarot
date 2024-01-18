@@ -56,29 +56,29 @@ export async function POST(req: NextRequest) {
   for (let i = 0; i < teamScore.length; i++) {
     const score = {
       explorer: teamScore[i].explorer,
-      expert: teamScore[i].expert,
-      planner: teamScore[i].planner,
+      analyst: teamScore[i].analyst,
+      designer: teamScore[i].designer,
       optimizer: teamScore[i].optimizer,
       connector: teamScore[i].connector,
-      coach: teamScore[i].coach,
+      nurturer: teamScore[i].nurturer,
       energizer: teamScore[i].energizer,
-      producer: teamScore[i].producer,
+      achiever: teamScore[i].achiever,
     };
 
     const dominantStyle = getDominantStyle(score);
     if (dominantStyle) {
-      const { explorer, expert, planner, optimizer, connector, coach, energizer, producer } = score;
+      const { explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever } = score;
 
       const tempPrompt = teamMemberTemplate
         .replace("{dominantStyle}", dominantStyle)
         .replace("{explorer}", explorer)
-        .replace("{expert}", expert)
-        .replace("{planner}", planner)
+        .replace("{analyst}", analyst)
+        .replace("{designer}", designer)
         .replace("{optimizer}", optimizer)
         .replace("{connector}", connector)
-        .replace("{coach}", coach)
+        .replace("{nurturer}", nurturer)
         .replace("{energizer}", energizer)
-        .replace("{producer}", producer);
+        .replace("{achiever}", achiever);
       teamMemberTemplateList.push(tempPrompt);
     }
   }

@@ -8,13 +8,13 @@ import { Score } from "./quiz";
 
 export const thinkingStyleDescriptions = {
   Explorer: "Focused on generating creative ideas and big-picture thinking.",
-  Expert: "Seeks to achieve objectivity and insight, often delving into the details.",
-  Planner: "Concerned with designing effective systems and processes.",
+  Analyst: "Seeks to achieve objectivity and insight, often delving into the details.",
+  Designer: "Concerned with designing effective systems and processes.",
   Optimizer: "Strives to improve productivity and efficiency, fine-tuning processes.",
   Connector: "Builds and strengthens relationships, focusing on the interpersonal aspects.",
-  Coach: "Dedicated to cultivating people and potential, focusing on personal development.",
+  Nurturer: "Dedicated to cultivating people and potential, focusing on personal development.",
   Energizer: "Aims to mobilize people into action and inspire enthusiasm.",
-  Producer: "Driven to achieve completion and maintain momentum, often action-oriented.",
+  Achiever: "Driven to achieve completion and maintain momentum, often action-oriented.",
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -46,13 +46,13 @@ const ArchetypePieChart = ({ scores }: Props) => {
       name: "Explorer",
       value: scoresArray[0],
     },
-    { name: "Expert", value: scoresArray[1] },
-    { name: "Planner", value: scoresArray[2] },
+    { name: "Analyst", value: scoresArray[1] },
+    { name: "Designer", value: scoresArray[2] },
     { name: "Optimizer", value: scoresArray[3] },
     { name: "Connector", value: scoresArray[4] },
-    { name: "Coach", value: scoresArray[5] },
+    { name: "Nurturer", value: scoresArray[5] },
     { name: "Energizer", value: scoresArray[6] },
-    { name: "Producer", value: scoresArray[7] },
+    { name: "Achiever", value: scoresArray[7] },
   ];
 
   return (

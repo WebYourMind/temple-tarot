@@ -27,13 +27,13 @@ export function absoluteUrl(path: string) {
 export function haveMatchingArchetypeValues(scores: Score, report: Score): boolean {
   const archetypes: (keyof Score)[] = [
     "explorer",
-    "expert",
-    "planner",
+    "analyst",
+    "designer",
     "optimizer",
     "connector",
-    "coach",
+    "nurturer",
     "energizer",
-    "producer",
+    "achiever",
   ];
 
   for (const archetype of archetypes) {
@@ -45,12 +45,21 @@ export function haveMatchingArchetypeValues(scores: Score, report: Score): boole
   return true;
 }
 
-export function getScoresArray({ explorer, expert, planner, optimizer, connector, coach, energizer, producer }: Score) {
-  return [explorer, expert, planner, optimizer, connector, coach, energizer, producer];
+export function getScoresArray({
+  explorer,
+  analyst,
+  designer,
+  optimizer,
+  connector,
+  nurturer,
+  energizer,
+  achiever,
+}: Score) {
+  return [explorer, analyst, designer, optimizer, connector, nurturer, energizer, achiever];
 }
 
 export function getSortedStyles(scores: number[]) {
-  const styleNames = ["Explorer", "Expert", "Planner", "Optimizer", "Connector", "Coach", "Energizer", "Producer"];
+  const styleNames = ["Explorer", "Analyst", "Designer", "Optimizer", "Connector", "Nurturer", "Energizer", "Achiever"];
   const sortedStyles = styleNames
     .map((style, index) => ({ style, score: scores[index] }))
     .sort((a, b) => b.score - a.score) // Sorting in descending order of scores
@@ -82,23 +91,23 @@ export function isValidEmail(email: string) {
 
 export function getDominantStyle({
   explorer,
-  expert,
-  planner,
+  analyst,
+  designer,
   optimizer,
   connector,
-  coach,
+  nurturer,
   energizer,
-  producer,
+  achiever,
 }: Score) {
   const scores = {
     explorer,
-    expert,
-    planner,
+    analyst,
+    designer,
     optimizer,
     connector,
-    coach,
+    nurturer,
     energizer,
-    producer,
+    achiever,
   };
   // Check if any score is null
   const hasNullScore = Object.values(scores).some((score) => score === null);
