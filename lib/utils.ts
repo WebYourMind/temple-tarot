@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
-import { ThinkingStyle } from "./types";
+import { ThinkingStyle, UserProfile } from "./types";
 import { Score } from "./quiz";
 
 export function cn(...inputs: ClassValue[]) {
@@ -111,4 +111,12 @@ export function capitalizeFirstLetter(str: string) {
 
   // Capitalize the first letter and concatenate it with the rest of the string
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function minUsersWithStyles(users: UserProfile[]) {
+  const usersWithDominantStyle = users.filter((user) => user.dominantStyle && user.dominantStyle.trim() !== "");
+
+  const hasAtLeastThreeUsersWithDominantStyle = usersWithDominantStyle.length >= 3;
+
+  return hasAtLeastThreeUsersWithDominantStyle;
 }
