@@ -9,9 +9,9 @@ import toast from "react-hot-toast";
 
 const FeedbackWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [email, setEmail] = useState("adambfad@gmail.com");
-  const [feedback, setFeedback] = useState("It's sick bro.");
-  const [sentiment, setSentiment] = useState("positive");
+  const [email, setEmail] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [sentiment, setSentiment] = useState("");
 
   const submitFeedback = async () => {
     const feedbackData = { email, feedback, sentiment };
