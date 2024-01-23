@@ -18,9 +18,11 @@ export async function POST(req: Request) {
   }
 
   const promotToSuggestedResponse = `
-  Previous AI message: "${lastMessage}" 
-  Generate 3 short suggested question responses to the AI message for the user so that they can easily respond to this message. 
-  Your entire response should be an array in json format.
+  Context: this is an AI response to a user query.
+  AI response: "${lastMessage}" 
+  Generate 3 short suggested questions the user might ask in response to this AI message. Keep the subject in the topic of 'Thinking Styles'.
+  Your entire response should be an array of strings in json format and easily parsable. No markdown. Example:
+  ["response 1", "response 2"]
   `;
 
   try {
@@ -32,13 +34,13 @@ export async function POST(req: Request) {
           content: promotToSuggestedResponse,
         },
       ],
-      temperature: 0.2,
+      temperature: 0,
     });
     const data = (await res.json()) as any;
     const choices = data.choices;
     const suggestedResponses = JSON.parse(choices[0].message.content);
 
-    return NextResponse.json(suggestedResponses, { status: 200 });
+    return NextResponse.json({ suggestedResponses }, { status: 200 });
   } catch (error: any) {
     console.error("Error status:", error.response?.status);
     console.error("Response headers:", [...error.response?.headers.entries()]);

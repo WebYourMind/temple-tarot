@@ -23,6 +23,8 @@ import { toast } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import Loading from "components/loading";
 import { Score } from "lib/quiz";
+import { useSuggestedResponses } from "lib/hooks/use-suggested-response";
+import { SuggestedResponses } from "./suggested-responses";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 export interface ChatProps extends React.ComponentProps<"div"> {
@@ -51,11 +53,28 @@ export function Chat({ id, className }: ChatProps) {
       }
     },
   });
+  const { generateResponses, suggestedResponses, setSuggestedResponses } = useSuggestedResponses();
+  const [lastMessage, setLastMessage] = useState<string | undefined>();
 
   useEffect(() => {
     // Scroll to the bottom of the page
     window.scrollTo(0, document.documentElement.scrollHeight);
   }, [messages]);
+
+  useEffect(() => {
+    if (
+      messages &&
+      messages.length > 0 &&
+      messages[messages.length - 1].role === "assistant" &&
+      messages[messages.length - 1].content !== lastMessage &&
+      !isLoading
+    ) {
+      generateResponses(messages[messages.length - 1].content);
+      setLastMessage(messages[messages.length - 1].content);
+    } else if (isLoading) {
+      setSuggestedResponses(null);
+    }
+  }, [messages, isLoading]);
 
   useEffect(() => {
     async function fetchData() {
@@ -103,6 +122,13 @@ export function Chat({ id, className }: ChatProps) {
           <>
             <ChatList messages={messages} />
             <ChatScrollAnchor trackVisibility={isLoading} />
+            <SuggestedResponses
+              suggestedResponses={suggestedResponses}
+              setSuggestedResponses={setSuggestedResponses}
+              append={append}
+              id={id}
+              isLoading={isLoading}
+            />
           </>
         ) : (
           <EmptyScreen setInput={setInput} scores={scores} />
