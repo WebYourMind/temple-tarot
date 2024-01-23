@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       const { explore, analyze, design, optimize, connect, nurture, energize, achieve } = score;
 
       const tempPrompt = teamMemberTemplate
-        .replace("{dominantStyle}", dominantStyle)
+        // .replace("{dominantStyle}", dominantStyle)
         .replace("{explore}", explore)
         .replace("{analyze}", analyze)
         .replace("{design}", design)

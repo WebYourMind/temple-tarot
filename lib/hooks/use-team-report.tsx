@@ -25,6 +25,7 @@ export function useTeamReport(teamId: string) {
 
       if (!response.ok || !response.body) throw new Error(`Failed to generate team report: ${response.statusText}`);
 
+      toast.success("Began generating a team report. You will receive a notification when it's complete.");
       setTeamReport("");
 
       const reader = response.body.getReader();

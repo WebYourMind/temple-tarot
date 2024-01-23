@@ -6,6 +6,7 @@ import Loading from "components/loading";
 import { useTeamReport } from "lib/hooks/use-team-report";
 import { Team, UserProfile } from "lib/types";
 import { Button } from "components/ui/button";
+import { minUsersWithStyles } from "lib/utils";
 
 type Props = {
   team: Team;
@@ -24,13 +25,7 @@ export default function TeamReport({ team }: Props) {
     return <p>No users found for team.</p>;
   }
 
-  function findUsersWithoutDominantStyle(users: UserProfile[]) {
-    return users.filter((user) => !user.dominantStyle || user.dominantStyle.trim() === "");
-  }
-
-  const usersWithoutDominantStyle = findUsersWithoutDominantStyle(team.users);
-
-  const isWithoutTS = usersWithoutDominantStyle.length > 0;
+  const hasAtLeastThreeUsersWithDominantStyle = minUsersWithStyles(team.users);
 
   return (
     <div className="mx-auto my-20 flex max-w-4xl flex-col items-center space-y-10">
@@ -44,20 +39,22 @@ export default function TeamReport({ team }: Props) {
           )} */}
         </>
       )}
+      {!hasAtLeastThreeUsersWithDominantStyle && (
+        <div className="w-full space-y-4 text-center">
+          <p className="text-center">
+            To unlock a comprehensive analysis of your team&nbsp;s thinking styles, at least 3 team members need to
+            complete the Thinking Style Quiz. This ensures a more accurate and meaningful insight into the collective
+            dynamics and strengths of your team.
+          </p>
+          <p>
+            <i>Currently, less than 3 members have completed the quiz.</i>
+          </p>
+        </div>
+      )}
       {!teamReport && (
-        <Button onClick={generateReport} disabled={isWithoutTS}>
+        <Button onClick={generateReport} disabled={!hasAtLeastThreeUsersWithDominantStyle}>
           Generate AI Insights
         </Button>
-      )}
-      {isWithoutTS && (
-        <div className="w-80">
-          <p className="font-bold">Waiting on Thinking Style results from the following team members:</p>
-          <ul>
-            {usersWithoutDominantStyle.map((user) => (
-              <li key={user.id}>- {user.name}</li>
-            ))}
-          </ul>
-        </div>
       )}
     </div>
   );
