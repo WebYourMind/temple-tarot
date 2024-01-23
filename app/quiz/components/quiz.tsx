@@ -198,7 +198,6 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     if (res.status === 201) {
       if (session?.user?.teamId) {
         generateReport();
-        toast.success("Began generating a team report. You will receive a notification when it's complete.");
       }
       router.push("/report");
     } else if (data.error) {
