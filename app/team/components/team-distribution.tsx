@@ -5,7 +5,7 @@ import { Button } from "components/ui/button";
 import { thinkingStyleDescriptions } from "lib/ArchetypePieChart";
 import { Score } from "lib/quiz";
 import { ThinkingStyle, UserProfile } from "lib/types";
-import { capitalizeFirstLetter } from "lib/utils";
+import { capitalizeFirstLetter, minUsersWithStyles } from "lib/utils";
 import React, { useState } from "react";
 import {
   PieChart,
@@ -59,6 +59,29 @@ export const CustomTooltip = ({ active, payload, teamMembers }: any) => {
 const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
   const [currentPage, setCurrentPage] = useState(0);
 
+  const hasAtLeastThreeUsersWithDominantStyle = minUsersWithStyles(teamMembers);
+
+  if (!hasAtLeastThreeUsersWithDominantStyle) {
+    return (
+      <Card>
+        <div className="space-y-4 text-center">
+          <h2 className="mb-4 text-center text-2xl font-bold">Team Distribution</h2>
+          <p>
+            This section visualizes the collective thinking styles of your team, providing valuable insights into how
+            your team collaborates and approaches challenges.
+          </p>
+          <p>
+            <b>Note:</b> A minimum of 3 team members need to complete the Thinking Style Quiz to activate this feature
+            and ensure the accuracy and relevance of the displayed charts.
+          </p>
+          <p>
+            <i>Current status: Awaiting responses from more team members.</i>
+          </p>
+        </div>
+      </Card>
+    );
+  }
+
   // Calculate the distribution of thinking styles
   const styleCounts = teamMembers.reduce((acc: any, member: UserProfile) => {
     Object.keys(member.scores as Score).forEach((key: string) => {
@@ -68,7 +91,6 @@ const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
 
     return acc;
   }, {});
-
   const data = Object.keys(styleCounts).map((key) => ({ name: key, value: styleCounts[key] }));
   const radarData = data.map((d) => ({ ...d, value: d.value / data.length }));
 

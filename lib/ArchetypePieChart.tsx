@@ -7,14 +7,14 @@ import { ThinkingStyle } from "./types";
 import { Score } from "./quiz";
 
 export const thinkingStyleDescriptions = {
-  Explorer: "Focused on generating creative ideas and big-picture thinking.",
-  Expert: "Seeks to achieve objectivity and insight, often delving into the details.",
-  Planner: "Concerned with designing effective systems and processes.",
-  Optimizer: "Strives to improve productivity and efficiency, fine-tuning processes.",
-  Connector: "Builds and strengthens relationships, focusing on the interpersonal aspects.",
-  Coach: "Dedicated to cultivating people and potential, focusing on personal development.",
-  Energizer: "Aims to mobilize people into action and inspire enthusiasm.",
-  Producer: "Driven to achieve completion and maintain momentum, often action-oriented.",
+  Explore: "Focused on generating creative ideas and big-picture thinking.",
+  Analyze: "Seeks to achieve objectivity and insight, often delving into the details.",
+  Design: "Concerned with designing effective systems and processes.",
+  Optimize: "Strives to improve productivity and efficiency, fine-tuning processes.",
+  Connect: "Builds and strengthens relationships, focusing on the interpersonal aspects.",
+  Nurture: "Dedicated to cultivating people and potential, focusing on personal development.",
+  Energize: "Aims to mobilize people into action and inspire enthusiasm.",
+  Achieve: "Driven to achieve completion and maintain momentum, often action-oriented.",
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -43,16 +43,16 @@ const ArchetypePieChart = ({ scores }: Props) => {
   const scoresArray = getScoresArray(scores);
   const data = [
     {
-      name: "Explorer",
+      name: "Explore",
       value: scoresArray[0],
     },
-    { name: "Expert", value: scoresArray[1] },
-    { name: "Planner", value: scoresArray[2] },
-    { name: "Optimizer", value: scoresArray[3] },
-    { name: "Connector", value: scoresArray[4] },
-    { name: "Coach", value: scoresArray[5] },
-    { name: "Energizer", value: scoresArray[6] },
-    { name: "Producer", value: scoresArray[7] },
+    { name: "Analyze", value: scoresArray[1] },
+    { name: "Design", value: scoresArray[2] },
+    { name: "Optimize", value: scoresArray[3] },
+    { name: "Connect", value: scoresArray[4] },
+    { name: "Nurture", value: scoresArray[5] },
+    { name: "Energize", value: scoresArray[6] },
+    { name: "Achieve", value: scoresArray[7] },
   ];
 
   return (

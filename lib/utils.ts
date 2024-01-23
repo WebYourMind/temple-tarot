@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
-import { ThinkingStyle } from "./types";
+import { ThinkingStyle, UserProfile } from "./types";
 import { Score } from "./quiz";
 
 export function cn(...inputs: ClassValue[]) {
@@ -26,14 +26,14 @@ export function absoluteUrl(path: string) {
 // Function to check if the archetype values match in scores and report objects
 export function haveMatchingArchetypeValues(scores: Score, report: Score): boolean {
   const archetypes: (keyof Score)[] = [
-    "explorer",
-    "expert",
-    "planner",
-    "optimizer",
-    "connector",
-    "coach",
-    "energizer",
-    "producer",
+    "explore",
+    "analyze",
+    "design",
+    "optimize",
+    "connect",
+    "nurture",
+    "energize",
+    "achieve",
   ];
 
   for (const archetype of archetypes) {
@@ -45,12 +45,12 @@ export function haveMatchingArchetypeValues(scores: Score, report: Score): boole
   return true;
 }
 
-export function getScoresArray({ explorer, expert, planner, optimizer, connector, coach, energizer, producer }: Score) {
-  return [explorer, expert, planner, optimizer, connector, coach, energizer, producer];
+export function getScoresArray({ explore, analyze, design, optimize, connect, nurture, energize, achieve }: Score) {
+  return [explore, analyze, design, optimize, connect, nurture, energize, achieve];
 }
 
 export function getSortedStyles(scores: number[]) {
-  const styleNames = ["Explorer", "Expert", "Planner", "Optimizer", "Connector", "Coach", "Energizer", "Producer"];
+  const styleNames = ["Explore", "Analyze", "Design", "Optimize", "Connect", "Nurture", "Energize", "Achieve"];
   const sortedStyles = styleNames
     .map((style, index) => ({ style, score: scores[index] }))
     .sort((a, b) => b.score - a.score) // Sorting in descending order of scores
@@ -80,28 +80,19 @@ export function isValidEmail(email: string) {
   return regex.test(email);
 }
 
-export function getDominantStyle({
-  explorer,
-  expert,
-  planner,
-  optimizer,
-  connector,
-  coach,
-  energizer,
-  producer,
-}: Score) {
+export function getDominantStyle({ explore, analyze, design, optimize, connect, nurture, energize, achieve }: Score) {
   const scores = {
-    explorer,
-    expert,
-    planner,
-    optimizer,
-    connector,
-    coach,
-    energizer,
-    producer,
+    explore,
+    analyze,
+    design,
+    optimize,
+    connect,
+    nurture,
+    energize,
+    achieve,
   };
   // Check if any score is null
-  const hasNullScore = Object.values(scores).some((score) => score === null);
+  const hasNullScore = Object.values(scores).some((score) => score === null || Number.isNaN(score));
   if (hasNullScore) {
     return null;
   }
@@ -120,4 +111,12 @@ export function capitalizeFirstLetter(str: string) {
 
   // Capitalize the first letter and concatenate it with the rest of the string
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function minUsersWithStyles(users: UserProfile[]) {
+  const usersWithDominantStyle = users.filter((user) => user.dominantStyle && user.dominantStyle.trim() !== "");
+
+  const hasAtLeastThreeUsersWithDominantStyle = usersWithDominantStyle.length >= 3;
+
+  return hasAtLeastThreeUsersWithDominantStyle;
 }

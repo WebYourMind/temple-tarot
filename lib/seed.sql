@@ -61,29 +61,29 @@ CREATE TABLE chat_messages (
 CREATE TABLE scores (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
-    explorer NUMERIC(5,2),
-    analyst NUMERIC(5,2),
-    designer NUMERIC(5,2),
-    optimizer NUMERIC(5,2),
-    connector NUMERIC(5,2),
-    nurturer NUMERIC(5,2),
-    energizer NUMERIC(5,2),
-    achiever NUMERIC(5,2),
+    explore NUMERIC(5,2),
+    analyze NUMERIC(5,2),
+    design NUMERIC(5,2),
+    optimize NUMERIC(5,2),
+    connect NUMERIC(5,2),
+    nurture NUMERIC(5,2),
+    energize NUMERIC(5,2),
+    achieve NUMERIC(5,2),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE thinking_style_scores (
+CREATE TABLE scores (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
-    explorer NUMERIC(5,2),
-    planner NUMERIC(5,2),
-    energizer NUMERIC(5,2),
-    connector NUMERIC(5,2),
-    expert NUMERIC(5,2),
-    optimizer NUMERIC(5,2),
-    producer NUMERIC(5,2),
-    coach NUMERIC(5,2),
+    explore NUMERIC(5,2),
+    design NUMERIC(5,2),
+    energize NUMERIC(5,2),
+    connect NUMERIC(5,2),
+    analyze NUMERIC(5,2),
+    optimize NUMERIC(5,2),
+    achieve NUMERIC(5,2),
+    nurture NUMERIC(5,2),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -92,7 +92,6 @@ CREATE TABLE reports (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
     scores_id INTEGER NOT NULL REFERENCES scores(id),
-    ts_scores_id INTEGER NOT NULL REFERENCES thinking_style_scores(id),
     report TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

@@ -25,9 +25,9 @@ The first step is to understand what kind of thinker you are. I’ve outlined th
 
 As an alternative mental model, think about your team as a portfolio of thinking styles. Just as you construct an investment portfolio differently for different investment objectives, you want construct your thinking portfolio.
 
-Most teams need every kind of thinking style at one point or another. So just as geese tend to take turns leading the flock, different thinking styles should also take turns. In the beginning of the project, Explorers and Planners are helpful to set the strategy and structure the work effort. Then Connectors and Energizers take the lead to create the vision, access resources, and enroll the stakeholders.
+Most teams need every kind of thinking style at one point or another. So just as geese tend to take turns leading the flock, different thinking styles should also take turns. In the beginning of the project, Explorers and Designers are helpful to set the strategy and structure the work effort. Then Connectors and Energizers take the lead to create the vision, access resources, and enroll the stakeholders.
 
-As strategy and planning give way to execution and operations, those with a more micro orientation take the lead. Experts and Optimizers work together to work out the details and find the efficiencies. Meanwhile, Producers execute the plan and cross things off the list, while Coaches keep everyone engaged and performing at their best.
+As strategy and planning give way to execution and operations, those with a more micro orientation take the lead. Analysts and Optimizers work together to work out the details and find the efficiencies. Meanwhile, Achievers execute the plan and cross things off the list, while Nurtureres keep everyone engaged and performing at their best.
 
 The shift from doing to thinking has consequences for the role of the team leader. First, the leader is responsible for maintaining the effectiveness and alignment of the team’s mental model. This is more than keeping the team informed. Information gets filtered in or out depending on the mental model. So team leaders are responsible for setting the context more than the content of people’s thinking.
 
@@ -35,7 +35,7 @@ Second, the leader is responsible for creating the right mix of thinking styles.
 
 Thinking styles can also be helpful in making hiring and staffing decisions. Consider not just the experience and personality of the candidate, but also their thinking styles.
 
-As an example, say you are hiring new sales team or adding to an existing team. What kind of thinking styles are most important? Do the salespeople need to come up with creative ideas? Look for an Explorer style. To structure effective solutions — Planner. To answer technical questions — Expert. To improve existing systems — Optimizer. To form coalitions — Connector. To build deep relationships — Coach. To push the pipeline — Producer. To close the deal— Energizer.
+As an example, say you are hiring new sales team or adding to an existing team. What kind of thinking styles are most important? Do the salespeople need to come up with creative ideas? Look for an Explorer style. To structure effective solutions — Designer. To answer technical questions — Analyst. To improve existing systems — Optimizer. To form coalitions — Connector. To build deep relationships — Nurturer. To push the pipeline — Achiever. To close the deal— Energizer.
 
 When hiring, also consider more than what they know and how fast they learn. You want people who are able to unlearn and shift their thinking. Do they have not only mental ability, but mental agility. In some roles, it’s also critical that they have an ability to the shift the thinking of others. Great leaders today are able to persuade by creating and shaping the mental models of their organizations and communities.
 

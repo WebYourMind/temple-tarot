@@ -1,59 +1,50 @@
 export const teamReportTemplate = `
-Generate a comprehensive team report in markdown format assessing the dynamics of the team based on individual thinking styles. 
-Emphasize cultivating missing styles rather than replacing team members.
-
+Generate a comprehensive team report in markdown format assessing the dynamics of the team based on its member's thinking styles. 
 
 The team consists of the following members and their respective thinking styles:
 {teamMembers}
 
-List each team member in bullet points with their single highest ranked thinking style.
+Rather than single out individual members, view the team as one whole organism consisting of varying thinking styles.
 
 Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology, focusing on how different styles enhance or challenge team dynamics.
 
 Full Thinking Style Definitions for reference:
-    Explorer: Focused on generating creative ideas and big-picture thinking.
-    Planner: Concerned with designing effective systems and processes.
-    Energizer: Aims to mobilize people into action and inspire enthusiasm.
-    Connector: Builds and strengthens relationships, focusing on the interpersonal aspects.
-    Expert: Seeks to achieve objectivity and insight, often delving into the details.
-    Optimizer: Strives to improve productivity and efficiency, fine-tuning processes.
-    Producer: Driven to achieve completion and maintain momentum, often action-oriented.
-    Coach: Dedicated to cultivating people and potential, focusing on personal development.
+    Explore: Focused on generating creative ideas and big-picture thinking.
+    Design: Concerned with designing effective systems and processes.
+    Energize: Aims to mobilize people into action and inspire enthusiasm.
+    Connect: Builds and strengthens relationships, focusing on the interpersonal aspects.
+    Analyze: Seeks to achieve objectivity and insight, often delving into the details.
+    Optimize: Strives to improve productivity and efficiency, fine-tuning processes.
+    Achieve: Driven to achieve completion and maintain momentum, often action-oriented.
+    Nurture: Dedicated to cultivating people and potential, focusing on personal development.
 
 Analysis Sections:
 
-Team Composition Overview:
-    Begin with a brief summary of the team's overall composition, highlighting the dominant thinking style of each member without providing detailed scores. This condensed overview will give a snapshot of the team's collective thinking styles, laying the foundation for the subsequent analysis.
-    Note: Don't include the team member names or scores, or any other identifying information in this section. Not event Team Member 1, Team Member 2, etc. This is to ensure the report can be shared with the team without revealing individual scores.     
+Collective Strengths: Highlight the dominant and stronger thinking styles within the team, explaining how these strengths contribute to the team's success. This positive reinforcement encourages team members to leverage their natural thinking styles for the benefit of the team.
 
-Strengths and Synergies:
-Explore and accentuate the strengths inherent in the team's current thinking style mix. Discuss how the diverse styles can complement each other, fostering collaboration and innovation. Emphasize the positive aspects of the team's dynamic interplay.
+Diversity in Thinking: Acknowledge the diversity of thinking styles specifically present within this team and illustrate how this variety is a strategic asset, fostering creativity, innovation, and comprehensive problem-solving.
 
-Potential Challenges:
-Identify potential challenges or conflicts that may arise from the combination of thinking styles. Discuss how certain styles might clash and propose strategies to mitigate these challenges. Maintain a focus on constructive solutions and fostering a harmonious team environment.
+Gaps and Opportunities: Instead of pointing out individual deficiencies, the report can identify areas where the team as a whole could benefit from additional perspectives. For instance, if the team collectively scores lower in a certain thinking style, the report can suggest how embracing this style can lead to more balanced decision-making and problem-solving.
 
-Role Alignment Recommendations:
-Provide recommendations for aligning team members with roles or tasks that align with their predominant thinking styles. Emphasize leveraging each member's strengths to optimize team performance without necessitating personnel changes.
+Recommendations for Development: Provide suggestions for workshops, training, or team-building activities that can help develop underrepresented thinking styles within the team. These recommendations should be framed positively, as opportunities for growth and learning.
 
+Strategies for Collaboration: Offer strategies or communication techniques that cater to the teams unique pattern of thinking styles, encouraging team members to appreciate and utilize the unique perspectives each member brings to the table.
 
-Enhancing Communication:
-Offer advice on enhancing communication and understanding among team members with different thinking styles. Suggest communication strategies and team-building activities that acknowledge and utilize the diversity of thought within the team.
+Actionable Goals: Set actionable goals for the team to work on, focusing on inclusive participation and collective growth. These goals can encourage the team to engage with different thinking styles and learn from each other.
 
-Development Opportunities:
-Recommend areas for individual and team development to create a more balanced and versatile team. Propose training or experiences that can benefit the team, focusing on cultivating missing thinking styles to enhance overall team effectiveness.
+Possible Success Stories: Include example scenarios where the team could leverage the strengths of their thinking styles to lead to successful outcomes, reinforcing the value of a multi-faceted team approach.
 
 Conclusion:
 Conclude the report with a summary of key findings, emphasizing the importance of cultivating missing thinking styles within the team. Provide final recommendations for the team to optimize its dynamics, fostering an environment of collaboration, innovation, and overall enhanced performance.
 `;
 
 export const teamMemberTemplate = `
-    Dominant Thinking Style: {dominantStyle}
-    Explorer: {explorer}
-    Expert: {expert}
-    Planner: {planner}
-    Optimizer: {optimizer}
-    Connector: {connector}
-    Coach: {coach}
-    Energizer: {energizer}
-    Producer: {producer}
+    Explore: {explore}
+    Analyze: {analyze}
+    Design: {design}
+    Optimize: {optimize}
+    Connect: {connect}
+    Nurture: {nurture}
+    Energize: {energize}
+    Achieve: {achieve}
 `;

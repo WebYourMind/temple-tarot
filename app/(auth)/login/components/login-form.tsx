@@ -1,5 +1,5 @@
 "use client";
-import { useState, type SyntheticEvent } from "react";
+import { useState, type SyntheticEvent, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
@@ -14,16 +14,23 @@ export default function LoginForm() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const redirectUrl = searchParams?.get("redirect");
+  const error = searchParams?.get("error");
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
 
-    const redirectUrl = searchParams?.get("redirect");
-
     const result = await signIn("credentials", {
       email,
       password,
+      redirect: true,
       callbackUrl: redirectUrl || "/",
     });
 
