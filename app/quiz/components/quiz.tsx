@@ -2,11 +2,10 @@
 import { Button } from "components/ui/button";
 import { Score, calculateInitialResults, calculateScores, initialQuestions, questions } from "lib/quiz";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { ArrowLeftIcon, ArrowRightIcon, CheckCircledIcon, ColorWheelIcon } from "@radix-ui/react-icons";
+import { useEffect, useState } from "react";
+import { ArrowLeftIcon, ArrowRightIcon, ColorWheelIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 import { useTeamReport } from "lib/hooks/use-team-report";
-import toast from "react-hot-toast";
 
 type Answer = {
   [question: string]: number;
@@ -14,13 +13,13 @@ type Answer = {
 
 const archetypeStatements = {
   explore: "I am always looking for new experiences and ideas.",
-  analyze: "I seek to achieve objectivity and insight, often delving into the details.", // Analyze equivalent
-  design: "I am concerned with designing effective systems and processes.", // Design equivalent
+  analyze: "I seek to achieve objectivity and insight, often delving into the details.",
+  design: "I am concerned with designing effective systems and processes.",
   optimize: "I constantly seek to improve productivity and efficiency, fine-tuning processes.",
   connect: "I focus on building and strengthening relationships, emphasizing interpersonal aspects.",
-  nurture: "I am dedicated to cultivating people and potential, focusing on personal development.", // Nurture equivalent
+  nurture: "I am dedicated to cultivating people and potential, focusing on personal development.",
   energize: "I aim to mobilize people into action and inspire enthusiasm.",
-  achieve: "I am driven to achieve completion and maintain momentum, often being action-oriented.", // Achieve equivalent
+  achieve: "I am driven to achieve completion and maintain momentum, often being action-oriented.",
 };
 
 type ArchetypeKey = keyof typeof archetypeStatements;
@@ -30,67 +29,112 @@ type FinalQuestionOption = {
   statement: string;
 };
 
-const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
-  const isDeepQuestion = type === "deep";
+interface AgreeDisagreeProps {
+  question: string | any;
+  onSelectOption: (question: string, option: number) => void;
+  selectedOption: number;
+}
 
+const AgreeDisagree = ({ question, onSelectOption, selectedOption }: AgreeDisagreeProps) => {
+  const options = [
+    { value: 0, size: "w-12 h-12 border-red-400" },
+    { value: 1, size: "w-10 h-10 border-red-400" },
+    { value: 2, size: "w-8 h-8 border-muted-foreground" },
+    { value: 3, size: "w-10 h-10 border-green-400" },
+    { value: 4, size: "w-12 h-12 border-green-400" },
+  ];
+  return (
+    <div className="flex flex-col items-center justify-center p-4">
+      <p className="mb-16 text-center text-2xl">{question as string}</p>
+      <div className="flex w-full items-center md:max-w-lg">
+        <span className="mr-4 hidden text-lg font-medium md:block">DISAGREE</span>
+        <div className="flex w-full items-center justify-between">
+          {options.map((option, index) => (
+            <div key={index} className="relative">
+              <input
+                id={`radio-${index}`}
+                type="radio"
+                name="quizOption"
+                value={option.value}
+                checked={selectedOption === option.value}
+                onChange={() => onSelectOption(question as string, option.value)}
+                className="sr-only" // Hide the actual input but keep it accessible
+              />
+              <label htmlFor={`radio-${index}`} className="block cursor-pointer">
+                <span className={`block ${option.size} rounded-full border-2 hover:bg-accent`}></span>
+              </label>
+              {selectedOption === option.value && (
+                <span className="absolute left-1/2 top-1/2 block h-full w-full -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-foreground bg-primary"></span>
+              )}
+            </div>
+          ))}
+        </div>
+        <span className="ml-4 hidden text-lg font-medium md:block">AGREE</span>
+      </div>
+      <div className="mt-5 flex w-full justify-between md:hidden">
+        <span>DISAGREE</span>
+        <span>AGREE</span>
+      </div>
+    </div>
+  );
+};
+
+const MultipleChoice = ({ question, onSelectOption, selectedOption }: AgreeDisagreeProps) => {
   return (
     <>
-      <label className="mb-5 block text-lg text-foreground">{question.prompt || question}</label>
-      <div className="flex flex-col gap-2">
-        {(isDeepQuestion ? Array.from({ length: 5 }, (_, i) => ({ option: i + 1 })) : question.choices).map(
-          (choice: any, index: any) => {
-            const selected = isDeepQuestion
-              ? answers[question] === choice.option
-              : answers[question.prompt] === choice.option;
-            return (
-              <label
-                key={index}
-                className={`flex cursor-pointer items-center justify-between rounded-sm border p-2 ${
-                  selected
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-card bg-card text-card-foreground"
-                } hover:bg-accent hover:text-accent-foreground`}
-              >
-                <input
-                  type="radio"
-                  name={question.prompt || question}
-                  className="hidden"
-                  value={choice.option}
-                  onChange={() => handleOptionChange(question.prompt || question, choice.option)}
-                  checked={selected}
-                />
-                <span className="ml-2">{choice.option}</span>
-                <div className="w-8">
-                  {selected && <CheckCircledIcon width="25" height="25" className="text-primary-foreground" />}
-                </div>
-              </label>
-            );
-          }
-        )}
+      <h2 className="mb-10 block text-xl text-foreground">{(question.prompt as string) || question}</h2>
+      <div className="flex flex-col space-y-4">
+        {question.choices.map((choice: any, index: any) => {
+          const selected = selectedOption === choice.option;
+          return (
+            <label
+              key={index}
+              className={`flex cursor-pointer items-center justify-between rounded-sm border p-2 ${
+                selected
+                  ? "border-primary-foreground bg-primary text-primary-foreground"
+                  : "border-muted-foreground bg-background text-foreground"
+              } hover:bg-accent hover:text-accent-foreground`}
+            >
+              <input
+                type="radio"
+                name={question.prompt || question}
+                className="hidden"
+                value={choice.option}
+                onChange={() => onSelectOption(question.prompt, choice.option)}
+                checked={selected}
+              />
+              <span className="ml-2">{choice.option}</span>
+            </label>
+          );
+        })}
       </div>
     </>
   );
 };
 
+const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
+  const isDeepQuestion = type === "deep";
+
+  if (isDeepQuestion) {
+    return <AgreeDisagree question={question} onSelectOption={handleOptionChange} selectedOption={answers[question]} />;
+  }
+
+  return (
+    <MultipleChoice question={question} selectedOption={answers[question.prompt]} onSelectOption={handleOptionChange} />
+  );
+};
+
 const Question = ({ section, answers, handleOptionChange, initial }: any) => {
   return (
-    <div className="mb-8">
-      {!initial && (
-        <p className="mb-5 text-sm italic">
-          Please rate how strongly you agree with the statement below a scale from 1 (not at all like me) to 5 (very
-          much like me).
-        </p>
-      )}
-      <h2 className="mb-2 text-xl font-bold">{section.section}</h2>
+    <div className="my-5">
       {section.questions.map((question: any, questionIndex: number) => (
-        <div key={questionIndex} className="mb-4">
-          <QuestionItem
-            question={question}
-            answers={answers}
-            handleOptionChange={handleOptionChange}
-            type={initial ? "initial" : "deep"}
-          />
-        </div>
+        <QuestionItem
+          key={questionIndex}
+          question={question}
+          answers={answers}
+          handleOptionChange={handleOptionChange}
+          type={initial ? "initial" : "deep"}
+        />
       ))}
     </div>
   );
@@ -99,9 +143,11 @@ const Question = ({ section, answers, handleOptionChange, initial }: any) => {
 const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   const [answers, setAnswers] = useState<Answer>({});
   const [initialAnswers, setInitialAnswers] = useState<any>({});
+  const [finalAnswer, setFinalAnswer] = useState<any>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [contentVisible, setContentVisible] = useState(true);
+  const [showSubmit, setShowSubmit] = useState(false);
   const { data: session } = useSession() as any;
   const { generateReport } = useTeamReport(session?.user?.teamId);
 
@@ -159,6 +205,27 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     return Object.keys(scores).filter((key) => scores[key] === highestScore);
   }
 
+  useEffect(() => {
+    // are all questions answered
+    // calculate scores
+    // check if tie breakers
+    // if so, show finalQuestion
+    // else show submit
+    const allQuestionsAnswered = areAllQuestionsAnswered();
+    if (allQuestionsAnswered) {
+      const initialScores = calculateInitialResults(initialAnswers);
+      const scores = calculateScores(answers, initialScores);
+      setQuizScores(scores);
+
+      const highscores = getHighestRankingArchetypes(scores) as ArchetypeKey[];
+      if (highscores.length > 1) {
+        askFinalQuestion(highscores);
+      } else {
+        setShowSubmit(true);
+      }
+    }
+  }, [answers, initialAnswers]);
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!areAllQuestionsAnswered()) {
@@ -207,13 +274,14 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   }
 
   const handleFinalQuestionResponse = async (selectedStyle: ArchetypeKey) => {
-    setIsLoading(true);
-    const updatedScores = { ...quizScores, [selectedStyle]: quizScores[selectedStyle] + 7 };
-    await saveResults(updatedScores);
+    const updatedScores = { ...quizScores, [selectedStyle]: quizScores[selectedStyle] + 5 };
+    setFinalAnswer(selectedStyle);
+    setQuizScores(updatedScores);
+    setShowSubmit(true);
   };
 
   const InitialInfo = () => (
-    <div className="grid gap-2">
+    <div className="space-y-4 text-lg">
       <p>
         For this assessment, we aim to understand your natural way of thinking. This isn&apos;t about what you strive to
         do but rather how you inherently process information and respond to situations, akin to being right or
@@ -231,6 +299,10 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   );
 
   const renderCurrentQuestions = () => {
+    if (finalQuestionVisible) {
+      return renderFinalQuestion();
+    }
+
     if (isInitialInfo) {
       return <InitialInfo />;
     } else if (isInitialQuestions) {
@@ -250,7 +322,11 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
       {finalQuestionOptions.map((option, index) => (
         <label
           key={index}
-          className="mb-2 flex cursor-pointer items-center justify-between rounded-sm border border-card bg-card p-2 text-card-foreground hover:bg-accent hover:text-accent-foreground"
+          className={`mb-2 flex cursor-pointer items-center justify-between rounded-sm border p-2 hover:bg-accent hover:text-accent-foreground ${
+            finalAnswer === option.style
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-card bg-card text-card-foreground"
+          }`}
         >
           <input
             type="radio"
@@ -292,25 +368,26 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     return true;
   };
 
+  const SubmitButton = () => (
+    <Button onClick={handleSubmit} disabled={isLoading || !areAllQuestionsAnswered()} className="float-right">
+      {isLoading ? (
+        <>
+          <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />
+          Processing
+        </>
+      ) : (
+        "Submit"
+      )}
+    </Button>
+  );
+
   return (
     <div className="fad flex grow flex-col justify-between">
+      <h1 className="text-2xl font-bold">Discover your thinking style</h1>
       <form onSubmit={handleSubmit} className={animationClasses}>
         {finalQuestionVisible ? renderFinalQuestion() : renderCurrentQuestions()}
-
-        {currentPage === totalPages - 1 && !finalQuestionVisible && (
-          <Button type="submit" disabled={isLoading || !areAllQuestionsAnswered()} className="float-right">
-            {isLoading ? (
-              <>
-                <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />
-                Processing
-              </>
-            ) : (
-              "Submit"
-            )}
-          </Button>
-        )}
       </form>
-      {!finalQuestionVisible && (
+      {!finalQuestionVisible ? (
         <div>
           <Button
             variant={"outline"}
@@ -319,14 +396,24 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
           >
             <ArrowLeftIcon />
           </Button>
-          <Button
-            variant={"outline"}
-            className={currentPage >= totalPages - 1 ? "hidden" : " float-right"}
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            <ArrowRightIcon />
-          </Button>
+          {showSubmit && currentPage >= totalPages - 1 ? (
+            <SubmitButton />
+          ) : (
+            <Button
+              variant={"outline"}
+              className={currentPage >= totalPages - 1 ? "hidden" : " float-right"}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              <ArrowRightIcon />
+            </Button>
+          )}
         </div>
+      ) : showSubmit ? (
+        <div>
+          <SubmitButton />
+        </div>
+      ) : (
+        <div className="h-10" />
       )}
     </div>
   );

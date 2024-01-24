@@ -20,7 +20,7 @@ export const initialQuestions = [
     questions: [
       {
         prompt:
-          "Considering the saying about the forest and the trees, where do you focus when faced with a new problem or situation?",
+          "Considering the saying 'not seeing the forest for the trees', where do you focus when faced with a new problem or situation?",
         choices: [
           {
             option: "Macro (I see the forest): I focus on the big picture, looking for overarching trends and patterns",
