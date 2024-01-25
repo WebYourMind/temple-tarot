@@ -109,15 +109,14 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
 
     if (userId) {
       const initialScores = calculateInitialResults(initialAnswers);
-      const scores = calculateScores(answers, initialScores);
+      let scores = calculateScores(answers, initialScores);
       setQuizScores(scores);
 
-      const highscores = getHighestRankingArchetypes(scores) as ArchetypeKey[];
-      if (highscores.length > 1) {
-        askFinalQuestion(highscores);
-      } else {
-        await saveResults(scores);
+      if (finalAnswer) {
+        scores[finalAnswer] += 7;
       }
+
+      await saveResults(scores);
     } else {
       console.error("No user");
     }
@@ -212,7 +211,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   return (
     <div className="fad flex grow flex-col justify-between">
       <h1 className="text-2xl font-bold">Discover your thinking style</h1>
-      <form onSubmit={handleSubmit} className={animationClasses}>
+      <div className={animationClasses}>
         {finalQuestionVisible ? (
           <TieBreaker
             options={finalQuestionOptions}
@@ -222,7 +221,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
         ) : (
           renderCurrentQuestions()
         )}
-      </form>
+      </div>
       {/* Quiz Navigation & Submit */}
       {!finalQuestionVisible ? (
         <div>
