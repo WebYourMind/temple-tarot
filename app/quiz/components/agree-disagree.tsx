@@ -1,10 +1,12 @@
+import { DeepQuestion } from "lib/quiz";
+
 interface AgreeDisagreeProps {
-  question: string;
+  section: DeepQuestion;
   onSelectOption: (question: string, option: number) => void;
   selectedOption: number;
 }
 
-const AgreeDisagree = ({ question, onSelectOption, selectedOption }: AgreeDisagreeProps) => {
+const AgreeDisagree = ({ section, onSelectOption, selectedOption }: AgreeDisagreeProps) => {
   const options = [
     { value: 0, size: "w-12 h-12 border-purple-400" },
     { value: 1, size: "w-10 h-10 border-purple-400" },
@@ -12,9 +14,10 @@ const AgreeDisagree = ({ question, onSelectOption, selectedOption }: AgreeDisagr
     { value: 3, size: "w-10 h-10 border-green-400" },
     { value: 4, size: "w-12 h-12 border-green-400" },
   ];
+
   return (
-    <div className="flex flex-col items-center justify-center p-4">
-      <p className="mb-16 text-center text-2xl">{question as string}</p>
+    <div className="my-5 flex flex-col items-center justify-center p-4">
+      <p className="mb-16 text-center text-2xl">{section.statement as string}</p>
       <div className="flex w-full items-center md:max-w-lg">
         <span className="mr-4 hidden text-lg font-medium md:block">DISAGREE</span>
         <div className="flex w-full items-center justify-between">
@@ -26,7 +29,7 @@ const AgreeDisagree = ({ question, onSelectOption, selectedOption }: AgreeDisagr
                 name="quizOption"
                 value={option.value}
                 checked={selectedOption === option.value}
-                onChange={() => onSelectOption(question as string, option.value)}
+                onChange={() => onSelectOption(section.statement as string, option.value)}
                 className="sr-only" // Hide the actual input but keep it accessible
               />
               <label htmlFor={`radio-${index}`} className="block cursor-pointer">

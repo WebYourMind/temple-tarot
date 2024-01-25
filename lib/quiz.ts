@@ -17,162 +17,146 @@ type Choice = {
   points: Points;
 };
 
-export type Question = {
-  choices: Choice[];
-  prompt: string;
-};
-
 export type DeepQuestion = {
-  section: string;
+  name: string;
   archetype: Archetype;
-  questions: string[];
+  statement: string;
 };
 
 export type InitialQuestion = {
-  section: string;
-  questions: Question[];
+  name: string;
+  choices: Choice[];
+  statement: string;
 };
 
 export const initialQuestions: InitialQuestion[] = [
   {
-    section: "Macro/Micro Lens",
-    questions: [
+    name: "Macro/Micro Lens",
+    statement:
+      "Considering the saying 'not seeing the forest for the trees', where do you focus when faced with a new problem or situation?",
+    choices: [
       {
-        prompt:
-          "Considering the saying 'not seeing the forest for the trees', where do you focus when faced with a new problem or situation?",
-        choices: [
-          {
-            option: "Macro (I see the forest): I focus on the big picture, looking for overarching trends and patterns",
-            points: {
-              explore: 3,
-              design: 3,
-              connect: 3,
-              energize: 3,
-            },
-          },
-          {
-            option: "Mostly Macro: While I consider the larger context, I do pay attention to key details",
-            points: {
-              explore: 2,
-              design: 2,
-              connect: 2,
-              energize: 2,
-              optimize: 1,
-              analyze: 1,
-              nurture: 1,
-              achieve: 1,
-            },
-          },
-          {
-            option:
-              "Balanced: (I see the forest and the trees) I like to see both the overall picture and the intricate details as needed",
-            points: {
-              explore: 1,
-              design: 1,
-              connect: 1,
-              energize: 1,
-              optimize: 1,
-              analyze: 1,
-              nurture: 1,
-              achieve: 1,
-            },
-          },
-          {
-            option: "Mostly Micro: I tend to delve into the details, although I keep the broader implications in mind",
-            points: {
-              explore: 1,
-              design: 1,
-              connect: 1,
-              energize: 1,
-              optimize: 2,
-              analyze: 2,
-              nurture: 2,
-              achieve: 2,
-            },
-          },
-          {
-            option: "Very Micro (I see the leaves): I concentrate on the specifics and fine points of the situation",
-            points: {
-              optimize: 3,
-              analyze: 3,
-              nurture: 3,
-              achieve: 3,
-            },
-          },
-        ],
+        option: "Macro (I see the forest): I focus on the big picture, looking for overarching trends and patterns",
+        points: {
+          explore: 3,
+          design: 3,
+          connect: 3,
+          energize: 3,
+        },
+      },
+      {
+        option: "Mostly Macro: While I consider the larger context, I do pay attention to key details",
+        points: {
+          explore: 2,
+          design: 2,
+          connect: 2,
+          energize: 2,
+          optimize: 1,
+          analyze: 1,
+          nurture: 1,
+          achieve: 1,
+        },
+      },
+      {
+        option:
+          "Balanced: (I see the forest and the trees) I like to see both the overall picture and the intricate details as needed",
+        points: {
+          explore: 1,
+          design: 1,
+          connect: 1,
+          energize: 1,
+          optimize: 1,
+          analyze: 1,
+          nurture: 1,
+          achieve: 1,
+        },
+      },
+      {
+        option: "Mostly Micro: I tend to delve into the details, although I keep the broader implications in mind",
+        points: {
+          explore: 1,
+          design: 1,
+          connect: 1,
+          energize: 1,
+          optimize: 2,
+          analyze: 2,
+          nurture: 2,
+          achieve: 2,
+        },
+      },
+      {
+        option: "Very Micro (I see the leaves): I concentrate on the specifics and fine points of the situation",
+        points: {
+          optimize: 3,
+          analyze: 3,
+          nurture: 3,
+          achieve: 3,
+        },
       },
     ],
   },
   {
-    section: "Head/Heart Lens",
-    questions: [
+    name: "Head/Heart Lens",
+    statement: "When faced with a decision or problem, which statement aligns more with your instinctive focus?",
+    choices: [
       {
-        prompt: "When faced with a decision or problem, which statement aligns more with your instinctive focus?",
-        choices: [
-          {
-            option:
-              "More Head: I tend to focus on ideas, employing facts and frameworks or constructing stories to make sense of situations",
-            points: {
-              explore: 3,
-              analyze: 3,
-            },
-          },
-          {
-            option:
-              "More Heart: I prioritize relationships, connecting people, nurturing talent, and understanding emotional dynamics",
-            points: {
-              connect: 3,
-              nurture: 3,
-            },
-          },
-          {
-            option:
-              "Even: I seek a balance, considering both logical narratives and the emotional dimensions of situations and relationships",
-            points: {
-              explore: 1,
-              connect: 1,
-              analyze: 1,
-              nurture: 1,
-            },
-          },
-        ],
+        option:
+          "More Head: I tend to focus on ideas, employing facts and frameworks or constructing stories to make sense of situations",
+        points: {
+          explore: 3,
+          analyze: 3,
+        },
+      },
+      {
+        option:
+          "More Heart: I prioritize relationships, connecting people, nurturing talent, and understanding emotional dynamics",
+        points: {
+          connect: 3,
+          nurture: 3,
+        },
+      },
+      {
+        option:
+          "Even: I seek a balance, considering both logical narratives and the emotional dimensions of situations and relationships",
+        points: {
+          explore: 1,
+          connect: 1,
+          analyze: 1,
+          nurture: 1,
+        },
       },
     ],
   },
   {
-    section: "How/What Lens",
-    questions: [
+    name: "How/What Lens",
+    statement:
+      "In a collaborative project or when solving problems, which approach do you gravitate towards naturally?",
+    choices: [
       {
-        prompt:
-          "In a collaborative project or when solving problems, which approach do you gravitate towards naturally?",
-        choices: [
-          {
-            option:
-              "More How: I am drawn to crafting the process, improving efficiency, and ensuring the design is effective",
-            points: {
-              design: 3,
-              optimize: 3,
-            },
-          },
-          {
-            option:
-              "More What: My focus is on achieving goals, driving results, and rallying the team around a shared objective for success",
-            points: {
-              achieve: 3,
-              energize: 3,
-            },
-          },
-          {
-            option:
-              "Blend of Both: I strike a balance, giving equal attention to design and efficiency, energy and execution",
-            points: {
-              design: 1,
-              energize: 1,
-              optimize: 1,
-              achieve: 1,
-            },
-          },
-        ],
+        option:
+          "More How: I am drawn to crafting the process, improving efficiency, and ensuring the design is effective",
+        points: {
+          design: 3,
+          optimize: 3,
+        },
+      },
+      {
+        option:
+          "More What: My focus is on achieving goals, driving results, and rallying the team around a shared objective for success",
+        points: {
+          achieve: 3,
+          energize: 3,
+        },
+      },
+      {
+        option:
+          "Blend of Both: I strike a balance, giving equal attention to design and efficiency, energy and execution",
+        points: {
+          design: 1,
+          energize: 1,
+          optimize: 1,
+          achieve: 1,
+        },
       },
     ],
   },
@@ -180,60 +164,52 @@ export const initialQuestions: InitialQuestion[] = [
 
 export const questions: DeepQuestion[] = [
   {
-    section: "Macro Head",
+    name: "Macro Head",
     archetype: "explore",
-    questions: [
+    statement:
       "I thrive on discovering new ideas and conceptual frameworks; I am energized by exploring possibilities and abstract theories.",
-    ],
   },
   {
-    section: "Micro Head",
+    name: "Micro Head",
     archetype: "analyze",
-    questions: [
+    statement:
       "I am drawn to data and analysis; I enjoy delving into the details to understand the mechanics of how things work.",
-    ],
   },
   {
-    section: "Macro How",
+    name: "Macro How",
     archetype: "design",
-    questions: [
+    statement:
       "I love to design systems and processes; I am focused on the efficiency and elegance of the overarching structure.",
-    ],
   },
   {
-    section: "Micro How",
+    name: "Micro How",
     archetype: "optimize",
-    questions: [
+    statement:
       "I am constantly looking for ways to make improvements and tweaks to existing systems to optimize performance.",
-    ],
   },
   {
-    section: "Macro Heart",
+    name: "Macro Heart",
     archetype: "connect",
-    questions: [
+    statement:
       "I prioritize building networks and fostering connections; I believe in the power of relationships to drive collaborative success.",
-    ],
   },
   {
-    section: "Micro Heart",
+    name: "Micro Heart",
     archetype: "nurture",
-    questions: [
+    statement:
       "I focus on the individual; I am attentive to personal development and emotional well-being in my approach to relationships.",
-    ],
   },
   {
-    section: "Macro What",
+    name: "Macro What",
     archetype: "energize",
-    questions: [
+    statement:
       "I am passionate about motivating others towards a common goal; I energize and mobilize teams to achieve shared objectives.",
-    ],
   },
   {
-    section: "Micro What",
+    name: "Micro What",
     archetype: "achieve",
-    questions: [
+    statement:
       "I am results-driven; I set specific goals and work diligently towards achieving them, often in a hands-on manner.",
-    ],
   },
 ];
 
@@ -271,9 +247,7 @@ export function calculateScores(answers: Answer, scores: Score): Score {
 
   // Build questionToArchetypeMap and counters dynamically from the questions array
   questions.forEach((section) => {
-    section.questions.forEach((question) => {
-      scores[section.archetype] += answers[question] || 0; // Add score or zero if not answered
-    });
+    scores[section.archetype] += answers[section.statement] || 0; // Add score or zero if not answered
   });
 
   // Normalize scores by dividing by the count of questions for each archetype

@@ -1,17 +1,17 @@
-import { Question } from "lib/quiz";
+import { InitialQuestion } from "lib/quiz";
 
 interface Props {
-  question: Question;
+  section: InitialQuestion;
   onSelectOption: (question: string, option: number) => void;
   selectedOption: number;
 }
 
-const MultipleChoice = ({ question, onSelectOption, selectedOption }: Props) => {
+const MultipleChoice = ({ section, onSelectOption, selectedOption }: Props) => {
   return (
-    <>
-      <h2 className="mb-10 block text-xl text-foreground">{question.prompt}</h2>
+    <div className="my-5">
+      <h2 className="mb-10 block text-xl text-foreground">{section.statement}</h2>
       <div className="flex flex-col space-y-4">
-        {question.choices.map((choice: any, index: any) => {
+        {section.choices.map((choice: any, index: any) => {
           const selected = selectedOption === choice.option;
           return (
             <label
@@ -24,10 +24,10 @@ const MultipleChoice = ({ question, onSelectOption, selectedOption }: Props) => 
             >
               <input
                 type="radio"
-                name={question.prompt}
+                name={section.statement}
                 className="hidden"
                 value={choice.option}
-                onChange={() => onSelectOption(question.prompt, choice.option)}
+                onChange={() => onSelectOption(section.statement, choice.option)}
                 checked={selected}
               />
               <span className="ml-2">{choice.option}</span>
@@ -35,7 +35,7 @@ const MultipleChoice = ({ question, onSelectOption, selectedOption }: Props) => 
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 
