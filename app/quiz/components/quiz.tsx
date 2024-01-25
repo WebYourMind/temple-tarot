@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeftIcon, ArrowRightIcon, ColorWheelIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 import { useTeamReport } from "lib/hooks/use-team-report";
+import Question from "./question";
 
 type Answer = {
   [question: string]: number;
@@ -27,117 +28,6 @@ type ArchetypeKey = keyof typeof archetypeStatements;
 type FinalQuestionOption = {
   style: ArchetypeKey;
   statement: string;
-};
-
-interface AgreeDisagreeProps {
-  question: string | any;
-  onSelectOption: (question: string, option: number) => void;
-  selectedOption: number;
-}
-
-const AgreeDisagree = ({ question, onSelectOption, selectedOption }: AgreeDisagreeProps) => {
-  const options = [
-    { value: 0, size: "w-12 h-12 border-red-400" },
-    { value: 1, size: "w-10 h-10 border-red-400" },
-    { value: 2, size: "w-8 h-8 border-muted-foreground" },
-    { value: 3, size: "w-10 h-10 border-green-400" },
-    { value: 4, size: "w-12 h-12 border-green-400" },
-  ];
-  return (
-    <div className="flex flex-col items-center justify-center p-4">
-      <p className="mb-16 text-center text-2xl">{question as string}</p>
-      <div className="flex w-full items-center md:max-w-lg">
-        <span className="mr-4 hidden text-lg font-medium md:block">DISAGREE</span>
-        <div className="flex w-full items-center justify-between">
-          {options.map((option, index) => (
-            <div key={index} className="relative">
-              <input
-                id={`radio-${index}`}
-                type="radio"
-                name="quizOption"
-                value={option.value}
-                checked={selectedOption === option.value}
-                onChange={() => onSelectOption(question as string, option.value)}
-                className="sr-only" // Hide the actual input but keep it accessible
-              />
-              <label htmlFor={`radio-${index}`} className="block cursor-pointer">
-                <span className={`block ${option.size} rounded-full border-2 hover:bg-accent`}></span>
-              </label>
-              {selectedOption === option.value && (
-                <span className="absolute left-1/2 top-1/2 block h-full w-full -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-foreground bg-primary"></span>
-              )}
-            </div>
-          ))}
-        </div>
-        <span className="ml-4 hidden text-lg font-medium md:block">AGREE</span>
-      </div>
-      <div className="mt-5 flex w-full justify-between md:hidden">
-        <span>DISAGREE</span>
-        <span>AGREE</span>
-      </div>
-    </div>
-  );
-};
-
-const MultipleChoice = ({ question, onSelectOption, selectedOption }: AgreeDisagreeProps) => {
-  return (
-    <>
-      <h2 className="mb-10 block text-xl text-foreground">{(question.prompt as string) || question}</h2>
-      <div className="flex flex-col space-y-4">
-        {question.choices.map((choice: any, index: any) => {
-          const selected = selectedOption === choice.option;
-          return (
-            <label
-              key={index}
-              className={`flex cursor-pointer items-center justify-between rounded-sm border p-2 ${
-                selected
-                  ? "border-primary-foreground bg-primary text-primary-foreground"
-                  : "border-muted-foreground bg-background text-foreground"
-              } hover:bg-accent hover:text-accent-foreground`}
-            >
-              <input
-                type="radio"
-                name={question.prompt || question}
-                className="hidden"
-                value={choice.option}
-                onChange={() => onSelectOption(question.prompt, choice.option)}
-                checked={selected}
-              />
-              <span className="ml-2">{choice.option}</span>
-            </label>
-          );
-        })}
-      </div>
-    </>
-  );
-};
-
-const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
-  const isDeepQuestion = type === "deep";
-
-  if (isDeepQuestion) {
-    return <AgreeDisagree question={question} onSelectOption={handleOptionChange} selectedOption={answers[question]} />;
-  }
-
-  return (
-    <MultipleChoice question={question} selectedOption={answers[question.prompt]} onSelectOption={handleOptionChange} />
-  );
-};
-
-const Question = ({ section, answers, handleOptionChange, initial }: any) => {
-  return (
-    <div className="my-5">
-      {section.questions.map((question: any, questionIndex: number) => (
-        <QuestionItem
-          key={questionIndex}
-          question={question}
-          answers={answers}
-          handleOptionChange={handleOptionChange}
-          type={initial ? "initial" : "deep"}
-        />
-      ))}
-    </div>
-  );
 };
 
 const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
@@ -308,11 +198,16 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     } else if (isInitialQuestions) {
       const section = initialQuestions[currentSectionIndex];
       return (
-        <Question section={section} handleOptionChange={handleInitialOptionChange} answers={initialAnswers} initial />
+        <Question
+          section={section}
+          onSelectOption={handleInitialOptionChange}
+          answers={initialAnswers}
+          type="initial"
+        />
       );
     } else {
       const section = questions[currentSectionIndex];
-      return <Question section={section} handleOptionChange={handleOptionChange} answers={answers} />;
+      return <Question section={section} onSelectOption={handleOptionChange} answers={answers} type="deep" />;
     }
   };
 
@@ -400,10 +295,11 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
             <SubmitButton />
           ) : (
             <Button
-              variant={"outline"}
-              className={currentPage >= totalPages - 1 ? "hidden" : " float-right"}
+              variant={currentPage === 0 ? "default" : "outline"}
+              className={currentPage >= totalPages - 1 ? "hidden" : " float-right space-x-1"}
               onClick={() => handlePageChange(currentPage + 1)}
             >
+              {currentPage === 0 && <span>Start</span>}
               <ArrowRightIcon />
             </Button>
           )}

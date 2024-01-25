@@ -1,4 +1,4 @@
-type Answer = {
+export type Answer = {
   [key: string]: number;
 };
 
@@ -8,13 +8,32 @@ export type Score = {
   [key in Archetype]: number;
 };
 
-type QuestionSection = {
+type Points = {
+  [key in Archetype]?: number;
+};
+
+type Choice = {
+  option: string;
+  points: Points;
+};
+
+export type Question = {
+  choices: Choice[];
+  prompt: string;
+};
+
+export type DeepQuestion = {
   section: string;
   archetype: Archetype;
   questions: string[];
 };
 
-export const initialQuestions = [
+export type InitialQuestion = {
+  section: string;
+  questions: Question[];
+};
+
+export const initialQuestions: InitialQuestion[] = [
   {
     section: "Macro/Micro Lens",
     questions: [
@@ -93,7 +112,6 @@ export const initialQuestions = [
           {
             option:
               "More Head: I tend to focus on ideas, employing facts and frameworks or constructing stories to make sense of situations",
-            lens: "Head",
             points: {
               explore: 3,
               analyze: 3,
@@ -102,7 +120,6 @@ export const initialQuestions = [
           {
             option:
               "More Heart: I prioritize relationships, connecting people, nurturing talent, and understanding emotional dynamics",
-            lens: "Heart",
             points: {
               connect: 3,
               nurture: 3,
@@ -111,7 +128,6 @@ export const initialQuestions = [
           {
             option:
               "Even: I seek a balance, considering both logical narratives and the emotional dimensions of situations and relationships",
-            lens: "Balanced",
             points: {
               explore: 1,
               connect: 1,
@@ -133,7 +149,6 @@ export const initialQuestions = [
           {
             option:
               "More How: I am drawn to crafting the process, improving efficiency, and ensuring the design is effective",
-            lens: "How",
             points: {
               design: 3,
               optimize: 3,
@@ -142,7 +157,6 @@ export const initialQuestions = [
           {
             option:
               "More What: My focus is on achieving goals, driving results, and rallying the team around a shared objective for success",
-            lens: "What",
             points: {
               achieve: 3,
               energize: 3,
@@ -151,7 +165,6 @@ export const initialQuestions = [
           {
             option:
               "Blend of Both: I strike a balance, giving equal attention to design and efficiency, energy and execution",
-            lens: "Balanced",
             points: {
               design: 1,
               energize: 1,
@@ -165,7 +178,7 @@ export const initialQuestions = [
   },
 ];
 
-export const questions: QuestionSection[] = [
+export const questions: DeepQuestion[] = [
   {
     section: "Macro Head",
     archetype: "explore",
@@ -224,9 +237,9 @@ export const questions: QuestionSection[] = [
   },
 ];
 
-export function calculateInitialResults(answers: any) {
+export function calculateInitialResults(answers: Record<string, Answer>) {
   // Initialize the results object with all archetypes set to 0
-  const results = {
+  const results: Score = {
     explore: 0,
     analyze: 0,
     design: 0,
@@ -238,16 +251,13 @@ export function calculateInitialResults(answers: any) {
   };
 
   // Iterate over each answer
-  Object.values(answers).forEach((answer: any) => {
-    // Check if 'points' object exists and iterate over its keys (archetypes)
+  Object.values(answers).forEach((answer) => {
     if (answer.points) {
-      Object.keys(answer.points).forEach((key) => {
-        const archetype = key as Archetype;
-        // Add the points to the corresponding archetype in the results object
+      Object.entries(answer.points).forEach(([archetype, points]) => {
         if (archetype in results) {
-          results[archetype] += answer.points[archetype]; // Add points from the answer
+          results[archetype as Archetype] += points;
         } else {
-          console.warn(`Unrecognized archetype: ${archetype}`); // Warn about unrecognized archetypes
+          console.warn(`Unrecognized archetype: ${archetype}`);
         }
       });
     }
