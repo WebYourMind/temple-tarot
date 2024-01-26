@@ -1,3 +1,7 @@
+export type InitialAnswer = {
+  [key: string]: Choice;
+};
+
 export type Answer = {
   [key: string]: number;
 };
@@ -12,7 +16,7 @@ type Points = {
   [key in Archetype]?: number;
 };
 
-type Choice = {
+export type Choice = {
   option: string;
   points: Points;
 };
@@ -162,7 +166,7 @@ export const initialQuestions: InitialQuestion[] = [
   },
 ];
 
-export const questions: DeepQuestion[] = [
+export const deepQuestions: DeepQuestion[] = [
   {
     name: "Macro Head",
     archetype: "explore",
@@ -213,9 +217,9 @@ export const questions: DeepQuestion[] = [
   },
 ];
 
-export function calculateInitialResults(answers: Record<string, Answer>) {
+export function calculateInitialResults(answers: InitialAnswer[]) {
   // Initialize the results object with all archetypes set to 0
-  const results: Score = {
+  const results = {
     explore: 0,
     analyze: 0,
     design: 0,
@@ -230,7 +234,7 @@ export function calculateInitialResults(answers: Record<string, Answer>) {
   Object.values(answers).forEach((answer) => {
     if (answer.points) {
       Object.entries(answer.points).forEach(([archetype, points]) => {
-        if (archetype in results) {
+        if (archetype in results && typeof points === "number") {
           results[archetype as Archetype] += points;
         } else {
           console.warn(`Unrecognized archetype: ${archetype}`);
@@ -238,24 +242,21 @@ export function calculateInitialResults(answers: Record<string, Answer>) {
       });
     }
   });
-
   return results;
 }
 
-export function calculateScores(answers: Answer, scores: Score): Score {
-  const maxScorePerQuestion = 6;
-
+export function calculateScores(answers: Answer, initialScores: Score): Score {
   // Build questionToArchetypeMap and counters dynamically from the questions array
-  questions.forEach((section) => {
-    scores[section.archetype] += answers[section.statement] || 0; // Add score or zero if not answered
+  deepQuestions.forEach((section) => {
+    initialScores[section.archetype] += answers[section.statement] || 0; // Add score or zero if not answered
   });
 
   // Normalize scores by dividing by the count of questions for each archetype
-  Object.keys(scores).forEach((key) => {
+  Object.keys(initialScores).forEach((key) => {
     const archetype = key as Archetype;
-    scores[archetype] = Number((scores[archetype] / maxScorePerQuestion).toFixed(2)) * 100; // Adjusted to 2 decimal places for consistency with database precision
+    initialScores[archetype] *= 10;
   });
 
   // Return the normalized scores
-  return scores;
+  return initialScores;
 }

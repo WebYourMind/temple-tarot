@@ -1,11 +1,11 @@
-import { Answer, DeepQuestion, InitialQuestion } from "lib/quiz";
+import { Answer, DeepQuestion, InitialAnswer, InitialQuestion } from "lib/quiz";
 import AgreeDisagree from "./agree-disagree";
 import MultipleChoice from "./multiple-choice";
 
 interface QuestionItemProps {
   section: InitialQuestion | DeepQuestion;
-  answers: Answer;
-  onSelectOption: (question: string, score: number) => void;
+  answers: Answer | InitialAnswer;
+  onSelectOption: (statement: string, result: number | string) => void;
   type: "deep" | "initial";
 }
 
@@ -16,7 +16,7 @@ const QuestionItem = ({ section, answers, onSelectOption, type }: QuestionItemPr
     return (
       <MultipleChoice
         section={section as InitialQuestion}
-        selectedOption={answers[section.statement]}
+        selectedOption={answers[section.statement] as string}
         onSelectOption={onSelectOption}
       />
     );
@@ -26,7 +26,7 @@ const QuestionItem = ({ section, answers, onSelectOption, type }: QuestionItemPr
     <AgreeDisagree
       section={section as DeepQuestion}
       onSelectOption={onSelectOption}
-      selectedOption={answers[section.statement]}
+      selectedOption={answers[section.statement] as number}
     />
   );
 };

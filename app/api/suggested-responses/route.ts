@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   const json = (await req.json()) as any;
   const { lastMessage } = json as any;
 
-  const model = process.env.GPT_MODEL;
+  const model = process.env.GPT_3;
 
   if (!model) {
     return new Response("No GPT model set", { status: 500 });

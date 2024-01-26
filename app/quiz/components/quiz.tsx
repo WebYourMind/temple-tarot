@@ -1,22 +1,28 @@
 "use client";
 import { Button } from "components/ui/button";
-import { Score, calculateInitialResults, calculateScores, initialQuestions, questions } from "lib/quiz";
+import {
+  Score,
+  calculateInitialResults,
+  calculateScores,
+  initialQuestions,
+  deepQuestions,
+  Answer,
+  InitialAnswer,
+  Choice,
+} from "lib/quiz";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeftIcon, ArrowRightIcon, ColorWheelIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 import { useTeamReport } from "lib/hooks/use-team-report";
-import Question from "./question-item";
 import TieBreaker, { ArchetypeKey, FinalQuestionOption, archetypeStatements } from "./tie-breaker";
 import InitialInfo from "./initial-info";
-
-type Answer = {
-  [question: string]: number;
-};
+import MultipleChoice from "./multiple-choice";
+import AgreeDisagree from "./agree-disagree";
 
 const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
-  const [answers, setAnswers] = useState<Answer>({});
-  const [initialAnswers, setInitialAnswers] = useState<any>({});
+  const [initialAnswers, setInitialAnswers] = useState<InitialAnswer[]>();
+  const [deepAnswers, setDeepAnswers] = useState<Answer>({});
   const [finalAnswer, setFinalAnswer] = useState<ArchetypeKey>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -34,7 +40,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
 
   const router = useRouter();
 
-  const totalPages = questions.length + initialQuestions.length + 1;
+  const totalPages = deepQuestions.length + initialQuestions.length + 1;
 
   const isInitialInfo = currentPage === 0;
   const isInitialQuestions = currentPage > 0 && currentPage <= initialQuestions.length;
@@ -56,16 +62,16 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     }, 400);
   };
 
-  const handleInitialOptionChange = (statement: string, selectedChoice: any) => {
+  const handleInitialOptionChange = (statement: string, result: Choice) => {
     setInitialAnswers((prevAnswers: any) => ({
       ...prevAnswers,
-      [statement]: selectedChoice, // Store the entire choice object
+      [statement]: result, // Store the entire choice object
     }));
     handlePageChange(currentPage + 1);
   };
 
-  const handleOptionChange = (statement: string, score: number) => {
-    setAnswers((prevAnswers) => ({ ...prevAnswers, [statement]: score }));
+  const handleOptionChange = (statement: string, result: number) => {
+    setDeepAnswers((prevAnswers) => ({ ...prevAnswers, [statement]: result }));
     if (currentPage != totalPages - 1) {
       handlePageChange(currentPage + 1);
     }
@@ -86,19 +92,19 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     // if so, show finalQuestion
     // else show submit
     const allQuestionsAnswered = areAllQuestionsAnswered();
-    if (allQuestionsAnswered) {
+    if (allQuestionsAnswered && initialAnswers) {
       const initialScores = calculateInitialResults(initialAnswers);
-      const scores = calculateScores(answers, initialScores);
+      const scores = calculateScores(deepAnswers, initialScores);
       setQuizScores(scores);
 
       const highscores = getHighestRankingArchetypes(scores) as ArchetypeKey[];
       if (highscores.length > 1) {
-        askFinalQuestion(highscores);
+        showFinalQuestion(highscores);
       } else {
         setShowSubmit(true);
       }
     }
-  }, [answers, initialAnswers]);
+  }, [deepAnswers, initialAnswers]);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -107,13 +113,15 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
       return;
     }
 
-    if (userId) {
+    if (userId && initialAnswers) {
       const initialScores = calculateInitialResults(initialAnswers);
-      let scores = calculateScores(answers, initialScores);
+      let scores = calculateScores(deepAnswers, initialScores);
       setQuizScores(scores);
 
       if (finalAnswer) {
-        scores[finalAnswer] += 7;
+        finalQuestionOptions.forEach((finalQ) => {
+          if (finalQ.style !== finalAnswer) scores[finalQ.style] -= 5;
+        });
       }
 
       await saveResults(scores);
@@ -159,20 +167,27 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     } else if (isInitialQuestions) {
       const section = initialQuestions[currentSectionIndex];
       return (
-        <Question
+        <MultipleChoice
           section={section}
           onSelectOption={handleInitialOptionChange}
-          answers={initialAnswers}
-          type="initial"
+          selectedOption={
+            initialAnswers && (initialAnswers[section.statement as keyof typeof initialAnswers] as unknown as Choice)
+          }
         />
       );
     } else {
-      const section = questions[currentSectionIndex];
-      return <Question section={section} onSelectOption={handleOptionChange} answers={answers} type="deep" />;
+      const section = deepQuestions[currentSectionIndex];
+      return (
+        <AgreeDisagree
+          section={section}
+          onSelectOption={handleOptionChange}
+          selectedOption={deepAnswers[section.statement]}
+        />
+      );
     }
   };
 
-  const askFinalQuestion = (highscores: ArchetypeKey[]) => {
+  const showFinalQuestion = (highscores: ArchetypeKey[]) => {
     const statements = highscores.map((style) => ({
       style,
       statement: archetypeStatements[style],
@@ -183,12 +198,12 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
 
   const areAllQuestionsAnswered = () => {
     for (let section of initialQuestions) {
-      if (initialAnswers[section.statement] === undefined) {
+      if (!initialAnswers || initialAnswers[section.statement as keyof typeof initialAnswers] === undefined) {
         return false;
       }
     }
-    for (let section of questions) {
-      if (answers[section.statement] === undefined) {
+    for (let section of deepQuestions) {
+      if (deepAnswers[section.statement] === undefined) {
         return false;
       }
     }
