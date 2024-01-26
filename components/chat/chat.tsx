@@ -122,13 +122,15 @@ export function Chat({ id, className }: ChatProps) {
           <>
             <ChatList messages={messages} />
             <ChatScrollAnchor trackVisibility={isLoading} />
-            <SuggestedResponses
-              suggestedResponses={suggestedResponses}
-              setSuggestedResponses={setSuggestedResponses}
-              append={append}
-              id={id}
-              isLoading={isLoading}
-            />
+            {suggestedResponses && suggestedResponses?.length > 0 && !isLoading && (
+              <SuggestedResponses
+                suggestedResponses={suggestedResponses}
+                setSuggestedResponses={setSuggestedResponses}
+                append={append}
+                id={id}
+                isLoading={isLoading}
+              />
+            )}
           </>
         ) : (
           <EmptyScreen setInput={setInput} scores={scores} />

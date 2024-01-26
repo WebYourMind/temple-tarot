@@ -29,13 +29,13 @@ const AcceptInvite = () => {
       const token = searchParams?.get("token");
       try {
         const response = await fetch(`/api/accept-invite?token=${token}`);
-        if (!response.ok) {
-          throw new Error();
-        }
         const responseData = (await response.json()) as any;
+        if (!response.ok) {
+          throw new Error(responseData.error);
+        }
         setTeam(responseData.data);
       } catch (err: any) {
-        toast.error(`Failed to fetch team info.`);
+        toast.error(err.message);
       } finally {
         setLoading(false);
       }
