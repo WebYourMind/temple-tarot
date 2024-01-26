@@ -54,7 +54,7 @@ export default {
         secondary: "#005f73",
         secondaryForeground: "#ffffff",
         muted: "#f1f5f9",
-        mutedForeground: "#64748b",
+        mutedForeground: "#9b9faa",
         accent: "#fef7ed",
         accentForeground: "#333333",
         destructive: "#e63946",
@@ -66,7 +66,7 @@ export default {
       },
       dark: {
         background: "#111827",
-        foreground: "#ffffff",
+        foreground: "#dddddd",
         card: "#1f2937",
         cardForeground: "#f7f9fb",
         popover: "#1f2937",
