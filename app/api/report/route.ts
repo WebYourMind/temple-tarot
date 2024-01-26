@@ -100,6 +100,9 @@ export async function POST(req: NextRequest) {
       await sql`
         INSERT INTO reports (user_id, scores_id, report)
         VALUES (${userId}, ${scores.id}, ${completion})
+        ON CONFLICT (user_id) DO UPDATE
+        SET scores_id = EXCLUDED.scores_id,
+            report = EXCLUDED.report
         RETURNING *;
       `;
     },

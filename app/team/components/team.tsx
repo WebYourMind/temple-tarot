@@ -20,7 +20,7 @@ import TeamReport from "./team-report";
 
 export default function Team() {
   const { team, isLoading, createTeam, updateTeam, loadingMessage, setTeam } = useTeam();
-  const { data: session, update } = useSession() as any;
+  const { data: session, update, status } = useSession() as any;
   const [editMode, setEditMode] = useState(false);
   const [teamName, setTeamName] = useState(team ? team.name : "");
   const [teamDescription, setTeamDescription] = useState(team ? team.description : "");
@@ -37,7 +37,7 @@ export default function Team() {
     }
   }, [team]);
 
-  if (isLoading) {
+  if (isLoading || status === "loading") {
     return <Loading message={loadingMessage} />;
   }
 

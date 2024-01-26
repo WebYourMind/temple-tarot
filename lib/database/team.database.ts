@@ -8,9 +8,9 @@ export const verifyTeamToken = async (token: string) => {
 
     if (rows.length > 0) {
       const team = rows[0];
-      if (team.invite_token_expiry > new Date()) {
-        return team;
-      }
+      // if (team.invite_token_expiry > new Date()) {
+      return team;
+      // }
     }
     return null;
   } catch (error) {

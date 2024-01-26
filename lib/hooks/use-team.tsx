@@ -74,10 +74,10 @@ export function useTeam() {
   }
 
   useEffect(() => {
-    if (session?.user?.id && !team) {
-      fetchTeam();
-    } else {
-      setIsLoading(false);
+    if (session?.user?.id) {
+      if (!team && session.user.teamId) {
+        fetchTeam();
+      }
     }
   }, [session?.user.id]);
 
