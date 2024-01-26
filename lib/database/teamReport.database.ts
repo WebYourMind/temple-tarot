@@ -23,6 +23,8 @@ export const insertTeamReport = async (teamId: string, report: string) => {
     const { rows } = await sql`
         INSERT INTO team_reports (team_id, report)
         VALUES (${teamId}, ${report})
+        ON CONFLICT (team_id) DO UPDATE
+        SET report = EXCLUDED.report
         RETURNING *;
     `;
 
