@@ -1,107 +1,33 @@
 "use client";
 import { Button } from "components/ui/button";
-import { Score, calculateInitialResults, calculateScores, initialQuestions, questions } from "lib/quiz";
+import {
+  Score,
+  calculateInitialResults,
+  calculateScores,
+  initialQuestions,
+  deepQuestions,
+  Answer,
+  InitialAnswer,
+  Choice,
+} from "lib/quiz";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { ArrowLeftIcon, ArrowRightIcon, CheckCircledIcon, ColorWheelIcon } from "@radix-ui/react-icons";
+import { useEffect, useState } from "react";
+import { ArrowLeftIcon, ArrowRightIcon, ColorWheelIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 import { useTeamReport } from "lib/hooks/use-team-report";
-import toast from "react-hot-toast";
-
-type Answer = {
-  [question: string]: number;
-};
-
-const archetypeStatements = {
-  explore: "I am always looking for new experiences and ideas.",
-  analyze: "I seek to achieve objectivity and insight, often delving into the details.", // Analyze equivalent
-  design: "I am concerned with designing effective systems and processes.", // Design equivalent
-  optimize: "I constantly seek to improve productivity and efficiency, fine-tuning processes.",
-  connect: "I focus on building and strengthening relationships, emphasizing interpersonal aspects.",
-  nurture: "I am dedicated to cultivating people and potential, focusing on personal development.", // Nurture equivalent
-  energize: "I aim to mobilize people into action and inspire enthusiasm.",
-  achieve: "I am driven to achieve completion and maintain momentum, often being action-oriented.", // Achieve equivalent
-};
-
-type ArchetypeKey = keyof typeof archetypeStatements;
-
-type FinalQuestionOption = {
-  style: ArchetypeKey;
-  statement: string;
-};
-
-const QuestionItem = ({ question, answers, handleOptionChange, type }: any) => {
-  const isDeepQuestion = type === "deep";
-
-  return (
-    <>
-      <label className="mb-5 block text-lg text-foreground">{question.prompt || question}</label>
-      <div className="flex flex-col gap-2">
-        {(isDeepQuestion ? Array.from({ length: 5 }, (_, i) => ({ option: i + 1 })) : question.choices).map(
-          (choice: any, index: any) => {
-            const selected = isDeepQuestion
-              ? answers[question] === choice.option
-              : answers[question.prompt] === choice.option;
-            return (
-              <label
-                key={index}
-                className={`flex cursor-pointer items-center justify-between rounded-sm border p-2 ${
-                  selected
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-card bg-card text-card-foreground"
-                } hover:bg-accent hover:text-accent-foreground`}
-              >
-                <input
-                  type="radio"
-                  name={question.prompt || question}
-                  className="hidden"
-                  value={choice.option}
-                  onChange={() => handleOptionChange(question.prompt || question, choice.option)}
-                  checked={selected}
-                />
-                <span className="ml-2">{choice.option}</span>
-                <div className="w-8">
-                  {selected && <CheckCircledIcon width="25" height="25" className="text-primary-foreground" />}
-                </div>
-              </label>
-            );
-          }
-        )}
-      </div>
-    </>
-  );
-};
-
-const Question = ({ section, answers, handleOptionChange, initial }: any) => {
-  return (
-    <div className="mb-8">
-      {!initial && (
-        <p className="mb-5 text-sm italic">
-          Please rate how strongly you agree with the statement below a scale from 1 (not at all like me) to 5 (very
-          much like me).
-        </p>
-      )}
-      <h2 className="mb-2 text-xl font-bold">{section.section}</h2>
-      {section.questions.map((question: any, questionIndex: number) => (
-        <div key={questionIndex} className="mb-4">
-          <QuestionItem
-            question={question}
-            answers={answers}
-            handleOptionChange={handleOptionChange}
-            type={initial ? "initial" : "deep"}
-          />
-        </div>
-      ))}
-    </div>
-  );
-};
+import TieBreaker, { ArchetypeKey, FinalQuestionOption, archetypeStatements } from "./tie-breaker";
+import InitialInfo from "./initial-info";
+import MultipleChoice from "./multiple-choice";
+import AgreeDisagree from "./agree-disagree";
 
 const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
-  const [answers, setAnswers] = useState<Answer>({});
-  const [initialAnswers, setInitialAnswers] = useState<any>({});
+  const [initialAnswers, setInitialAnswers] = useState<InitialAnswer[]>();
+  const [deepAnswers, setDeepAnswers] = useState<Answer>({});
+  const [finalAnswer, setFinalAnswer] = useState<ArchetypeKey>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [contentVisible, setContentVisible] = useState(true);
+  const [showSubmit, setShowSubmit] = useState(false);
   const { data: session } = useSession() as any;
   const { generateReport } = useTeamReport(session?.user?.teamId);
 
@@ -114,7 +40,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
 
   const router = useRouter();
 
-  const totalPages = questions.length + initialQuestions.length + 1;
+  const totalPages = deepQuestions.length + initialQuestions.length + 1;
 
   const isInitialInfo = currentPage === 0;
   const isInitialQuestions = currentPage > 0 && currentPage <= initialQuestions.length;
@@ -136,16 +62,16 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     }, 400);
   };
 
-  const handleInitialOptionChange = (questionPrompt: string, selectedChoice: any) => {
+  const handleInitialOptionChange = (statement: string, result: Choice) => {
     setInitialAnswers((prevAnswers: any) => ({
       ...prevAnswers,
-      [questionPrompt]: selectedChoice, // Store the entire choice object
+      [statement]: result, // Store the entire choice object
     }));
     handlePageChange(currentPage + 1);
   };
 
-  const handleOptionChange = (question: string, score: number) => {
-    setAnswers((prevAnswers) => ({ ...prevAnswers, [question]: score }));
+  const handleOptionChange = (statement: string, result: number) => {
+    setDeepAnswers((prevAnswers) => ({ ...prevAnswers, [statement]: result }));
     if (currentPage != totalPages - 1) {
       handlePageChange(currentPage + 1);
     }
@@ -159,6 +85,27 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     return Object.keys(scores).filter((key) => scores[key] === highestScore);
   }
 
+  useEffect(() => {
+    // are all questions answered
+    // calculate scores
+    // check if tie breakers
+    // if so, show finalQuestion
+    // else show submit
+    const allQuestionsAnswered = areAllQuestionsAnswered();
+    if (allQuestionsAnswered && initialAnswers) {
+      const initialScores = calculateInitialResults(initialAnswers);
+      const scores = calculateScores(deepAnswers, initialScores);
+      setQuizScores(scores);
+
+      const highscores = getHighestRankingArchetypes(scores) as ArchetypeKey[];
+      if (highscores.length > 1) {
+        showFinalQuestion(highscores);
+      } else {
+        setShowSubmit(true);
+      }
+    }
+  }, [deepAnswers, initialAnswers]);
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!areAllQuestionsAnswered()) {
@@ -166,17 +113,18 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
       return;
     }
 
-    if (userId) {
+    if (userId && initialAnswers) {
       const initialScores = calculateInitialResults(initialAnswers);
-      const scores = calculateScores(answers, initialScores);
+      let scores = calculateScores(deepAnswers, initialScores);
       setQuizScores(scores);
 
-      const highscores = getHighestRankingArchetypes(scores) as ArchetypeKey[];
-      if (highscores.length > 1) {
-        askFinalQuestion(highscores);
-      } else {
-        await saveResults(scores);
+      if (finalAnswer) {
+        finalQuestionOptions.forEach((finalQ) => {
+          if (finalQ.style !== finalAnswer) scores[finalQ.style] -= 5;
+        });
       }
+
+      await saveResults(scores);
     } else {
       console.error("No user");
     }
@@ -207,28 +155,11 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   }
 
   const handleFinalQuestionResponse = async (selectedStyle: ArchetypeKey) => {
-    setIsLoading(true);
-    const updatedScores = { ...quizScores, [selectedStyle]: quizScores[selectedStyle] + 7 };
-    await saveResults(updatedScores);
+    const updatedScores = { ...quizScores, [selectedStyle]: quizScores[selectedStyle] + 5 };
+    setFinalAnswer(selectedStyle);
+    setQuizScores(updatedScores);
+    setShowSubmit(true);
   };
-
-  const InitialInfo = () => (
-    <div className="grid gap-2">
-      <p>
-        For this assessment, we aim to understand your natural way of thinking. This isn&apos;t about what you strive to
-        do but rather how you inherently process information and respond to situations, akin to being right or
-        left-handed.
-      </p>
-      <p>
-        Your Thinking Styles are viewed through three lenses: the Macro or Micro perspective, the balance between Head
-        and Heart, and the interplay of How and What.
-      </p>
-      <p>
-        Initially, we&apos;ll determine your dominant style with broad questions, then we&apos;ll delve deeper for a
-        more nuanced understanding.
-      </p>
-    </div>
-  );
 
   const renderCurrentQuestions = () => {
     if (isInitialInfo) {
@@ -236,36 +167,27 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     } else if (isInitialQuestions) {
       const section = initialQuestions[currentSectionIndex];
       return (
-        <Question section={section} handleOptionChange={handleInitialOptionChange} answers={initialAnswers} initial />
+        <MultipleChoice
+          section={section}
+          onSelectOption={handleInitialOptionChange}
+          selectedOption={
+            initialAnswers && (initialAnswers[section.statement as keyof typeof initialAnswers] as unknown as Choice)
+          }
+        />
       );
     } else {
-      const section = questions[currentSectionIndex];
-      return <Question section={section} handleOptionChange={handleOptionChange} answers={answers} />;
+      const section = deepQuestions[currentSectionIndex];
+      return (
+        <AgreeDisagree
+          section={section}
+          onSelectOption={handleOptionChange}
+          selectedOption={deepAnswers[section.statement]}
+        />
+      );
     }
   };
 
-  const renderFinalQuestion = () => (
-    <div className="mb-8">
-      <h2 className="mb-5 text-xl font-bold">Select the statement you identify with most:</h2>
-      {finalQuestionOptions.map((option, index) => (
-        <label
-          key={index}
-          className="mb-2 flex cursor-pointer items-center justify-between rounded-sm border border-card bg-card p-2 text-card-foreground hover:bg-accent hover:text-accent-foreground"
-        >
-          <input
-            type="radio"
-            name="finalQuestion"
-            className="hidden"
-            value={option.style}
-            onChange={() => handleFinalQuestionResponse(option.style)}
-          />
-          {option.statement}
-        </label>
-      ))}
-    </div>
-  );
-
-  const askFinalQuestion = (highscores: ArchetypeKey[]) => {
+  const showFinalQuestion = (highscores: ArchetypeKey[]) => {
     const statements = highscores.map((style) => ({
       style,
       statement: archetypeStatements[style],
@@ -276,41 +198,47 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
 
   const areAllQuestionsAnswered = () => {
     for (let section of initialQuestions) {
-      for (let question of section.questions) {
-        if (initialAnswers[question.prompt] === undefined) {
-          return false;
-        }
+      if (!initialAnswers || initialAnswers[section.statement as keyof typeof initialAnswers] === undefined) {
+        return false;
       }
     }
-    for (let section of questions) {
-      for (let question of section.questions) {
-        if (answers[question] === undefined) {
-          return false;
-        }
+    for (let section of deepQuestions) {
+      if (deepAnswers[section.statement] === undefined) {
+        return false;
       }
     }
     return true;
   };
 
+  const SubmitButton = () => (
+    <Button onClick={handleSubmit} disabled={isLoading || !areAllQuestionsAnswered()} className="float-right">
+      {isLoading ? (
+        <>
+          <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />
+          Processing
+        </>
+      ) : (
+        "Submit"
+      )}
+    </Button>
+  );
+
   return (
     <div className="fad flex grow flex-col justify-between">
-      <form onSubmit={handleSubmit} className={animationClasses}>
-        {finalQuestionVisible ? renderFinalQuestion() : renderCurrentQuestions()}
-
-        {currentPage === totalPages - 1 && !finalQuestionVisible && (
-          <Button type="submit" disabled={isLoading || !areAllQuestionsAnswered()} className="float-right">
-            {isLoading ? (
-              <>
-                <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />
-                Processing
-              </>
-            ) : (
-              "Submit"
-            )}
-          </Button>
+      <h1 className="text-2xl font-bold">Discover your thinking style</h1>
+      <div className={animationClasses}>
+        {finalQuestionVisible ? (
+          <TieBreaker
+            options={finalQuestionOptions}
+            selectedStyle={finalAnswer}
+            onSelectOption={handleFinalQuestionResponse}
+          />
+        ) : (
+          renderCurrentQuestions()
         )}
-      </form>
-      {!finalQuestionVisible && (
+      </div>
+      {/* Quiz Navigation & Submit */}
+      {!finalQuestionVisible ? (
         <div>
           <Button
             variant={"outline"}
@@ -319,14 +247,25 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
           >
             <ArrowLeftIcon />
           </Button>
-          <Button
-            variant={"outline"}
-            className={currentPage >= totalPages - 1 ? "hidden" : " float-right"}
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            <ArrowRightIcon />
-          </Button>
+          {showSubmit && currentPage >= totalPages - 1 ? (
+            <SubmitButton />
+          ) : (
+            <Button
+              variant={currentPage === 0 ? "default" : "outline"}
+              className={currentPage >= totalPages - 1 ? "hidden" : " float-right space-x-1"}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              {currentPage === 0 && <span>Start</span>}
+              <ArrowRightIcon />
+            </Button>
+          )}
         </div>
+      ) : showSubmit ? (
+        <div>
+          <SubmitButton />
+        </div>
+      ) : (
+        <div className="h-10" />
       )}
     </div>
   );
