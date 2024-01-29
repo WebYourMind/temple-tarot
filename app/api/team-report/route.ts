@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTeamReport, insertTeamReport } from "../../../lib/database/teamReport.database";
-import { teamMemberTemplate, teamReportTemplate } from "../../../lib/templates/team.templates";
+import { styleTemplate, teamMemberTemplate, teamReportTemplate } from "../../../lib/templates/team.templates";
 import {
   checkTeamThinkingStyleScore,
   getTeamById,
@@ -11,7 +11,13 @@ import { StreamingTextResponse } from "ai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
-import { getDominantStyle } from "../../../lib/utils";
+import {
+  convertToRelativePercentages,
+  countUsersWithStyles,
+  getAccumulatedStyles,
+  sanitizeTeamScores,
+} from "../../../lib/utils";
+import { UserProfile } from "lib/types";
 
 export const runtime = "edge";
 
@@ -52,36 +58,13 @@ export async function POST(req: NextRequest) {
     return new Response("Team score not found", { status: 404 });
   }
 
-  const teamMemberTemplateList = [];
-  for (let i = 0; i < teamScore.length; i++) {
-    const score = {
-      explore: teamScore[i].explore,
-      analyze: teamScore[i].analyze,
-      design: teamScore[i].design,
-      optimize: teamScore[i].optimize,
-      connect: teamScore[i].connect,
-      nurture: teamScore[i].nurture,
-      energize: teamScore[i].energize,
-      achieve: teamScore[i].achieve,
-    };
+  const membersWithStyles = countUsersWithStyles(sanitizeTeamScores(teamScore) as unknown as UserProfile[]);
+  const accumulatedStyles = getAccumulatedStyles(membersWithStyles);
+  const stylesMap = convertToRelativePercentages(accumulatedStyles);
 
-    const dominantStyle = getDominantStyle(score);
-    if (dominantStyle) {
-      const { explore, analyze, design, optimize, connect, nurture, energize, achieve } = score;
-
-      const tempPrompt = teamMemberTemplate
-        // .replace("{dominantStyle}", dominantStyle)
-        .replace("{explore}", explore)
-        .replace("{analyze}", analyze)
-        .replace("{design}", design)
-        .replace("{optimize}", optimize)
-        .replace("{connect}", connect)
-        .replace("{nurture}", nurture)
-        .replace("{energize}", energize)
-        .replace("{achieve}", achieve);
-      teamMemberTemplateList.push(tempPrompt);
-    }
-  }
+  const stylesTemplateList: string[] = stylesMap.map((style) =>
+    styleTemplate.replace("{name}", style.name).replace("{value}", style.value)
+  );
 
   const teamReportTemplatePrompt = PromptTemplate.fromTemplate(teamReportTemplate);
 
@@ -92,7 +75,7 @@ export async function POST(req: NextRequest) {
   const chain = teamReportTemplatePrompt.pipe(langChainChatModel).pipe(outputParser);
 
   const chainStream = await chain.stream(
-    { teamMembers: teamMemberTemplateList.join("\n") },
+    { collectiveThinkingStyles: stylesTemplateList.join("\n"), numberOfMembers: membersWithStyles.length.toString() },
     {
       callbacks: [
         {

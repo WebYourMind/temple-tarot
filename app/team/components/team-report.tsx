@@ -4,9 +4,9 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import Loading from "components/loading";
 import { useTeamReport } from "lib/hooks/use-team-report";
-import { Team, UserProfile } from "lib/types";
+import { Team } from "lib/types";
 import { Button } from "components/ui/button";
-import { minUsersWithStyles } from "lib/utils";
+import { countUsersWithStyles } from "lib/utils";
 
 type Props = {
   team: Team;
@@ -25,21 +25,16 @@ export default function TeamReport({ team }: Props) {
     return <p>No users found for team.</p>;
   }
 
-  const hasAtLeastThreeUsersWithDominantStyle = minUsersWithStyles(team.users);
+  const usersWithStyles = countUsersWithStyles(team.users);
 
   return (
     <div className="mx-auto my-20 flex max-w-4xl flex-col items-center space-y-10">
       {teamReport && (
         <>
           <ReactMarkdown className="prose prose-indigo text-foreground md:prose-lg">{`${teamReport}`}</ReactMarkdown>
-          {/* {!isGenerating && (
-            <Button className="mt-10" onClick={generateReport} disabled={isWithoutTS}>
-              Generate Another
-            </Button>
-          )} */}
         </>
       )}
-      {!hasAtLeastThreeUsersWithDominantStyle && (
+      {usersWithStyles.length < 3 && (
         <div className="w-full space-y-4 text-center">
           <p className="text-center">
             To unlock a comprehensive analysis of your team&nbsp;s thinking styles, at least 3 team members need to
@@ -52,7 +47,7 @@ export default function TeamReport({ team }: Props) {
         </div>
       )}
       {!teamReport && (
-        <Button onClick={generateReport} disabled={!hasAtLeastThreeUsersWithDominantStyle}>
+        <Button onClick={generateReport} disabled={usersWithStyles.length < 3}>
           Generate AI Insights
         </Button>
       )}

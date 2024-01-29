@@ -5,7 +5,7 @@ import { Button } from "components/ui/button";
 import { thinkingStyleDescriptions } from "lib/ArchetypePieChart";
 import { Score } from "lib/quiz";
 import { ThinkingStyle, UserProfile } from "lib/types";
-import { capitalizeFirstLetter, minUsersWithStyles } from "lib/utils";
+import { countUsersWithStyles, getAccumulatedStyles } from "lib/utils";
 import React, { useState } from "react";
 import {
   PieChart,
@@ -59,9 +59,9 @@ export const CustomTooltip = ({ active, payload, teamMembers }: any) => {
 const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
   const [currentPage, setCurrentPage] = useState(0);
 
-  const hasAtLeastThreeUsersWithDominantStyle = minUsersWithStyles(teamMembers);
+  const usersWithStyles = countUsersWithStyles(teamMembers);
 
-  if (!hasAtLeastThreeUsersWithDominantStyle) {
+  if (!usersWithStyles) {
     return (
       <Card>
         <div className="space-y-4 text-center">
@@ -83,16 +83,8 @@ const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
   }
 
   // Calculate the distribution of thinking styles
-  const styleCounts = teamMembers.reduce((acc: any, member: UserProfile) => {
-    Object.keys(member.scores as Score).forEach((key: string) => {
-      const capKey = capitalizeFirstLetter(key);
-      acc[capKey] = (acc[capKey] || 0) + (member.scores as Score)[key as ArchetypeKey];
-    });
-
-    return acc;
-  }, {});
-  const data = Object.keys(styleCounts).map((key) => ({ name: key, value: styleCounts[key] }));
-  const radarData = data.map((d) => ({ ...d, value: d.value / data.length }));
+  const data = getAccumulatedStyles(usersWithStyles);
+  const radarData = data.map((d) => ({ ...d, value: (d.value / usersWithStyles.length).toFixed(2) }));
 
   return (
     <Card>

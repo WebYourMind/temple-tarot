@@ -9,50 +9,7 @@ import {
   getTeamScore,
   updateTeamByAdminID,
 } from "../../../lib/database/team.database";
-import { getDominantStyle } from "../../../lib/utils";
-
-const sanitizeTeamData = (teamScores: any, team: any) => {
-  const users = [];
-  if (teamScores !== null) {
-    for (let i = 0; i < teamScores.length; i++) {
-      const row = teamScores[i];
-
-      const score = {
-        id: row.score_id,
-        explore: parseFloat(row.explore),
-        design: parseFloat(row.design),
-        energize: parseFloat(row.energize),
-        connect: parseFloat(row.connect),
-        analyze: parseFloat(row.analyze),
-        optimize: parseFloat(row.optimize),
-        achieve: parseFloat(row.achieve),
-        nurture: parseFloat(row.nurture),
-      };
-
-      const dominantStyle = getDominantStyle(score);
-      users.push({
-        id: row.user_id,
-        name: row.user_name,
-        email: row.user_email,
-        phone: row.user_phone,
-        role: row.user_role,
-        dominantStyle: dominantStyle,
-        scores: score,
-      });
-    }
-  }
-
-  const teamData = {
-    id: team.id,
-    name: team.name,
-    description: team.description,
-    adminId: team.admin_id,
-    image: team.image,
-    inviteToken: team.invite_token,
-    users: users,
-  };
-  return teamData;
-};
+import { sanitizeTeamData } from "lib/utils";
 
 export async function POST(request: NextRequest) {
   try {
@@ -132,7 +89,6 @@ export async function GET(request: NextRequest) {
     }
 
     const rows = await getTeamScore(parseInt(team.id));
-
     const teamData = sanitizeTeamData(rows, team);
 
     // Return the team row

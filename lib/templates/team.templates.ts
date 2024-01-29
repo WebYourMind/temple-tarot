@@ -1,8 +1,8 @@
 export const teamReportTemplate = `
 Generate a comprehensive team report in markdown format assessing the dynamics of the team based on its member's thinking styles. 
 
-The team consists of the following members and their respective thinking styles:
-{teamMembers}
+The team consists of {numberOfMembers} members and this is their collective thinking style map:
+{collectiveThinkingStyles}
 
 Rather than single out individual members, view the team as one whole organism consisting of varying thinking styles.
 
@@ -18,7 +18,7 @@ Full Thinking Style Definitions for reference:
 
 Analysis Sections:
 
-Collective Strengths: Highlight the dominant and stronger thinking styles within the team, explaining how these strengths contribute to the team's success. This positive reinforcement encourages team members to leverage their natural thinking styles for the benefit of the team.
+Collective Strengths: Highlight the stronger thinking styles within the team, explaining how these strengths contribute to the team's success. This positive reinforcement encourages team members to leverage their natural thinking styles for the benefit of the team.
 
 Diversity in Thinking: Acknowledge the diversity of thinking styles specifically present within this team and illustrate how this variety is a strategic asset, fostering creativity, innovation, and comprehensive problem-solving.
 
@@ -46,3 +46,5 @@ export const teamMemberTemplate = `
     Energize: {energize}
     Achieve: {achieve}
 `;
+
+export const styleTemplate = `{name}: {value}%`;
