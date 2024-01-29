@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
 import { ThinkingStyle, UserProfile } from "./types";
 import { Score } from "./quiz";
+import { ArchetypeKey } from "app/quiz/components/tie-breaker";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -113,10 +114,86 @@ export function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function minUsersWithStyles(users: UserProfile[]) {
+export function countUsersWithStyles(users: UserProfile[]) {
   const usersWithDominantStyle = users.filter((user) => user.dominantStyle && user.dominantStyle.trim() !== "");
 
-  const hasAtLeastThreeUsersWithDominantStyle = usersWithDominantStyle.length >= 3;
-
-  return hasAtLeastThreeUsersWithDominantStyle;
+  return usersWithDominantStyle;
 }
+
+export function getAccumulatedStyles(teamMembers: UserProfile[]) {
+  const styleCounts = teamMembers.reduce((acc: any, member: UserProfile) => {
+    Object.keys(member.scores as Score).forEach((key: string) => {
+      const capKey = capitalizeFirstLetter(key);
+      acc[capKey] = (acc[capKey] || 0) + (member.scores as Score)[key as ArchetypeKey];
+    });
+
+    return acc;
+  }, {});
+  const data = Object.keys(styleCounts).map((key) => ({ name: key, value: styleCounts[key] }));
+  return data;
+}
+
+interface DataItem {
+  name: string;
+  value: number;
+}
+
+export function convertToRelativePercentages(data: DataItem[]) {
+  // Calculate the total sum of all 'value' fields
+  const total = data.reduce((sum: number, item: DataItem) => sum + item.value, 0);
+
+  // Convert each 'value' to a percentage of the total
+  const percentages = data.map((item) => ({
+    ...item,
+    value: ((item.value / total) * 100).toFixed(2) + "%", // Convert to percentage and format as a string with 2 decimal places
+  }));
+
+  return percentages;
+}
+
+export const sanitizeTeamScores = (teamScores: any) => {
+  const users = [];
+  if (teamScores !== null) {
+    for (let i = 0; i < teamScores.length; i++) {
+      const row = teamScores[i];
+
+      const score = {
+        explore: parseFloat(row.explore),
+        design: parseFloat(row.design),
+        energize: parseFloat(row.energize),
+        connect: parseFloat(row.connect),
+        analyze: parseFloat(row.analyze),
+        optimize: parseFloat(row.optimize),
+        achieve: parseFloat(row.achieve),
+        nurture: parseFloat(row.nurture),
+      };
+
+      const dominantStyle = getDominantStyle(score);
+      users.push({
+        id: row.user_id,
+        name: row.user_name,
+        email: row.user_email,
+        phone: row.user_phone,
+        role: row.user_role,
+        dominantStyle: dominantStyle,
+        scores: score,
+      });
+    }
+  }
+  return users;
+};
+
+export const sanitizeTeamData = (teamScores: any, team: any) => {
+  const users = sanitizeTeamScores(teamScores);
+
+  const teamData = {
+    id: team.id,
+    name: team.name,
+    description: team.description,
+    adminId: team.admin_id,
+    image: team.image,
+    inviteToken: team.invite_token,
+    users: users,
+  };
+  return teamData;
+};
