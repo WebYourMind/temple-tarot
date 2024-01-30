@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTeamReport, insertTeamReport } from "../../../lib/database/teamReport.database";
-import { styleTemplate, teamMemberTemplate, teamReportTemplate } from "../../../lib/templates/team.templates";
+import { styleTemplate, teamReportTemplate } from "../../../lib/templates/team.templates";
 import {
   checkTeamThinkingStyleScore,
   getTeamById,

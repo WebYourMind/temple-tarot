@@ -5,7 +5,7 @@ import { Configuration, OpenAIApi } from "openai-edge";
 import { Score } from "lib/quiz";
 import { NextRequest, NextResponse } from "next/server";
 import config from "app.config";
-import { getScoresArray, getSortedStyles } from "lib/utils";
+import { getScoresArray, getSortedStyles, getTopTwoStyles } from "lib/utils";
 
 export const runtime = "edge";
 
@@ -18,9 +18,7 @@ const openai = new OpenAIApi(configuration);
 function createContextPrompt({ explore, analyze, design, optimize, connect, nurture, energize, achieve }: Score) {
   const scores = { explore, analyze, design, optimize, connect, nurture, energize, achieve };
   // Identify the dominant thinking style based on the highest score
-  const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
-    scores[a] > scores[b] ? a : b
-  );
+  const dominantStyle = getTopTwoStyles(scores)?.join(" ");
 
   const sortedStyles = getSortedStyles(getScoresArray(scores));
   return config.chatbot.prompts.chatScoresContext(dominantStyle, sortedStyles);

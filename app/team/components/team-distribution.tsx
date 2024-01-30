@@ -61,7 +61,7 @@ const ThinkingStyleDistribution = ({ teamMembers }: Props) => {
 
   const usersWithStyles = countUsersWithStyles(teamMembers);
 
-  if (!usersWithStyles) {
+  if (usersWithStyles.length < 3) {
     return (
       <Card>
         <div className="space-y-4 text-center">
