@@ -24,23 +24,25 @@ const createReportGenerationPrompt = ({
   const scores = { explore, analyze, design, optimize, connect, nurture, energize, achieve };
   const sortedStyles = getSortedStyles(getScoresArray(scores));
 
-  const dominantStyle = getTopTwoStyles(scores)?.join(" and ");
+  const dominantStyle = getTopTwoStyles(scores)?.join(" ");
 
   // Start the prompt with the dominant thinking style
   return `
-Generate a comprehensive insight report titled within the context of thinking styles and 'Shift Thinking': 'Your Thinking Style Results' in markdown format for a user primarily identified as a "${dominantStyle}". Explicitly state their dominant thinking style the beginning of the report. The user's full thinking style profile is as follows: ${sortedStyles.join(
+  Generate a detailed insight report titled 'Your Thinking Style Results' with '${dominantStyle}' as the subheading in markdown format for a user with dominant "${dominantStyle}" thinking styles. The user's full thinking style profile is as follows: ${sortedStyles.join(
     ", "
-  )}. Without explicitly stating it, align the report on the teachings of Mark Bonchek and shift.to methodology. The report should:
+  )}. The report should:
 
-1. Create a profile of someone with this specific, unique blend of thinking styles, considered as a whole, offering detailed strategies for personal growth, learning, decision-making, problem-solving, and maintaining motivation. Mention a few well known popular figures that may also align with this profile.
-2. Include insights and personalized advice for the highest scored thinking styles, ensuring a comprehensive understanding of the user's multifaceted thinking approach.
-3. Provide recommendations for enhancing interpersonal relationships, considering their communicative and caring scores.
-4. Offer ideas for managing change and uncertainty in both personal and professional contexts.
-5. Suggest techniques for maintaining energy and motivation, specifically tailored to activities that best suit their dominant thinking archetype.
-6. Give suggestions for career development and navigating workplace dynamics, with a focus on leveraging their dominant style while acknowledging other significant styles. Inform the of user what sort of careers they would likely thrive in.
-7. Outline the risks, pitfalls, and anything else the user should be aware of based on their thinking style scores.
+1. Provide a personalized profile, incorporating real-life applications and scenarios specific to the user's dominant thinking styles.
+2. Include a comparative analysis between the user's higher and lower-scoring thinking styles, offering insights into how they interact and influence each other in various settings.
+3. Offer strategies for developing lower-scoring thinking styles, aiming for a balanced and versatile thinking approach.
+4. Deliver tailored career advice, pinpointing specific roles or industries where the ${dominantStyle} styles are especially valuable, and guiding on how to navigate these paths.
+5. Present actionable strategies for leveraging ${dominantStyle} styles in decision-making, problem-solving, and maintaining motivation.
+6. Discuss stress management techniques suitable for the user's thinking style profile, providing strategies for coping with pressure and uncertainty.
+7. If available, include insights or testimonials from individuals with a similar thinking style profile for real-world perspective and validation.
+8. Advise on long-term growth strategies that align with the user's dominant thinking styles, ensuring sustainable personal and professional development.
+9. Encourage the user to engage in self-reflection, relating the insights provided in the report to their own experiences.
 
-End the report with a short summary of key takeaways for maintaining balance and overall well-being, emphasizing the importance of their dominant thinking style in various aspects of life.
+Conclude the report with a summary of key takeaways, emphasizing the role of the dominant thinking style in achieving a balanced and fulfilling life.
 
 These are the full Thinking Style Definitions for reference:
     Explore: Focused on generating creative ideas and big-picture thinking.
