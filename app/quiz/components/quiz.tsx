@@ -11,7 +11,7 @@ import {
   Choice,
 } from "lib/quiz";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeftIcon, ArrowRightIcon, ColorWheelIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 import { useTeamReport } from "lib/hooks/use-team-report";
@@ -24,6 +24,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   const [initialAnswers, setInitialAnswers] = useState<InitialAnswer[]>();
   const [deepAnswers, setDeepAnswers] = useState<Answer>({});
   const [finalAnswer, setFinalAnswer] = useState<ArchetypeKey>();
+  const prevFinalAnswerRef = useRef<ArchetypeKey>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [contentVisible, setContentVisible] = useState(true);
@@ -77,34 +78,96 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     }
   };
 
-  function getHighestRankingArchetypes(scores: any) {
-    // Find the highest score value
-    const highestScore = Math.max(...(Object.values(scores) as number[]));
+  function getRankingArchetypes(archetypeScores: Answer, placement: number): string[] {
+    // Convert the scores object to an array of [archetype, score] pairs
+    const scorePairs = Object.entries(archetypeScores);
 
-    // Filter and return the archetypes with the highest score
-    return Object.keys(scores).filter((key) => scores[key] === highestScore);
+    // Sort the pairs by score in descending order
+    scorePairs.sort((a, b) => b[1] - a[1]);
+
+    // Group archetypes with the same score
+    const groupedByScore = scorePairs.reduce(
+      (acc, [archetype, score]) => {
+        if (!acc[score]) {
+          acc[score] = [];
+        }
+        acc[score].push(archetype);
+        return acc;
+      },
+      {} as { [score: number]: string[] }
+    );
+
+    // Get an array of score groups sorted by score
+    const sortedGroups = Object.entries(groupedByScore)
+      .sort((a, b) => parseFloat(b[0]) - parseFloat(a[0]))
+      .map((entry) => entry[1]);
+
+    // Check if the placement is valid
+    if (placement - 1 < sortedGroups.length) {
+      // Return the archetypes at the specified placement
+      return sortedGroups[placement - 1];
+    } else {
+      // Return an empty array if the placement is out of bounds
+      return [];
+    }
   }
 
   useEffect(() => {
-    // are all questions answered
-    // calculate scores
-    // check if tie breakers
-    // if so, show finalQuestion
-    // else show submit
     const allQuestionsAnswered = areAllQuestionsAnswered();
     if (allQuestionsAnswered && initialAnswers) {
-      const initialScores = calculateInitialResults(initialAnswers);
-      const scores = calculateScores(deepAnswers, initialScores);
-      setQuizScores(scores);
-
-      const highscores = getHighestRankingArchetypes(scores) as ArchetypeKey[];
-      if (highscores.length > 1) {
-        showFinalQuestion(highscores);
-      } else {
-        setShowSubmit(true);
+      if (!quizScores) {
+        const initialScores = calculateInitialResults(initialAnswers);
+        const scores = calculateScores(deepAnswers, initialScores);
+        setQuizScores(scores);
       }
     }
-  }, [deepAnswers, initialAnswers]);
+  }, [initialAnswers, deepAnswers]);
+
+  useEffect(() => {
+    if (quizScores) {
+      const firstPlace = getRankingArchetypes(quizScores, 1) as ArchetypeKey[];
+      if (firstPlace.length > 1) {
+        showFinalQuestion(firstPlace);
+      } else {
+        const secondPlace = getRankingArchetypes(quizScores, 2) as ArchetypeKey[];
+        if (secondPlace.length > 1) {
+          showFinalQuestion(secondPlace);
+        } else {
+          setShowSubmit(true);
+        }
+      }
+    }
+  }, [quizScores]);
+
+  function calcScoresWithFinalAnswers(currentFinalAnswer: string, previousFinalAnswer?: string) {
+    const updatedScores = { ...quizScores };
+
+    finalQuestionOptions.forEach((finalQ) => {
+      // If the option is not the current final answer, subtract points
+      if (finalQ.style !== currentFinalAnswer) {
+        updatedScores[finalQ.style] -= 2;
+      } else if (finalQ.style === currentFinalAnswer && previousFinalAnswer) {
+        updatedScores[finalQ.style] += 2;
+      }
+    });
+
+    return updatedScores;
+  }
+
+  useEffect(() => {
+    if (finalAnswer) {
+      const prevFinalAnswer = prevFinalAnswerRef.current;
+      const updatedScores = calcScoresWithFinalAnswers(finalAnswer, prevFinalAnswer);
+      setQuizScores(updatedScores);
+      prevFinalAnswerRef.current = finalAnswer; // Update the ref to the current finalAnswer
+    }
+  }, [finalAnswer]);
+
+  useEffect(() => {
+    if (finalQuestionOptions) {
+      prevFinalAnswerRef.current = undefined;
+    }
+  }, [finalQuestionOptions]);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -114,28 +177,18 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     }
 
     if (userId && initialAnswers) {
-      const initialScores = calculateInitialResults(initialAnswers);
-      let scores = calculateScores(deepAnswers, initialScores);
-      setQuizScores(scores);
-
-      if (finalAnswer) {
-        finalQuestionOptions.forEach((finalQ) => {
-          if (finalQ.style !== finalAnswer) scores[finalQ.style] -= 5;
-        });
-      }
-
-      await saveResults(scores);
+      await saveResults();
     } else {
       console.error("No user");
     }
   }
 
-  async function saveResults(scores: Score) {
+  async function saveResults() {
     setIsLoading(true);
     const res = await fetch("/api/quiz", {
       method: "POST",
       body: JSON.stringify({
-        scores,
+        scores: quizScores,
         userId,
       }),
       headers: {
@@ -155,10 +208,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
   }
 
   const handleFinalQuestionResponse = async (selectedStyle: ArchetypeKey) => {
-    const updatedScores = { ...quizScores, [selectedStyle]: quizScores[selectedStyle] + 5 };
     setFinalAnswer(selectedStyle);
-    setQuizScores(updatedScores);
-    setShowSubmit(true);
   };
 
   const renderCurrentQuestions = () => {
@@ -187,8 +237,8 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
     }
   };
 
-  const showFinalQuestion = (highscores: ArchetypeKey[]) => {
-    const statements = highscores.map((style) => ({
+  const showFinalQuestion = (competingScores: ArchetypeKey[]) => {
+    const statements = competingScores.map((style) => ({
       style,
       statement: archetypeStatements[style],
     }));
