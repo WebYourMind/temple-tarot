@@ -197,3 +197,36 @@ export const sanitizeTeamData = (teamScores: any, team: any) => {
   };
   return teamData;
 };
+
+export function getTopTwoStyles({
+  explore,
+  analyze,
+  design,
+  optimize,
+  connect,
+  nurture,
+  energize,
+  achieve,
+}: Score): ThinkingStyle[] | null {
+  const scores = {
+    explore,
+    analyze,
+    design,
+    optimize,
+    connect,
+    nurture,
+    energize,
+    achieve,
+  };
+
+  // Check if any score is null
+  const hasNullScore = Object.values(scores).some((score) => score === null);
+  if (hasNullScore) {
+    return null;
+  }
+
+  const sortedStyles = (Object.keys(scores) as (keyof typeof scores)[]).sort((a, b) => scores[b] - scores[a]);
+
+  const topTwoStyles = sortedStyles.slice(0, 2);
+  return topTwoStyles.map((style) => style[0].toUpperCase() + style.slice(1)) as ThinkingStyle[];
+}
