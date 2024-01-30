@@ -1,35 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
 import bcrypt from "bcrypt";
+import { deletePasswordResetToken, getPasswordResetToken } from "../../../../lib/database/passwordResetTokens.database";
+import { updateUserHashed } from "../../../../lib/database/user.database";
 
 export async function POST(request: NextRequest) {
   try {
     const { token, password } = (await request.json()) as { token: string; password: string };
 
+    if (!token) return NextResponse.json({ error: "Token is Required" }, { status: 400 });
+
+    if (!password) return NextResponse.json({ error: "Password is Required" }, { status: 400 });
+
     // Validate the token and get the associated email or user ID
-    const { rows } = await sql`
-      SELECT * FROM password_reset_tokens WHERE token = ${token}
-    `;
+    const rows = await getPasswordResetToken(token);
 
-    if (rows.length > 0) {
-      const userId = rows[0].user_id;
+    if (!rows) return NextResponse.json({ error: "Invalid or expired verification token." }, { status: 400 });
 
-      // Hash the password
-      const hashedPassword = await bcrypt.hash(password, 10);
+    const userId = rows.user_id;
 
-      // Token is valid, so update the user's password
-      await sql`
-        UPDATE users SET hashed_password = ${hashedPassword} WHERE id = ${userId}
-      `;
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      await sql`
-        DELETE FROM password_reset_tokens WHERE token = ${token}
-      `;
+    // Token is valid, so update the user's password
+    const isUpdated = await updateUserHashed(parseInt(userId), hashedPassword);
 
-      return NextResponse.json({ message: "Password reset successfully." }, { status: 200 });
-    } else {
-      return NextResponse.json({ error: "Invalid or expired verification token." }, { status: 400 });
-    }
+    if (!isUpdated)
+      return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
+
+    const isDeleted = await deletePasswordResetToken(token);
+
+    if (!isDeleted)
+      return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
+
+    return NextResponse.json({ message: "Password reset successfully." }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       {
