@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent, useEffect } from "react";
 import InputField from "../../components/input-field";
 import Link from "next/link";
 import AuthForm from "app/(auth)/components/auth-form";
@@ -9,6 +9,18 @@ import toast from "react-hot-toast";
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInputValid, setIsInputValid] = useState<boolean>(false);
+
+  // Validate email and password
+  useEffect(() => {
+    const validateInput = () => {
+      // Basic validation: check if email and password are not empty
+      const isValid = email.trim().length > 0;
+      setIsInputValid(isValid);
+    };
+
+    validateInput();
+  }, [email]);
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -37,7 +49,7 @@ const ForgotPasswordForm = () => {
   };
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={handleSubmit}>
+    <AuthForm isLoading={isLoading} onSubmit={handleSubmit} isSubmitDisabled={!isInputValid}>
       <InputField
         id="email"
         placeholder="name@example.com"

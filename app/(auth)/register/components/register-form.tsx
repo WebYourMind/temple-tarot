@@ -1,5 +1,5 @@
 "use client";
-import { useState, SyntheticEvent } from "react";
+import { useState, SyntheticEvent, useEffect } from "react";
 import AuthForm from "app/(auth)/components/auth-form";
 import InputField from "app/(auth)/components/input-field";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -19,9 +19,26 @@ export default function RegisterForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [isInputValid, setIsInputValid] = useState<boolean>(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // Validate email and password
+  useEffect(() => {
+    const validateInput = () => {
+      // Basic validation: check if email and password are not empty
+      const isValid =
+        email.trim().length > 0 &&
+        name.trim().length > 0 &&
+        name.trim().length < 30 &&
+        password.trim().length > 0 &&
+        confirmPassword.trim().length > 0;
+      setIsInputValid(isValid);
+    };
+
+    validateInput();
+  }, [email, password]);
 
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
@@ -85,7 +102,7 @@ export default function RegisterForm() {
   }
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={onSubmit}>
+    <AuthForm isLoading={isLoading} onSubmit={onSubmit} isSubmitDisabled={!isInputValid}>
       <InputField
         id="name"
         placeholder="Jane Doe"

@@ -11,6 +11,7 @@ export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInputValid, setIsInputValid] = useState<boolean>(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -22,6 +23,17 @@ export default function LoginForm() {
       toast.error(error);
     }
   }, [error]);
+
+  // Validate email and password
+  useEffect(() => {
+    const validateInput = () => {
+      // Basic validation: check if email and password are not empty
+      const isValid = email.trim().length > 0 && password.trim().length > 0;
+      setIsInputValid(isValid);
+    };
+
+    validateInput();
+  }, [email, password]);
 
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
@@ -45,7 +57,7 @@ export default function LoginForm() {
   }
 
   return (
-    <AuthForm isLoading={isLoading} onSubmit={onSubmit}>
+    <AuthForm isLoading={isLoading} onSubmit={onSubmit} isSubmitDisabled={!isInputValid}>
       <InputField
         id="email"
         placeholder="name@example.com"
