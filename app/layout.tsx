@@ -1,5 +1,6 @@
 import "styles/tailwind.css";
 import { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
 import { Providers } from "app/providers";
 import { Header } from "components/navigation/header";
 import { Toaster } from "react-hot-toast";
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <FeedbackWidget />
           </div>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
