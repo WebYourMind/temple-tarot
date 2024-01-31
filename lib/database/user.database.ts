@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { QueryResultRow, sql } from "@vercel/postgres";
 
 export const InsertUser = async (name: string, email: string, hashedPassword: string) => {
   try {
@@ -30,7 +30,7 @@ export const updateUserTeam = async (userId: number, teamId: number | null) => {
   }
 };
 
-export const getUserById = async (userId: number) => {
+export const getUserById = async (userId: number | string) => {
   try {
     const { rows } = await sql`
             SELECT *
@@ -53,7 +53,7 @@ export const getUserByEmail = async (email: string) => {
     const { rows } = await sql`
             SELECT *
             FROM users
-            WHERE id = ${email}
+            WHERE email = ${email}
         `;
 
     if (rows.length > 0) {
@@ -90,6 +90,72 @@ export const updateUserVerified = async (identifier: number) => {
     return result.rowCount > 0;
   } catch (error) {
     console.error(error);
+    return null;
+  }
+};
+
+export const getAddressById = async (userId: number) => {
+  try {
+    const { rows: existingAddress } = await sql`SELECT address_id FROM users WHERE id = ${userId}`;
+    return existingAddress[0];
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const updateUserId = async (newAddressId: number, userId: number) => {
+  try {
+    await sql`UPDATE users SET address_id = ${newAddressId} WHERE id = ${userId}`;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const removeUserAddressId = async (userId: number) => {
+  try {
+    await sql`UPDATE users SET address_id = NULL WHERE id = ${userId}`;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const updateUserById = async (email: string, name: string, phone: string | undefined, userId: number) => {
+  try {
+    const { rows } =
+      await sql`UPDATE users SET email = ${email}, name = ${name}, phone = ${phone} WHERE id = ${userId} RETURNING *`;
+    if (rows.length > 0) {
+      return rows[0];
+    }
+    return null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getUserWithAdressById = async (userId: number) => {
+  try {
+    const { rows } = await sql`
+    SELECT users.*, 
+           addresses.street, 
+           addresses.city, 
+           addresses.state, 
+           addresses.postal_code, 
+           addresses.country 
+    FROM users 
+    LEFT JOIN addresses ON users.address_id = addresses.id
+    WHERE users.id = ${userId}
+  `;
+
+    if (rows.length > 0) {
+      return rows[0];
+    }
+    return null;
+  } catch (error) {
+    console.log(error);
     return null;
   }
 };
