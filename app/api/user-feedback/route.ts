@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
     const message = {
       to: "ibis-feedback@webyourmind.com", // Your email where you want to receive the feedback
-      from: "adam@webyourmind.com", // Verified SendGrid sender email
+      from: process.env.SENDGRID_EMAIL_ADDRESS as string, // Verified SendGrid sender email
       subject: `${capitalizeFirstLetter(sentiment)} Feedback from ${email}`,
       text: `Sentiment: ${sentiment}\nFeedback: ${feedback}`,
       html: `<strong>Sentiment:</strong> ${sentiment}<br><strong>Feedback:</strong> ${feedback}`,
