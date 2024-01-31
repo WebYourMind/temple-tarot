@@ -1,3 +1,4 @@
+import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { DeepQuestion } from "lib/quiz";
 
 interface AgreeDisagreeProps {
@@ -10,7 +11,7 @@ const AgreeDisagree = ({ section, onSelectOption, selectedOption }: AgreeDisagre
   const options = [
     { value: 0, size: "w-12 h-12 border-purple-400" },
     { value: 1, size: "w-10 h-10 border-purple-400" },
-    { value: 2, size: "w-8 h-8 border-muted-foreground" },
+    { value: 2, size: "w-8 h-8 border-input" },
     { value: 3, size: "w-10 h-10 border-green-400" },
     { value: 4, size: "w-12 h-12 border-green-400" },
   ];
@@ -36,7 +37,9 @@ const AgreeDisagree = ({ section, onSelectOption, selectedOption }: AgreeDisagre
                 <span className={`block ${option.size} rounded-full border-2 hover:bg-accent`}></span>
               </label>
               {selectedOption === option.value && (
-                <span className="absolute left-1/2 top-1/2 block h-full w-full -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-foreground bg-primary"></span>
+                <span className="absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-primary-foreground bg-primary text-primary-foreground">
+                  <CheckCircledIcon className="h-full w-full" />
+                </span>
               )}
             </div>
           ))}
