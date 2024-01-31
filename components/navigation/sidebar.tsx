@@ -5,6 +5,7 @@ import * as React from "react";
 import { Button } from "components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "components/ui/sheet";
 import { IconSidebar } from "components/ui/icons";
+import appConfig from "app.config";
 
 export interface SidebarProps {
   children?: React.ReactNode;
@@ -22,7 +23,7 @@ export function Sidebar({ children }: SidebarProps) {
         </SheetTrigger>
         <SheetContent className="inset-y-0 flex h-auto w-[300px] flex-col bg-background p-0 text-foreground">
           <SheetHeader className="p-4">
-            <SheetTitle className="text-sm">Navigation</SheetTitle>
+            <SheetTitle className="text-sm">{appConfig.appName}</SheetTitle>
           </SheetHeader>
           {children}
         </SheetContent>
