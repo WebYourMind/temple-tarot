@@ -1,4 +1,5 @@
 import { sql } from "@vercel/postgres";
+import { getExpireDate } from "../utils";
 
 export const getPasswordResetToken = async (token: string) => {
   try {
@@ -18,6 +19,20 @@ export const deletePasswordResetToken = async (token: string) => {
     const result = await sql`
       DELETE FROM password_reset_tokens WHERE token = ${token}
         `;
+    return result.rowCount > 0;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const insertPasswordResetToken = async (userId: number, resetToken: string) => {
+  try {
+    const expirationTime = getExpireDate("ONE_HOUR").toISOString(); // one hour
+    const result = await sql`
+        INSERT INTO password_reset_tokens (user_id, token, expires)
+        VALUES (${userId}, ${resetToken}, ${expirationTime})`;
+
     return result.rowCount > 0;
   } catch (error) {
     console.error(error);

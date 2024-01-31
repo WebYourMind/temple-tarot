@@ -30,20 +30,13 @@ export async function PATCH(request: NextRequest) {
     if (team.id !== user.team_id) {
       return NextResponse.json({ error: "You are not authorized to delete this user." }, { status: 403 });
     }
-    const isUpdated = await updateUserTeam(parseInt(userId), null);
+    const isUpdated = await updateUserTeam(parseInt(userId), team.id);
 
-    if (isUpdated === null || !isUpdated) {
+    if (!isUpdated) {
       return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
     }
 
-    return NextResponse.json(
-      {
-        message: "User removed from team successfully.",
-      },
-      {
-        status: 200,
-      }
-    );
+    return NextResponse.json({ message: "User removed from team successfully." }, { status: 200 });
   } catch (error) {
     console.error(error); // Log the error for debugging purposes
 

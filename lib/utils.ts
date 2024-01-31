@@ -5,6 +5,15 @@ import { ThinkingStyle, UserProfile } from "./types";
 import { Score } from "./quiz";
 import { ArchetypeKey } from "app/quiz/components/tie-breaker";
 
+export const EXPIRY_TIME_ONE_HOUR = 60 * 60 * 1000; // 1 hour
+
+export const EXPIRY_TIME_ONE_WEEK = 60 * 60 * 1000 * 24 * 7; // 1 week
+
+export const expiryTypes: { [key: string]: number } = {
+  ONE_HOUR: EXPIRY_TIME_ONE_HOUR,
+  ONE_WEEK: EXPIRY_TIME_ONE_WEEK,
+};
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -197,3 +206,8 @@ export const sanitizeTeamData = (teamScores: any, team: any) => {
   };
   return teamData;
 };
+
+export function getExpireDate(expiryType: keyof typeof expiryTypes) {
+  const expiryTime = expiryTypes[expiryType];
+  return new Date(new Date().getTime() + expiryTime);
+}
