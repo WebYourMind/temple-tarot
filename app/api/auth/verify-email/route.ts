@@ -1,31 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
+import {
+  deleteVerificationToken,
+  validateVerificationToken,
+} from "../../../../lib/database/verificationTokens.database";
+import { updateUserVerified } from "../../../../lib/database/user.database";
 
 export async function POST(request: NextRequest) {
   try {
     const { token } = (await request.json()) as { token: string };
 
     // Validate the token and get the associated email or user ID
-    const { rows } = await sql`
-      SELECT * FROM verification_tokens WHERE token = ${token}
-    `;
+    const rows = await validateVerificationToken(token);
 
-    if (rows.length > 0) {
-      const identifier = rows[0].identifier;
+    if (!rows) return NextResponse.json({ error: "Invalid or expired verification token." }, { status: 400 });
 
-      // Token is valid, so update the user's email verification status
-      await sql`
-        UPDATE users SET email_verified = NOW() WHERE email = ${identifier}
-      `;
+    const identifier = rows.identifier;
 
-      await sql`
-        DELETE FROM verification_tokens WHERE token = ${token}
-      `;
+    // Token is valid, so update the user's email verification status
+    const isUpdated = await updateUserVerified(identifier);
 
-      return NextResponse.json({ message: "Email verified successfully." }, { status: 200 });
-    } else {
-      return NextResponse.json({ error: "Invalid or expired verification token." }, { status: 400 });
-    }
+    if (!isUpdated)
+      return NextResponse.json({ error: "An error occurred while processing your request. UV" }, { status: 500 });
+
+    const isDeleted = await deleteVerificationToken(token);
+
+    if (!isDeleted)
+      return NextResponse.json({ error: "An error occurred while processing your request. DT" }, { status: 500 });
+
+    return NextResponse.json({ message: "Email verified successfully." }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       {

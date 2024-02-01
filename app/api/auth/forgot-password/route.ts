@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
 import crypto from "crypto";
 import sgMail from "@sendgrid/mail";
+import { getUserByEmail } from "../../../../lib/database/user.database";
+import { insertPasswordResetToken } from "../../../../lib/database/passwordResetTokens.database";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,19 +13,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Check for existing user
-    const { rows: existingUsers } = await sql`SELECT * FROM users WHERE email = ${email}`;
+    const user = await getUserByEmail(email);
 
-    if (existingUsers.length === 0) {
+    if (!user) {
       return NextResponse.json({ error: "No user with this email exists!" }, { status: 409 });
     }
 
-    const user = existingUsers[0];
-
     const resetToken = crypto.randomBytes(32).toString("hex");
 
-    await sql`INSERT INTO password_reset_tokens (user_id, token, expires) VALUES (${user.id}, ${resetToken}, ${new Date(
-      new Date().getTime() + 60 * 60 * 1000
-    ).toISOString()})`;
+    const isInserted = await insertPasswordResetToken(user.id, resetToken);
+
+    if (!isInserted) {
+      return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
+    }
 
     sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
     const msg = {

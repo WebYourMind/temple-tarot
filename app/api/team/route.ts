@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
 import crypto from "crypto";
 import { TeamForm } from "lib/types";
 import {
+  InsertTeam,
   deleteTeamById,
   getTeamById,
   getTeamByUser,
@@ -10,6 +10,7 @@ import {
   updateTeamByAdminID,
 } from "../../../lib/database/team.database";
 import { sanitizeTeamData } from "lib/utils";
+import { updateUserTeam } from "lib/database/user.database";
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,39 +27,23 @@ export async function POST(request: NextRequest) {
     const expiryDuration = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
     const inviteTokenExpiry = new Date(Date.now() + expiryDuration).toISOString();
 
-    // Begin transaction
-    await sql`BEGIN`;
+    let teams = await InsertTeam(parseInt(userId), team.name, team.description, inviteToken, inviteTokenExpiry);
+    if (!teams) {
+      return NextResponse.json({ message: "Failed to insert Team." }, { status: 500 });
+    }
 
-    const { rows: teams } = await sql`INSERT INTO teams (
-        admin_id,
-        name,
-        description,
-        invite_token,
-        invite_token_expiry
-    ) VALUES (
-        ${userId}, 
-        ${team.name}, 
-        ${team.description},
-        ${inviteToken}, 
-        ${inviteTokenExpiry}
-    ) RETURNING *`;
+    let res = await updateUserTeam(parseInt(teams?.id), parseInt(userId));
+    if (!res) {
+      return NextResponse.json({ message: "Failed to update user." }, { status: 500 });
+    }
 
-    await sql`UPDATE users SET team_id = ${teams[0].id} WHERE id = ${userId}`;
+    const rows = await getTeamScore(parseInt(teams.id));
 
-    // Commit transaction
-    await sql`COMMIT`;
-
-    const rows = await getTeamScore(parseInt(teams[0].id));
-
-    const teamData = sanitizeTeamData(rows, teams[0]);
+    const teamData = sanitizeTeamData(rows, teams);
 
     return NextResponse.json({ message: "Team created successfully.", team: teamData }, { status: 201 });
   } catch (error) {
     console.error(error); // Log the error for debugging purposes
-
-    // Rollback transaction in case of error
-    await sql`ROLLBACK`;
-
     return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
   }
 }

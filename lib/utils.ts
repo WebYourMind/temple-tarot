@@ -4,6 +4,17 @@ import { customAlphabet } from "nanoid";
 import { ThinkingStyle, UserProfile } from "./types";
 import { Score } from "./quiz";
 import { ArchetypeKey } from "app/quiz/components/tie-breaker";
+import { userReportTemplate } from "./templates/report.templates";
+import { scoresUpdateTemplate } from "./templates/score.templates";
+
+export const EXPIRY_TIME_ONE_HOUR = 60 * 60 * 1000; // 1 hour
+
+export const EXPIRY_TIME_ONE_WEEK = 60 * 60 * 1000 * 24 * 7; // 1 week
+
+export const expiryTypes: { [key: string]: number } = {
+  ONE_HOUR: EXPIRY_TIME_ONE_HOUR,
+  ONE_WEEK: EXPIRY_TIME_ONE_WEEK,
+};
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -59,6 +70,12 @@ export function getSortedStyles(scores: number[]) {
   return sortedStyles;
 }
 
+export const getScoresUpdateMessage = (scores: number[]) => {
+  const sortedStyles = getSortedStyles(scores);
+
+  return scoresUpdateTemplate.replace("{userThinkingStyles}", sortedStyles.join("\n"));
+};
+
 export function isPasswordComplex(password: string) {
   const minLength = 8;
   const hasUpperCase = /[A-Z]/.test(password);
@@ -82,16 +99,7 @@ export function isValidEmail(email: string) {
 }
 
 export function getDominantStyle({ explore, analyze, design, optimize, connect, nurture, energize, achieve }: Score) {
-  const scores = {
-    explore,
-    analyze,
-    design,
-    optimize,
-    connect,
-    nurture,
-    energize,
-    achieve,
-  };
+  const scores = { explore, analyze, design, optimize, connect, nurture, energize, achieve };
   // Check if any score is null
   const hasNullScore = Object.values(scores).some((score) => score === null || Number.isNaN(score));
   if (hasNullScore) {
@@ -103,6 +111,28 @@ export function getDominantStyle({ explore, analyze, design, optimize, connect, 
   const capitalizedStyle = dominantStyle[0].toUpperCase() + dominantStyle.slice(1);
   return capitalizedStyle as ThinkingStyle;
 }
+
+export const createReportGenerationPrompt = ({
+  explore,
+  analyze,
+  design,
+  optimize,
+  connect,
+  nurture,
+  energize,
+  achieve,
+}: Score) => {
+  // Identify the dominant thinking style based on the highest score
+  const scores = { explore, analyze, design, optimize, connect, nurture, energize, achieve };
+  const sortedStyles = getSortedStyles(getScoresArray(scores));
+
+  const dominantStyles = getTopTwoStyles(scores) as string[];
+
+  // Start the prompt with the dominant thinking style
+  return userReportTemplate
+    .replace("{dominantStyle}", dominantStyles?.join(" "))
+    .replace("{sortedStyles}", sortedStyles.join(", "));
+};
 
 export function capitalizeFirstLetter(str: string) {
   // Check if the input string is not empty
@@ -229,4 +259,9 @@ export function getTopTwoStyles({
 
   const topTwoStyles = sortedStyles.slice(0, 2);
   return topTwoStyles.map((style) => style[0].toUpperCase() + style.slice(1)) as ThinkingStyle[];
+}
+
+export function getExpireDate(expiryType: keyof typeof expiryTypes) {
+  const expiryTime = expiryTypes[expiryType];
+  return new Date(new Date().getTime() + expiryTime);
 }

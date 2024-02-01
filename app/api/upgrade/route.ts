@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
+import { upgradeUserToAdmin } from "lib/database/user.database";
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -11,9 +11,18 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "The user ID must be provided." }, { status: 400 });
     }
 
-    const { rows: users } = await sql`UPDATE users SET role = 'admin' WHERE id = ${userId} RETURNING *`;
-
-    return NextResponse.json({ message: "User succesfully upgraded to admin.", user: users[0] }, { status: 200 });
+    const users = await upgradeUserToAdmin(parseInt(userId));
+    if (!users) {
+      return NextResponse.json(
+        {
+          error: "Failed to upgrade user role",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
+    return NextResponse.json({ message: "User succesfully upgraded to admin.", user: users }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

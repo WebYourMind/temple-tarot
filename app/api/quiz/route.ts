@@ -1,22 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
 import { Score } from "lib/quiz";
-import { getScoresArray, getSortedStyles } from "lib/utils";
+import { getScoresArray, getScoresUpdateMessage, getSortedStyles } from "lib/utils";
+import { getScoreByUserId, insertScore } from "../../../lib/database/scores.database";
+import { insertChatMessages } from "../../../lib/database/chatMessages.database";
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = "force-dynamic";
-
-const getScoresUpdateMessage = (scores: number[]) => {
-  const sortedStyles = getSortedStyles(scores);
-
-  return `🌟 Thinking Styles Reassessed! 🌟
-
-Your journey of self-discovery continues with fresh insights. Here's how your thinking styles now align:
-
-${sortedStyles.join("\n")}
-
-Embrace these insights and continue to explore the unique facets of your thought processes!`;
-};
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,41 +14,24 @@ export async function POST(request: NextRequest) {
       userId: string;
     };
 
-    await sql`INSERT INTO scores (
-        user_id, 
-        explore, 
-        "analyze", 
-        design, 
-        optimize, 
-        "connect", 
-        nurture, 
-        energize, 
-        achieve
-        ) VALUES (
-        ${userId}, 
-        ${scores.explore}, 
-        ${scores.analyze}, 
-        ${scores.design}, 
-        ${scores.optimize}, 
-        ${scores.connect}, 
-        ${scores.nurture}, 
-        ${scores.energize}, 
-        ${scores.achieve}
-    ) RETURNING *`;
+    const inScoreInserted = await insertScore(parseInt(userId), scores);
+
+    if (!inScoreInserted) {
+      return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
+    }
+
     const scoresUpdate = getScoresUpdateMessage(getScoresArray(scores));
-    await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${scoresUpdate}, 'assistant')`;
+
+    const isChatMessageInserted = await insertChatMessages(parseInt(userId), scoresUpdate, "assistant");
+
+    if (!isChatMessageInserted) {
+      return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
+    }
 
     return NextResponse.json({ message: "Scores added successfully." }, { status: 201 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      {
-        error: "An error occurred while processing your request.",
-      },
-      {
-        status: 500,
-      }
-    );
+    return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
   }
 }
 
@@ -74,28 +46,15 @@ export async function GET(request: NextRequest) {
     }
 
     // Query to select the latest scores row for the given user ID
-    const { rows } = await sql`
-      SELECT * 
-      FROM scores
-      WHERE user_id = ${userId}
-      ORDER BY created_at DESC
-      LIMIT 1;
-    `;
+    const row = await getScoreByUserId(parseInt(userId));
 
     // Check if we got a result back
-    if (rows.length === 0) {
-      return NextResponse.json(
-        {
-          error: "No scores found for the given user ID.",
-        },
-        {
-          status: 404,
-        }
-      );
+    if (!row) {
+      return NextResponse.json({ error: "No scores found for the given user ID." }, { status: 404 });
     }
 
     // Convert decimal string values to numbers
-    const convertedScores = rows.map((row) => ({
+    const scores = {
       ...row,
       explore: parseFloat(row.explore),
       design: parseFloat(row.design),
@@ -105,31 +64,13 @@ export async function GET(request: NextRequest) {
       optimize: parseFloat(row.optimize),
       achieve: parseFloat(row.achieve),
       nurture: parseFloat(row.nurture),
-    }));
-
-    // If you're expecting only one row (due to LIMIT 1), you can directly access the first element
-    const scores = convertedScores[0];
+    };
 
     // Return the latest scores row
-    return NextResponse.json(
-      {
-        message: "Latest scores retrieved successfully.",
-        scores: scores,
-      },
-      {
-        status: 200,
-      }
-    );
+    return NextResponse.json({ message: "Latest scores retrieved successfully.", scores: scores }, { status: 200 });
   } catch (error) {
     console.error(error);
     // Return an error response
-    return NextResponse.json(
-      {
-        error: "An error occurred while processing your request.",
-      },
-      {
-        status: 500,
-      }
-    );
+    return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
   }
 }

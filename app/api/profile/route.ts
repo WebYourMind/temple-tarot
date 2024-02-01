@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
 import sgMail from "@sendgrid/mail";
 import crypto from "crypto";
 import { UserProfile } from "lib/types";
 import { getSession } from "lib/auth";
+import {
+  getAddressById,
+  getUserByEmail,
+  getUserById,
+  getUserWithAdressById,
+  removeUserAddressId,
+  updateUserById,
+  updateUserAddressById,
+} from "lib/database/user.database";
+import { deleteAddressById, insertNewAddress, updateUserAddress } from "lib/database/addresses.database";
+import { insertVerificationToken } from "lib/database/verificationTokens.database";
+import { deleteProfileById } from "lib/database/profile.database";
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -15,31 +26,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "The user ID must be provided." }, { status: 400 });
     }
 
-    const { user } = (await request.json()) as {
-      user: UserProfile;
-    };
-
-    const { street, city, state, postalCode, country } = user.address;
-    const isAddressProvided = street || city || state || postalCode || country;
-    const { rows: existingAddress } = await sql`SELECT address_id FROM users WHERE id = ${userId}`;
-
-    if (isAddressProvided) {
-      if (existingAddress[0].address_id) {
-        // Update existing address
-        await sql`UPDATE addresses SET street = ${street}, city = ${city}, state = ${state}, postal_code = ${postalCode}, country = ${country} WHERE id = ${existingAddress[0].address_id}`;
-      } else {
-        // Insert new address and update user record with new address_id
-        const { rows: newAddress } =
-          await sql`INSERT INTO addresses (street, city, state, postal_code, country) VALUES (${street}, ${city}, ${state}, ${postalCode}, ${country}) RETURNING id`;
-        await sql`UPDATE users SET address_id = ${newAddress[0].id} WHERE id = ${userId}`;
-      }
-      // If there is an address stored but the user intentionally deletes their address fields
-    } else if (existingAddress[0] && existingAddress[0].address_id) {
-      // Delete the existing address record
-      await sql`DELETE FROM addresses WHERE id = ${existingAddress[0].address_id}`;
-      // Set the user's address_id to NULL
-      await sql`UPDATE users SET address_id = NULL WHERE id = ${userId}`;
-    }
+    const { user } = (await request.json()) as { user: UserProfile };
 
     // Validate email and name
     if (!user.email || !user.email.includes("@")) {
@@ -50,19 +37,53 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Check if user exists
-    const { rows: existingUser } = await sql`SELECT * FROM users WHERE id = ${userId}`;
-    if (existingUser.length === 0) {
+    const existingUser = await getUserById(parseInt(userId));
+    if (!existingUser) {
       return NextResponse.json({ error: "User not found." }, { status: 404 });
+    }
+
+    const { street, city, state, postalCode, country } = user?.address;
+    const isAddressProvided = street || city || state || postalCode || country;
+
+    const existingAddress = await getAddressById(parseInt(userId));
+
+    if (!existingAddress) {
+      return NextResponse.json({ error: "Address does not exist" }, { status: 400 });
+    }
+
+    if (isAddressProvided) {
+      if (existingAddress?.address_id) {
+        // Update existing address
+        await updateUserAddress(street, city, state, postalCode, country, existingAddress?.address_id);
+      } else {
+        // Insert new address and update user record with new address_id
+        const newAddress = await insertNewAddress(street, city, state, postalCode, country);
+        if (!newAddress) {
+          return NextResponse.json({ error: "Failed to insert address." }, { status: 400 });
+        }
+        await updateUserAddressById(parseInt(newAddress?.id), parseInt(userId));
+      }
+      // If there is an address stored but the user intentionally deletes their address fields
+    } else if (existingAddress && existingAddress?.address_id) {
+      // Delete the existing address record
+      await deleteAddressById(existingAddress?.address_id);
+      // Set the user's address_id to NULL
+      await removeUserAddressId(parseInt(userId));
     }
 
     let successMessage = "Profile updated successfully.";
 
-    if (existingUser[0].email !== user.email) {
-      const { rows: existingEmail } = await sql`SELECT * FROM users WHERE email = ${user.email}`;
-      if (existingEmail.length === 0) {
+    if (existingUser?.email !== user?.email) {
+      //get user infromation by email
+      const existingEmail = await getUserByEmail(user?.email);
+
+      if (!existingEmail) {
         const verifyToken = crypto.randomBytes(32).toString("hex");
-        const expirationTime = new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 7).toISOString(); // one week
-        await sql`INSERT INTO verification_tokens (identifier, token, expires) VALUES (${user.email}, ${verifyToken}, ${expirationTime})`;
+        //verification token from database
+        const isInsertedVerificationToken = await insertVerificationToken(user.email, verifyToken);
+        if (!isInsertedVerificationToken) {
+          return NextResponse.json({ error: "Token Insertion failed" }, { status: 500 });
+        }
         sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
         const msg = {
           to: user.email,
@@ -86,20 +107,15 @@ export async function PATCH(request: NextRequest) {
       }
     }
 
-    const { rows: users } =
-      await sql`UPDATE users SET email = ${user.email}, name = ${user.name}, phone = ${user.phone} WHERE id = ${userId} RETURNING *`;
-
-    return NextResponse.json({ message: successMessage, updatedUser: users[0] }, { status: 200 });
+    //update user information in database
+    const users = await updateUserById(user.email, user.name, user.phone, parseInt(userId));
+    if (!users) {
+      return NextResponse.json({ error: "user update failed" }, { status: 500 });
+    }
+    return NextResponse.json({ message: successMessage, updatedUser: users }, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      {
-        error: "An error occurred while processing your request.",
-      },
-      {
-        status: 500,
-      }
-    );
+    return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
   }
 }
 
@@ -112,25 +128,18 @@ export async function DELETE(request: NextRequest) {
       throw new Error("The user ID must be provided.");
     }
 
-    // Start a transaction
-    await sql`BEGIN`;
-
-    // Deleting dependent data
-    await sql`DELETE FROM chat_messages WHERE user_id = ${userId}`;
-    await sql`DELETE FROM password_reset_tokens WHERE user_id = ${userId}`;
-    await sql`DELETE FROM verification_tokens WHERE identifier = (SELECT email FROM users WHERE id = ${userId})`;
-    await sql`DELETE FROM accounts WHERE user_id = ${userId}`;
-    await sql`DELETE FROM sessions WHERE user_id = ${userId}`;
-    await sql`DELETE FROM reports WHERE user_id = ${userId}`;
-    await sql`DELETE FROM scores WHERE user_id = ${userId}`;
-    await sql`DELETE FROM addresses WHERE id = (SELECT address_id FROM users WHERE id = ${userId})`;
-
-    // Finally, delete the user
-    await sql`DELETE FROM users WHERE id = ${userId}`;
-
-    // Commit the transaction
-    await sql`COMMIT`;
-
+    //delete profile from all tables in database
+    const res = await deleteProfileById(parseInt(userId));
+    if (!res) {
+      return NextResponse.json(
+        {
+          message: "Failed to delete profile",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
     return NextResponse.json(
       {
         message: "User and associated data deleted successfully.",
@@ -162,20 +171,10 @@ export async function GET(request: NextRequest) {
       throw new Error("The user ID must be provided.");
     }
 
-    const { rows: users } = await sql`
-    SELECT users.*, 
-           addresses.street, 
-           addresses.city, 
-           addresses.state, 
-           addresses.postal_code, 
-           addresses.country 
-    FROM users 
-    LEFT JOIN addresses ON users.address_id = addresses.id
-    WHERE users.id = ${userId}
-  `;
-
+    //get user data with address from database
+    const user = await getUserWithAdressById(parseInt(userId));
     // Check if we got a result back
-    if (users.length === 0) {
+    if (!user) {
       return NextResponse.json(
         {
           error: "No user found for the given user ID.",
@@ -185,8 +184,6 @@ export async function GET(request: NextRequest) {
         }
       );
     }
-
-    const user = users[0];
 
     const hasAddress =
       user.street !== null ||
