@@ -14,7 +14,7 @@ import {
 } from "lib/database/user.database";
 import { deleteAddressById, insertNewAddress, updateUserAddress } from "lib/database/addresses.database";
 import { insertVerificationToken } from "lib/database/verificationTokens.database";
-import { deleteProfileById } from "lib/database/profile/profile.delete.database";
+import { deleteProfileById } from "lib/database/profile.database";
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -26,9 +26,21 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "The user ID must be provided." }, { status: 400 });
     }
 
-    const { user } = (await request.json()) as {
-      user: UserProfile;
-    };
+    const { user } = (await request.json()) as { user: UserProfile };
+
+    // Validate email and name
+    if (!user.email || !user.email.includes("@")) {
+      return NextResponse.json({ error: "Invalid email provided." }, { status: 400 });
+    }
+    if (!user.name || user.name.trim().length === 0) {
+      return NextResponse.json({ error: "Invalid name provided." }, { status: 400 });
+    }
+
+    // Check if user exists
+    const existingUser = await getUserById(parseInt(userId));
+    if (!existingUser) {
+      return NextResponse.json({ error: "User not found." }, { status: 404 });
+    }
 
     const { street, city, state, postalCode, country } = user?.address;
     const isAddressProvided = street || city || state || postalCode || country;
@@ -57,20 +69,6 @@ export async function PATCH(request: NextRequest) {
       await deleteAddressById(existingAddress?.address_id);
       // Set the user's address_id to NULL
       await removeUserAddressId(parseInt(userId));
-    }
-
-    // Validate email and name
-    if (!user.email || !user.email.includes("@")) {
-      return NextResponse.json({ error: "Invalid email provided." }, { status: 400 });
-    }
-    if (!user.name || user.name.trim().length === 0) {
-      return NextResponse.json({ error: "Invalid name provided." }, { status: 400 });
-    }
-
-    // Check if user exists
-    const existingUser = await getUserById(parseInt(userId));
-    if (!existingUser) {
-      return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
     let successMessage = "Profile updated successfully.";
@@ -117,14 +115,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ message: successMessage, updatedUser: users }, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      {
-        error: "An error occurred while processing your request.",
-      },
-      {
-        status: 500,
-      }
-    );
+    return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
   }
 }
 

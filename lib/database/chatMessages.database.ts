@@ -29,3 +29,15 @@ export const getChatMessagesByUserId = async (userId: number) => {
     return null;
   }
 };
+
+export const insertChatMessages = async (userId: number, content: string, role: string) => {
+  try {
+    const result = await sql`
+      INSERT INTO chat_messages (user_id, content, role) VALUES (${userId},${content}, ${role});
+    `;
+    return result.rowCount > 0;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
