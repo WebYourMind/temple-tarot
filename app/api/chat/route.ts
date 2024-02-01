@@ -1,4 +1,3 @@
-import { sql } from "@vercel/postgres";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 

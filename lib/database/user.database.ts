@@ -104,7 +104,7 @@ export const getAddressById = async (userId: number) => {
   }
 };
 
-export const updateUserId = async (newAddressId: number, userId: number) => {
+export const updateUserAddressById = async (newAddressId: number, userId: number) => {
   try {
     await sql`UPDATE users SET address_id = ${newAddressId} WHERE id = ${userId}`;
   } catch (error) {
@@ -150,6 +150,19 @@ export const getUserWithAdressById = async (userId: number) => {
     WHERE users.id = ${userId}
   `;
 
+    if (rows.length > 0) {
+      return rows[0];
+    }
+    return null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const upgradeUserToAdmin = async (userId: number) => {
+  try {
+    const { rows } = await sql`UPDATE users SET role = 'admin' WHERE id = ${userId} RETURNING *`;
     if (rows.length > 0) {
       return rows[0];
     }

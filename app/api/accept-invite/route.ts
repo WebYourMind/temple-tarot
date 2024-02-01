@@ -2,19 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import sgMail from "@sendgrid/mail";
 import { verifyTeamToken } from "../../../lib/database/team.database";
 import { updateUserTeam } from "../../../lib/database/user.database";
-
-type Invitee = {
-  email: string;
-  name: string;
-};
-
-type SendInvitesRequest = {
-  invitees: Invitee[];
-  inviteUrl: string;
-  inviterName: string;
-  inviteMessage: string;
-  teamName: string;
-};
+import { SendInvitesRequest } from "lib/AppCustomTypes";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
 

@@ -10,7 +10,7 @@ import {
   getUserWithAdressById,
   removeUserAddressId,
   updateUserById,
-  updateUserId,
+  updateUserAddressById,
 } from "lib/database/user.database";
 import { deleteAddressById, insertNewAddress, updateUserAddress } from "lib/database/addresses.database";
 import { insertVerificationToken } from "lib/database/verificationTokens.database";
@@ -61,7 +61,7 @@ export async function PATCH(request: NextRequest) {
         if (!newAddress) {
           return NextResponse.json({ error: "Failed to insert address." }, { status: 400 });
         }
-        await updateUserId(parseInt(newAddress?.id), parseInt(userId));
+        await updateUserAddressById(parseInt(newAddress?.id), parseInt(userId));
       }
       // If there is an address stored but the user intentionally deletes their address fields
     } else if (existingAddress && existingAddress?.address_id) {

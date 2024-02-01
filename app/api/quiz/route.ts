@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
 import { Score } from "lib/quiz";
 import { getScoresArray, getScoresUpdateMessage, getSortedStyles } from "lib/utils";
 import { getScoreByUserId, insertScore } from "../../../lib/database/scores.database";
