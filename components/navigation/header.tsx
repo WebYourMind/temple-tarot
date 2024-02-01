@@ -38,7 +38,7 @@ export function Header() {
             </React.Suspense>
           </Sidebar>
         ) : (
-          <Link href="/" target="_blank" rel="nofollow" className="mr-1">
+          <Link href="/" className="mr-1">
             {appConfig.appName}
           </Link>
         )}

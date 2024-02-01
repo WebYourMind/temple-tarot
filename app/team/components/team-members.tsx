@@ -35,12 +35,8 @@ const TeamMemberList = ({ members, isAdmin, adminId, handleRemove }: Props) => {
                   </Button>
                 )}
               </div>
-              <span
-                className={`inline-flex items-center rounded-full bg-muted px-3 py-0.5 text-sm font-medium text-muted-foreground ${
-                  member.dominantStyle ? "text-green-900" : "text-red-900"
-                }`}
-              >
-                {member.dominantStyle ? "Assessment Complete" : "Assessment Pending"}
+              <span className="inline-flex items-center rounded-full bg-muted px-3 py-0.5 text-sm font-medium text-foreground">
+                {member.dominantStyle ? "Quiz Complete" : "Quiz Pending"}
               </span>
             </li>
           ))}
