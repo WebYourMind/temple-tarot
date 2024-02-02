@@ -130,8 +130,8 @@ export const createReportGenerationPrompt = ({
 
   // Start the prompt with the dominant thinking style
   return userReportTemplate
-    .replace("{dominantStyle}", dominantStyles?.join(" "))
-    .replace("{sortedStyles}", sortedStyles.join(", "));
+    .replace(/{dominantStyle}/g, dominantStyles?.join(" "))
+    .replace(/{sortedStyles}/g, sortedStyles.join(", "));
 };
 
 export function capitalizeFirstLetter(str: string) {
