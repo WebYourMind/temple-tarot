@@ -16,7 +16,7 @@ import { useTheme } from "app/theme";
 import { useSearchParams } from "next/navigation";
 
 export function Header() {
-  const { data: session } = useSession() as any;
+  const { data: session, status } = useSession() as any;
   const { toggleTheme } = useTheme();
   const searchParams = useSearchParams();
 
@@ -42,22 +42,24 @@ export function Header() {
             {appConfig.appName}
           </Link>
         )}
-        <div className="flex items-center">
-          <IconSeparator className="text-muted-foreground/50 h-6 w-6" />
-          {session?.user ? (
-            <UserMenu user={session.user} />
-          ) : (
-            <>
-              <Button variant="link" asChild className="-ml-2">
-                <Link href={loginUrl}>Login</Link>
-              </Button>
+        {status !== "loading" && (
+          <div className="flex items-center">
+            <IconSeparator className="text-muted-foreground/50 h-6 w-6" />
+            {session?.user ? (
+              <UserMenu user={session.user} />
+            ) : (
+              <>
+                <Button variant="link" asChild className="-ml-2">
+                  <Link href={loginUrl}>Login</Link>
+                </Button>
 
-              <Button variant="link" asChild className="-ml-2">
-                <Link href={registerUrl}>Register</Link>
-              </Button>
-            </>
-          )}
-        </div>
+                <Button variant="link" asChild className="-ml-2">
+                  <Link href={registerUrl}>Register</Link>
+                </Button>
+              </>
+            )}
+          </div>
+        )}
       </div>
       <div className="flex items-center justify-end space-x-4">
         <button onClick={toggleTheme}>
