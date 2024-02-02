@@ -31,14 +31,15 @@ export default function RegisterForm() {
       const isValid =
         email.trim().length > 0 &&
         name.trim().length > 0 &&
-        name.trim().length < 30 &&
+        // name.trim().length < 30 &&
         password.trim().length > 0 &&
         confirmPassword.trim().length > 0;
+      console.log(isValid);
       setIsInputValid(isValid);
     };
 
     validateInput();
-  }, [email, password]);
+  }, [name, email, password, confirmPassword]);
 
   async function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
