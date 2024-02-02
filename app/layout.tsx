@@ -6,6 +6,7 @@ import { Header } from "components/navigation/header";
 import { Toaster } from "react-hot-toast";
 import appConfig from "app.config";
 import FeedbackWidget from "components/feedback/feedback-widget";
+import CookieNotice from "components/cookie-notice";
 
 const title = appConfig.appName;
 const description = appConfig.description;
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
             {children}
             <FeedbackWidget />
+            <CookieNotice />
           </div>
         </Providers>
         <Analytics />

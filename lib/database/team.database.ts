@@ -180,3 +180,31 @@ export const updateTeamByAdminID = async (team: any, adminId: number) => {
     return null;
   }
 };
+
+export const InsertTeam = async (
+  userId: number,
+  name: string,
+  description: string,
+  inviteToken: string,
+  inviteTokenExpiry: string
+) => {
+  try {
+    const { rows } = await sql`INSERT INTO teams (
+        admin_id,
+        name,
+        description,
+        invite_token,
+        invite_token_expiry
+    ) VALUES (
+        ${userId}, 
+        ${name}, 
+        ${description},
+        ${inviteToken}, 
+        ${inviteTokenExpiry}
+    ) RETURNING *`;
+    return rows[0];
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

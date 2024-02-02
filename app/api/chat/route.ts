@@ -1,4 +1,3 @@
-import { sql } from "@vercel/postgres";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 
@@ -6,6 +5,7 @@ import { Score } from "lib/quiz";
 import { NextRequest, NextResponse } from "next/server";
 import config from "app.config";
 import { getScoresArray, getSortedStyles, getTopTwoStyles } from "lib/utils";
+import { getChatMessagesByUserId, insertPasswordResetToken } from "../../../lib/database/chatMessages.database";
 
 export const runtime = "edge";
 
@@ -29,9 +29,7 @@ export async function POST(req: Request) {
   const { messages, scores, userId } = json as any;
 
   if (!userId) {
-    return new Response("Unauthorized", {
-      status: 401,
-    });
+    return new Response("Unauthorized", { status: 401 });
   }
   const model = process.env.GPT_MODEL;
 
@@ -63,8 +61,14 @@ export async function POST(req: Request) {
 
     const stream = OpenAIStream(res, {
       async onCompletion(completion) {
-        await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${latestMessage.content}, ${latestMessage.role})`;
-        await sql`INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${completion}, 'assistant')`;
+        const isUserInserted = await insertPasswordResetToken(userId, latestMessage.content, latestMessage.role);
+        if (!isUserInserted) {
+          throw new Error("Error inserting into database");
+        }
+        const isAIInserted = await insertPasswordResetToken(userId, completion, "assistant");
+        if (!isAIInserted) {
+          throw new Error("Error inserting into database");
+        }
       },
     });
 
@@ -102,44 +106,18 @@ export async function GET(request: NextRequest) {
     }
 
     // Query to select the latest reports row for the given user ID
-    const { rows: existingMessages } = await sql`
-    SELECT * FROM chat_messages 
-    WHERE user_id=${userId} 
-    ORDER BY created_at ASC;
-`;
+    const existingMessages = await getChatMessagesByUserId(parseInt(userId));
 
     // Check if we got a result back
-    if (existingMessages.length === 0) {
-      return NextResponse.json(
-        {
-          error: "No chat found for the given user ID.",
-        },
-        {
-          status: 404,
-        }
-      );
+    if (!existingMessages) {
+      return NextResponse.json({ error: "No chat found for the given user ID." }, { status: 404 });
     }
 
     // Return the latest scores row
-    return NextResponse.json(
-      {
-        message: "Chat retrieved successfully.",
-        existingMessages,
-      },
-      {
-        status: 200,
-      }
-    );
+    return NextResponse.json({ message: "Chat retrieved successfully.", existingMessages }, { status: 200 });
   } catch (error) {
     console.error(error);
     // Return an error response
-    return NextResponse.json(
-      {
-        error: "An error occurred while processing your request.",
-      },
-      {
-        status: 500,
-      }
-    );
+    return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
   }
 }
