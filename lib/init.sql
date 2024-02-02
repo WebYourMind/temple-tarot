@@ -1,4 +1,4 @@
--- Create addresses table first
+-- Create the addresses table first 
 CREATE TABLE addresses (
     id SERIAL PRIMARY KEY,
     street VARCHAR(255),
