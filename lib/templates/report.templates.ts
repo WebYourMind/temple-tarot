@@ -1,5 +1,5 @@
 export const userReportTemplate = `
-Generate a detailed insight report titled 'Your Thinking Style Results' with '{dominantStyle}' as the subheading in markdown format for a user with dominant "{dominantStyle}" thinking styles. The user's full thinking style profile is as follows: {userThinkingStyles}. The report should:
+Generate a detailed insight report titled 'Your Thinking Style Results' with '{dominantStyle}' as the subheading in markdown format for a user with dominant "{dominantStyle}" thinking styles. The user's full thinking style profile is as follows: {sortedStyles}. The report should:
 
 1. Provide a personalized profile, incorporating real-life applications and scenarios specific to the user's dominant thinking styles.
 2. Include a comparative analysis between the user's higher and lower-scoring thinking styles, offering insights into how they interact and influence each other in various settings.
