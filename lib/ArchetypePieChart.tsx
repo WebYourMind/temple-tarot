@@ -9,7 +9,7 @@ import { Score } from "./quiz";
 export const thinkingStyleDescriptions = {
   Explore: "Focused on generating creative ideas and big-picture thinking.",
   Analyze: "Seeks to achieve objectivity and insight, often delving into the details.",
-  Design: "Concerned with designing effective systems and processes.",
+  Plan: "Concerned with designing effective systems and processes.",
   Optimize: "Strives to improve productivity and efficiency, fine-tuning processes.",
   Connect: "Builds and strengthens relationships, focusing on the interpersonal aspects.",
   Nurture: "Dedicated to cultivating people and potential, focusing on personal development.",
@@ -47,7 +47,7 @@ const ArchetypePieChart = ({ scores }: Props) => {
       value: scoresArray[0],
     },
     { name: "Analyze", value: scoresArray[1] },
-    { name: "Design", value: scoresArray[2] },
+    { name: "Plan", value: scoresArray[2] },
     { name: "Optimize", value: scoresArray[3] },
     { name: "Connect", value: scoresArray[4] },
     { name: "Nurture", value: scoresArray[5] },

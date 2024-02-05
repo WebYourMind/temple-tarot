@@ -65,7 +65,7 @@ CREATE TABLE scores (
     user_id INTEGER NOT NULL REFERENCES users(id),
     explore NUMERIC(5,2),
     "analyze" NUMERIC(5,2),
-    design NUMERIC(5,2),
+    plan NUMERIC(5,2),
     optimize NUMERIC(5,2),
     "connect" NUMERIC(5,2),
     nurture NUMERIC(5,2),

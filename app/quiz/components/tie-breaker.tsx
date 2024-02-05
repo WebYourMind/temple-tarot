@@ -1,7 +1,7 @@
 export const archetypeStatements = {
   explore: "I am always looking for new experiences and ideas.",
   analyze: "I seek to achieve objectivity and insight, often delving into the details.",
-  design: "I am concerned with designing effective systems and processes.",
+  plan: "I am concerned with designing effective systems and processes.",
   optimize: "I constantly seek to improve productivity and efficiency, fine-tuning processes.",
   connect: "I focus on building and strengthening relationships, emphasizing interpersonal aspects.",
   nurture: "I am dedicated to cultivating people and potential, focusing on personal development.",

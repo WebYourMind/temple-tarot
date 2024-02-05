@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
     const convertedReport = {
       ...report,
       explore: parseFloat(report.explore),
-      design: parseFloat(report.design),
+      plan: parseFloat(report.plan),
       energize: parseFloat(report.energize),
       connect: parseFloat(report.connect),
       analyze: parseFloat(report.analyze),

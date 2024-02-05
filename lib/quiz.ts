@@ -6,7 +6,7 @@ export type Answer = {
   [key: string]: number;
 };
 
-export type Archetype = "explore" | "analyze" | "design" | "optimize" | "connect" | "nurture" | "energize" | "achieve";
+export type Archetype = "explore" | "analyze" | "plan" | "optimize" | "connect" | "nurture" | "energize" | "achieve";
 
 export type Score = {
   [key in Archetype]: number;
@@ -43,7 +43,7 @@ export const initialQuestions: InitialQuestion[] = [
         option: "Macro (I see the forest): I focus on the big picture, looking for overarching trends and patterns",
         points: {
           explore: 3,
-          design: 3,
+          plan: 3,
           connect: 3,
           energize: 3,
         },
@@ -52,7 +52,7 @@ export const initialQuestions: InitialQuestion[] = [
         option: "Mostly Macro: While I consider the larger context, I do pay attention to key details",
         points: {
           explore: 2,
-          design: 2,
+          plan: 2,
           connect: 2,
           energize: 2,
           optimize: 1,
@@ -66,7 +66,7 @@ export const initialQuestions: InitialQuestion[] = [
           "Balanced: (I see the forest and the trees) I like to see both the overall picture and the intricate details as needed",
         points: {
           explore: 1,
-          design: 1,
+          plan: 1,
           connect: 1,
           energize: 1,
           optimize: 1,
@@ -79,7 +79,7 @@ export const initialQuestions: InitialQuestion[] = [
         option: "Mostly Micro: I tend to delve into the details, although I keep the broader implications in mind",
         points: {
           explore: 1,
-          design: 1,
+          plan: 1,
           connect: 1,
           energize: 1,
           optimize: 2,
@@ -138,9 +138,9 @@ export const initialQuestions: InitialQuestion[] = [
     choices: [
       {
         option:
-          "More How: I am drawn to crafting the process, improving efficiency, and ensuring the design is effective",
+          "More How: I am drawn to crafting the process, improving efficiency, and ensuring the plan is effective",
         points: {
-          design: 3,
+          plan: 3,
           optimize: 3,
         },
       },
@@ -154,9 +154,9 @@ export const initialQuestions: InitialQuestion[] = [
       },
       {
         option:
-          "Blend of Both: I strike a balance, giving equal attention to design and efficiency, energy and execution",
+          "Blend of Both: I strike a balance, giving equal attention to plan and efficiency, energy and execution",
         points: {
-          design: 1,
+          plan: 1,
           energize: 1,
           optimize: 1,
           achieve: 1,
@@ -181,9 +181,9 @@ export const deepQuestions: DeepQuestion[] = [
   },
   {
     name: "Macro How",
-    archetype: "design",
+    archetype: "plan",
     statement:
-      "I love to design systems and processes; I am focused on the efficiency and elegance of the overarching structure.",
+      "I love to plan systems and processes; I am focused on the efficiency and elegance of the overarching structure.",
   },
   {
     name: "Micro How",
@@ -222,7 +222,7 @@ export function calculateInitialResults(answers: InitialAnswer[]) {
   const results = {
     explore: 0,
     analyze: 0,
-    design: 0,
+    plan: 0,
     optimize: 0,
     connect: 0,
     nurture: 0,

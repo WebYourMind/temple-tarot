@@ -40,7 +40,7 @@ export function haveMatchingArchetypeValues(scores: Score, report: Score): boole
   const archetypes: (keyof Score)[] = [
     "explore",
     "analyze",
-    "design",
+    "plan",
     "optimize",
     "connect",
     "nurture",
@@ -57,12 +57,12 @@ export function haveMatchingArchetypeValues(scores: Score, report: Score): boole
   return true;
 }
 
-export function getScoresArray({ explore, analyze, design, optimize, connect, nurture, energize, achieve }: Score) {
-  return [explore, analyze, design, optimize, connect, nurture, energize, achieve];
+export function getScoresArray({ explore, analyze, plan, optimize, connect, nurture, energize, achieve }: Score) {
+  return [explore, analyze, plan, optimize, connect, nurture, energize, achieve];
 }
 
 export function getSortedStyles(scores: number[]) {
-  const styleNames = ["Explore", "Analyze", "Design", "Optimize", "Connect", "Nurture", "Energize", "Achieve"];
+  const styleNames = ["Explore", "Analyze", "Plan", "Optimize", "Connect", "Nurture", "Energize", "Achieve"];
   const sortedStyles = styleNames
     .map((style, index) => ({ style, score: scores[index] }))
     .sort((a, b) => b.score - a.score) // Sorting in descending order of scores
@@ -98,8 +98,8 @@ export function isValidEmail(email: string) {
   return regex.test(email);
 }
 
-export function getDominantStyle({ explore, analyze, design, optimize, connect, nurture, energize, achieve }: Score) {
-  const scores = { explore, analyze, design, optimize, connect, nurture, energize, achieve };
+export function getDominantStyle({ explore, analyze, plan, optimize, connect, nurture, energize, achieve }: Score) {
+  const scores = { explore, analyze, plan, optimize, connect, nurture, energize, achieve };
   // Check if any score is null
   const hasNullScore = Object.values(scores).some((score) => score === null || Number.isNaN(score));
   if (hasNullScore) {
@@ -115,7 +115,7 @@ export function getDominantStyle({ explore, analyze, design, optimize, connect, 
 export const createReportGenerationPrompt = ({
   explore,
   analyze,
-  design,
+  plan,
   optimize,
   connect,
   nurture,
@@ -123,7 +123,7 @@ export const createReportGenerationPrompt = ({
   achieve,
 }: Score) => {
   // Identify the dominant thinking style based on the highest score
-  const scores = { explore, analyze, design, optimize, connect, nurture, energize, achieve };
+  const scores = { explore, analyze, plan, optimize, connect, nurture, energize, achieve };
   const sortedStyles = getSortedStyles(getScoresArray(scores));
 
   const dominantStyles = getTopTwoStyles(scores) as string[];
@@ -189,7 +189,7 @@ export const sanitizeTeamScores = (teamScores: any) => {
 
       const score = {
         explore: parseFloat(row.explore),
-        design: parseFloat(row.design),
+        plan: parseFloat(row.plan),
         energize: parseFloat(row.energize),
         connect: parseFloat(row.connect),
         analyze: parseFloat(row.analyze),
@@ -231,7 +231,7 @@ export const sanitizeTeamData = (teamScores: any, team: any) => {
 export function getTopTwoStyles({
   explore,
   analyze,
-  design,
+  plan,
   optimize,
   connect,
   nurture,
@@ -241,7 +241,7 @@ export function getTopTwoStyles({
   const scores = {
     explore,
     analyze,
-    design,
+    plan,
     optimize,
     connect,
     nurture,

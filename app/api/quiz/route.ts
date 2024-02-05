@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     const scores = {
       ...row,
       explore: parseFloat(row.explore),
-      design: parseFloat(row.design),
+      plan: parseFloat(row.plan),
       energize: parseFloat(row.energize),
       connect: parseFloat(row.connect),
       analyze: parseFloat(row.analyze),
