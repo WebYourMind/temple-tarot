@@ -79,7 +79,7 @@ export const getTeamScore = async (teamId: number) => {
             
                 latest_scores.explore,
                 latest_scores.analyze,
-                latest_scores.design,
+                latest_scores.plan,
                 latest_scores.optimize,
                 latest_scores.connect,
                 latest_scores.nurture,
@@ -93,7 +93,7 @@ export const getTeamScore = async (teamId: number) => {
                     scores.user_id,
                     scores.explore,
                     scores.analyze,
-                    scores.design,
+                    scores.plan,
                     scores.optimize,
                     scores.connect,
                     scores.nurture,

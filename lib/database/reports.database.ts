@@ -27,7 +27,7 @@ export const reportScoreByUserId = async (userId: number) => {
             SELECT reports.*,
                    scores.explore,
                    scores.analyze,
-                   scores.design,
+                   scores.plan,
                    scores.optimize,
                    scores.connect,
                    scores.nurture,

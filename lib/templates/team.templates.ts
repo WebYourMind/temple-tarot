@@ -6,7 +6,7 @@ The team consists of {numberOfMembers} members, and this is their collective thi
 
 Full Thinking Style Definitions for reference:
     Explore: Focused on generating creative ideas and big-picture thinking.
-    Design: Concerned with designing effective systems and processes.
+    Plan: Concerned with designing effective systems and processes.
     Energize: Aims to mobilize people into action and inspire enthusiasm.
     Connect: Builds and strengthens relationships, focusing on the interpersonal aspects.
     Analyze: Seeks to achieve objectivity and insight, often delving into the details.
@@ -44,7 +44,7 @@ Conclusion: Summarize key findings and provide final recommendations for optimiz
 export const teamMemberTemplate = `
     Explore: {explore}
     Analyze: {analyze}
-    Design: {design}
+    Plan: {plan}
     Optimize: {optimize}
     Connect: {connect}
     Nurture: {nurture}

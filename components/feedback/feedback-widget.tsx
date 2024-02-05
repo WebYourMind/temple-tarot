@@ -65,20 +65,20 @@ const FeedbackWidget = () => {
           ></textarea>
           <div className="flex w-48 justify-around">
             <Button variant={"ghost"} className="rounded-full" onClick={() => setSentiment("negative")}>
-              <EmojiSad className={sentiment === "negative" ? "text-primary" : "text-gray-400"} />
+              <EmojiSad className={sentiment === "negative" ? "text-red-500" : "text-gray-400"} />
             </Button>
             <Button variant={"ghost"} className="rounded-full" onClick={() => setSentiment("neutral")}>
-              <EmojiMeh className={sentiment === "neutral" ? "text-primary" : "text-gray-400"} />
+              <EmojiMeh className={sentiment === "neutral" ? "text-yellow-500" : "text-gray-400"} />
             </Button>
             <Button variant={"ghost"} className="rounded-full" onClick={() => setSentiment("positive")}>
-              <EmojiNice className={sentiment === "positive" ? "text-primary" : "text-gray-400"} />
+              <EmojiNice className={sentiment === "positive" ? "text-green-500" : "text-gray-400"} />
             </Button>
           </div>
           <Button onClick={submitFeedback}>Submit</Button>
         </div>
       )}
-      <Button className="float-right h-14 w-14 rounded-full" onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? <IconClose className="h-10 w-10" /> : <IconMessage className="h-10 w-10" />}
+      <Button className={`float-right rounded-full ${isOpen ? "h-14 w-14" : "p-4"}`} onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? <IconClose className="h-10 w-10" /> : "Feedback"}
       </Button>
     </div>
   );

@@ -19,7 +19,7 @@ export type Address = {
 export type ArchetypeValues = {
   explore: string;
   analyze: string;
-  design: string;
+  plan: string;
   optimize: string;
   connect: string;
   nurture: string;
@@ -30,7 +30,7 @@ export type ArchetypeValues = {
 export type ThinkingStyle =
   | "Explore"
   | "Analyze"
-  | "Design"
+  | "Plan"
   | "Optimize"
   | "Connect"
   | "Nurture"

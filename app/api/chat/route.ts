@@ -15,10 +15,10 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-function createContextPrompt({ explore, analyze, design, optimize, connect, nurture, energize, achieve }: Score) {
-  const scores = { explore, analyze, design, optimize, connect, nurture, energize, achieve };
+function createContextPrompt({ explore, analyze, plan, optimize, connect, nurture, energize, achieve }: Score) {
+  const scores = { explore, analyze, plan, optimize, connect, nurture, energize, achieve };
   // Identify the dominant thinking style based on the highest score
-  const dominantStyle = getTopTwoStyles(scores)?.join(" ");
+  const dominantStyle = getTopTwoStyles(scores)?.join(" | ");
 
   const sortedStyles = getSortedStyles(getScoresArray(scores));
   return config.chatbot.prompts.chatScoresContext(dominantStyle, sortedStyles);

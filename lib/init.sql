@@ -65,7 +65,7 @@ CREATE TABLE scores (
     user_id INTEGER NOT NULL REFERENCES users(id),
     explore NUMERIC(5,2),
     "analyze" NUMERIC(5,2),
-    design NUMERIC(5,2),
+    plan NUMERIC(5,2),
     optimize NUMERIC(5,2),
     "connect" NUMERIC(5,2),
     nurture NUMERIC(5,2),
@@ -77,7 +77,7 @@ CREATE TABLE scores (
 
 CREATE TABLE reports (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(id),
+    user_id INTEGER NOT NULL UNIQUE REFERENCES users(id),
     scores_id INTEGER NOT NULL REFERENCES scores(id),
     report TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
@@ -87,5 +87,5 @@ CREATE TABLE team_reports (
     id SERIAL PRIMARY KEY,
     report TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    team_id INTEGER REFERENCES teams(id)
+    team_id INTEGER UNIQUE REFERENCES teams(id)
 );
