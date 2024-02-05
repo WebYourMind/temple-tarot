@@ -130,7 +130,7 @@ export const createReportGenerationPrompt = ({
 
   // Start the prompt with the dominant thinking style
   return userReportTemplate
-    .replace(/{dominantStyle}/g, dominantStyles?.join(" "))
+    .replace(/{dominantStyle}/g, dominantStyles?.join(" | "))
     .replace(/{sortedStyles}/g, sortedStyles.join(", "));
 };
 
