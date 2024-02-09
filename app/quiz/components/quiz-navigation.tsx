@@ -33,6 +33,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
           {currentPage > 0 &&
             Array.from({ length: totalPages - 1 }, (_, index) => (
               <Button
+                key={index.toString()}
                 className="hidden md:block"
                 variant={index + 1 === currentPage ? "secondary" : "ghost"}
                 size={"icon"}
