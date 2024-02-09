@@ -1,7 +1,7 @@
-import { Choice, InitialQuestion } from "lib/quiz";
+import { Choice, MCQQuestion } from "lib/quiz";
 
 interface Props {
-  section: InitialQuestion;
+  section: MCQQuestion;
   onSelectOption: (question: string, choice: Choice) => void;
   selectedOption?: Choice;
 }
@@ -11,7 +11,7 @@ const MultipleChoice = ({ section, onSelectOption, selectedOption }: Props) => {
     <div className="my-5">
       <h2 className="mb-10 block text-xl text-foreground">{section.statement}</h2>
       <div className="flex flex-col space-y-4">
-        {section.choices.map((choice: Choice) => {
+        {section.choices?.map((choice: Choice) => {
           const isSelected = selectedOption?.option === choice.option;
           return (
             <label

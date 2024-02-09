@@ -34,7 +34,6 @@ export default function RegisterForm() {
         // name.trim().length < 30 &&
         password.trim().length > 0 &&
         confirmPassword.trim().length > 0;
-      console.log(isValid);
       setIsInputValid(isValid);
     };
 
