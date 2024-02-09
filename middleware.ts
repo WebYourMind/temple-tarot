@@ -10,7 +10,7 @@ export const config = {
      * 3. /_static (inside /public)
      * 4. all root files inside /public (e.g. /favicon.ico)
      */
-    "/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)",
+    "/((?!_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)",
   ],
 };
 
@@ -22,6 +22,11 @@ export default async function middleware(req: NextRequest) {
 
   const session = (await getToken({ req, secret: process.env.SECRET })) as any;
 
+  if (path.startsWith("/api/auth")) {
+    return NextResponse.next();
+  } else if (session && path.startsWith("/api")) {
+    return NextResponse.next();
+  }
   // List of paths accessible without authentication
   const openPaths = ["/login", "/register", "/forgot-password", "/reset-password", "/verify-email", "/accept-invite"];
 

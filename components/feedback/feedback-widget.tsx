@@ -1,8 +1,10 @@
 "use client";
 
+import { FileIcon } from "@radix-ui/react-icons";
 import InputField from "app/(auth)/components/input-field";
+import { useFeedback } from "app/feedback-data";
 import { Button } from "components/ui/button";
-import { EmojiMeh, EmojiNice, EmojiSad, IconClose, IconMessage } from "components/ui/icons";
+import { EmojiMeh, EmojiNice, EmojiSad, IconClose, IconTrash } from "components/ui/icons";
 import { ApiResponse } from "lib/types";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -12,9 +14,10 @@ const FeedbackWidget = () => {
   const [email, setEmail] = useState("");
   const [feedback, setFeedback] = useState("");
   const [sentiment, setSentiment] = useState("");
+  const { feedbackData, includeData } = useFeedback();
 
   const submitFeedback = async () => {
-    const feedbackData = { email, feedback, sentiment };
+    const feedbackBody = { email, feedback, sentiment };
 
     try {
       const response = await fetch("/api/user-feedback", {
@@ -22,7 +25,7 @@ const FeedbackWidget = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(feedbackData),
+        body: JSON.stringify({ ...feedbackBody, feedbackData }),
       });
 
       const data = (await response.json()) as ApiResponse;
@@ -49,6 +52,18 @@ const FeedbackWidget = () => {
       {isOpen && (
         <div className="my-2 flex w-80 flex-col items-center space-y-4 rounded-xl border bg-background px-4 py-8 shadow-lg">
           <p>Have Feedback? We&apos;d love to hear it.</p>
+          {feedbackData.type && (
+            <div className="flex items-center border px-4 py-2">
+              <FileIcon className="mx-2" /> {feedbackData?.type}{" "}
+              <Button
+                className="ml-2 px-0 hover:bg-transparent hover:text-foreground"
+                variant={"ghost"}
+                onClick={() => includeData({ type: "", subject: undefined })}
+              >
+                <IconTrash />
+              </Button>
+            </div>
+          )}
           <InputField
             id="email"
             placeholder="name@example.com"
@@ -78,7 +93,7 @@ const FeedbackWidget = () => {
         </div>
       )}
       <Button className={`float-right rounded-full ${isOpen ? "h-14 w-14" : "p-4"}`} onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? <IconClose className="h-10 w-10" /> : "Feedback"}
+        {isOpen ? <IconClose className="h-10 w-10" /> : `${feedbackData.type && feedbackData.type + " "}` + "Feedback"}
       </Button>
     </div>
   );

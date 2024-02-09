@@ -1,9 +1,5 @@
-export type InitialAnswer = {
+export type McqAnswer = {
   [key: string]: Choice;
-};
-
-export type Answer = {
-  [key: string]: number;
 };
 
 export type Archetype = "explore" | "analyze" | "plan" | "optimize" | "connect" | "nurture" | "energize" | "achieve";
@@ -18,70 +14,62 @@ type Points = {
 
 export type Choice = {
   option: string;
-  points: Points;
+  points?: Points;
+  styles?: Archetype[];
 };
 
-export type DeepQuestion = {
-  name: string;
-  archetype: Archetype;
+export type MCQQuestion = {
+  type: "mcq";
   statement: string;
-};
-
-export type InitialQuestion = {
-  name: string;
   choices: Choice[];
-  statement: string;
 };
 
-export const initialQuestions: InitialQuestion[] = [
+export type RankingQuestion = {
+  type: "ranking";
+  statement: string;
+  choices: Choice[];
+};
+
+export type RatingQuestion = {
+  type: "rating";
+  statement: string;
+  archetype: Archetype;
+};
+
+export type QuizQuestion = MCQQuestion | RankingQuestion | RatingQuestion;
+
+export const quizQuestions: QuizQuestion[] = [
   {
-    name: "Macro/Micro Lens",
+    type: "ranking",
     statement:
-      "Considering the saying 'not seeing the forest for the trees', where do you focus when faced with a new problem or situation?",
+      "As you get ready for your day, what are you most likely to be thinking about? (Please drag to rank from top to bottom, with the most likely at the top)",
+    choices: [
+      { option: "A GOAL to energize or achieve", styles: ["energize", "achieve"] },
+      { option: "A PROCESS to design or optimize", styles: ["plan", "optimize"] },
+      { option: "A RELATIONSHIP to connect or nurture", styles: ["connect", "nurture"] },
+      { option: "An IDEA to explore or analyze", styles: ["explore", "analyze"] },
+    ],
+  },
+  {
+    type: "mcq",
+    statement: "Which statement best applies to how you think?",
     choices: [
       {
-        option: "Macro (I see the forest): I focus on the big picture, looking for overarching trends and patterns",
+        option: "I’m a big picture person. I am fine for others to work out the details.",
+        points: {
+          explore: 5,
+          plan: 5,
+          connect: 5,
+          energize: 5,
+        },
+      },
+      {
+        option: "I like to have the context, then dig into the details.",
         points: {
           explore: 3,
           plan: 3,
           connect: 3,
           energize: 3,
-        },
-      },
-      {
-        option: "Mostly Macro: While I consider the larger context, I do pay attention to key details",
-        points: {
-          explore: 2,
-          plan: 2,
-          connect: 2,
-          energize: 2,
-          optimize: 1,
-          analyze: 1,
-          nurture: 1,
-          achieve: 1,
-        },
-      },
-      {
-        option:
-          "Balanced: (I see the forest and the trees) I like to see both the overall picture and the intricate details as needed",
-        points: {
-          explore: 1,
-          plan: 1,
-          connect: 1,
-          energize: 1,
-          optimize: 1,
-          analyze: 1,
-          nurture: 1,
-          achieve: 1,
-        },
-      },
-      {
-        option: "Mostly Micro: I tend to delve into the details, although I keep the broader implications in mind",
-        points: {
-          explore: 1,
-          plan: 1,
-          connect: 1,
-          energize: 1,
           optimize: 2,
           analyze: 2,
           nurture: 2,
@@ -89,146 +77,231 @@ export const initialQuestions: InitialQuestion[] = [
         },
       },
       {
-        option: "Very Micro (I see the leaves): I concentrate on the specifics and fine points of the situation",
+        option: "I like to start with specifics, then zoom out to get the big picture.",
         points: {
+          explore: 2,
+          plan: 2,
+          connect: 2,
+          energize: 2,
           optimize: 3,
           analyze: 3,
           nurture: 3,
           achieve: 3,
         },
       },
+      {
+        option: "I’m a detail person. I am fine when others set the strategy and direction.",
+        points: {
+          optimize: 5,
+          analyze: 5,
+          nurture: 5,
+          achieve: 5,
+        },
+      },
     ],
   },
   {
-    name: "Head/Heart Lens",
-    statement: "When faced with a decision or problem, which statement aligns more with your instinctive focus?",
+    type: "mcq",
+    statement: "When making decisions...",
+    choices: [
+      {
+        option: "I tend to focus on the facts, being as objective as possible.",
+        points: {
+          explore: 10,
+          analyze: 10,
+        },
+      },
+      {
+        option: "I look at the facts first, but make sure I will feel good about the outcome.",
+        points: {
+          explore: 6,
+          analyze: 6,
+          connect: 4,
+          nurture: 4,
+        },
+      },
+      {
+        option: "I sense what feels right, then evaluate how well the facts support it.",
+        points: {
+          explore: 4,
+          analyze: 4,
+          connect: 6,
+          nurture: 6,
+        },
+      },
+      {
+        option: "I tend to focus on my feelings and intuition, even if it goes against the facts.",
+        points: {
+          connect: 10,
+          nurture: 10,
+        },
+      },
+    ],
+  },
+  {
+    type: "mcq",
+    statement: "When starting a project...",
     choices: [
       {
         option:
-          "More Head: I tend to focus on ideas, employing facts and frameworks or constructing stories to make sense of situations",
+          "I tend to focus on WHAT needs to be done, the goals and actions, to ensure we are energized, aligned and in motion.",
         points: {
-          explore: 3,
-          analyze: 3,
+          achieve: 10,
+          energize: 10,
         },
       },
       {
         option:
-          "More Heart: I prioritize relationships, connecting people, nurturing talent, and understanding emotional dynamics",
+          "I tend to focus on HOW we get there, the plans and process, to ensure we are efficient, organized and productive.",
         points: {
-          connect: 3,
-          nurture: 3,
+          plan: 10,
+          optimize: 10,
         },
       },
       {
-        option:
-          "Even: I seek a balance, considering both logical narratives and the emotional dimensions of situations and relationships",
+        option: "I look at both equally.",
         points: {
-          explore: 1,
-          connect: 1,
-          analyze: 1,
-          nurture: 1,
+          plan: 5,
+          energize: 5,
+          optimize: 5,
+          achieve: 5,
         },
       },
     ],
   },
   {
-    name: "How/What Lens",
-    statement:
-      "In a collaborative project or when solving problems, which approach do you gravitate towards naturally?",
-    choices: [
-      {
-        option:
-          "More How: I am drawn to crafting the process, improving efficiency, and ensuring the plan is effective",
-        points: {
-          plan: 3,
-          optimize: 3,
-        },
-      },
-      {
-        option:
-          "More What: My focus is on achieving goals, driving results, and rallying the team around a shared objective for success",
-        points: {
-          achieve: 3,
-          energize: 3,
-        },
-      },
-      {
-        option:
-          "Blend of Both: I strike a balance, giving equal attention to plan and efficiency, energy and execution",
-        points: {
-          plan: 1,
-          energize: 1,
-          optimize: 1,
-          achieve: 1,
-        },
-      },
-    ],
-  },
-];
-
-export const deepQuestions: DeepQuestion[] = [
-  {
-    name: "Macro Head",
+    type: "rating",
     archetype: "explore",
-    statement:
-      "I thrive on discovering new ideas and conceptual frameworks; I am energized by exploring possibilities and abstract theories.",
+    statement: "Explore creative solutions to a problem.",
   },
   {
-    name: "Micro Head",
-    archetype: "analyze",
-    statement:
-      "I am drawn to data and analysis; I enjoy delving into the details to understand the mechanics of how things work.",
-  },
-  {
-    name: "Macro How",
-    archetype: "plan",
-    statement:
-      "I love to plan systems and processes; I am focused on the efficiency and elegance of the overarching structure.",
-  },
-  {
-    name: "Micro How",
-    archetype: "optimize",
-    statement:
-      "I am constantly looking for ways to make improvements and tweaks to existing systems to optimize performance.",
-  },
-  {
-    name: "Macro Heart",
+    type: "rating",
     archetype: "connect",
-    statement:
-      "I prioritize building networks and fostering connections; I believe in the power of relationships to drive collaborative success.",
+    statement: "Make a connection to someone you know.",
   },
   {
-    name: "Micro Heart",
-    archetype: "nurture",
-    statement:
-      "I focus on the individual; I am attentive to personal development and emotional well-being in my approach to relationships.",
-  },
-  {
-    name: "Macro What",
+    type: "rating",
     archetype: "energize",
-    statement:
-      "I am passionate about motivating others towards a common goal; I energize and mobilize teams to achieve shared objectives.",
+    statement: "Mobilize resources around an initiative.",
   },
   {
-    name: "Micro What",
+    type: "rating",
+    archetype: "plan",
+    statement: "Design a process to achieve a goal.",
+  },
+  {
+    type: "rating",
+    archetype: "analyze",
+    statement: "Analyze data to generate insights.",
+  },
+  {
+    type: "rating",
+    archetype: "optimize",
+    statement: "Improve a process to save time or money.",
+  },
+  {
+    type: "rating",
+    archetype: "nurture",
+    statement: "Get advice on a personal problem.",
+  },
+  {
+    type: "rating",
     archetype: "achieve",
-    statement:
-      "I am results-driven; I set specific goals and work diligently towards achieving them, often in a hands-on manner.",
+    statement: "Make a list of action items.",
+  },
+  {
+    type: "mcq",
+    statement: "Are you more likely to get bored or frustrated in a meeting because it is...",
+    choices: [
+      {
+        option: "Too conceptual and in the clouds.",
+        points: {
+          explore: 5,
+          connect: 5,
+          energize: 5,
+          plan: 5,
+        },
+      },
+      {
+        option: "Too detailed and in the weeds.",
+        points: {
+          analyze: 5,
+          nurture: 5,
+          optimize: 5,
+          achieve: 5,
+        },
+      },
+      {
+        option: "Both.",
+        points: {
+          explore: 2,
+          connect: 2,
+          energize: 2,
+          plan: 2,
+          analyze: 2,
+          nurture: 2,
+          optimize: 2,
+          achieve: 2,
+        },
+      },
+      {
+        option: "Neither.",
+        points: {
+          plan: 0,
+        },
+      },
+    ],
+  },
+  {
+    type: "mcq",
+    statement: "Are you more likely to pay attention in a meeting to...",
+    choices: [
+      {
+        option: "The ideas being discussed and the related facts and data.",
+        points: {
+          explore: 10,
+          analyze: 10,
+        },
+      },
+      {
+        option: "The people and their relationships, behavior and feelings.",
+        points: {
+          connect: 10,
+          nurture: 10,
+        },
+      },
+      {
+        option: "Both.",
+        points: {
+          explore: 5,
+          analyze: 5,
+          connect: 5,
+          nurture: 5,
+        },
+      },
+      {
+        option: "Neither.",
+        points: {
+          explore: 0,
+        },
+      },
+    ],
   },
 ];
 
-export function calculateInitialResults(answers: InitialAnswer[]) {
-  // Initialize the results object with all archetypes set to 0
-  const results = {
-    explore: 0,
-    analyze: 0,
-    plan: 0,
-    optimize: 0,
-    connect: 0,
-    nurture: 0,
-    energize: 0,
-    achieve: 0,
-  };
+const resultsInit = {
+  explore: 0,
+  analyze: 0,
+  plan: 0,
+  optimize: 0,
+  connect: 0,
+  nurture: 0,
+  energize: 0,
+  achieve: 0,
+};
+
+export function calculateMcqResults(answers: McqAnswer[]) {
+  const results = { ...resultsInit };
 
   // Iterate over each answer
   Object.values(answers).forEach((answer) => {
@@ -245,18 +318,45 @@ export function calculateInitialResults(answers: InitialAnswer[]) {
   return results;
 }
 
-export function calculateScores(answers: Answer, initialScores: Score): Score {
-  // Build questionToArchetypeMap and counters dynamically from the questions array
-  deepQuestions.forEach((section) => {
-    initialScores[section.archetype] += answers[section.statement] || 0; // Add score or zero if not answered
+export function calculateRankingResults(rankAnswers: Choice[]) {
+  const results: Score = { ...resultsInit };
+  // Points for each position [first, second, third, ...]
+  const pointsForPosition = [5, 3, 2, 0]; // Extend this array if you have more positions
+
+  rankAnswers.forEach((item, index) => {
+    const points = pointsForPosition[index] || 0; // Default to 0 if index is out of bounds
+    (item.styles as Archetype[]).forEach((style) => {
+      results[style] = points;
+    });
   });
 
-  // Normalize scores by dividing by the count of questions for each archetype
-  Object.keys(initialScores).forEach((key) => {
-    const archetype = key as Archetype;
-    initialScores[archetype] *= 10;
-  });
-
-  // Return the normalized scores
-  return initialScores;
+  return results;
 }
+
+// Function to combine scores
+export const combineScores = (scores: Score[]): Score => {
+  const combinedScores: Score = { ...resultsInit };
+
+  scores.forEach((score) => {
+    Object.keys(score).forEach((key) => {
+      const archetype = key as Archetype;
+      if (!combinedScores[archetype]) {
+        combinedScores[archetype] = 0;
+      }
+      combinedScores[archetype] += score[archetype];
+    });
+  });
+
+  return combinedScores;
+};
+
+export const calcScoresOver100 = (score: Score): Score => {
+  const scoresOver100: Score = { ...resultsInit };
+
+  Object.keys(score).forEach((key) => {
+    const archetype = key as Archetype;
+    scoresOver100[archetype] = parseFloat(((score[archetype] / 40) * 100).toFixed(0));
+  });
+
+  return scoresOver100;
+};
