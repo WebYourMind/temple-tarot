@@ -168,7 +168,14 @@ export async function GET(request: NextRequest) {
 
     // Check if userId is not null or undefined
     if (!userId) {
-      throw new Error("The user ID must be provided.");
+      return NextResponse.json(
+        {
+          error: "The user ID must be provided.",
+        },
+        {
+          status: 400,
+        }
+      );
     }
 
     //get user data with address from database

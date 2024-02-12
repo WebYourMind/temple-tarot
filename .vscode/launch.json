@@ -8,6 +8,12 @@
       "command": "npm run dev"
     },
     {
+      "name": "Next.js: Unit Test Debugger",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run test"
+    },
+    {
       "name": "Next.js: debug client-side",
       "type": "chrome",
       "request": "launch",
