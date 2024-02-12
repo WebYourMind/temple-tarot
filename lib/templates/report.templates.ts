@@ -7,7 +7,7 @@ Generate a detailed insight report titled 'Your Personalized Insight Report' wit
 4. Deliver tailored career advice, pinpointing specific roles or industries where the {dominantStyle} styles are especially valuable, and guiding on how to navigate these paths.
 5. Present actionable strategies for leveraging {dominantStyle} styles in decision-making, problem-solving, and maintaining motivation.
 6. Discuss stress management techniques suitable for the user's thinking style profile, providing strategies for coping with pressure and uncertainty.
-7. If available, include insights or testimonials from individuals with a similar thinking style profile for real-world perspective and validation.
+7. If available, include well-known / pop-culture individuals who may have a similar thinking style profile for real-world perspective and validation.
 8. Advise on long-term growth strategies that align with the user's dominant thinking styles, ensuring sustainable personal and professional development.
 9. Encourage the user to engage in self-reflection, relating the insights provided in the report to their own experiences.
 
