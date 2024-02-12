@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "components/ui/button";
 import { useRouter } from "next/navigation";
@@ -9,14 +9,26 @@ import { useScores } from "lib/hooks/use-scores";
 import { useReport } from "lib/hooks/use-report";
 import Loading from "components/loading";
 import ArchetypePieChart from "lib/ArchetypePieChart";
+import { useFeedback } from "app/feedback-data";
 
 export default function Report() {
   const router = useRouter();
   const session = useSession() as any;
+  const { includeData } = useFeedback();
   const { scores, isLoading: scoresLoading } = useScores(session);
   const { report, isLoading: reportLoading, isGenerating } = useReport(session, scores);
 
   const isLoading = scoresLoading || reportLoading;
+
+  useEffect(() => {
+    if (report && !isGenerating) {
+      includeData({ type: "Insight Report", subject: JSON.stringify(report) });
+    }
+
+    return () => {
+      includeData({ type: "", subject: undefined });
+    };
+  }, [report]);
 
   const navToQuiz = useCallback(() => {
     router.push("/quiz");

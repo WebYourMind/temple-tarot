@@ -1,26 +1,28 @@
 import { CheckCircledIcon } from "@radix-ui/react-icons";
-import { DeepQuestion } from "lib/quiz";
+import { Archetype, RatingQuestion } from "lib/quiz";
 
-interface AgreeDisagreeProps {
-  section: DeepQuestion;
-  onSelectOption: (question: string, option: number) => void;
-  selectedOption: number;
+interface RatingProps {
+  section: RatingQuestion;
+  onSelectOption: (archetype: Archetype, option: number) => void;
+  selectedOption?: number;
 }
 
-const AgreeDisagree = ({ section, onSelectOption, selectedOption }: AgreeDisagreeProps) => {
+const Rating = ({ section, onSelectOption, selectedOption }: RatingProps) => {
   const options = [
     { value: 0, size: "w-12 h-12 border-purple-400" },
-    { value: 1, size: "w-10 h-10 border-purple-400" },
-    { value: 2, size: "w-8 h-8 border-input" },
-    { value: 3, size: "w-10 h-10 border-green-400" },
-    { value: 4, size: "w-12 h-12 border-green-400" },
+    { value: 3, size: "w-10 h-10 border-purple-400" },
+    { value: 6, size: "w-10 h-10 border-green-400" },
+    { value: 10, size: "w-12 h-12 border-green-400" },
   ];
 
   return (
     <div className="my-5 flex flex-col items-center justify-center p-4">
+      <p className="mb-4 text-center text-lg text-muted-foreground">
+        Please rate how likely or how often someone would come to you for help in this area:
+      </p>
       <p className="mb-16 text-center text-2xl">{section.statement as string}</p>
       <div className="flex w-full items-center md:max-w-lg">
-        <span className="mr-4 hidden text-lg font-medium md:block">DISAGREE</span>
+        <span className="mr-4 hidden text-center text-lg font-medium md:block">RARELY</span>
         <div className="flex w-full items-center justify-between">
           {options.map((option, index) => (
             <div key={index} className="relative">
@@ -30,7 +32,7 @@ const AgreeDisagree = ({ section, onSelectOption, selectedOption }: AgreeDisagre
                 name="quizOption"
                 value={option.value}
                 checked={selectedOption === option.value}
-                onChange={() => onSelectOption(section.statement as string, option.value)}
+                onChange={() => onSelectOption(section.archetype as Archetype, option.value)}
                 className="sr-only" // Hide the actual input but keep it accessible
               />
               <label htmlFor={`radio-${index}`} className="block cursor-pointer">
@@ -44,14 +46,14 @@ const AgreeDisagree = ({ section, onSelectOption, selectedOption }: AgreeDisagre
             </div>
           ))}
         </div>
-        <span className="ml-4 hidden text-lg font-medium md:block">AGREE</span>
+        <span className="ml-4 hidden text-center text-lg font-medium md:block">VERY OFTEN</span>
       </div>
       <div className="mt-5 flex w-full justify-between md:hidden">
-        <span>DISAGREE</span>
-        <span>AGREE</span>
+        <span>RARELY</span>
+        <span>VERY OFTEN</span>
       </div>
     </div>
   );
 };
 
-export default AgreeDisagree;
+export default Rating;

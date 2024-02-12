@@ -6,14 +6,21 @@ sendgrid.setApiKey(process.env.SENDGRID_API_KEY as string);
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, feedback, sentiment } = (await request.json()) as any;
+    const {
+      email,
+      feedback,
+      sentiment,
+      feedbackData: { type, subject },
+    } = (await request.json()) as any;
 
     const message = {
-      to: "ibis-feedback@webyourmind.com", // Your email where you want to receive the feedback
+      to: "ibis-feedback@webyourmind.com",
       from: process.env.SENDGRID_EMAIL_ADDRESS as string, // Verified SendGrid sender email
       subject: `${capitalizeFirstLetter(sentiment)} Feedback from ${email}`,
-      text: `Sentiment: ${sentiment}\nFeedback: ${feedback}`,
-      html: `<strong>Sentiment:</strong> ${sentiment}<br><strong>Feedback:</strong> ${feedback}`,
+      text: `Sentiment: ${sentiment}\nFeedback: ${feedback}\n\n${type ? type : ""}\n${subject ? subject : ""}`,
+      html: `<strong>Sentiment:</strong> ${sentiment}<br><strong>Feedback:</strong> ${feedback}<br><br>${
+        type ? type : ""
+      }<br>${subject ? subject : ""}`,
     };
 
     await sendgrid.send(message);

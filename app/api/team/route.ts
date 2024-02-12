@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Failed to insert Team." }, { status: 500 });
     }
 
-    let res = await updateUserTeam(parseInt(teams?.id), parseInt(userId));
+    let res = await updateUserTeam(parseInt(userId), parseInt(teams?.id));
     if (!res) {
       return NextResponse.json({ message: "Failed to update user." }, { status: 500 });
     }
