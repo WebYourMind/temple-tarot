@@ -20,7 +20,7 @@ const MultipleChoice = ({ section, onSelectOption, selectedOption }: Props) => {
                 isSelected
                   ? "border-primary-foreground bg-primary text-primary-foreground"
                   : "border-muted-foreground bg-background text-foreground"
-              } hover:bg-accent hover:text-accent-foreground`}
+              } md:hover:bg-accent md:hover:text-accent-foreground`}
             >
               <input
                 type="radio"

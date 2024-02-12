@@ -31,7 +31,7 @@ const TieBreaker = ({ options, selectedStyle, onSelectOption }: Props) => (
     {options.map((option, index) => (
       <label
         key={option.style}
-        className={`mb-2 flex cursor-pointer items-center justify-between rounded-sm border p-2 hover:bg-accent hover:text-accent-foreground ${
+        className={`mb-2 flex cursor-pointer items-center justify-between rounded-sm border p-2 md:hover:bg-accent md:hover:text-accent-foreground ${
           selectedStyle === option.style
             ? "border-primary bg-primary text-primary-foreground"
             : "border-card bg-card text-card-foreground"

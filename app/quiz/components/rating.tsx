@@ -36,7 +36,7 @@ const Rating = ({ section, onSelectOption, selectedOption }: RatingProps) => {
                 className="sr-only" // Hide the actual input but keep it accessible
               />
               <label htmlFor={`radio-${index}`} className="block cursor-pointer">
-                <span className={`block ${option.size} rounded-full border-2 hover:bg-accent`}></span>
+                <span className={`block ${option.size} rounded-full border-2 md:hover:bg-accent`}></span>
               </label>
               {selectedOption === option.value && (
                 <span className="absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-primary-foreground bg-primary text-primary-foreground">
