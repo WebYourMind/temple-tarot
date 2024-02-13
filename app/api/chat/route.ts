@@ -5,7 +5,7 @@ import { Score } from "lib/quiz";
 import { NextRequest, NextResponse } from "next/server";
 import config from "app.config";
 import { getScoresArray, getSortedStyles, getTopTwoStyles } from "lib/utils";
-import { getChatMessagesByUserId, insertPasswordResetToken } from "../../../lib/database/chatMessages.database";
+import { getChatMessagesByUserId, insertPasswordResetToken } from "lib/database/chatMessages.database";
 
 export const runtime = "edge";
 
@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
 
     // Check if userId is not null or undefined
     if (!userId) {
-      throw new Error("The user ID must be provided.");
+      return NextResponse.json({ error: "The user ID must be provided." }, { status: 400 });
     }
 
     // Query to select the latest reports row for the given user ID

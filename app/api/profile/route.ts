@@ -125,7 +125,15 @@ export async function DELETE(request: NextRequest) {
 
     // Check if userId is not null or undefined
     if (!userId) {
-      throw new Error("The user ID must be provided.");
+      // Return an error response
+      return NextResponse.json(
+        {
+          error: "The user ID must be provided.",
+        },
+        {
+          status: 400,
+        }
+      );
     }
 
     //delete profile from all tables in database
