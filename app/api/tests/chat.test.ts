@@ -90,5 +90,6 @@ describe("GET function", () => {
     // Assert that the response contains the expected error message and status
     expect(apiResponseJson).toEqual({ error: "An error occurred while processing your request." });
     expect(response.status).toEqual(500);
+
   });
 });
