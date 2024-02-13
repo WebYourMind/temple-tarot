@@ -12,7 +12,7 @@ export function useTeam() {
 
   async function fetchTeam() {
     setIsLoading(true);
-    setLoadingMessage("Fetching Team...");
+    setLoadingMessage("Getting team info...");
     try {
       const response = await fetch(`/api/team/?userId=${session?.user.id}`);
       if (!response.ok && response.status !== 404) {
@@ -22,7 +22,7 @@ export function useTeam() {
       setTeam(data.team);
     } catch (err: any) {
       setError(err.message);
-      toast.error(`Error fetching team: ${err.message}`);
+      toast.error(`Error getting team: ${err.message}`);
     } finally {
       setIsLoading(false);
     }

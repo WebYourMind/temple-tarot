@@ -21,7 +21,7 @@ export default function EditProfile() {
   const { profile, setProfile, isLoading: profileLoading } = useProfile();
 
   if (profileLoading || !profile) {
-    return <Loading message="Fetching profile.." />;
+    return <Loading message="Getting profile info.." />;
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -129,7 +129,7 @@ export default function EditProfile() {
           <Button type="submit">
             {" "}
             {isLoading && <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />}
-            {isLoading ? "Processing" : "Save Changes"}
+            {isLoading ? "Saving..." : "Save Changes"}
           </Button>
         </form>
       </div>

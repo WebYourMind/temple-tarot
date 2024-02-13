@@ -21,7 +21,7 @@ export function useScores(session: any) {
     if (!fetchAttempted && session?.data?.user && !scores) {
       fetchScores()
         .catch((error) => {
-          toast.error(`Error fetching scores: ${error.message}`);
+          toast.error(`Error getting scores: ${error.message}`);
         })
         .finally(() => {
           setIsLoading(false);

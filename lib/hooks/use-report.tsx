@@ -50,7 +50,7 @@ export function useReport(session: any, scores?: Score) {
       }
     } catch (error: any) {
       if (isSubscribed) {
-        toast.error("Error fetching report: " + error.message);
+        toast.error("Error getting report: " + error.message);
         setIsGenerating(false);
         setReport("Connection lost. Please refresh.");
       }
