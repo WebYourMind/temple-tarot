@@ -3,7 +3,7 @@
 import { ChatBubbleIcon, EyeOpenIcon, PersonIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { SidebarItem } from "./sidebar-item";
 import { IconUsers } from "components/ui/icons";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 
 const menuItems = [
   {
@@ -35,13 +35,15 @@ const teamItem = {
 };
 
 export function SidebarList() {
-  const { data: session } = useSession() as any;
+  // const { data: session } = useSession() as any;
   return (
     <div className="flex-1 overflow-auto">
       {menuItems?.length ? (
         <div className="space-y-2 px-2">
           {menuItems.map((item) => item && <SidebarItem key={item?.path} menuItem={item} />)}
-          {(session?.user?.role === "admin" || session?.user?.teamId) && <SidebarItem menuItem={teamItem} />}
+          {/* {(session?.user?.role === "admin" || session?.user?.teamId) &&  */}
+          <SidebarItem menuItem={teamItem} />
+          {/* } */}
         </div>
       ) : (
         <div className="p-8 text-center">

@@ -54,7 +54,7 @@ export function useTeamReport(teamId: string) {
       }
     } catch (error: any) {
       if (isSubscribed) {
-        // toast.error("Error fetching team report: " + error.message);
+        // toast.error("Error getting team report: " + error.message);
         setIsGenerating(false);
         setTeamReport("Connection lost. Please refresh.");
       }

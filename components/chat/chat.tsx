@@ -112,7 +112,7 @@ export function Chat({ id, className }: ChatProps) {
   }, [session?.data?.user.id]);
 
   if (initLoading) {
-    return <Loading message="Loading chat..." />;
+    return <Loading message="Getting chat messages..." />;
   }
 
   return (

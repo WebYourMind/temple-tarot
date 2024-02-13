@@ -121,6 +121,7 @@ const ThinkingStyleQuiz = ({ userId }: { userId: string }) => {
 
   // check all questions answered and calculate scores
   useEffect(() => {
+    console.log(ratingAnswers);
     const allQuestionsAnswered = areAllQuestionsAnswered();
     if (allQuestionsAnswered && mcqAnswers) {
       // if (!quizScores) {

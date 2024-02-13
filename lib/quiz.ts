@@ -338,6 +338,7 @@ export const combineScores = (scores: Score[]): Score => {
   const combinedScores: Score = { ...resultsInit };
 
   scores.forEach((score) => {
+    console.log(score);
     Object.keys(score).forEach((key) => {
       const archetype = key as Archetype;
       if (!combinedScores[archetype]) {
