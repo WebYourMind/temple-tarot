@@ -11,7 +11,7 @@ import { UserMenu } from "./user-menu";
 import { SidebarList } from "components/navigation/sidebar-list";
 import { useSession } from "next-auth/react";
 import appConfig from "app.config";
-import { Half2Icon } from "@radix-ui/react-icons";
+import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "app/theme";
 import { useSearchParams } from "next/navigation";
 
@@ -38,13 +38,13 @@ export function Header() {
             </React.Suspense>
           </Sidebar>
         ) : (
-          <Link href="/" className="mr-1">
+          <Link href="/" className="mr-2">
             {appConfig.appName}
           </Link>
         )}
         {status !== "loading" && (
           <div className="flex items-center">
-            <IconSeparator className="text-muted-foreground/50 h-6 w-6" />
+            <DividerVerticalIcon className="h-6 w-6 text-border" />
             {session?.user ? (
               <UserMenu user={session.user} />
             ) : (
@@ -62,7 +62,7 @@ export function Header() {
         )}
       </div>
       <div className="flex items-center justify-end space-x-4">
-        <button onClick={toggleTheme}>
+        <button onClick={toggleTheme} aria-label="Theme">
           <Half2Icon />
         </button>
         <a href="https://shift.to" target="_blank" rel="noreferrer" className={cn(buttonVariants())}>

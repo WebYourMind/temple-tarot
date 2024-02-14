@@ -51,7 +51,7 @@ export function UserMenu({ user }: UserMenuProps) {
             <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full bg-muted text-xs font-medium uppercase text-foreground">
               {user?.name ? getUserInitials(user?.name) : null}
             </div>
-            <span className="ml-2">{user?.name}</span>
+            <span className="ml-2 hidden md:block">{user?.name}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent sideOffset={8} align="start" className="w-[180px] bg-background text-foreground">
