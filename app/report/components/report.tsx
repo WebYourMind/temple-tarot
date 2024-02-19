@@ -28,7 +28,7 @@ export default function Report() {
     return () => {
       includeData({ type: "", subject: undefined });
     };
-  }, [report]);
+  }, [report, isGenerating]);
 
   const navToQuiz = useCallback(() => {
     router.push("/quiz");
