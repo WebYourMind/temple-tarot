@@ -16,7 +16,9 @@ export default {
     Analyze: Seeks to achieve objectivity and insight, often delving into the details.
     Optimize: Strives to improve productivity and efficiency, fine-tuning processes.
     Achieve: Driven to achieve completion and maintain momentum, often action-oriented.
-    Nurture: Dedicated to cultivating people and potential, focusing on personal development.`,
+    Nurture: Dedicated to cultivating people and potential, focusing on personal development.
+    
+    Politely decline to answer a query if you cannot relate the response to thinking styles or workplace topics.`,
 
       chatScoresContext: (
         dominantStyle,
@@ -37,7 +39,9 @@ export default {
     Analyze: Seeks to achieve objectivity and insight, often delving into the details.
     Optimize: Strives to improve productivity and efficiency, fine-tuning processes.
     Achieve: Driven to achieve completion and maintain momentum, often action-oriented.
-    Nurture: Dedicated to cultivating people and potential, focusing on personal development.`,
+    Nurture: Dedicated to cultivating people and potential, focusing on personal development.
+    
+    Politely decline to answer a query if you cannot relate the response to thinking styles or workplace topics.`,
     },
   },
   theme: {
