@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import config from "app.config";
 import { getScoresArray, getSortedStyles, getTopTwoStyles } from "lib/utils";
 import { getChatMessagesByUserId, insertPasswordResetToken } from "lib/database/chatMessages.database";
+import { chatTemplate, chatTemplateNoStyles } from "lib/templates/chat.templates";
 
 export const runtime = "edge";
 
@@ -18,10 +19,14 @@ const openai = new OpenAIApi(configuration);
 function createContextPrompt({ explore, analyze, plan, optimize, connect, nurture, energize, achieve }: Score) {
   const scores = { explore, analyze, plan, optimize, connect, nurture, energize, achieve };
   // Identify the dominant thinking style based on the highest score
-  const dominantStyle = getTopTwoStyles(scores)?.join(" | ");
-
+  const dominantStyle = getTopTwoStyles(scores);
   const sortedStyles = getSortedStyles(getScoresArray(scores));
-  return config.chatbot.prompts.chatScoresContext(dominantStyle, sortedStyles);
+  if (dominantStyle) {
+    return chatTemplate
+      .replace(/{dominantStyle}/g, dominantStyle.join(" | "))
+      .replace(/{sortedStyles}/g, sortedStyles.join(", "));
+  }
+  // return config.chatbot.prompts.chatScoresContext(dominantStyle, sortedStyles);
 }
 
 export async function POST(req: Request) {
@@ -41,7 +46,7 @@ export async function POST(req: Request) {
 
   const latestMessage = messages[messages.length - 1];
   const relevantMessages = messages.slice(-4);
-  const contextPrompt = scores ? createContextPrompt(scores) : config.chatbot.prompts.chatContext;
+  const contextPrompt = scores ? createContextPrompt(scores) : chatTemplateNoStyles;
 
   try {
     const res = await openai.createChatCompletion({

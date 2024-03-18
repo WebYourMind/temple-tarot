@@ -1,5 +1,3 @@
-import { getScoresUpdateMessage } from "../utils";
-
 export const scoresUpdateTemplate = `
 🌟 Thinking Styles Reassessed! 🌟
 
