@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   //   images: [image],
   //   creator: "@vercel",
   // },
-  metadataBase: new URL("https://ibis-ai.vercel.app"),
+  metadataBase: new URL(process.env.NEXTAUTH_URL as string),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

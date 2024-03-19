@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
 import { ThinkingStyle, UserProfile } from "./types";
 import { Score } from "./quiz";
-import { ArchetypeKey } from "app/quiz/components/tie-breaker";
+import { ArchetypeKey } from "app/(custom)/quiz/components/tie-breaker";
 import { userReportTemplate } from "./templates/report.templates";
 import { scoresUpdateTemplate } from "./templates/score.templates";
 
