@@ -1,5 +1,5 @@
 export default {
-  appName: "Thoth's Reader",
+  appName: "Thoth Tarot",
   description: "An interpreter of Thoth Tarot.",
   theme: {
     modes: {
