@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   const promotToSuggestedResponse = `
   Context: this is an AI response to a user query.
   AI response: "${lastMessage}" 
-  Generate 3 short suggested questions the user might ask in response to this AI message. Keep the subject in the topic of 'Thinking Styles'.
+  Generate 3 short suggested questions the user might ask in response to this AI message.
   Your entire response should be an array of strings in json format and easily parsable. No markdown. Example:
   ["response 1", "response 2"]
   `;

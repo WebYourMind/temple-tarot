@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "components/ui/dropdown-menu";
 import { UserProfile } from "lib/types";
+import { IconUser } from "components/ui/icons";
 // import toast from "react-hot-toast";
 
 export interface UserMenuProps {
@@ -48,9 +49,10 @@ export function UserMenu({ user }: UserMenuProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost">
-            <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full bg-muted text-xs font-medium uppercase text-foreground">
-              {user?.name ? getUserInitials(user?.name) : null}
+            <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full border border-white bg-gradient-to-r from-cyan-500 to-blue-600 text-primary-foreground">
+              <IconUser className="h-full w-full p-1" />
             </div>
+
             <span className="ml-2 hidden md:block">{user?.name}</span>
           </Button>
         </DropdownMenuTrigger>

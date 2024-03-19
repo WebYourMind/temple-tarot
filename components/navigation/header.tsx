@@ -6,12 +6,11 @@ import Link from "next/link";
 import { cn } from "lib/utils";
 import { Button, buttonVariants } from "components/ui/button";
 import { Sidebar } from "./sidebar";
-import { IconExternalLink, IconSeparator } from "../ui/icons";
 import { UserMenu } from "./user-menu";
 import { SidebarList } from "components/navigation/sidebar-list";
 import { useSession } from "next-auth/react";
 import appConfig from "app.config";
-import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
+import { DividerVerticalIcon, Half2Icon, HeartFilledIcon } from "@radix-ui/react-icons";
 import { useTheme } from "app/theme";
 import { useSearchParams } from "next/navigation";
 
@@ -66,10 +65,10 @@ export function Header() {
           <Half2Icon />
         </button>
         <a href="https://shift.to" target="_blank" rel="noreferrer" className={cn(buttonVariants())}>
-          <span className="hidden sm:block">Shift Thinking</span>
-          <span className="sm:hidden">shift.to</span>
+          <span className="hidden sm:block">Community</span>
+          <span className="sm:hidden">Community</span>
           &nbsp;
-          <IconExternalLink />
+          <HeartFilledIcon />
         </a>
       </div>
     </header>

@@ -1,6 +1,6 @@
 export default {
-  appName: "IBIS AI",
-  description: "A guide for thinking based on natural systems.",
+  appName: "Thoth's Reader",
+  description: "An interpreter of Thoth Tarot.",
   theme: {
     modes: {
       light: {
@@ -26,13 +26,13 @@ export default {
         radius: "0.5rem",
       },
       dark: {
-        background: "#111827",
+        background: "#000000",
         foreground: "#eeeeee",
         card: "#1f2937",
         cardForeground: "#f7f9fb",
         popover: "#1f2937",
         popoverForeground: "#f7f9fb",
-        primary: "#d1600f",
+        primary: "#30D5C8",
         primaryForeground: "#eeeeee",
         secondary: "#fff",
         secondaryForeground: "#333333",
@@ -42,7 +42,7 @@ export default {
         accentForeground: "#e26912",
         destructive: "#e63946",
         destructiveForeground: "#f7f9fb",
-        border: "#e26912",
+        border: "#26619C",
         input: "#7185a3",
         ring: "#60a5fa",
         radius: "0.5rem",

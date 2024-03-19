@@ -27,9 +27,8 @@ export function SidebarItem({ menuItem }: SidebarItemProps) {
         <Link
           href={menuItem.path}
           className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "group w-full appearance-none pl-4 pr-4",
-            isActive && "bg-primary text-primary-foreground"
+            isActive ? buttonVariants({ variant: "default" }) : buttonVariants({ variant: "ghost" }),
+            "group w-full appearance-none pl-4 pr-4"
           )}
         >
           <div

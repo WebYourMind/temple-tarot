@@ -23,13 +23,15 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
       <div
         className={cn(
           "flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-3xl border shadow",
-          message.role === "user" ? "bg-primary text-primary-foreground" : "bg-background text-orange-500"
+          message.role === "user"
+            ? "border-white bg-gradient-to-r from-cyan-500 to-blue-600 text-primary-foreground"
+            : "border-white"
         )}
       >
         {message.role === "user" ? (
-          <IconUser />
+          <IconUser className="h-full w-full p-1" />
         ) : (
-          <Image className="rounded-3xl" src={Ibis} alt="IBIS" width={45} height={45} />
+          <Image className="rounded-3xl invert filter" src={Ibis} alt="Thoth" width={45} height={45} />
         )}
       </div>
       <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">

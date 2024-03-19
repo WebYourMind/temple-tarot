@@ -1,4 +1,4 @@
-import { ColorWheelIcon } from "@radix-ui/react-icons";
+import { ColorWheelIcon, TriangleUpIcon } from "@radix-ui/react-icons";
 
 type LoadingProps = {
   message?: string;
@@ -17,7 +17,7 @@ export default function Loading({ message }: LoadingProps) {
           ))}
         </div>
       )}
-      <ColorWheelIcon className="h-10 w-10 animate-spin text-orange-600" />
+      <TriangleUpIcon className="h-20 w-20 animate-spin text-foreground" />
     </div>
   );
 }

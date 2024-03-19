@@ -7,7 +7,7 @@ import { IconUsers } from "components/ui/icons";
 
 const menuItems = [
   {
-    name: "Chat with IBIS",
+    name: "Speak with Thoth's reader",
     path: "/",
     icon: <ChatBubbleIcon />,
   },
@@ -16,23 +16,7 @@ const menuItems = [
     path: "/profile",
     icon: <PersonIcon />,
   },
-  {
-    name: "My Thinking Style Report",
-    path: "/report",
-    icon: <EyeOpenIcon />,
-  },
-  {
-    name: "Thinking Style Quiz",
-    path: "/quiz",
-    icon: <QuestionMarkCircledIcon />,
-  },
 ];
-
-const teamItem = {
-  name: "Teams",
-  path: "/team",
-  icon: <IconUsers />,
-};
 
 export function SidebarList() {
   // const { data: session } = useSession() as any;
@@ -41,9 +25,6 @@ export function SidebarList() {
       {menuItems?.length ? (
         <div className="space-y-2 px-2">
           {menuItems.map((item) => item && <SidebarItem key={item?.path} menuItem={item} />)}
-          {/* {(session?.user?.role === "admin" || session?.user?.teamId) &&  */}
-          <SidebarItem menuItem={teamItem} />
-          {/* } */}
         </div>
       ) : (
         <div className="p-8 text-center">
