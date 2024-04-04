@@ -92,7 +92,11 @@ const FeedbackWidget = () => {
           <Button onClick={submitFeedback}>Submit</Button>
         </div>
       )}
-      <Button className={`float-right rounded-full ${isOpen ? "h-14 w-14" : "p-4"}`} onClick={() => setIsOpen(!isOpen)}>
+      <Button
+        variant={"ghost"}
+        className={`float-right rounded-full ${isOpen ? "h-14 w-14" : "p-4"}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
         {isOpen ? <IconClose className="h-10 w-10" /> : `${feedbackData.type && feedbackData.type + " "}` + "Feedback"}
       </Button>
     </div>

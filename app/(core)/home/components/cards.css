@@ -1,0 +1,28 @@
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.75);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0);
+  }
+}
+
+.glow-on-click {
+  animation: glow 1s ease-in-out infinite;
+}
+
+@keyframes textReveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.revealText {
+  animation: textReveal 1s ease forwards;
+}

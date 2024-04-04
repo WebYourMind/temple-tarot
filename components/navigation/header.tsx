@@ -64,12 +64,6 @@ export function Header() {
         <button onClick={toggleTheme} aria-label="Theme">
           <Half2Icon />
         </button>
-        <a href="https://shift.to" target="_blank" rel="noreferrer" className={cn(buttonVariants())}>
-          <span className="hidden sm:block">Community</span>
-          <span className="sm:hidden">Community</span>
-          &nbsp;
-          <HeartFilledIcon />
-        </a>
       </div>
     </header>
   );

@@ -1,3 +1,4 @@
+import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { Button } from "components/ui/button";
 import { Label } from "components/ui/label";
 import { Textarea } from "components/ui/textarea";
@@ -18,16 +19,22 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center space-y-6 p-4">
+    <form
+      onSubmit={handleSubmit}
+      className="container flex max-w-xl flex-col items-center justify-center space-y-6 p-4"
+    >
       <Label htmlFor="question">What guidance are you seeking?</Label>
       <Textarea
         id="question"
         name="question"
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
-        placeholder="Enter your query"
+        placeholder="Write about it here..."
+        autoFocus
       />
-      <Button type="submit">Submit</Button>
+      <Button type="submit" size={"sm"} variant={"ghost"}>
+        SUBMIT <PaperPlaneIcon className="ml-2" />
+      </Button>
     </form>
   );
 };

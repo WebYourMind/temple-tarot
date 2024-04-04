@@ -47,13 +47,15 @@ export function TarotSession() {
       {phase === "spread" && <SpreadSelection onSpreadSelect={handleSpreadSelect} />}
       {(phase === "cards" || phase === "reading") && <CardSelection onSelect={handleCardSelect} />}
       {phase === "reading" && query && selectedCard && selectedOrientation && (
-        <Interpreter query={query} card={selectedCard} orientation={selectedOrientation} />
+        <>
+          <Interpreter query={query} card={selectedCard} orientation={selectedOrientation} />
+          <div className="mt-10 flex justify-center">
+            <Button variant={"ghost"} onClick={handleReset}>
+              Reset
+            </Button>
+          </div>
+        </>
       )}
-      <div className="mt-10 flex justify-center">
-        <Button variant={"ghost"} onClick={handleReset}>
-          Reset
-        </Button>
-      </div>
     </div>
   );
 }
