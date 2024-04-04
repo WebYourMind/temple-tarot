@@ -1,11 +1,11 @@
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 
-import { Score } from "lib/quiz";
 import { NextRequest, NextResponse } from "next/server";
-import { getScoresArray, getSortedStyles, getTopTwoStyles } from "lib/utils";
 import { getChatMessagesByUserId, insertPasswordResetToken } from "lib/database/chatMessages.database";
 import { chatTemplateNoStyles } from "lib/templates/chat.templates";
+import { getUserById } from "lib/database/user.database";
+import { updateCreditsByEmail } from "lib/stripe-credits-utils";
 
 export const runtime = "edge";
 
@@ -22,6 +22,12 @@ export async function POST(req: Request) {
   if (!userId) {
     return new Response("Unauthorized", { status: 401 });
   }
+
+  const user = await getUserById(userId);
+  if (user) {
+    await updateCreditsByEmail(user.email, -1);
+  }
+
   const model = process.env.GPT_MODEL;
 
   if (!model) {

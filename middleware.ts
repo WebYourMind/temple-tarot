@@ -28,7 +28,15 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
   // List of paths accessible without authentication
-  const openPaths = ["/login", "/register", "/forgot-password", "/reset-password", "/verify-email", "/accept-invite"];
+  const openPaths = [
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+    "/verify-email",
+    "/accept-invite",
+    "/api/stripe-webhook",
+  ];
 
   // Redirect unauthenticated users away from protected paths
   if (!session && !openPaths.some((openPath) => path.startsWith(openPath))) {

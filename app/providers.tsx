@@ -5,15 +5,18 @@ import { TooltipProvider } from "components/ui/tooltip";
 import { ThemeProvider } from "./theme";
 import { ThemeStyledComponent } from "./theme-styled-component";
 import { FeedbackDataProvider } from "./feedback-data";
+import { CreditProvider } from "lib/contexts/credit-context";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
       <SessionProvider>
         <TooltipProvider>
-          <FeedbackDataProvider>
-            <ThemeStyledComponent>{children}</ThemeStyledComponent>
-          </FeedbackDataProvider>
+          <CreditProvider>
+            <FeedbackDataProvider>
+              <ThemeStyledComponent>{children}</ThemeStyledComponent>
+            </FeedbackDataProvider>
+          </CreditProvider>
         </TooltipProvider>
       </SessionProvider>
     </ThemeProvider>

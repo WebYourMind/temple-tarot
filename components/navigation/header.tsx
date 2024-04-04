@@ -13,6 +13,7 @@ import appConfig from "app.config";
 import { DividerVerticalIcon, Half2Icon, HeartFilledIcon } from "@radix-ui/react-icons";
 import { useTheme } from "app/theme";
 import { useSearchParams } from "next/navigation";
+import { CreditBalance } from "./credit-balance";
 
 export function Header() {
   const { data: session, status } = useSession() as any;
@@ -61,6 +62,8 @@ export function Header() {
         )}
       </div>
       <div className="flex items-center justify-end space-x-4">
+        <CreditBalance />
+        <Link href="/credits/get-credits">Get Credits</Link>
         <button onClick={toggleTheme} aria-label="Theme">
           <Half2Icon />
         </button>

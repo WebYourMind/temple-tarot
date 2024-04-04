@@ -1,6 +1,5 @@
 "use client";
 
-import { User } from "next-auth";
 import React, { useEffect } from "react";
 
 interface StripePricingTableProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
@@ -17,17 +16,16 @@ declare global {
 }
 
 type Props = {
-  user: User;
+  userEmail: string;
 };
 
-const StripePricingTable = ({ user }: Props) => {
+const StripePricingTable = ({ userEmail }: Props) => {
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://js.stripe.com/v3/pricing-table.js";
     script.async = true;
 
     document.body.appendChild(script);
-    console.log("insert script");
     return () => {
       document.body.removeChild(script);
     };
@@ -38,8 +36,9 @@ const StripePricingTable = ({ user }: Props) => {
       <stripe-pricing-table
         pricing-table-id="prctbl_1OyDusDR56uACr3s9RtUIyW7"
         publishable-key="pk_test_51OyDNCDR56uACr3sxVYSc9t8Uvcylfvq96ANsbIpOLxuIIcL4aaKXuf20DdYNV9lySm3EiHjiuRyyrsQuchoqONA00ws6aKe4j"
-        // client-reference-id={user.id}
-        // customer-email={user.email}
+        // client-reference-id={userId}
+        customer-email={userEmail}
+        allow-top-navigation={true}
       ></stripe-pricing-table>
     </div>
   );
