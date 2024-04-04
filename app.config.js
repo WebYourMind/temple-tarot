@@ -1,6 +1,6 @@
 export default {
-  appName: "Thoth Tarot",
-  description: "An interpreter of Thoth Tarot.",
+  appName: "Spiritual.bot",
+  description: "Learn the art of Tarot with AI.",
   theme: {
     modes: {
       light: {
