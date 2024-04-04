@@ -60,8 +60,8 @@ const CardSelection = ({ onSelect }: CardSelectionProps) => {
                   className="cursor-pointer"
                   src={ThothCard}
                   alt={side}
-                  width={200} // Adjust based on your layout
-                  height={350} // Adjust to maintain aspect ratio
+                  width={200}
+                  height={350}
                 />
                 <p className="mt-2">{side.charAt(0).toUpperCase() + side.slice(1)}</p>
                 <p>{index === 0 ? Math.ceil(deck.length / 2) : Math.floor(deck.length / 2)} Cards</p>
