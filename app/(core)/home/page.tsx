@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { Chat } from "components/chat/chat";
 import appConfig from "app.config";
+import { TarotSession } from "./components/tarot-session";
 
 export const metadata: Metadata = {
   title: appConfig.appName,
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   return (
     <div className="pt-8 md:pt-16">
-      <Chat />
+      <TarotSession />
     </div>
   );
 }

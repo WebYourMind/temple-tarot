@@ -1,0 +1,35 @@
+import { Button } from "components/ui/button";
+import { Label } from "components/ui/label";
+import { Textarea } from "components/ui/textarea";
+import React, { useState } from "react";
+
+interface QueryInputProps {
+  onSubmitQuestion: (question: string) => void;
+}
+
+const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
+  const [question, setQuestion] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!question.trim()) return; // Prevent submitting empty questions
+    onSubmitQuestion(question);
+    setQuestion(""); // Clear the question input after submission
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center space-y-6 p-4">
+      <Label htmlFor="question">What guidance are you seeking?</Label>
+      <Textarea
+        id="question"
+        name="question"
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
+        placeholder="Enter your query"
+      />
+      <Button type="submit">Submit</Button>
+    </form>
+  );
+};
+
+export default QueryInput;

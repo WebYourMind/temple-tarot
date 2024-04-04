@@ -1,6 +1,6 @@
 import { sql } from "@vercel/postgres";
 
-export const insertPasswordResetToken = async (userId: number, content: string, role: string) => {
+export const insertChatMessage = async (userId: number, content: string, role: string) => {
   try {
     const result = await sql`
             INSERT INTO chat_messages (user_id, content, role) VALUES (${userId}, ${content}, ${role})`;

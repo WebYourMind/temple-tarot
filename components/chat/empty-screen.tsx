@@ -19,6 +19,10 @@ const exampleMessages = [
     heading: "What should I pay attention to in my relationships?",
     message: "What should I pay attention to in my relationships?",
   },
+  {
+    heading: "Am I on the right path?",
+    message: "Am I on the right path?",
+  },
 ];
 
 export function EmptyScreen({ setInput, scores }: Pick<UseChatHelpers, "setInput"> & { scores?: Score }) {
