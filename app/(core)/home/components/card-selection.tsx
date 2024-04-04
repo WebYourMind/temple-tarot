@@ -59,7 +59,8 @@ const CardSelection = ({ onSelect }: CardSelectionProps) => {
           <p className="mb-4 text-center">Where is your card?</p>
           <div className="flex w-full justify-between">
             {["left", "right"].map((side) => (
-              <div key={side} className={`flex flex-col items-center`}>
+              <div key={side} className={`flex flex-col items-center space-y-2`}>
+                <p className="mt-2">{side.charAt(0).toUpperCase() + side.slice(1)}</p>
                 <Image
                   onClick={() => handleSelectHalf(side as "left" | "right")}
                   className={`hover:glow-on-click cursor-pointer transition hover:scale-105 hover:brightness-125 ${
@@ -70,7 +71,7 @@ const CardSelection = ({ onSelect }: CardSelectionProps) => {
                   width={200}
                   height={350}
                 />
-                <p className="mt-2">{side.charAt(0).toUpperCase() + side.slice(1)}</p>
+                {/* <p className="text-8xl">{side === "left" ? Math.ceil(deck.length / 2) : Math.floor(deck.length / 2)}</p> */}
                 <p>{side === "left" ? Math.ceil(deck.length / 2) : Math.floor(deck.length / 2)} Cards</p>
               </div>
             ))}
