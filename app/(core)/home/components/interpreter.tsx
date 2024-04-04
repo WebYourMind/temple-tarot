@@ -25,6 +25,9 @@ export function Interpreter({ query, card, orientation }: InterpreterProps) {
   }, []);
 
   return (
-    <>{messages.length > 0 && messages.map((message) => message.role === "assistant" && <p>{message.content}</p>)}</>
+    <>
+      {messages.length > 0 &&
+        messages.map((message) => message.role === "assistant" && <p key={message.content}>{message.content}</p>)}
+    </>
   );
 }
