@@ -1,6 +1,6 @@
 "use client";
 
-import { ChatBubbleIcon, EyeOpenIcon, PersonIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
+import { ChatBubbleIcon, EyeOpenIcon, PersonIcon, QuestionMarkCircledIcon, StarIcon } from "@radix-ui/react-icons";
 import { SidebarItem } from "./sidebar-item";
 import { IconUsers } from "components/ui/icons";
 // import { useSession } from "next-auth/react";
@@ -10,6 +10,11 @@ const menuItems = [
     name: "Tarot Session",
     path: "/",
     icon: <ChatBubbleIcon />,
+  },
+  {
+    name: "Get Lumens",
+    path: "/credits/get-credits",
+    icon: <StarIcon />,
   },
   {
     name: "My Profile",
