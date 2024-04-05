@@ -40,6 +40,7 @@ const CardSelection = ({ onSelect }: CardSelectionProps) => {
     setGlowEffect(half); // Trigger glow effect
     const midPoint = Math.ceil(deck.length / 2);
     const newDeck = half === "left" ? deck.slice(0, midPoint) : deck.slice(midPoint);
+    console.log("Chosen deck:", newDeck);
     setDeck(newDeck);
 
     if (newDeck.length === 1) {
