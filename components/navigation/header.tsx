@@ -29,7 +29,7 @@ export function Header() {
   const loginUrl = createAuthUrl("/login");
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-background px-4">
+    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between bg-background px-4">
       <div className="flex items-center">
         {session?.user ? (
           <Sidebar>
@@ -67,12 +67,6 @@ export function Header() {
         <button onClick={toggleTheme} aria-label="Theme">
           <Half2Icon />
         </button>
-        <a href="https://shift.to" target="_blank" rel="noreferrer" className={cn(buttonVariants())}>
-          <span className="hidden sm:block">Community</span>
-          <span className="sm:hidden">Community</span>
-          &nbsp;
-          <HeartFilledIcon />
-        </a>
       </div>
     </header>
   );

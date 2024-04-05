@@ -2,10 +2,11 @@ import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 
 import { NextRequest, NextResponse } from "next/server";
-import { getChatMessagesByUserId, insertPasswordResetToken } from "lib/database/chatMessages.database";
+import { getChatMessagesByUserId } from "lib/database/chatMessages.database";
 import { chatTemplateNoStyles } from "lib/templates/chat.templates";
 import { getUserById } from "lib/database/user.database";
 import { updateCreditsByEmail } from "lib/stripe-credits-utils";
+import { getSession } from "lib/auth";
 
 export const runtime = "edge";
 
@@ -17,13 +18,14 @@ const openai = new OpenAIApi(configuration);
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { messages, scores, userId } = json as any;
+  const { messages } = json as any;
+  const session = await getSession();
 
-  if (!userId) {
+  if (!session?.user || !session.user.id) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const user = await getUserById(userId);
+  const user = await getUserById(session.user.id);
   if (user) {
     await updateCreditsByEmail(user.email, -1);
   }
@@ -36,7 +38,6 @@ export async function POST(req: Request) {
     });
   }
 
-  const latestMessage = messages[messages.length - 1];
   const relevantMessages = messages.slice(-10);
   const contextPrompt = chatTemplateNoStyles;
 
@@ -53,19 +54,19 @@ export async function POST(req: Request) {
       temperature: 0.2,
       stream: true,
       //   max_tokens: 1000,
-      user: userId.toString(),
     });
 
     const stream = OpenAIStream(res, {
       async onCompletion(completion) {
-        const isUserInserted = await insertPasswordResetToken(userId, latestMessage.content, latestMessage.role);
-        if (!isUserInserted) {
-          throw new Error("Error inserting into database");
-        }
-        const isAIInserted = await insertPasswordResetToken(userId, completion, "assistant");
-        if (!isAIInserted) {
-          throw new Error("Error inserting into database");
-        }
+        console.log(completion);
+        // const isUserInserted = await insertChatMessage(userId, latestMessage.content, latestMessage.role);
+        // if (!isUserInserted) {
+        //   throw new Error("Error inserting into database");
+        // }
+        // const isAIInserted = await insertChatMessage(userId, completion, "assistant");
+        // if (!isAIInserted) {
+        //   throw new Error("Error inserting into database");
+        // }
       },
     });
 
