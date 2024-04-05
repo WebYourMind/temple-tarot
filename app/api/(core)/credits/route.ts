@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserById } from "lib/database/user.database";
-import { findCustomerByEmail } from "lib/stripe-credits-utils";
+import { getCustomerBalance } from "lib/stripe-credits-utils";
 
 export const dynamic = "force-dynamic";
 
@@ -35,12 +35,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const customer = await findCustomerByEmail(user.email);
+    const creditBalance = await getCustomerBalance(user.email);
 
     return NextResponse.json(
       {
         message: "Credit balance retrieved successfully.",
-        credits: customer?.metadata.credit_balance,
+        credits: creditBalance,
       },
       {
         status: 200,

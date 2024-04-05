@@ -10,7 +10,7 @@ import { UserMenu } from "./user-menu";
 import { SidebarList } from "components/navigation/sidebar-list";
 import { useSession } from "next-auth/react";
 import appConfig from "app.config";
-import { DividerVerticalIcon, Half2Icon, HeartFilledIcon } from "@radix-ui/react-icons";
+import { DividerVerticalIcon, Half2Icon, HeartFilledIcon, StarIcon } from "@radix-ui/react-icons";
 import { useTheme } from "app/theme";
 import { useSearchParams } from "next/navigation";
 import { CreditBalance } from "./credit-balance";
@@ -61,9 +61,10 @@ export function Header() {
           </div>
         )}
       </div>
-      <div className="flex items-center justify-end space-x-4">
+      <div className="hidden items-center justify-end space-x-4 md:flex">
         <CreditBalance />
-        <Link href="/credits/get-credits">Get Credits</Link>
+        <Link href="/credits/get-credits">Get Lumens</Link>
+        <Link href="/">Tarot Session</Link>
         <button onClick={toggleTheme} aria-label="Theme">
           <Half2Icon />
         </button>

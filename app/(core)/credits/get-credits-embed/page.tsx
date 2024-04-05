@@ -3,7 +3,7 @@ import appConfig from "app.config";
 import MyPricingTable from "./components/my-pricing-table";
 
 export const metadata: Metadata = {
-  title: `Get Credits - ${appConfig.appName}`,
+  title: `Get Lumens - ${appConfig.appName}`,
   description: appConfig.description,
 };
 

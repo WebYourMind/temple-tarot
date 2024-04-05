@@ -3,6 +3,10 @@ import Stripe from "stripe";
 
 export const dynamic = "force-dynamic";
 
+const price1 = process.env.STRIPE_PRICE_ONE as string;
+const price2 = process.env.STRIPE_PRICE_TWO as string;
+const price3 = process.env.STRIPE_PRICE_THREE as string;
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2023-10-16",
 });
@@ -11,15 +15,12 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const type = searchParams.get("type") as "one_time" | "recurring";
   try {
-    // Retrieve prices and expand the product data for each
-    const prices = await stripe.prices.list({
-      limit: 10, // Adjust based on how many prices you want to fetch
-      expand: ["data.product"], // Expand product details
-      type,
-    });
+    const priceIds = [price1, price2, price3];
+    const pricesPromises = priceIds.map((priceId) => stripe.prices.retrieve(priceId, { expand: ["product"] }));
+    const prices = await Promise.all(pricesPromises);
 
     // Simplify the data structure for the frontend
-    const simplifiedPrices = prices.data.map((price) => ({
+    const simplifiedPrices = prices.map((price) => ({
       id: price.id,
       unitAmount: price.unit_amount,
       currency: price.currency,

@@ -1,5 +1,5 @@
 import { type SyntheticEvent, type ReactNode } from "react";
-import { ColorWheelIcon } from "@radix-ui/react-icons";
+import { StarIcon } from "@radix-ui/react-icons";
 import { Button } from "components/ui/button";
 
 interface AuthFormProps {
@@ -16,7 +16,7 @@ export default function AuthForm({ isLoading, onSubmit, isSubmitDisabled, childr
         <div className="grid gap-4">
           {children}
           <Button disabled={isLoading || isSubmitDisabled}>
-            {isLoading && <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />}
+            {isLoading && <StarIcon className="mr-2 h-4 w-4 animate-spin" />}
             {isLoading ? "Processing" : "Submit"}
           </Button>
         </div>

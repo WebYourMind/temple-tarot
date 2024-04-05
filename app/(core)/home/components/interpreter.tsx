@@ -5,6 +5,7 @@ import { useChat } from "ai/react";
 import { toast } from "react-hot-toast";
 import "./cards.css";
 import ReactMarkdown from "react-markdown";
+import { useCredits } from "lib/contexts/credit-context";
 
 export interface InterpreterProps extends React.ComponentProps<"div"> {
   query: string;
@@ -13,12 +14,19 @@ export interface InterpreterProps extends React.ComponentProps<"div"> {
 }
 
 export function Interpreter({ query, card, orientation }: InterpreterProps) {
+  const { fetchCreditBalance } = useCredits();
+
   // Simulated API call setup, for later use
   const { messages, append } = useChat({
-    onResponse(response) {
+    async onResponse(response) {
       if (response.status === 401) {
         toast.error(response.statusText);
       }
+    },
+    async onFinish() {
+      setTimeout(async () => {
+        await fetchCreditBalance();
+      }, 1000);
     },
   });
 

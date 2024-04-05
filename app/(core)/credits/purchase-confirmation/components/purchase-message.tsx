@@ -3,6 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 import Card from "components/card";
+import Link from "next/link";
+import { buttonVariants } from "components/ui/button";
+import { cn } from "lib/utils";
 
 export default function PurchaseConfirmation() {
   const [status, setStatus] = useState(null);
@@ -32,7 +35,7 @@ export default function PurchaseConfirmation() {
 
   if (status === "complete") {
     return (
-      <div className="container">
+      <div className="container mx-auto max-w-4xl">
         <section id="success">
           <Card className="py-8">
             <>
@@ -42,6 +45,9 @@ export default function PurchaseConfirmation() {
                 questions, please email <a href="mailto:orders@example.com">orders@example.com</a>. You may need to
                 refresh the page to see your updated balance.
               </p>
+              <Link className={cn(buttonVariants(), "mt-5")} href={"/"}>
+                Go to Tarot
+              </Link>
             </>
           </Card>
         </section>

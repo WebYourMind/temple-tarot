@@ -5,10 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { getChatMessagesByUserId } from "lib/database/chatMessages.database";
 import { chatTemplateNoStyles } from "lib/templates/chat.templates";
 import { getUserById } from "lib/database/user.database";
-import { updateCreditsByEmail } from "lib/stripe-credits-utils";
+import { getCustomerBalance, updateCreditsByEmail } from "lib/stripe-credits-utils";
 import { getSession } from "lib/auth";
 
-export const runtime = "edge";
+export const runtime = "node";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -25,9 +25,12 @@ export async function POST(req: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const user = await getUserById(session.user.id);
-  if (user) {
-    await updateCreditsByEmail(user.email, -1);
+  const user = session.user;
+
+  const creditBalance = await getCustomerBalance(user.email);
+
+  if (creditBalance < 1) {
+    return new Response("Not enough lumens", { status: 401 });
   }
 
   const model = process.env.GPT_MODEL;
@@ -59,6 +62,9 @@ export async function POST(req: Request) {
     const stream = OpenAIStream(res, {
       async onCompletion(completion) {
         console.log(completion);
+        if (user) {
+          await updateCreditsByEmail(user.email, -1);
+        }
         // const isUserInserted = await insertChatMessage(userId, latestMessage.content, latestMessage.role);
         // if (!isUserInserted) {
         //   throw new Error("Error inserting into database");

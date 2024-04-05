@@ -30,6 +30,16 @@ export async function findCustomerByEmail(email: string): Promise<Stripe.Custome
   );
 }
 
+export async function getCustomerBalance(email: string) {
+  const customer = await findCustomerByEmail(email);
+
+  if (!customer) {
+    return 0;
+  }
+
+  return parseInt(customer.metadata.credit_balance) || 0;
+}
+
 export async function createCustomerWithCredits(
   email: string,
   totalCreditsPurchased: number
