@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
 import crypto from "crypto";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import sgMail from "@sendgrid/mail";
 import { RegisterUser } from "../../../../../lib/AppInterface";
-import { getExpireDate } from "../../../../../lib/utils";
 import { insertVerificationToken } from "../../../../../lib/database/verificationTokens.database";
 import { getUserByEmail, InsertUser } from "../../../../../lib/database/user.database";
 
