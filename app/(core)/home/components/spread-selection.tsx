@@ -9,7 +9,7 @@ const SpreadSelection = ({ onSpreadSelect }: { onSpreadSelect: (spread: string) 
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
-      <h2 className="mb-4 text-lg font-semibold">Select Your Tarot Spread</h2>
+      <h2 className="mb-8 text-lg font-semibold">Choose a spread</h2>
       <div className="grid gap-8 md:grid-cols-2">
         <Button
           onClick={() => handleChange("single")}
