@@ -12,7 +12,7 @@ export default {
         popoverForeground: "#333333",
         primary: "#ce5905",
         primaryForeground: "#ffffff",
-        secondary: "#005f73",
+        secondary: "#1d1d1d",
         secondaryForeground: "#ffffff",
         muted: "#f1f5f9",
         mutedForeground: "#7b7b7b",
