@@ -8,6 +8,8 @@ import appConfig from "app.config";
 import FeedbackWidget from "components/feedback/feedback-widget";
 import CookieNotice from "components/cookie-notice";
 
+import { Suspense } from "react";
+
 const title = appConfig.appName;
 const description = appConfig.description;
 // const image = "https://vercel.pub/thumbnail.png";
@@ -39,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="flex min-h-screen flex-col bg-background text-foreground">
             <Toaster />
             <Header />
-            {children}
+            <Suspense>{children}</Suspense>
             <FeedbackWidget />
             <CookieNotice />
           </div>

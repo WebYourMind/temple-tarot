@@ -1,11 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
-import { ThinkingStyle, UserProfile } from "./types";
-import { Score } from "./quiz";
-import { ArchetypeKey } from "app/(custom)/quiz/components/tie-breaker";
-import { userReportTemplate } from "./templates/report.templates";
-import { scoresUpdateTemplate } from "./templates/score.templates";
+import { UserProfile } from "./types";
 
 export const EXPIRY_TIME_ONE_HOUR = 60 * 60 * 1000; // 1 hour
 
@@ -35,47 +31,6 @@ export function absoluteUrl(path: string) {
   return `${process.env.NEXT_PUBLIC_APP_URL}${path}`;
 }
 
-// Function to check if the archetype values match in scores and report objects
-export function haveMatchingArchetypeValues(scores: Score, report: Score): boolean {
-  const archetypes: (keyof Score)[] = [
-    "explore",
-    "analyze",
-    "plan",
-    "optimize",
-    "connect",
-    "nurture",
-    "energize",
-    "achieve",
-  ];
-
-  for (const archetype of archetypes) {
-    if (scores[archetype] !== report[archetype]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-export function getScoresArray({ explore, analyze, plan, optimize, connect, nurture, energize, achieve }: Score) {
-  return [explore, analyze, plan, optimize, connect, nurture, energize, achieve];
-}
-
-export function getSortedStyles(scores: number[]) {
-  const styleNames = ["Explore", "Analyze", "Plan", "Optimize", "Connect", "Nurture", "Energize", "Achieve"];
-  const sortedStyles = styleNames
-    .map((style, index) => ({ style, score: scores[index] }))
-    .sort((a, b) => b.score - a.score) // Sorting in descending order of scores
-    .map(({ style, score }) => `- ${style}: ${score}/100`);
-  return sortedStyles;
-}
-
-export const getScoresUpdateMessage = (scores: number[]) => {
-  const sortedStyles = getSortedStyles(scores);
-
-  return scoresUpdateTemplate.replace("{userThinkingStyles}", sortedStyles.join("\n"));
-};
-
 export function isPasswordComplex(password: string) {
   const minLength = 8;
   const hasUpperCase = /[A-Z]/.test(password);
@@ -98,42 +53,6 @@ export function isValidEmail(email: string) {
   return regex.test(email);
 }
 
-export function getDominantStyle({ explore, analyze, plan, optimize, connect, nurture, energize, achieve }: Score) {
-  const scores = { explore, analyze, plan, optimize, connect, nurture, energize, achieve };
-  // Check if any score is null
-  const hasNullScore = Object.values(scores).some((score) => score === null || Number.isNaN(score));
-  if (hasNullScore) {
-    return null;
-  }
-  const dominantStyle = (Object.keys(scores) as (keyof typeof scores)[]).reduce((a, b) =>
-    scores[a] > scores[b] ? a : b
-  );
-  const capitalizedStyle = dominantStyle[0].toUpperCase() + dominantStyle.slice(1);
-  return capitalizedStyle as ThinkingStyle;
-}
-
-export const createReportGenerationPrompt = ({
-  explore,
-  analyze,
-  plan,
-  optimize,
-  connect,
-  nurture,
-  energize,
-  achieve,
-}: Score) => {
-  // Identify the dominant thinking style based on the highest score
-  const scores = { explore, analyze, plan, optimize, connect, nurture, energize, achieve };
-  const sortedStyles = getSortedStyles(getScoresArray(scores));
-
-  const dominantStyles = getTopTwoStyles(scores) as string[];
-
-  // Start the prompt with the dominant thinking style
-  return userReportTemplate
-    .replace(/{dominantStyle}/g, dominantStyles?.join(" | "))
-    .replace(/{sortedStyles}/g, sortedStyles.join(", "));
-};
-
 export function capitalizeFirstLetter(str: string) {
   // Check if the input string is not empty
   if (str.length === 0) {
@@ -148,19 +67,6 @@ export function countUsersWithStyles(users: UserProfile[]) {
   const usersWithDominantStyle = users.filter((user) => user.dominantStyle && user.dominantStyle.trim() !== "");
 
   return usersWithDominantStyle;
-}
-
-export function getAccumulatedStyles(teamMembers: UserProfile[]) {
-  const styleCounts = teamMembers.reduce((acc: any, member: UserProfile) => {
-    Object.keys(member.scores as Score).forEach((key: string) => {
-      const capKey = capitalizeFirstLetter(key);
-      acc[capKey] = (acc[capKey] || 0) + (member.scores as Score)[key as ArchetypeKey];
-    });
-
-    return acc;
-  }, {});
-  const data = Object.keys(styleCounts).map((key) => ({ name: key, value: styleCounts[key] }));
-  return data;
 }
 
 interface DataItem {
@@ -179,86 +85,6 @@ export function convertToRelativePercentages(data: DataItem[]) {
   }));
 
   return percentages;
-}
-
-export const sanitizeTeamScores = (teamScores: any) => {
-  const users = [];
-  if (teamScores !== null) {
-    for (let i = 0; i < teamScores.length; i++) {
-      const row = teamScores[i];
-
-      const score = {
-        explore: parseFloat(row.explore),
-        plan: parseFloat(row.plan),
-        energize: parseFloat(row.energize),
-        connect: parseFloat(row.connect),
-        analyze: parseFloat(row.analyze),
-        optimize: parseFloat(row.optimize),
-        achieve: parseFloat(row.achieve),
-        nurture: parseFloat(row.nurture),
-      };
-
-      const dominantStyle = getDominantStyle(score);
-      users.push({
-        id: row.user_id,
-        name: row.user_name,
-        email: row.user_email,
-        phone: row.user_phone,
-        role: row.user_role,
-        dominantStyle: dominantStyle,
-        scores: score,
-      });
-    }
-  }
-  return users;
-};
-
-export const sanitizeTeamData = (teamScores: any, team: any) => {
-  const users = sanitizeTeamScores(teamScores);
-
-  const teamData = {
-    id: team.id,
-    name: team.name,
-    description: team.description,
-    adminId: team.admin_id,
-    image: team.image,
-    inviteToken: team.invite_token,
-    users: users,
-  };
-  return teamData;
-};
-
-export function getTopTwoStyles({
-  explore,
-  analyze,
-  plan,
-  optimize,
-  connect,
-  nurture,
-  energize,
-  achieve,
-}: Score): ThinkingStyle[] | null {
-  const scores = {
-    explore,
-    analyze,
-    plan,
-    optimize,
-    connect,
-    nurture,
-    energize,
-    achieve,
-  };
-
-  // Check if any score is null
-  const hasNullScore = Object.values(scores).some((score) => score === null);
-  if (hasNullScore) {
-    return null;
-  }
-
-  const sortedStyles = (Object.keys(scores) as (keyof typeof scores)[]).sort((a, b) => scores[b] - scores[a]);
-
-  const topTwoStyles = sortedStyles.slice(0, 2);
-  return topTwoStyles.map((style) => style[0].toUpperCase() + style.slice(1)) as ThinkingStyle[];
 }
 
 export function getExpireDate(expiryType: keyof typeof expiryTypes) {

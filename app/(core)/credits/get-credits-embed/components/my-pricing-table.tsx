@@ -17,7 +17,6 @@ const MyPricingTable = () => {
       <div className="flex w-full flex-1 flex-col">
         <StripePricingTable
           userEmail={user.email as string}
-          userId={user.id}
           publishableKey={publishableKey}
           pricingTableId={pricingTableId}
         />
