@@ -4,11 +4,10 @@ import { Configuration, OpenAIApi } from "openai-edge";
 import { NextRequest, NextResponse } from "next/server";
 import { getChatMessagesByUserId } from "lib/database/chatMessages.database";
 import { chatTemplateNoStyles } from "lib/templates/chat.templates";
-import { getUserById } from "lib/database/user.database";
 import { getCustomerBalance, updateCreditsByEmail } from "lib/stripe-credits-utils";
 import { getSession } from "lib/auth";
 
-export const runtime = "node";
+export const runtime = "nodejs";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
