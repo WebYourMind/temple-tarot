@@ -28,6 +28,11 @@ export function Interpreter({ query, card, orientation }: InterpreterProps) {
 
   return (
     <>
+      <div className="mt-4 flex justify-center">
+        <p>
+          Your card is: <strong>{card}</strong> and it&apos;s <strong>{orientation}</strong>.
+        </p>
+      </div>
       {messages.length > 0 &&
         messages.map(
           (message) =>

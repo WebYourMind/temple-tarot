@@ -39,13 +39,14 @@ export function TarotSession() {
     setPhase("question");
     setSelectedCard(null);
     setSelectedOrientation(null);
+    setQuery(null);
   }
 
   return (
     <div className="container max-w-4xl">
       {phase === "question" && <QueryInput onSubmitQuestion={handleSubmitQuestion} />}
       {phase === "spread" && <SpreadSelection onSpreadSelect={handleSpreadSelect} />}
-      {(phase === "cards" || phase === "reading") && <CardSelection onSelect={handleCardSelect} />}
+      {phase === "cards" && <CardSelection onSelect={handleCardSelect} />}
       {phase === "reading" && query && selectedCard && selectedOrientation && (
         <>
           <Interpreter query={query} card={selectedCard} orientation={selectedOrientation} />

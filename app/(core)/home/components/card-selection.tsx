@@ -79,13 +79,6 @@ const CardSelection = ({ onSelect }: CardSelectionProps) => {
           </div>
         </>
       )}
-      {deck.length === 1 && (
-        <div className="mt-4">
-          <p>
-            Your card is: <strong>{deck[0].name}</strong> and it&apos;s <strong>{deck[0].orientation}</strong>.
-          </p>
-        </div>
-      )}
     </div>
   );
 };
