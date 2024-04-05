@@ -52,18 +52,18 @@ const CardSelection = ({ onSelect }: CardSelectionProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 transition-opacity">
+    <div className="flex flex-col items-center justify-center transition-opacity md:p-4">
       {deck.length > 1 && (
         <>
           <p className="text-center">The deck is split.</p>
           <p className="mb-4 text-center">Where is your card?</p>
           <div className="flex w-full justify-between">
             {["left", "right"].map((side) => (
-              <div key={side} className={`flex flex-col items-center space-y-2`}>
-                <p className="mt-2">{side.charAt(0).toUpperCase() + side.slice(1)}</p>
+              <div key={side} className={`flex flex-col items-center space-y-2 px-1`}>
+                <p className="mt-2">{side.charAt(0).toUpperCase() + side.slice(1)} deck</p>
                 <Image
                   onClick={() => handleSelectHalf(side as "left" | "right")}
-                  className={`hover:glow-on-click cursor-pointer transition hover:scale-105 hover:brightness-125 ${
+                  className={`hover:glow-on-click cursor-pointer transition md:hover:scale-105 md:hover:brightness-125 ${
                     glowEffect === side ? "glow-on-click" : ""
                   }`}
                   src={ThothCard}

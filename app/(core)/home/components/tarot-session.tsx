@@ -49,7 +49,7 @@ export function TarotSession() {
       {phase === "reading" && query && selectedCard && selectedOrientation && (
         <>
           <Interpreter query={query} card={selectedCard} orientation={selectedOrientation} />
-          <div className="mt-10 flex justify-center">
+          <div className="my-20 flex justify-center">
             <Button variant={"ghost"} onClick={handleReset}>
               Reset
             </Button>

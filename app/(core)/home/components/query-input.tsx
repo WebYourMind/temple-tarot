@@ -19,10 +19,7 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="container flex max-w-xl flex-col items-center justify-center space-y-6 p-4"
-    >
+    <form onSubmit={handleSubmit} className="flex max-w-xl flex-col items-center justify-center space-y-6 md:container">
       <Label htmlFor="question">What guidance are you seeking?</Label>
       <Textarea
         id="question"

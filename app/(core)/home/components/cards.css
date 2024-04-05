@@ -11,7 +11,7 @@
 }
 
 .glow-on-click {
-  animation: glow 1s ease-in-out infinite;
+  animation: glow 1s ease-out infinite;
 }
 
 @keyframes textReveal {

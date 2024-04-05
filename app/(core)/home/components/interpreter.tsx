@@ -34,7 +34,7 @@ export function Interpreter({ query, card, orientation }: InterpreterProps) {
             message.role === "assistant" && (
               <ReactMarkdown
                 key={message.content}
-                className="prose prose-indigo mx-auto w-full text-center text-foreground md:prose-lg"
+                className="prose prose-indigo mx-auto mt-10 w-full font-mono text-foreground md:prose-lg"
               >
                 {message.content}
               </ReactMarkdown>
