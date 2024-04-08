@@ -1,7 +1,7 @@
 "use client";
 
 import { FileIcon } from "@radix-ui/react-icons";
-import InputField from "app/(core)/(auth)/components/input-field";
+import InputField from "app/(views)/(auth)/components/input-field";
 import { useFeedback } from "app/feedback-data";
 import { Button } from "components/ui/button";
 import { EmojiMeh, EmojiNice, EmojiSad, IconClose, IconTrash } from "components/ui/icons";
