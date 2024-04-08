@@ -19,8 +19,8 @@ export async function POST(request: Request) {
     switch (event.type) {
       case "checkout.session.completed":
         return await handleCheckoutSessionCompleted(event);
-      case "invoice.payment_succeeded":
-        return await handleInvoicePaymentSucceeded(event);
+      // case "invoice.payment_succeeded":
+      //   return await handleInvoicePaymentSucceeded(event);
       default:
         return NextResponse.json({ message: "Unhandled event type" }, { status: 400 });
     }
@@ -53,10 +53,31 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
 
     const creditsToAdd = parseInt(product.metadata.credits, 10);
     console.log("adding credits: ", creditsToAdd);
-    await addCredits(creditsToAdd, email);
+    return await addCredits(creditsToAdd, email);
   } else {
     console.log("The price object does not contain a product ID.");
     return NextResponse.json({ message: "The price object does not contain a product ID." }, { status: 400 });
+  }
+}
+
+async function addCredits(creditsToAdd: number, email: string) {
+  if (!isNaN(creditsToAdd)) {
+    try {
+      await updateCreditsByEmail(email, creditsToAdd);
+      return NextResponse.json({ message: "Credits updated successfully." }, { status: 200 });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(`Error: ${error.message}`);
+        return NextResponse.json({ message: `Error: ${error.message}` }, { status: 500 });
+      } else {
+        // Fallback for other cases
+        console.error("An unexpected error occurred:", error);
+        return NextResponse.json({ message: "An unexpected error occurred" }, { status: 500 });
+      }
+    }
+  } else {
+    console.log("No valid credits found in product metadata.");
+    return NextResponse.json({ message: "No valid credits found in product metadata." }, { status: 400 });
   }
 }
 
@@ -81,25 +102,4 @@ async function handleInvoicePaymentSucceeded(event: Stripe.Event) {
   }
 
   return NextResponse.json({ message: "Subscription credits updated successfully." }, { status: 200 });
-}
-
-async function addCredits(creditsToAdd: number, email: string) {
-  if (!isNaN(creditsToAdd)) {
-    try {
-      await updateCreditsByEmail(email, creditsToAdd);
-      return NextResponse.json({ message: "Credits updated successfully." }, { status: 200 });
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(`Error: ${error.message}`);
-        return NextResponse.json({ message: `Error: ${error.message}` }, { status: 500 });
-      } else {
-        // Fallback for other cases
-        console.error("An unexpected error occurred:", error);
-        return NextResponse.json({ message: "An unexpected error occurred" }, { status: 500 });
-      }
-    }
-  } else {
-    console.log("No valid credits found in product metadata.");
-    return NextResponse.json({ message: "No valid credits found in product metadata." }, { status: 400 });
-  }
 }
