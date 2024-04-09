@@ -13,6 +13,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       const savedTheme = localStorage.getItem("themeMode");
       return savedTheme || "light";
     }
+    return "light";
   });
 
   // Update local storage whenever themeMode changes
