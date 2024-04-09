@@ -3,14 +3,13 @@
 import * as React from "react";
 import Link from "next/link";
 
-import { cn } from "lib/utils";
 import { Button, buttonVariants } from "components/ui/button";
 import { Sidebar } from "./sidebar";
 import { UserMenu } from "./user-menu";
 import { SidebarList } from "components/navigation/sidebar-list";
 import { useSession } from "next-auth/react";
 import appConfig from "app.config";
-import { DividerVerticalIcon, Half2Icon, HeartFilledIcon, StarIcon } from "@radix-ui/react-icons";
+import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "app/theme";
 import { useSearchParams } from "next/navigation";
 import { CreditBalance } from "./credit-balance";

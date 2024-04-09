@@ -30,15 +30,11 @@ const createShuffledDeck = () => {
 };
 
 const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
-  // const [deck, setDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>([]);
   const [leftDeck, setLeftDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>([]);
   const [rightDeck, setRightDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>([]);
-  const [glowEffect, setGlowEffect] = useState("");
 
   useEffect(() => {
     const shuffledDeck = createShuffledDeck();
-    console.log({ shuffledDeck });
-    // setDeck(createShuffledDeck());
     const midPoint = Math.ceil(shuffledDeck.length / 2);
     setLeftDeck(shuffledDeck.slice(0, midPoint));
     setRightDeck(shuffledDeck.slice(midPoint));
@@ -50,7 +46,6 @@ const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
 
     // If the selected deck has only one card, it's the final selection.
     if (selectedDeck.length === 1) {
-      console.log("onSelect");
       onSelect(selectedDeck[0].name, selectedDeck[0].orientation); // Call onSelect with the final card.
       return;
     }
@@ -60,8 +55,6 @@ const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
     const newLeftDeck = selectedDeck.slice(0, midPoint); // First half becomes the new left deck.
     const newRightDeck = selectedDeck.slice(midPoint); // Second half becomes the new right deck.
 
-    console.log(newLeftDeck);
-    console.log(newRightDeck);
     // Update the state with the new decks.
     setLeftDeck(newLeftDeck);
     setRightDeck(newRightDeck);

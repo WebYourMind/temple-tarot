@@ -19,7 +19,7 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
   };
 
   return (
-    <div className="container mx-auto flex max-w-xl flex-col items-center justify-center space-y-6 px-2">
+    <div className="container mx-auto flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
       <Label htmlFor="question" className="font-mono">
         What guidance are you seeking?
       </Label>
