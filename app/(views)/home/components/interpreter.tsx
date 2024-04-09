@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useChat } from "ai/react";
 import { toast } from "react-hot-toast";
 import "./cards.css";
 import ReactMarkdown from "react-markdown";
 import { useCredits } from "lib/contexts/credit-context";
+import Loading from "components/loading";
 
 export interface InterpreterProps extends React.ComponentProps<"div"> {
   query: string;
@@ -15,10 +16,12 @@ export interface InterpreterProps extends React.ComponentProps<"div"> {
 
 export function Interpreter({ query, card, orientation }: InterpreterProps) {
   const { fetchCreditBalance } = useCredits();
+  const [loading, setLoading] = useState(true);
 
   // Simulated API call setup, for later use
   const { messages, append } = useChat({
     async onResponse(response) {
+      setLoading(false);
       if (response.status === 401) {
         toast.error(response.statusText);
       }
@@ -41,6 +44,7 @@ export function Interpreter({ query, card, orientation }: InterpreterProps) {
           Your card is: <strong>{card}</strong> and it&apos;s <strong>{orientation}</strong>.
         </p>
       </div>
+      {loading && <Loading />}
       {messages.length > 0 &&
         messages.map(
           (message) =>

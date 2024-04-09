@@ -62,7 +62,7 @@ const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col items-center justify-center transition-opacity">
-      <p className="mb-4 max-w-xs text-center text-xl">Focus on your question and choose the deck that calls to you.</p>
+      <p className="mb-4 max-w-xs text-center text-xl">Focus on your query and choose the deck that calls to you.</p>
       <p className="mx-10 mb-10 text-center italic">{query}</p>
       <div className="flex w-full justify-between">
         {["left", "right"].map((side) => (
