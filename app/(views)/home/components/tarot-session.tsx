@@ -43,16 +43,16 @@ export function TarotSession() {
   }
 
   return (
-    <div className="container max-w-4xl">
+    <div className="max-w-4xl p-4 pt-8 md:container">
       {phase === "question" && <QueryInput onSubmitQuestion={handleSubmitQuestion} />}
       {phase === "spread" && <SpreadSelection onSpreadSelect={handleSpreadSelect} />}
-      {phase === "cards" && <CardSelection onSelect={handleCardSelect} />}
+      {phase === "cards" && <CardSelection onSelect={handleCardSelect} query={query} />}
       {phase === "reading" && query && selectedCard && selectedOrientation && (
         <>
           <Interpreter query={query} card={selectedCard} orientation={selectedOrientation} />
           <div className="my-20 flex justify-center">
             <Button variant={"ghost"} onClick={handleReset}>
-              RESET
+              New Session
             </Button>
           </div>
         </>

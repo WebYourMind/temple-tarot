@@ -33,7 +33,7 @@ const SpreadSelection = ({ onSpreadSelect }: { onSpreadSelect: (spread: string) 
             onClick={() => handleChange("single")}
             className="flex h-full flex-col space-y-2 py-4 transition hover:scale-105"
           >
-            <Image src={ThothCard} alt="Your card" width={200} height={350} />
+            <Image className="mb-2 rounded-xl shadow-md" src={ThothCard} alt="Your card" width={200} height={350} />
             <span>Single Card</span>
             <span>(1 Lumen)</span>
           </Button>

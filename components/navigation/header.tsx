@@ -63,8 +63,12 @@ export function Header() {
       </div>
       <div className="hidden items-center justify-end space-x-4 md:flex">
         <CreditBalance />
-        <Link href="/credits/get-credits">Get Lumens</Link>
-        <Link href="/">Tarot Session</Link>
+        <Link href="/credits/get-credits" className={buttonVariants({ variant: "link" })}>
+          Get Lumens
+        </Link>
+        <Link href="/" className={buttonVariants({ variant: "link" })}>
+          Start Tarot
+        </Link>
         <button onClick={toggleTheme} aria-label="Theme">
           <Half2Icon />
         </button>

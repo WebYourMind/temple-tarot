@@ -19,8 +19,10 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex max-w-xl flex-col items-center justify-center space-y-6 md:container">
-      <Label htmlFor="question">What guidance are you seeking?</Label>
+    <div className="container mx-auto flex max-w-xl flex-col items-center justify-center space-y-6 px-2">
+      <Label htmlFor="question" className="font-mono">
+        What guidance are you seeking?
+      </Label>
       <Textarea
         id="question"
         name="question"
@@ -29,10 +31,10 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
         placeholder="Write about it here..."
         autoFocus
       />
-      <Button type="submit" size={"sm"} variant={"ghost"}>
+      <Button onClick={handleSubmit} size={"sm"} variant={"ghost"}>
         SUBMIT <PaperPlaneIcon className="ml-2" />
       </Button>
-    </form>
+    </div>
   );
 };
 

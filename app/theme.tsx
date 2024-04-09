@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useState, useEffect } from "react";
 
-const ThemeContext = createContext({ themeMode: "dark", toggleTheme: () => {} });
+const ThemeContext = createContext({ themeMode: "light", toggleTheme: () => {} });
 
 export function useTheme() {
   return useContext(ThemeContext);
@@ -11,9 +11,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [themeMode, setThemeMode] = useState(() => {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem("themeMode");
-      return savedTheme ?? "dark";
+      return savedTheme || "light";
     }
-    return "dark";
   });
 
   // Update local storage whenever themeMode changes

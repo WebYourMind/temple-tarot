@@ -8,9 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  return (
-    <div className="pt-8 md:pt-16">
-      <TarotSession />
-    </div>
-  );
+  return <TarotSession />;
 }
