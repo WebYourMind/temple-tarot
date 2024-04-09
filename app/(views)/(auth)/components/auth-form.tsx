@@ -4,7 +4,7 @@ import { Button } from "components/ui/button";
 
 interface AuthFormProps {
   isLoading: boolean;
-  onSubmit: (event: SyntheticEvent) => Promise<void | false | undefined>;
+  onSubmit: (event: SyntheticEvent) => Promise<void | boolean | undefined>;
   isSubmitDisabled?: boolean;
   children: ReactNode;
 }
