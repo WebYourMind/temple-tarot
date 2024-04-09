@@ -7,7 +7,7 @@ import { IconUsers } from "components/ui/icons";
 
 const menuItems = [
   {
-    name: "Tarot Session",
+    name: "Tarot",
     path: "/",
     icon: <ChatBubbleIcon />,
   },
