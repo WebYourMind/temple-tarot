@@ -73,13 +73,17 @@ export function Header() {
         )}
       </div>
       <div className="hidden items-center justify-end space-x-4 md:flex">
-        <CreditBalance />
-        <Link href="/credits/get-credits" className={buttonVariants({ variant: "link" })}>
-          Get Lumens
-        </Link>
-        <Link href="/" onClick={handleTarotClick} className={buttonVariants({ variant: "link" })}>
-          Tarot
-        </Link>
+        {session?.user && (
+          <>
+            <CreditBalance />
+            <Link href="/credits/get-credits" className={buttonVariants({ variant: "link" })}>
+              Get Lumens
+            </Link>
+            <Link href="/" onClick={handleTarotClick} className={buttonVariants({ variant: "link" })}>
+              Tarot
+            </Link>
+          </>
+        )}
         <button onClick={toggleTheme} aria-label="Theme">
           <Half2Icon />
         </button>
