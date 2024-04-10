@@ -105,7 +105,7 @@ export default function RegisterForm() {
     <AuthForm isLoading={isLoading} onSubmit={onSubmit} isSubmitDisabled={!isInputValid}>
       <InputField
         id="name"
-        placeholder="Jane Doe"
+        placeholder="Aleister Crowley"
         type="text"
         disabled={isLoading}
         label="Your Name"
@@ -114,7 +114,7 @@ export default function RegisterForm() {
       />
       <InputField
         id="email"
-        placeholder="name@example.com"
+        placeholder="acrowley@templetarot.com"
         type="email"
         disabled={isLoading}
         label="Email"
