@@ -1,7 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getServerSession, type NextAuthOptions, User } from "next-auth";
 import { sql } from "@vercel/postgres";
-import bcrypt from "bcrypt";
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
@@ -27,6 +26,7 @@ export const authOptions: NextAuthOptions = {
           // If a user is found, and the password matches, return the user details.
           if (result.rows.length > 0) {
             const user = result.rows[0];
+            const bcrypt = (await import("bcryptjs")).default;
             const passwordMatch = await bcrypt.compare(password, user.hashed_password);
             if (passwordMatch) {
               return {
@@ -90,7 +90,7 @@ export const authOptions: NextAuthOptions = {
       if (token.user) {
         session.user = {
           ...session.user,
-          ...token.user,
+          ...(token.user as User),
         };
       }
       return session;

@@ -1,0 +1,49 @@
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.75);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0);
+  }
+}
+
+.glow-on-click {
+  animation: glow 1s ease-out infinite;
+}
+
+@keyframes textReveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.revealText {
+  animation: textReveal 1s ease forwards;
+}
+
+/* cards.css */
+
+.card-stack {
+  position: relative;
+  width: 200px; /* Match your card width */
+  height: 350px; /* Match your card height */
+}
+
+.tarot-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+/* Adjust the hover effect as needed */
+.tarot-card:hover {
+  transform: scale(1.1);
+  z-index: 100; /* Ensure the hovered card comes to the top */
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { FileIcon } from "@radix-ui/react-icons";
-import InputField from "app/(core)/(auth)/components/input-field";
+import InputField from "app/(views)/(auth)/components/input-field";
 import { useFeedback } from "app/feedback-data";
 import { Button } from "components/ui/button";
 import { EmojiMeh, EmojiNice, EmojiSad, IconClose, IconTrash } from "components/ui/icons";
@@ -48,7 +48,7 @@ const FeedbackWidget = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 hidden md:block">
+    <div className="fixed bottom-4 right-4 z-50 hidden md:block">
       {isOpen && (
         <div className="my-2 flex w-80 flex-col items-center space-y-4 rounded-xl border bg-background px-4 py-8 shadow-lg">
           <p>Have Feedback? We&apos;d love to hear it.</p>
@@ -92,7 +92,11 @@ const FeedbackWidget = () => {
           <Button onClick={submitFeedback}>Submit</Button>
         </div>
       )}
-      <Button className={`float-right rounded-full ${isOpen ? "h-14 w-14" : "p-4"}`} onClick={() => setIsOpen(!isOpen)}>
+      <Button
+        variant={"ghost"}
+        className={`float-right rounded-full ${isOpen ? "h-14 w-14" : "p-4"}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
         {isOpen ? <IconClose className="h-10 w-10" /> : `${feedbackData.type && feedbackData.type + " "}` + "Feedback"}
       </Button>
     </div>

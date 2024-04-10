@@ -6,6 +6,11 @@
   :root {
     --background: #ffffff;
     --foreground: #333333;
+    font-family:
+      Arial,
+      Helvetica,
+      sans-serif sans-serif;
+    font-size: large;
   }
 
   .dark {

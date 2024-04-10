@@ -7,7 +7,8 @@ import { env } from "./env.mjs";
  */
 const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
   reactStrictMode: false,
-  experimental: { instrumentationHook: true },
+
+  experimental: { instrumentationHook: true, missingSuspenseWithCSRBailout: false },
   output: "standalone",
   rewrites() {
     return [

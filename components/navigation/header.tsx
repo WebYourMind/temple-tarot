@@ -3,16 +3,16 @@
 import * as React from "react";
 import Link from "next/link";
 
-import { cn } from "lib/utils";
 import { Button, buttonVariants } from "components/ui/button";
 import { Sidebar } from "./sidebar";
 import { UserMenu } from "./user-menu";
 import { SidebarList } from "components/navigation/sidebar-list";
 import { useSession } from "next-auth/react";
 import appConfig from "app.config";
-import { DividerVerticalIcon, Half2Icon, HeartFilledIcon } from "@radix-ui/react-icons";
+import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "app/theme";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { CreditBalance } from "./credit-balance";
 
 export function Header() {
   const { data: session, status } = useSession() as any;
@@ -26,9 +26,21 @@ export function Header() {
 
   const registerUrl = createAuthUrl("/register");
   const loginUrl = createAuthUrl("/login");
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleTarotClick = (e) => {
+    // Check if the target href is the same as the current pathname
+    if (pathname === "/") {
+      console.log(pathname);
+      e.preventDefault(); // Prevent Link from navigating
+      router.refresh(); // Reload the page
+      router.replace("/");
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-background px-4">
+    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between bg-background px-4">
       <div className="flex items-center">
         {session?.user ? (
           <Sidebar>
@@ -60,16 +72,17 @@ export function Header() {
           </div>
         )}
       </div>
-      <div className="flex items-center justify-end space-x-4">
+      <div className="hidden items-center justify-end space-x-4 md:flex">
+        <CreditBalance />
+        <Link href="/credits/get-credits" className={buttonVariants({ variant: "link" })}>
+          Get Lumens
+        </Link>
+        <Link href="/" onClick={handleTarotClick} className={buttonVariants({ variant: "link" })}>
+          Tarot
+        </Link>
         <button onClick={toggleTheme} aria-label="Theme">
           <Half2Icon />
         </button>
-        <a href="https://shift.to" target="_blank" rel="noreferrer" className={cn(buttonVariants())}>
-          <span className="hidden sm:block">Community</span>
-          <span className="sm:hidden">Community</span>
-          &nbsp;
-          <HeartFilledIcon />
-        </a>
       </div>
     </header>
   );
