@@ -12,7 +12,7 @@ import appConfig from "app.config";
 import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "app/theme";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { CreditBalance } from "./credit-balance";
+// import { CreditBalance } from "./credit-balance";
 
 export function Header() {
   const { data: session, status } = useSession() as any;
@@ -75,10 +75,10 @@ export function Header() {
       <div className="hidden items-center justify-end space-x-4 md:flex">
         {session?.user && (
           <>
-            <CreditBalance />
+            {/* <CreditBalance />
             <Link href="/credits/get-credits" className={buttonVariants({ variant: "link" })}>
               Get Lumens
-            </Link>
+            </Link> */}
             <Link href="/" onClick={handleTarotClick} className={buttonVariants({ variant: "link" })}>
               Tarot
             </Link>

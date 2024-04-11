@@ -1,7 +1,7 @@
 import { Button, buttonVariants } from "components/ui/button";
 import Image from "next/image";
-import ThothCard from "../../../thoth-card.png";
-import { useCredits } from "lib/contexts/credit-context";
+import TarotBack from "../../../tarot-back.jpg";
+// import { useCredits } from "lib/contexts/credit-context";
 import {
   Dialog,
   DialogContent,
@@ -12,16 +12,17 @@ import {
 } from "components/ui/dialog";
 import Link from "next/link";
 import { useState } from "react";
+import Card from "./card";
 
 const SpreadSelection = ({ onSpreadSelect }: { onSpreadSelect: (spread: string) => void }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { credits } = useCredits();
+  // const { credits } = useCredits();
   const handleChange = (value: string) => {
-    if (credits < 1) {
-      setDialogOpen(true);
-    } else {
-      onSpreadSelect(value);
-    }
+    // if (credits < 1) {
+    //   setDialogOpen(true);
+    // } else {
+    onSpreadSelect(value);
+    // }
   };
 
   return (
@@ -33,29 +34,29 @@ const SpreadSelection = ({ onSpreadSelect }: { onSpreadSelect: (spread: string) 
             onClick={() => handleChange("single")}
             className="flex h-full flex-col space-y-2 py-4 transition hover:scale-105"
           >
-            <Image className="mb-2 rounded-xl shadow-md" src={ThothCard} alt="Your card" width={200} height={350} />
+            <Card className="mb-2" />
             <span>Single Card</span>
             <span>(1 Lumen)</span>
           </Button>
-          <Button
+          {/* <Button
             onClick={() => handleChange("three")}
             className="relative flex h-full w-[276px] grow flex-col items-center space-y-2 py-4 transition hover:scale-105"
             disabled
           >
             <div className="relative h-full w-full">
               <div className="absolute left-0 z-10 inline-block">
-                <Image src={ThothCard} alt="Card 1" width={200} height={350} />
+                <Card alt="Card 1" />
               </div>
               <div className="absolute left-0 z-20 inline-block translate-x-4 transform">
-                <Image src={ThothCard} alt="Card 2" width={200} height={350} />
+                <Card alt="Card 2" />
               </div>
               <div className="absolute left-0 z-30 inline-block translate-x-8 transform">
-                <Image src={ThothCard} alt="Card 3" width={200} height={350} />
+                <Card alt="Card 3" />
               </div>
             </div>
             <span>3 Card Spread</span>
             <span>(2 Lumens)</span>
-          </Button>
+          </Button> */}
         </div>
       </div>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
