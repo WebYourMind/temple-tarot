@@ -7,7 +7,7 @@ import QueryInput from "./query-input";
 import { Button } from "components/ui/button";
 import { Interpreter } from "./interpreter";
 
-export function TarotSession() {
+export default function TarotSession() {
   const [query, setQuery] = useState<string | null>(null);
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const [selectedOrientation, setSelectedOrientation] = useState<string | null>(null);

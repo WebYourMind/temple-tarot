@@ -4,8 +4,26 @@
 
 @layer base {
   :root {
-    --background: #ffffff;
-    --foreground: #333333;
+    --color-background: #ffffff;
+    --color-foreground: #333333;
+    --color-card: #f9fafb;
+    --color-card-foreground: #333333;
+    --color-popover: #f9fafb;
+    --color-popover-foreground: #333333;
+    --color-primary: #ce5905;
+    --color-primary-foreground: #ffffff;
+    --color-secondary: #1d1d1d;
+    --color-secondary-foreground: #ffffff;
+    --color-muted: #f1f5f9;
+    --color-muted-foreground: #7b7b7b;
+    --color-accent: #edfafe;
+    --color-accent-foreground: #333333;
+    --color-destructive: #e63946;
+    --color-destructive-foreground: #ffffff;
+    --color-border: #1d1d1d;
+    --color-input: #1d1d1d;
+    --color-ring: #1d1d1d;
+    --radius: 0.5rem;
     font-family:
       Arial,
       Helvetica,
@@ -14,8 +32,26 @@
   }
 
   .dark {
-    --background: #111827;
-    --foreground: #ffffff;
+    --color-background: #000000;
+    --color-foreground: #eeeeee;
+    --color-card: #1f2937;
+    --color-card-foreground: #f7f9fb;
+    --color-popover: #1f2937;
+    --color-popover-foreground: #f7f9fb;
+    --color-primary: #30d5c8;
+    --color-primary-foreground: #eeeeee;
+    --color-secondary: #fff;
+    --color-secondary-foreground: #333333;
+    --color-muted: #788597;
+    --color-muted-foreground: #a9b0ba;
+    --color-accent: #111827;
+    --color-accent-foreground: #e26912;
+    --color-destructive: #e63946;
+    --color-destructive-foreground: #f7f9fb;
+    --color-border: #ffffff;
+    --color-input: #ffffff;
+    --color-ring: #ffffff;
+    --radius: 0.5rem;
   }
 }
 

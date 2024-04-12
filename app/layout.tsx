@@ -2,13 +2,22 @@ import "styles/tailwind.css";
 import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { Providers } from "app/providers";
-import { Header } from "components/navigation/header";
+// import { Header } from "components/navigation/header";
 import { Toaster } from "react-hot-toast";
 import appConfig from "app.config";
-import FeedbackWidget from "components/feedback/feedback-widget";
+// import FeedbackWidget from "components/feedback/feedback-widget";
 import CookieNotice from "components/cookie-notice";
+import dynamic from "next/dynamic";
 
 import { Suspense } from "react";
+
+const Header = dynamic(() => import("../components/navigation/header"), {
+  ssr: false,
+});
+
+const FeedbackWidget = dynamic(() => import("../components/feedback/feedback-widget"), {
+  ssr: false,
+});
 
 const title = appConfig.appName;
 const description = appConfig.description;

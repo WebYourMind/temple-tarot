@@ -26,11 +26,11 @@ export async function POST(req: Request) {
 
   const user = session.user;
 
-  const creditBalance = await getCustomerBalance(user.email);
+  // const creditBalance = await getCustomerBalance(user.email);
 
-  if (creditBalance < 1) {
-    return new Response("Not enough lumens", { status: 401 });
-  }
+  // if (creditBalance < 1) {
+  //   return new Response("Not enough lumens", { status: 401 });
+  // }
 
   const model = process.env.GPT_MODEL;
 
@@ -60,10 +60,10 @@ export async function POST(req: Request) {
 
     const stream = OpenAIStream(res, {
       async onCompletion(completion) {
-        console.log(completion);
-        if (user) {
-          await updateCreditsByEmail(user.email, -1);
-        }
+        // console.log(completion);
+        // if (user) {
+        //   await updateCreditsByEmail(user.email, -1);
+        // }
         // const isUserInserted = await insertChatMessage(userId, latestMessage.content, latestMessage.role);
         // if (!isUserInserted) {
         //   throw new Error("Error inserting into database");
