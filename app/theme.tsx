@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useState, useEffect } from "react";
+import { ReactNode, createContext, useContext, useState, useLayoutEffect } from "react";
 
 const ThemeContext = createContext({ themeMode: "light", toggleTheme: () => {} });
 
@@ -7,22 +7,36 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  // Initialize themeMode from local storage or default to 'dark'
-  const [themeMode, setThemeMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      const savedTheme = localStorage.getItem("themeMode");
-      return savedTheme || "light";
+  // Function to update theme on the document body
+  const updateTheme = (theme: string) => {
+    if (theme === "dark") {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
     }
-    return "light";
+  };
+
+  // Initialize themeMode from local storage or default based on system preference
+  const [themeMode, setThemeMode] = useState(() => {
+    // Check for server-side rendering
+    if (typeof window !== "undefined") {
+      const savedTheme =
+        localStorage.getItem("themeMode") ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      updateTheme(savedTheme); // Update theme immediately on load based on saved preference or system preference
+      return savedTheme;
+    }
+    return "light"; // Default theme if server-side rendering
   });
 
-  // Update local storage whenever themeMode changes
-  useEffect(() => {
-    localStorage.setItem("themeMode", themeMode);
+  // Effect to handle theme changes
+  useLayoutEffect(() => {
+    localStorage.setItem("themeMode", themeMode); // Save the current theme mode to localStorage
+    updateTheme(themeMode); // Apply the current theme mode
   }, [themeMode]);
 
   const toggleTheme = () => {
-    setThemeMode((currentMode) => (currentMode === "light" ? "dark" : "light"));
+    setThemeMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   };
 
   return <ThemeContext.Provider value={{ themeMode, toggleTheme }}>{children}</ThemeContext.Provider>;

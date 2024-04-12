@@ -29,7 +29,7 @@ const SpreadSelection = ({ onSpreadSelect }: { onSpreadSelect: (spread: string) 
     <>
       <div className="flex flex-col items-center justify-center p-4">
         <h2 className="mb-8 text-lg font-semibold">Choose a spread</h2>
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-1">
           <Button
             onClick={() => handleChange("single")}
             className="flex h-full flex-col space-y-2 py-4 transition hover:scale-105"

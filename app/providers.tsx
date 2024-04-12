@@ -3,7 +3,6 @@
 import { SessionProvider } from "next-auth/react";
 import { TooltipProvider } from "components/ui/tooltip";
 import { ThemeProvider } from "./theme";
-import { ThemeStyledComponent } from "./theme-styled-component";
 import { FeedbackDataProvider } from "./feedback-data";
 import { CreditProvider } from "lib/contexts/credit-context";
 
@@ -13,9 +12,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <SessionProvider>
         <TooltipProvider>
           <CreditProvider>
-            <FeedbackDataProvider>
-              <ThemeStyledComponent>{children}</ThemeStyledComponent>
-            </FeedbackDataProvider>
+            <FeedbackDataProvider>{children}</FeedbackDataProvider>
           </CreditProvider>
         </TooltipProvider>
       </SessionProvider>

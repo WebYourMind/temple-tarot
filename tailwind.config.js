@@ -12,11 +12,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        gold: {
-          light: "#FFD700", // Adjust the light gold shade as needed
-          DEFAULT: "#FFD700", // Mid gold shade
-          dark: "#C5A000", // Adjust the dark gold shade as needed
-        },
         border: "var(--color-border)",
         input: "var(--color-input)",
         ring: "var(--color-ring)",

@@ -14,7 +14,7 @@ import { useTheme } from "app/theme";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 // import { CreditBalance } from "./credit-balance";
 
-export function Header() {
+export default function Header() {
   const { data: session, status } = useSession() as any;
   const { toggleTheme } = useTheme();
   const searchParams = useSearchParams();

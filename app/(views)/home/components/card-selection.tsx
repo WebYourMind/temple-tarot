@@ -82,10 +82,10 @@ const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
         <>
           <p className="mb-4 max-w-sm text-center text-xl md:mb-10">Lastly, what is your card&apos;s orientation?</p>
           <button onClick={() => switchOrientation()} className="p-4 transition hover:scale-105">
-            <div className="rounded-lg shadow-md">
+            <div className="rounded-lg">
               <Card
                 alt={"Your Card"}
-                className={`rotate-${finalCard.orientation === "upright" ? "0" : "180"} shadow-none transition`}
+                className={`${finalCard.orientation === "upright" ? "rotate-0" : "rotate-180"} shadow-none transition`}
               />
             </div>
           </button>
