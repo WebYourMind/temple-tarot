@@ -76,7 +76,7 @@ const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
   };
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col items-center justify-center transition-opacity">
+    <div className="mx-auto flex max-w-2xl flex-col items-center justify-center pb-10 transition-opacity">
       <p className="mx-10 mb-4 text-center italic">{query}</p>
       {finalCard ? (
         <>
