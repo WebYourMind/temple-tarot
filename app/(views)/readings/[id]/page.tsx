@@ -4,11 +4,7 @@ import dynamic from "next/dynamic";
 import Loading from "components/loading";
 
 const Reading = dynamic(() => import("./reading"), {
-  loading: () => (
-    <div className="dark flex h-screen items-center justify-center bg-black">
-      <Loading />
-    </div>
-  ),
+  loading: () => <Loading />,
   ssr: false,
 });
 

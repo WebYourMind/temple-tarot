@@ -5,11 +5,7 @@ import Loading from "components/loading";
 // import { TarotSession } from "./components/tarot-session";
 
 const TarotSession = dynamic(() => import("./components/tarot-session"), {
-  loading: () => (
-    <div className="dark flex h-screen items-center justify-center bg-black">
-      <Loading />
-    </div>
-  ),
+  loading: () => <Loading />,
   ssr: false,
 });
 
