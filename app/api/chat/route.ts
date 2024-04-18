@@ -1,11 +1,12 @@
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import { Configuration, OpenAIApi } from "openai-edge";
+import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai-edge";
 
 import { NextRequest, NextResponse } from "next/server";
 import { getChatMessagesByUserId } from "lib/database/chatMessages.database";
 import { chatTemplateNoStyles } from "lib/templates/chat.templates";
-import { getCustomerBalance, updateCreditsByEmail } from "lib/stripe-credits-utils";
 import { getSession } from "lib/auth";
+import { Reading, addReadingWithCards } from "lib/database/readings.database";
+import { CardInReading } from "lib/database/cardsInReadings.database";
 
 export const runtime = "nodejs";
 
@@ -17,7 +18,8 @@ const openai = new OpenAIApi(configuration);
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { messages } = json as any;
+  const { messages, cardName, orientation, position, userQuery, spreadType } = json as Reading &
+    CardInReading & { messages: ChatCompletionRequestMessage[] };
   const session = await getSession();
 
   if (!session?.user || !session.user.id) {
@@ -55,7 +57,7 @@ export async function POST(req: Request) {
       ],
       temperature: 0.2,
       stream: true,
-      //   max_tokens: 1000,
+      max_tokens: 2500,
     });
 
     const stream = OpenAIStream(res, {
@@ -64,14 +66,20 @@ export async function POST(req: Request) {
         // if (user) {
         //   await updateCreditsByEmail(user.email, -1);
         // }
-        // const isUserInserted = await insertChatMessage(userId, latestMessage.content, latestMessage.role);
-        // if (!isUserInserted) {
-        //   throw new Error("Error inserting into database");
-        // }
-        // const isAIInserted = await insertChatMessage(userId, completion, "assistant");
-        // if (!isAIInserted) {
-        //   throw new Error("Error inserting into database");
-        // }
+        const reading = {
+          userId: user.id,
+          userQuery,
+          spreadType,
+          aiInterpretation: completion,
+        };
+        const cards = [
+          {
+            cardName,
+            orientation,
+            position,
+          },
+        ];
+        await addReadingWithCards(reading, cards);
       },
     });
 

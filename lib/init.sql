@@ -41,3 +41,22 @@ CREATE TABLE chat_messages (
     role VARCHAR(50) NOT NULL, -- 'user' or 'assistant'
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE readings (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    user_query TEXT,
+    spread_type VARCHAR(255),
+    ai_interpretation TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE cards_in_readings (
+    id SERIAL PRIMARY KEY,
+    reading_id INTEGER REFERENCES readings(id),
+    card_name VARCHAR(255),
+    orientation VARCHAR(50),
+    position INTEGER,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);

@@ -29,8 +29,10 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
         placeholder="Write about it here..."
+        maxLength={5000}
         autoFocus
       />
+      {/* <p>Spread Type</p> */}
       <Button onClick={handleSubmit} size={"sm"} variant={"ghost"}>
         SUBMIT <PaperPlaneIcon className="ml-2" />
       </Button>

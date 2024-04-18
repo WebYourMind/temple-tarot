@@ -20,6 +20,13 @@ export function Interpreter({ query, card, orientation }: InterpreterProps) {
 
   // Simulated API call setup, for later use
   const { messages, append } = useChat({
+    body: {
+      cardName: card,
+      orientation,
+      position: 1,
+      userQuery: query,
+      spreadType: "single_card",
+    },
     async onResponse(response) {
       setLoading(false);
       if (response.status === 401) {
@@ -38,10 +45,11 @@ export function Interpreter({ query, card, orientation }: InterpreterProps) {
   }, []);
 
   return (
-    <>
-      <div className="mt-4 flex justify-center">
-        <p>
-          Your card is: <strong>{card}</strong> and it&apos;s <strong>{orientation}</strong>.
+    <div className="mx-auto max-w-2xl">
+      <div className="flex flex-col">
+        <p className="my-4 italic">{query}</p>
+        <p className="my-3 text-lg">
+          <strong>{card}</strong> - <strong>{orientation.charAt(0).toUpperCase() + orientation.slice(1)}</strong>
         </p>
       </div>
       {loading && <Loading />}
@@ -51,12 +59,12 @@ export function Interpreter({ query, card, orientation }: InterpreterProps) {
             message.role === "assistant" && (
               <ReactMarkdown
                 key={message.content}
-                className="prose prose-indigo mx-auto mt-10 w-full font-mono text-foreground md:prose-lg"
+                className="prose prose-indigo mx-auto my-6 w-full max-w-full font-mono leading-relaxed text-foreground md:prose-lg"
               >
                 {message.content}
               </ReactMarkdown>
             )
         )}
-    </>
+    </div>
   );
 }

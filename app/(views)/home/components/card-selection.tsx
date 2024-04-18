@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { tarotDeck } from "./tarot-deck";
-import TarotBack from "../../../tarot-back.jpg";
 import "./cards.css";
 import { Button } from "components/ui/button";
 import { IconRotate } from "components/ui/icons";
-import Card from "./card";
+import Card from "./tarot-card";
 
 interface CardSelectionProps {
   onSelect: (cardName: string, orientation: "upright" | "reversed") => void;

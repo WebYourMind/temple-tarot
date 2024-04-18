@@ -6,6 +6,7 @@ import CardSelection from "./card-selection"; // Assuming you'll create this
 import QueryInput from "./query-input";
 import { Button } from "components/ui/button";
 import { Interpreter } from "./interpreter";
+import { IconClose } from "components/ui/icons";
 
 export default function TarotSession() {
   const [query, setQuery] = useState<string | null>(null);
@@ -51,8 +52,12 @@ export default function TarotSession() {
         <>
           <Interpreter query={query} card={selectedCard} orientation={selectedOrientation} />
           <div className="my-20 flex justify-center">
-            <Button variant={"ghost"} onClick={handleReset}>
-              New Session
+            <Button
+              variant={"ghost"}
+              className="flex h-14 w-14 items-center justify-center rounded-full font-mono hover:text-primary"
+              onClick={handleReset}
+            >
+              <IconClose className="h-20 w-20" />
             </Button>
           </div>
         </>

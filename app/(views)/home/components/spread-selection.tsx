@@ -1,6 +1,4 @@
 import { Button, buttonVariants } from "components/ui/button";
-import Image from "next/image";
-import TarotBack from "../../../tarot-back.jpg";
 // import { useCredits } from "lib/contexts/credit-context";
 import {
   Dialog,
@@ -12,7 +10,7 @@ import {
 } from "components/ui/dialog";
 import Link from "next/link";
 import { useState } from "react";
-import Card from "./card";
+import Card from "./tarot-card";
 
 const SpreadSelection = ({ onSpreadSelect }: { onSpreadSelect: (spread: string) => void }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
