@@ -7,16 +7,18 @@ import toast from "react-hot-toast";
 export function useReadings() {
   const [readings, setReadings] = useState<Reading[]>([]);
   const [reading, setReading] = useState<Reading>();
-  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchReadings = async (userId) => {
+  const fetchReadings = async (userId, page, limit) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/readings/?userId=${userId}`);
+      const response = await fetch(`/api/readings/?userId=${userId}&page=${page}&limit=${limit}`);
       const data = (await response.json()) as any;
 
       setReadings(keysToCamel(data.readings)); // Assume the response contains an array under 'readings'
+      setTotalPages(data.totalPages);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -104,5 +106,6 @@ export function useReadings() {
     reading,
     setReadings,
     setReading,
+    totalPages,
   };
 }

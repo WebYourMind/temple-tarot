@@ -4,6 +4,7 @@ import {
   getReadingById,
   deleteReading,
   getReadingsByUserId,
+  countReadingsByUserId,
 } from "lib/database/readings.database";
 import { CardInReading, getCardsByReadingId } from "lib/database/cardsInReadings.database";
 import { getSession } from "lib/auth";
@@ -34,6 +35,8 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const readingId = searchParams.get("readingId");
   const userId = searchParams.get("userId");
+  const page = parseInt(searchParams.get("page") || "1", 10); // Default to page 1 if not specified
+  const limit = parseInt(searchParams.get("limit") || "10", 10); // Default to 10 items per page if not specified
 
   try {
     if (readingId) {
@@ -45,11 +48,18 @@ export async function GET(request: NextRequest) {
       const cards = await getCardsByReadingId(parseInt(readingId));
       return NextResponse.json({ ...reading, cards }, { status: 200 });
     } else if (userId) {
-      const readings = await getReadingsByUserId(parseInt(userId));
+      // Fetch paginated readings and count total readings
+      const [readings, total] = await Promise.all([
+        getReadingsByUserId(parseInt(userId), page, limit),
+        countReadingsByUserId(parseInt(userId)),
+      ]);
+
+      const totalPages = Math.ceil(total / limit); // Calculate the total number of pages
+
       if (!readings || readings.length === 0) {
         return NextResponse.json({ error: "No readings found for this user" }, { status: 404 });
       }
-      return NextResponse.json({ readings }, { status: 200 });
+      return NextResponse.json({ readings, totalPages }, { status: 200 });
     } else {
       return NextResponse.json({ error: "Reading ID or User ID must be provided" }, { status: 400 });
     }

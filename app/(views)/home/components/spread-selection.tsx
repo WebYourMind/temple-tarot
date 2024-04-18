@@ -31,6 +31,7 @@ const SpreadSelection = ({ onSpreadSelect }: { onSpreadSelect: (spread: string) 
           <Button
             onClick={() => handleChange("single")}
             className="flex h-full flex-col space-y-2 py-4 transition hover:scale-105"
+            variant="link"
           >
             <Card className="mb-2" />
             <span>Single Card</span>

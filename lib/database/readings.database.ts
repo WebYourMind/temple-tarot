@@ -82,7 +82,9 @@ export const getReadingById = async (id: number): Promise<Reading | null> => {
 };
 
 // Function to list readings for a specific user
-export const getReadingsByUserId = async (userId: number): Promise<Reading[]> => {
+export const getReadingsByUserId = async (userId: number, page: number = 1, limit: number = 10): Promise<Reading[]> => {
+  const offset = (page - 1) * limit; // Calculate the offset based on the current page and limit
+
   try {
     const { rows } = await sql`
       SELECT readings.id, readings.user_id, readings.user_query, readings.spread_type, readings.created_at, readings.ai_interpretation,
@@ -90,7 +92,8 @@ export const getReadingsByUserId = async (userId: number): Promise<Reading[]> =>
       FROM readings
       LEFT JOIN cards_in_readings ON readings.id = cards_in_readings.reading_id
       WHERE readings.user_id = ${userId}
-      ORDER BY readings.created_at DESC, cards_in_readings.position ASC;
+      ORDER BY readings.created_at DESC, cards_in_readings.position ASC
+      LIMIT ${limit} OFFSET ${offset};
     `;
 
     // Map to organize readings by id and prevent duplication
@@ -110,7 +113,6 @@ export const getReadingsByUserId = async (userId: number): Promise<Reading[]> =>
       }
 
       if (row.card_id) {
-        // Check if there is a card linked in this row
         readingsMap.get(row.id).cards.push({
           id: row.card_id,
           cardName: row.card_name,
@@ -123,6 +125,19 @@ export const getReadingsByUserId = async (userId: number): Promise<Reading[]> =>
     return Array.from(readingsMap.values()); // Convert the map values into an array
   } catch (error) {
     console.error("Failed to retrieve readings:", error);
+    throw error;
+  }
+};
+
+// Function to count all readings for a specific user
+export const countReadingsByUserId = async (userId: number): Promise<number> => {
+  try {
+    const { rows } = await sql`
+      SELECT COUNT(*) AS total FROM readings WHERE user_id = ${userId};
+    `;
+    return parseInt(rows[0].total, 10); // Assuming 'total' is the name of the count column
+  } catch (error) {
+    console.error("Failed to count readings:", error);
     throw error;
   }
 };
