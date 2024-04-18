@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 export function useReadings() {
   const [readings, setReadings] = useState<Reading[]>([]);
-  const [reading, setReading] = useState<{ reading: Reading; cards: CardInReading[] }>();
+  const [reading, setReading] = useState<Reading>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -43,7 +43,7 @@ export function useReadings() {
     }
   };
 
-  const addReading = async (reading: any, cards: any[]) => {
+  const addReading = async (reading: Reading, cards: CardInReading[]) => {
     setLoading(true);
     try {
       const response = await fetch("/api/readings", {
@@ -53,7 +53,6 @@ export function useReadings() {
       });
       const data = await response.json();
       setLoading(false);
-      return data;
     } catch (err) {
       setLoading(false);
       setError(err as Error);
@@ -71,7 +70,6 @@ export function useReadings() {
       });
       const data = await response.json();
       setLoading(false);
-      return data;
     } catch (err) {
       setLoading(false);
       setError(err as Error);
@@ -87,7 +85,6 @@ export function useReadings() {
       });
       const data = await response.json();
       setLoading(false);
-      return data;
     } catch (err) {
       setLoading(false);
       setError(err as Error);
@@ -95,5 +92,17 @@ export function useReadings() {
     }
   };
 
-  return { loading, error, fetchReadings, fetchReading, addReading, updateReading, deleteReading, readings, reading };
+  return {
+    loading,
+    error,
+    fetchReadings,
+    fetchReading,
+    addReading,
+    updateReading,
+    deleteReading,
+    readings,
+    reading,
+    setReadings,
+    setReading,
+  };
 }

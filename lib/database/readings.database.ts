@@ -18,6 +18,7 @@ export interface Reading {
     | "spiritual_guidance";
   aiInterpretation?: string;
   createdAt?: Date;
+  cards?: CardInReading[];
 }
 
 // Function to add reading and cards
@@ -84,10 +85,42 @@ export const getReadingById = async (id: number): Promise<Reading | null> => {
 export const getReadingsByUserId = async (userId: number): Promise<Reading[]> => {
   try {
     const { rows } = await sql`
-      SELECT * FROM readings WHERE user_id = ${userId} ORDER BY created_at DESC;
+      SELECT readings.id, readings.user_id, readings.user_query, readings.spread_type, readings.created_at, readings.ai_interpretation,
+             cards_in_readings.id as card_id, cards_in_readings.card_name, cards_in_readings.orientation, cards_in_readings.position
+      FROM readings
+      LEFT JOIN cards_in_readings ON readings.id = cards_in_readings.reading_id
+      WHERE readings.user_id = ${userId}
+      ORDER BY readings.created_at DESC, cards_in_readings.position ASC;
     `;
 
-    return rows as Reading[];
+    // Map to organize readings by id and prevent duplication
+    const readingsMap = new Map();
+
+    for (const row of rows) {
+      if (!readingsMap.has(row.id)) {
+        readingsMap.set(row.id, {
+          id: row.id,
+          userId: row.user_id,
+          userQuery: row.user_query,
+          spreadType: row.spread_type,
+          createdAt: row.created_at,
+          aiInterpretation: row.ai_interpretation,
+          cards: [],
+        });
+      }
+
+      if (row.card_id) {
+        // Check if there is a card linked in this row
+        readingsMap.get(row.id).cards.push({
+          id: row.card_id,
+          cardName: row.card_name,
+          orientation: row.orientation,
+          position: row.position,
+        });
+      }
+    }
+
+    return Array.from(readingsMap.values()); // Convert the map values into an array
   } catch (error) {
     console.error("Failed to retrieve readings:", error);
     throw error;

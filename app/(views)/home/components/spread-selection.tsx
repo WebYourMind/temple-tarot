@@ -34,7 +34,6 @@ const SpreadSelection = ({ onSpreadSelect }: { onSpreadSelect: (spread: string) 
           >
             <Card className="mb-2" />
             <span>Single Card</span>
-            <span>(1 Lumen)</span>
           </Button>
           {/* <Button
             onClick={() => handleChange("three")}

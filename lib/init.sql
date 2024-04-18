@@ -54,7 +54,7 @@ CREATE TABLE readings (
 
 CREATE TABLE cards_in_readings (
     id SERIAL PRIMARY KEY,
-    reading_id INTEGER REFERENCES readings(id),
+    reading_id INTEGER REFERENCES readings(id) ON DELETE SET NULL,
     card_name VARCHAR(255),
     orientation VARCHAR(50),
     position INTEGER,

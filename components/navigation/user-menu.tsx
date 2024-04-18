@@ -49,7 +49,7 @@ export function UserMenu({ user }: UserMenuProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost">
-            <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full border">
+            <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full border border-foreground">
               <IconUser className="h-full w-full p-1" />
             </div>
             <span className="ml-2 hidden md:block">{user?.name}</span>

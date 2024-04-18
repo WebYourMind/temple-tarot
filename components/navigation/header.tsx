@@ -35,7 +35,7 @@ export default function Header() {
       console.log(pathname);
       e.preventDefault(); // Prevent Link from navigating
       router.refresh(); // Reload the page
-      router.replace("/");
+      router.push("/");
     }
   };
 
@@ -79,6 +79,9 @@ export default function Header() {
             <Link href="/credits/get-credits" className={buttonVariants({ variant: "link" })}>
               Get Lumens
             </Link> */}
+            <Link href="/readings" className={buttonVariants({ variant: "link" })}>
+              My Readings
+            </Link>
             <Link href="/" onClick={handleTarotClick} className={buttonVariants({ variant: "link" })}>
               Tarot
             </Link>

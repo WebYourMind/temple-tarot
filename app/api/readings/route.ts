@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       }
 
       const cards = await getCardsByReadingId(parseInt(readingId));
-      return NextResponse.json({ reading, cards }, { status: 200 });
+      return NextResponse.json({ ...reading, cards }, { status: 200 });
     } else if (userId) {
       const readings = await getReadingsByUserId(parseInt(userId));
       if (!readings || readings.length === 0) {

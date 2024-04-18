@@ -3,7 +3,7 @@
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import Loading from "components/loading";
 import { Button } from "components/ui/button";
-import { useReadings } from "lib/hooks/use-readings";
+import { useReadingsContext } from "lib/contexts/readings-context";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -15,18 +15,17 @@ type ReadingProps = {
 
 function Reading({ readingId }: ReadingProps) {
   const { data: session, status } = useSession() as any;
-  const { reading, loading, error, fetchReading } = useReadings();
+  const { reading, loading, error, fetchReading } = useReadingsContext();
   const route = useRouter();
 
   useEffect(() => {
-    if (session?.user?.id) {
+    if (session?.user?.id && readingId != reading?.id) {
       fetchReading(readingId);
     }
   }, [status]);
 
   if (loading || !reading) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
-  console.log(reading);
 
   return (
     <div className="container max-w-4xl pt-4">
@@ -38,7 +37,7 @@ function Reading({ readingId }: ReadingProps) {
       </div>
       <div className="mx-auto max-w-2xl py-8">
         <div className="flex flex-col">
-          <p className="my-4 italic">{reading.reading?.userQuery}</p>
+          <p className="my-4 italic">{reading?.userQuery}</p>
 
           {reading.cards.map((card) => (
             <p className="my-3 text-lg" key={card.cardName}>
@@ -48,7 +47,7 @@ function Reading({ readingId }: ReadingProps) {
           ))}
         </div>
         <ReactMarkdown className="prose prose-indigo mx-auto my-6 w-full max-w-full font-mono leading-relaxed text-foreground md:prose-lg">
-          {reading.reading.aiInterpretation}
+          {reading.aiInterpretation}
         </ReactMarkdown>
       </div>
     </div>

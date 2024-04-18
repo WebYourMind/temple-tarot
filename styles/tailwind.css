@@ -8,7 +8,7 @@
     --color-foreground: #333333;
     --color-card: #f9fafb;
     --color-card-foreground: #333333;
-    --color-popover: #f9fafb;
+    --color-popover: #ffffff;
     --color-popover-foreground: #333333;
     --color-primary: #1a8cb9;
     --color-primary-foreground: #ffffff;
@@ -20,7 +20,7 @@
     --color-accent-foreground: #333333;
     --color-destructive: #e63946;
     --color-destructive-foreground: #ffffff;
-    --color-border: #1d1d1d;
+    --color-border: #c1c1c1;
     --color-input: #1d1d1d;
     --color-ring: #1d1d1d;
     --radius: 0.5rem;
@@ -48,7 +48,7 @@
     --color-accent-foreground: #e26912;
     --color-destructive: #e63946;
     --color-destructive-foreground: #f7f9fb;
-    --color-border: #ffffff;
+    --color-border: #b8b8b8;
     --color-input: #ffffff;
     --color-ring: #ffffff;
     --radius: 0.5rem;
