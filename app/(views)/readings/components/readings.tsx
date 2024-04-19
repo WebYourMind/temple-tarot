@@ -5,6 +5,7 @@ import ReadingItem from "./reading-item";
 import Loading from "components/loading";
 import { useReadingsContext } from "lib/contexts/readings-context";
 import PaginationComponent from "./pagination-component";
+import LoadingSkeleton from "./loading-skeleton";
 
 function paginate(currentPage, pageCount, delta = 2) {
   const range = [];
@@ -38,7 +39,7 @@ function Readings() {
     }
   }, [session?.user?.id, page]);
 
-  if (loading && !readings) return <Loading />;
+  if (loading && readings?.length === 0) return <LoadingSkeleton />;
   if (error) return <div>Error: {error.message}</div>;
   if (readings?.length === 0 && !loading) {
     return <div>No readings found.</div>;
@@ -54,15 +55,16 @@ function Readings() {
   console.log(readings);
 
   return (
-    <div className="container max-w-4xl py-8 ">
-      <h1 className="mb-8 text-2xl font-bold">My Readings</h1>
-      <div className="mb-8 grid max-w-4xl grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-3">
+    <>
+      <div className="mb-8 grid max-w-4xl grid-cols-1 gap-16 md:grid-cols-3 lg:grid-cols-3">
         {readings && readings.map((reading) => <ReadingItem key={reading.id} reading={reading} />)}
       </div>
-      {totalPages > 1 && (
-        <PaginationComponent pages={pages} page={page} totalPages={totalPages} onPaginate={handlePageChange} />
-      )}
-    </div>
+      <div className="my-16">
+        {totalPages > 1 && (
+          <PaginationComponent pages={pages} page={page} totalPages={totalPages} onPaginate={handlePageChange} />
+        )}
+      </div>
+    </>
   );
 }
 export default Readings;

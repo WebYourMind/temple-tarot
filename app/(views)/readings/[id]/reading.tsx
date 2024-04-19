@@ -29,28 +29,29 @@ function Reading({ readingId }: ReadingProps) {
   console.log(reading);
 
   return (
-    <div className="container max-w-4xl pt-4">
-      <div className="">
+    <div className="container max-w-4xl pb-16 pt-8 md:pt-16">
+      <div className="mb-10">
         <Button className="p-0" variant={"link"} onClick={() => route.push("/readings")}>
           <ArrowLeftIcon className="mr-2" />
           My Readings
         </Button>
       </div>
-      <div className="mx-auto max-w-2xl py-8">
+      <div className="mx-auto max-w-4xl py-8 font-mono">
         <div className="flex flex-col">
-          <p className="my-4 italic">{reading?.userQuery}</p>
-
-          <div className="my-3 text-lg">
+          <p className="text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
+          <h1 className="my-4 text-4xl font-bold">{reading?.userQuery}</h1>
+          <div className="my-16 text-lg">
+            <h2 className="mb-2 text-xl font-bold">Cards:</h2>
             {reading.cards.map((card, index) => (
               <p key={card.cardName}>
-                <strong>
-                  {index + 1}. {card.cardName} ({card.orientation.charAt(0).toUpperCase() + card.orientation.slice(1)})
-                </strong>
+                {/* <strong> */}
+                {index + 1}. {card.cardName} ({card.orientation.charAt(0).toUpperCase() + card.orientation.slice(1)})
+                {/* </strong> */}
               </p>
             ))}
           </div>
         </div>
-        <ReactMarkdown className="prose prose-indigo mx-auto my-6 w-full max-w-full font-mono leading-relaxed text-foreground md:prose-lg">
+        <ReactMarkdown className="prose prose-indigo mx-auto my-16 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
           {reading.aiInterpretation}
         </ReactMarkdown>
       </div>
