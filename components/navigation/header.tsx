@@ -32,7 +32,6 @@ export default function Header() {
   const handleTarotClick = (e) => {
     // Check if the target href is the same as the current pathname
     if (pathname === "/") {
-      console.log(pathname);
       e.preventDefault(); // Prevent Link from navigating
       router.refresh(); // Reload the page
       router.push("/");

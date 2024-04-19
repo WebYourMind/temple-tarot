@@ -51,6 +51,7 @@ function Readings() {
   };
 
   const pages = paginate(page, totalPages);
+  console.log(readings);
 
   return (
     <div className="container max-w-4xl py-8 ">

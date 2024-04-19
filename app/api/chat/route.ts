@@ -18,7 +18,7 @@ const openai = new OpenAIApi(configuration);
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { messages, cardName, orientation, position, userQuery, spreadType } = json as Reading &
+  const { messages, cards, userQuery, spreadType } = json as Reading &
     CardInReading & { messages: ChatCompletionRequestMessage[] };
   const session = await getSession();
 
@@ -72,13 +72,6 @@ export async function POST(req: Request) {
           spreadType,
           aiInterpretation: completion,
         };
-        const cards = [
-          {
-            cardName,
-            orientation,
-            position,
-          },
-        ];
         await addReadingWithCards(reading, cards);
       },
     });

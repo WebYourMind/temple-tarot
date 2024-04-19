@@ -26,6 +26,7 @@ function Reading({ readingId }: ReadingProps) {
 
   if (loading || !reading) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
+  console.log(reading);
 
   return (
     <div className="container max-w-4xl pt-4">
@@ -39,12 +40,15 @@ function Reading({ readingId }: ReadingProps) {
         <div className="flex flex-col">
           <p className="my-4 italic">{reading?.userQuery}</p>
 
-          {reading.cards.map((card) => (
-            <p className="my-3 text-lg" key={card.cardName}>
-              <strong>{card.cardName}</strong> -{" "}
-              <strong>{card.orientation.charAt(0).toUpperCase() + card.orientation.slice(1)}</strong>
-            </p>
-          ))}
+          <div className="my-3 text-lg">
+            {reading.cards.map((card, index) => (
+              <p key={card.cardName}>
+                <strong>
+                  {index + 1}. {card.cardName} ({card.orientation.charAt(0).toUpperCase() + card.orientation.slice(1)})
+                </strong>
+              </p>
+            ))}
+          </div>
         </div>
         <ReactMarkdown className="prose prose-indigo mx-auto my-6 w-full max-w-full font-mono leading-relaxed text-foreground md:prose-lg">
           {reading.aiInterpretation}

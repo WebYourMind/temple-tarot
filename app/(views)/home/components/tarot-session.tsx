@@ -7,11 +7,16 @@ import QueryInput from "./query-input";
 import { Button } from "components/ui/button";
 import { Interpreter } from "./interpreter";
 import { IconClose } from "components/ui/icons";
+import CardSelectionWrapper from "./card-selection-wrapper";
+
+export type SelectedCardType = {
+  cardName: string;
+  orientation: string;
+};
 
 export default function TarotSession() {
   const [query, setQuery] = useState<string | null>(null);
-  const [selectedCard, setSelectedCard] = useState<string | null>(null);
-  const [selectedOrientation, setSelectedOrientation] = useState<string | null>(null);
+  const [selectedCards, setSelectedCards] = useState<SelectedCardType[]>();
   const [spreadType, setSpreadType] = useState<any>(); // To store the selected spread type
   const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
 
@@ -21,26 +26,19 @@ export default function TarotSession() {
     setPhase("cards");
   }
 
-  function handleSpreadSelect(spread: string) {
-    setSpreadType(spread);
-    setPhase("cards");
-  }
-
-  function handleCardSelect(card: string, orientation: "upright" | "reversed") {
-    setSelectedCard(card);
-    setSelectedOrientation(orientation);
+  function handleCardSelect(selectedCards) {
+    setSelectedCards(selectedCards);
   }
 
   useEffect(() => {
-    if (selectedCard && selectedOrientation && query) {
+    if (selectedCards && query) {
       setPhase("reading");
     }
-  }, [selectedCard, selectedOrientation, query]);
+  }, [selectedCards, query]);
 
   function handleReset() {
     setPhase("question");
-    setSelectedCard(null);
-    setSelectedOrientation(null);
+    setSelectedCards(null);
     setQuery(null);
   }
 
@@ -48,10 +46,12 @@ export default function TarotSession() {
     <div className="max-w-4xl p-4 pt-8 md:container">
       {phase === "question" && <QueryInput onSubmitQuestion={handleSubmitQuestion} />}
       {/* {phase === "spread" && <SpreadSelection onSpreadSelect={handleSpreadSelect} />} */}
-      {phase === "cards" && <CardSelection onSelect={handleCardSelect} query={query} spread={spreadType} />}
-      {phase === "reading" && query && selectedCard && selectedOrientation && (
+      {phase === "cards" && (
+        <CardSelectionWrapper onSelectComplete={handleCardSelect} query={query} spread={spreadType} />
+      )}
+      {phase === "reading" && query && selectedCards && (
         <>
-          <Interpreter query={query} card={selectedCard} orientation={selectedOrientation} />
+          <Interpreter query={query} cards={selectedCards} spread={spreadType} />
           <div className="my-20 flex justify-center">
             <Button
               variant={"ghost"}

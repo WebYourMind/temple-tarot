@@ -37,6 +37,7 @@ export async function GET(request: NextRequest) {
   const userId = searchParams.get("userId");
   const page = parseInt(searchParams.get("page") || "1", 10); // Default to page 1 if not specified
   const limit = parseInt(searchParams.get("limit") || "10", 10); // Default to 10 items per page if not specified
+  const userSessionId = (await getSession())?.user.id;
 
   try {
     if (readingId) {
@@ -44,22 +45,30 @@ export async function GET(request: NextRequest) {
       if (!reading) {
         return NextResponse.json({ error: "Reading not found" }, { status: 404 });
       }
-
-      const cards = await getCardsByReadingId(parseInt(readingId));
-      return NextResponse.json({ ...reading, cards }, { status: 200 });
-    } else if (userId) {
-      // Fetch paginated readings and count total readings
-      const [readings, total] = await Promise.all([
-        getReadingsByUserId(parseInt(userId), page, limit),
-        countReadingsByUserId(parseInt(userId)),
-      ]);
-
-      const totalPages = Math.ceil(total / limit); // Calculate the total number of pages
-
-      if (!readings || readings.length === 0) {
-        return NextResponse.json({ error: "No readings found for this user" }, { status: 404 });
+      // @ts-ignore
+      if (reading.user_id == userSessionId) {
+        const cards = await getCardsByReadingId(parseInt(readingId));
+        return NextResponse.json({ ...reading, cards }, { status: 200 });
+      } else {
+        return NextResponse.json({ error: "You are not authorized to view this reading." }, { status: 401 });
       }
-      return NextResponse.json({ readings, totalPages }, { status: 200 });
+    } else if (userId) {
+      if (userId == userSessionId) {
+        // Fetch paginated readings and count total readings
+        const [readings, total] = await Promise.all([
+          getReadingsByUserId(parseInt(userId), page, limit),
+          countReadingsByUserId(parseInt(userId)),
+        ]);
+
+        const totalPages = Math.ceil(total / limit); // Calculate the total number of pages
+
+        if (!readings || readings.length === 0) {
+          return NextResponse.json({ error: "No readings found for this user" }, { status: 404 });
+        }
+        return NextResponse.json({ readings, totalPages }, { status: 200 });
+      } else {
+        return NextResponse.json({ error: "You are not authorized to view these readings." }, { status: 401 });
+      }
     } else {
       return NextResponse.json({ error: "Reading ID or User ID must be provided" }, { status: 400 });
     }

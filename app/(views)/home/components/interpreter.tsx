@@ -7,25 +7,24 @@ import "./cards.css";
 import ReactMarkdown from "react-markdown";
 import { useCredits } from "lib/contexts/credit-context";
 import Loading from "components/loading";
+import { SelectedCardType } from "./tarot-session";
 
 export interface InterpreterProps extends React.ComponentProps<"div"> {
   query: string;
-  card: string;
-  orientation: string;
+  cards: SelectedCardType[];
+  spread: { name: string; value: string };
 }
 
-export function Interpreter({ query, card, orientation }: InterpreterProps) {
+export function Interpreter({ query, cards, spread }: InterpreterProps) {
   const { fetchCreditBalance } = useCredits();
   const [loading, setLoading] = useState(true);
 
   // Simulated API call setup, for later use
   const { messages, append } = useChat({
     body: {
-      cardName: card,
-      orientation,
-      position: 1,
+      cards,
       userQuery: query,
-      spreadType: "single_card",
+      spreadType: spread.value,
     },
     async onResponse(response) {
       setLoading(false);
@@ -41,16 +40,31 @@ export function Interpreter({ query, card, orientation }: InterpreterProps) {
   });
 
   useEffect(() => {
-    append({ role: "user", content: `User's query: ${query}\n\n Chosen card: ${card} ${orientation}` });
+    const cardDescriptions = cards
+      .map((card, index) => `Position ${index + 1}: ${card.cardName} (${card.orientation})`)
+      .join(", ");
+
+    const content = `User's query: ${query}\n\nChosen spread: ${spread.name}\n\nChosen cards and their positions in the spread: ${cardDescriptions}`;
+    append({
+      content,
+      role: "user",
+    });
   }, []);
 
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex flex-col">
         <p className="my-4 italic">{query}</p>
-        <p className="my-3 text-lg">
-          <strong>{card}</strong> - <strong>{orientation.charAt(0).toUpperCase() + orientation.slice(1)}</strong>
-        </p>
+        <p className="my-3">{spread.name} Spread</p>
+        <div className="my-3 text-lg">
+          {cards.map((card, index) => (
+            <p key={card.cardName}>
+              <strong>
+                {index + 1}. {card.cardName} ({card.orientation.charAt(0).toUpperCase() + card.orientation.slice(1)})
+              </strong>
+            </p>
+          ))}
+        </div>
       </div>
       {loading && <Loading />}
       {messages.length > 0 &&

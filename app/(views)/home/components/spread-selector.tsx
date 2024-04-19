@@ -12,7 +12,7 @@ import {
 
 const spreads = [
   { value: "single_card", name: "Single Card", cards: 1 },
-  { value: "three_card", name: "Three Card", cards: 3 },
+  { value: "three_card", name: "Three Card (past, present, future)", cards: 3 },
   { value: "celtic_cross", name: "Celtic Cross", cards: 10 },
   //   "love",
   //   "career",
@@ -36,7 +36,9 @@ export function SpreadSelector({ onSpreadSelect, selectedSpread }) {
         <SelectGroup>
           <SelectLabel>Spreads</SelectLabel>
           {spreads.map((spread) => (
-            <SelectItem value={spread.value}>{spread.name}</SelectItem>
+            <SelectItem key={spread.value} value={spread.value}>
+              {spread.name}
+            </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>

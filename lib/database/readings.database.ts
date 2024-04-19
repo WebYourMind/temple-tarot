@@ -83,46 +83,59 @@ export const getReadingById = async (id: number): Promise<Reading | null> => {
 
 // Function to list readings for a specific user
 export const getReadingsByUserId = async (userId: number, page: number = 1, limit: number = 10): Promise<Reading[]> => {
-  const offset = (page - 1) * limit; // Calculate the offset based on the current page and limit
+  const offset = (page - 1) * limit;
 
   try {
-    const { rows } = await sql`
-      SELECT readings.id, readings.user_id, readings.user_query, readings.spread_type, readings.created_at, readings.ai_interpretation,
-             cards_in_readings.id as card_id, cards_in_readings.card_name, cards_in_readings.orientation, cards_in_readings.position
+    // Fetch the readings first
+    const { rows: readingRows } = await sql`
+      SELECT id, user_id, user_query, spread_type, created_at, ai_interpretation
       FROM readings
-      LEFT JOIN cards_in_readings ON readings.id = cards_in_readings.reading_id
-      WHERE readings.user_id = ${userId}
-      ORDER BY readings.created_at DESC, cards_in_readings.position ASC
+      WHERE user_id = ${userId}
+      ORDER BY created_at DESC
       LIMIT ${limit} OFFSET ${offset};
     `;
 
-    // Map to organize readings by id and prevent duplication
-    const readingsMap = new Map();
-
-    for (const row of rows) {
-      if (!readingsMap.has(row.id)) {
-        readingsMap.set(row.id, {
-          id: row.id,
-          userId: row.user_id,
-          userQuery: row.user_query,
-          spreadType: row.spread_type,
-          createdAt: row.created_at,
-          aiInterpretation: row.ai_interpretation,
-          cards: [],
-        });
-      }
-
-      if (row.card_id) {
-        readingsMap.get(row.id).cards.push({
-          id: row.card_id,
-          cardName: row.card_name,
-          orientation: row.orientation,
-          position: row.position,
-        });
-      }
+    if (readingRows.length === 0) {
+      return [];
     }
 
-    return Array.from(readingsMap.values()); // Convert the map values into an array
+    // Collect all reading IDs for the next query to fetch cards
+    const readingIds = readingRows.map((r) => r.id);
+
+    // Initialize an empty map to hold readings and their cards
+    const readingsMap = new Map(
+      readingRows.map((r) => [
+        r.id,
+        {
+          ...r,
+          cards: [],
+        },
+      ])
+    );
+
+    // Fetch cards for all fetched readings in separate queries
+    for (let readingId of readingIds) {
+      const { rows: cardRows } = await sql`
+        SELECT id, reading_id, card_name, orientation, position
+        FROM cards_in_readings
+        WHERE reading_id = ${readingId}
+        ORDER BY position ASC;
+      `;
+
+      // Add cards to the corresponding reading in the map
+      cardRows.forEach((card) => {
+        if (readingsMap.has(card.reading_id)) {
+          readingsMap.get(card.reading_id).cards.push({
+            id: card.card_id,
+            cardName: card.card_name,
+            orientation: card.orientation,
+            position: card.position,
+          });
+        }
+      });
+    }
+
+    return Array.from(readingsMap.values()) as Reading[];
   } catch (error) {
     console.error("Failed to retrieve readings:", error);
     throw error;
