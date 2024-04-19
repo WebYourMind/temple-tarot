@@ -19,7 +19,7 @@ const SpreadSelectionWrapper = ({ spread, query, onSelectComplete }) => {
   return (
     <div>
       <p>
-        Step {currentStep + 1} of {spread.cards}
+        Card {currentStep + 1} of {spread.cards}
       </p>
       <CardSelection onSelect={handleCardSelect} query={query} currentStep={currentStep} />
     </div>

@@ -13,21 +13,8 @@ type ReadingProps = {
   readingId: string;
 };
 
-function Reading({ readingId }: ReadingProps) {
-  const { data: session, status } = useSession() as any;
-  const { reading, loading, error, fetchReading } = useReadingsContext();
+export function ReadingTemplate({ reading }) {
   const route = useRouter();
-
-  useEffect(() => {
-    if (session?.user?.id && readingId != reading?.id) {
-      fetchReading(readingId);
-    }
-  }, [status]);
-
-  if (loading || !reading) return <Loading />;
-  if (error) return <div>Error: {error.message}</div>;
-  console.log(reading);
-
   return (
     <div className="container max-w-4xl pb-16 pt-8">
       <div className="mb-10">
@@ -40,7 +27,7 @@ function Reading({ readingId }: ReadingProps) {
         <div className="flex flex-col">
           <p className="text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
           <h1 className="my-4 text-4xl font-bold">{reading?.userQuery}</h1>
-          <div className="my-16 text-lg">
+          <div className="my-8 text-lg">
             <h2 className="mb-2 text-xl font-bold">Cards:</h2>
             {reading.cards.map((card, index) => (
               <p key={card.cardName}>
@@ -51,12 +38,29 @@ function Reading({ readingId }: ReadingProps) {
             ))}
           </div>
         </div>
-        <ReactMarkdown className="prose prose-indigo mx-auto my-16 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
+        <ReactMarkdown className="prose prose-indigo mx-auto my-8 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
           {reading.aiInterpretation}
         </ReactMarkdown>
       </div>
     </div>
   );
+}
+
+function Reading({ readingId }: ReadingProps) {
+  const { data: session, status } = useSession() as any;
+  const { reading, loading, error, fetchReading } = useReadingsContext();
+
+  useEffect(() => {
+    if (session?.user?.id && readingId != reading?.id) {
+      fetchReading(readingId);
+    }
+  }, [status]);
+
+  if (loading || !reading) return <Loading />;
+  if (error) return <div>Error: {error.message}</div>;
+  console.log(reading);
+
+  return <ReadingTemplate reading={reading} />;
 }
 
 export default Reading;

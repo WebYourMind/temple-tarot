@@ -91,7 +91,7 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
       <p className="mx-10 mb-4 text-center italic">{query}</p>
       {finalCard ? (
         <>
-          <p className="mb-4 max-w-sm text-center text-xl md:mb-10">Lastly, what is your card&apos;s orientation?</p>
+          <p className="mb-4 max-w-sm text-center text-xl md:mb-10">Which way is your card?</p>
           <button onClick={() => switchOrientation()} className="p-4 transition hover:scale-105">
             <div className="rounded-lg">
               <Card

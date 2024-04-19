@@ -23,11 +23,12 @@ function ReadingItem({ reading }: ReadingItemProps) {
     <Card>
       <>
         <div className="flex items-center justify-between">
-          <p className="text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
+          <p className="mb-4 text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
           <ReadingItemMenu readingId={reading.id} />
         </div>
         <Link href={`readings/${reading.id}`} onClick={handleClick} className={"flex flex-col space-y-2"}>
           <h3 className="truncate-text-2 font-bold">{reading.userQuery}</h3>
+          <p className="text-xs text-primary">{reading.spreadType}</p>
           <p className="truncate-text-7 font-mono text-xs">{reading.aiInterpretation}</p>
         </Link>
       </>
