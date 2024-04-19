@@ -29,7 +29,7 @@ function Reading({ readingId }: ReadingProps) {
   console.log(reading);
 
   return (
-    <div className="container max-w-4xl pb-16 pt-8 md:pt-16">
+    <div className="container max-w-4xl pb-16 pt-8">
       <div className="mb-10">
         <Button className="p-0" variant={"link"} onClick={() => route.push("/readings")}>
           <ArrowLeftIcon className="mr-2" />
