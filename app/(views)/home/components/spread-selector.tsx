@@ -36,7 +36,7 @@ export function SpreadSelector({ onSpreadSelect, selectedSpread }) {
         <SelectGroup>
           <SelectLabel>Spreads</SelectLabel>
           {spreads.map((spread) => (
-            <SelectItem key={spread.value} value={spread.value}>
+            <SelectItem className="cursor-pointer" key={spread.value} value={spread.value}>
               {spread.name}
             </SelectItem>
           ))}
