@@ -3,19 +3,25 @@ import { Button } from "components/ui/button";
 import { Label } from "components/ui/label";
 import { Textarea } from "components/ui/textarea";
 import React, { useState } from "react";
+import { SpreadSelector } from "./spread-selector";
 
 interface QueryInputProps {
-  onSubmitQuestion: (question: string) => void;
+  onSubmitQuestion: (question: string, selectedSpread: any) => void;
 }
 
 const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
   const [question, setQuestion] = useState("");
+  const [selectedSpread, setSelectedSpread] = useState();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!question.trim()) return; // Prevent submitting empty questions
-    onSubmitQuestion(question);
+    onSubmitQuestion(question, selectedSpread);
     setQuestion(""); // Clear the question input after submission
+  };
+
+  const onSpreadSelect = (spread) => {
+    setSelectedSpread(spread);
   };
 
   return (
@@ -32,8 +38,8 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
         maxLength={5000}
         autoFocus
       />
-      {/* <p>Spread Type</p> */}
-      <Button onClick={handleSubmit} size={"sm"} variant={"ghost"}>
+      <SpreadSelector onSpreadSelect={onSpreadSelect} selectedSpread={selectedSpread} />
+      <Button onClick={handleSubmit} size={"sm"} variant={"ghost"} disabled={!selectedSpread || question === ""}>
         SUBMIT <PaperPlaneIcon className="ml-2" />
       </Button>
     </div>

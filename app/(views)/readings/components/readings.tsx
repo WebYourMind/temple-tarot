@@ -40,7 +40,7 @@ function Readings() {
 
   if (loading && !readings) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
-  if (readings.length === 0 && !loading) {
+  if (readings?.length === 0 && !loading) {
     return <div>No readings found.</div>;
   }
 

@@ -7,6 +7,7 @@ import Card from "./tarot-card";
 
 interface CardSelectionProps {
   onSelect: (cardName: string, orientation: "upright" | "reversed") => void;
+  spread: any;
   query: string;
 }
 
@@ -30,7 +31,7 @@ const createShuffledDeck = () => {
   );
 };
 
-const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
+const CardSelection = ({ onSelect, query, spread }: CardSelectionProps) => {
   const [leftDeck, setLeftDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>([]);
   const [rightDeck, setRightDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>([]);
   const [finalCard, setFinalCard] = useState<{ name: string; orientation: "upright" | "reversed" }>();

@@ -12,12 +12,13 @@ export default function TarotSession() {
   const [query, setQuery] = useState<string | null>(null);
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const [selectedOrientation, setSelectedOrientation] = useState<string | null>(null);
-  const [spreadType, setSpreadType] = useState<string | null>(null); // To store the selected spread type
+  const [spreadType, setSpreadType] = useState<any>(); // To store the selected spread type
   const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
 
-  function handleSubmitQuestion(question: string) {
+  function handleSubmitQuestion(question: string, spread) {
     setQuery(question);
-    setPhase("spread");
+    setSpreadType(spread);
+    setPhase("cards");
   }
 
   function handleSpreadSelect(spread: string) {
@@ -46,8 +47,8 @@ export default function TarotSession() {
   return (
     <div className="max-w-4xl p-4 pt-8 md:container">
       {phase === "question" && <QueryInput onSubmitQuestion={handleSubmitQuestion} />}
-      {phase === "spread" && <SpreadSelection onSpreadSelect={handleSpreadSelect} />}
-      {phase === "cards" && <CardSelection onSelect={handleCardSelect} query={query} />}
+      {/* {phase === "spread" && <SpreadSelection onSpreadSelect={handleSpreadSelect} />} */}
+      {phase === "cards" && <CardSelection onSelect={handleCardSelect} query={query} spread={spreadType} />}
       {phase === "reading" && query && selectedCard && selectedOrientation && (
         <>
           <Interpreter query={query} card={selectedCard} orientation={selectedOrientation} />
