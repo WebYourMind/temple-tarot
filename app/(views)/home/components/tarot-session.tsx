@@ -52,7 +52,7 @@ export default function TarotSession() {
       {phase === "reading" && query && selectedCards && (
         <>
           <Interpreter query={query} cards={selectedCards} spread={spreadType} />
-          <div className="my-20 flex justify-center">
+          <div className="my-10 flex justify-center">
             <Button
               variant={"ghost"}
               className="flex h-14 w-14 items-center justify-center rounded-full font-mono hover:text-primary"

@@ -18,8 +18,7 @@ const openai = new OpenAIApi(configuration);
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { messages, cards, userQuery, spreadType } = json as Reading &
-    CardInReading & { messages: ChatCompletionRequestMessage[] };
+  const { cards, userQuery, spreadType, content } = json as Reading & CardInReading & { content: string };
   const session = await getSession();
 
   if (!session?.user || !session.user.id) {
@@ -42,7 +41,6 @@ export async function POST(req: Request) {
     });
   }
 
-  const relevantMessages = messages.slice(-10);
   const contextPrompt = chatTemplateNoStyles;
 
   try {
@@ -53,7 +51,7 @@ export async function POST(req: Request) {
           role: "system",
           content: contextPrompt,
         },
-        ...relevantMessages,
+        { role: "user", content },
       ],
       temperature: 0.2,
       stream: true,

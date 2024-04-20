@@ -38,7 +38,7 @@ export function ReadingTemplate({ reading }) {
             ))}
           </div>
         </div>
-        <ReactMarkdown className="prose prose-indigo mx-auto my-8 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
+        <ReactMarkdown className="prose prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
           {reading.aiInterpretation}
         </ReactMarkdown>
       </div>
