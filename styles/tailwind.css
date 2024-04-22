@@ -22,7 +22,7 @@
     --color-destructive-foreground: #ffffff;
     --color-border: #c1c1c1;
     --color-input: #661ea2;
-    --color-ring: #732eab;
+    --color-ring: #cdb2e2;
     --radius: 0.7rem;
     font-family:
       Arial,
@@ -50,7 +50,7 @@
     --color-destructive-foreground: #f7f9fb;
     --color-border: #b8b8b8;
     --color-input: #e7d3f8;
-    --color-ring: #9b58d2;
+    --color-ring: #2f2f82;
     --radius: 0.7rem;
   }
 }
