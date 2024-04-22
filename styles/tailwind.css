@@ -4,26 +4,26 @@
 
 @layer base {
   :root {
-    --color-background: #ffffff;
+    --color-background: #fffdf9;
     --color-foreground: #333333;
     --color-card: #f9fafb;
     --color-card-foreground: #333333;
     --color-popover: #ffffff;
     --color-popover-foreground: #333333;
-    --color-primary: #1a8cb9;
+    --color-primary: #7b26c0;
     --color-primary-foreground: #ffffff;
-    --color-secondary: #1d1d1d;
-    --color-secondary-foreground: #ffffff;
+    --color-secondary: #8550b4;
+    --color-secondary-foreground: #eeeeee;
     --color-muted: #a7a7a7;
     --color-muted-foreground: #7b7b7b;
-    --color-accent: #edfafe;
+    --color-accent: #f6edfe;
     --color-accent-foreground: #333333;
     --color-destructive: #e63946;
     --color-destructive-foreground: #ffffff;
     --color-border: #c1c1c1;
-    --color-input: #1d1d1d;
-    --color-ring: #1d1d1d;
-    --radius: 0.5rem;
+    --color-input: #661ea2;
+    --color-ring: #732eab;
+    --radius: 0.7rem;
     font-family:
       Arial,
       Helvetica,
@@ -32,26 +32,26 @@
   }
 
   .dark {
-    --color-background: #000000;
+    --color-background: #13131b;
     --color-foreground: #eeeeee;
     --color-card: #1f2937;
     --color-card-foreground: #f7f9fb;
-    --color-popover: #111111;
+    --color-popover: #1a1a27;
     --color-popover-foreground: #f7f9fb;
-    --color-primary: #30d5c8;
+    --color-primary: #9c48e0;
     --color-primary-foreground: #eeeeee;
-    --color-secondary: #fff;
-    --color-secondary-foreground: #333333;
+    --color-secondary: #815eb9;
+    --color-secondary-foreground: #f2ecf4;
     --color-muted: #788597;
     --color-muted-foreground: #a9b0ba;
-    --color-accent: #414141;
-    --color-accent-foreground: #ffffff;
+    --color-accent: #513e70;
+    --color-accent-foreground: #eeeeee;
     --color-destructive: #e63946;
     --color-destructive-foreground: #f7f9fb;
     --color-border: #b8b8b8;
-    --color-input: #ffffff;
-    --color-ring: #ffffff;
-    --radius: 0.5rem;
+    --color-input: #d6b6f0;
+    --color-ring: #9b58d2;
+    --radius: 0.7rem;
   }
 }
 
@@ -62,6 +62,26 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+h1 {
+  @apply mt-4 text-4xl font-bold;
+}
+
+h2 {
+  @apply mt-4 text-3xl font-bold;
+}
+
+h3 {
+  @apply mt-2 text-xl font-bold;
+}
+
+p {
+  @apply my-2;
+}
+
+a {
+  @apply font-bold text-primary underline-offset-4 hover:underline;
 }
 
 @keyframes fadeIn {

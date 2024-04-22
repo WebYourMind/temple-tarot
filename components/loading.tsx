@@ -17,7 +17,7 @@ export default function Loading({ message }: LoadingProps) {
           ))}
         </div>
       )}
-      <StarIcon className="animate-spin-slow h-10 w-10 text-foreground" />
+      <StarIcon className="animate-spin-slow h-10 w-10 text-primary" />
     </div>
   );
 }

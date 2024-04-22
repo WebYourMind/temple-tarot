@@ -58,7 +58,6 @@ function Reading({ readingId }: ReadingProps) {
 
   if (loading || !reading) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
-  console.log(reading);
 
   return <ReadingTemplate reading={reading} />;
 }

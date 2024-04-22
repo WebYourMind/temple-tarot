@@ -22,8 +22,8 @@ export function Sidebar({ children }: SidebarProps) {
           </Button>
         </SheetTrigger>
         <SheetContent className="inset-y-0 flex h-auto w-[300px] flex-col bg-background p-0 text-foreground">
-          <SheetHeader className="p-4">
-            <SheetTitle className="text-sm">{appConfig.appName}</SheetTitle>
+          <SheetHeader className="mb-4 p-4">
+            <SheetTitle className="text-md font-bold">{appConfig.appName}</SheetTitle>
           </SheetHeader>
           {children}
         </SheetContent>

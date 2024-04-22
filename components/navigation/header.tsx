@@ -48,8 +48,8 @@ export default function Header() {
             </React.Suspense>
           </Sidebar>
         ) : (
-          <Link href="/" className="mr-2">
-            {appConfig.appName}
+          <Link href="/" className="mr-2 hover:no-underline">
+            <h3 className="mt-0 text-foreground ">{appConfig.appName}</h3>
           </Link>
         )}
         {status !== "loading" && (
@@ -71,9 +71,9 @@ export default function Header() {
           </div>
         )}
       </div>
-      <div className="hidden items-center justify-end space-x-4 md:flex">
+      <div className="flex items-center justify-end space-x-4">
         {session?.user && (
-          <>
+          <div className="hidden items-center justify-end space-x-4 md:flex">
             {/* <CreditBalance />
             <Link href="/credits/get-credits" className={buttonVariants({ variant: "link" })}>
               Get Lumens
@@ -84,7 +84,7 @@ export default function Header() {
             <Link href="/" onClick={handleTarotClick} className={buttonVariants({ variant: "link" })}>
               Tarot
             </Link>
-          </>
+          </div>
         )}
         <button onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")} aria-label="Theme">
           <Half2Icon />

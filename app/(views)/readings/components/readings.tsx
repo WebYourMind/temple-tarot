@@ -6,6 +6,7 @@ import Loading from "components/loading";
 import { useReadingsContext } from "lib/contexts/readings-context";
 import PaginationComponent from "./pagination-component";
 import LoadingSkeleton from "./loading-skeleton";
+import EmptyReadings from "./empty-readings";
 
 function paginate(currentPage, pageCount, delta = 2) {
   const range = [];
@@ -41,8 +42,9 @@ function Readings() {
 
   if (loading && readings?.length === 0) return <LoadingSkeleton />;
   if (error) return <div>Error: {error.message}</div>;
-  if (readings?.length === 0 && !loading) {
-    return <div>No readings found.</div>;
+  console.log(readings?.length, loading);
+  if ((!readings || readings?.length === 0) && !loading) {
+    return <EmptyReadings />;
   }
 
   const handlePageChange = (newPage) => {
@@ -52,7 +54,6 @@ function Readings() {
   };
 
   const pages = paginate(page, totalPages);
-  console.log(readings);
 
   return (
     <>

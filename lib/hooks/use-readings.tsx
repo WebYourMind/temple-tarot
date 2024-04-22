@@ -1,7 +1,7 @@
 import { CardInReading } from "lib/database/cardsInReadings.database";
 import { Reading } from "lib/database/readings.database";
 import { keysToCamel } from "lib/utils";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 export function useReadings() {
@@ -10,11 +10,6 @@ export function useReadings() {
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    console.log(loading);
-    console.log(readings);
-  }, [loading, readings]);
 
   const fetchReadings = async (userId, page, limit) => {
     setLoading(true);
@@ -42,7 +37,6 @@ export function useReadings() {
       } else {
         toast.error(data.error.message);
       }
-      console.log("Setting to false");
       setLoading(false);
     } catch (err) {
       setLoading(false);
