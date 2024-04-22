@@ -48,7 +48,7 @@ export function UserMenu({ user }: UserMenuProps) {
     <div className="flex items-center justify-between">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost">
+          <Button variant="link">
             <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full border border-foreground">
               <IconUser className="h-full w-full p-1" />
             </div>

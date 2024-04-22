@@ -39,7 +39,7 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
         autoFocus
       />
       <SpreadSelector onSpreadSelect={onSpreadSelect} selectedSpread={selectedSpread} />
-      <Button onClick={handleSubmit} size={"sm"} variant={"ghost"} disabled={!selectedSpread || question === ""}>
+      <Button onClick={handleSubmit} variant={"ghost"} disabled={!selectedSpread || question === ""}>
         SUBMIT <PaperPlaneIcon className="ml-2" />
       </Button>
     </div>

@@ -27,7 +27,7 @@ export function SidebarList() {
   return (
     <div className="flex-1 overflow-auto">
       {menuItems?.length ? (
-        <div className="space-y-2 px-2">
+        <div className="space-y-4 px-2">
           {menuItems.map((item) => item && <SidebarItem key={item?.path} menuItem={item} />)}
         </div>
       ) : (

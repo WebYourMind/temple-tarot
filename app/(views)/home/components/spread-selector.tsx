@@ -29,7 +29,7 @@ export function SpreadSelector({ onSpreadSelect, selectedSpread }) {
   };
   return (
     <Select onValueChange={handleSpreadSelect} value={selectedSpread?.value}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="mb-2 w-[180px]">
         <SelectValue placeholder="Choose a spread" />
       </SelectTrigger>
       <SelectContent>

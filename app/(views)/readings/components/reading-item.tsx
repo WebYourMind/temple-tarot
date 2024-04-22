@@ -26,10 +26,14 @@ function ReadingItem({ reading }: ReadingItemProps) {
           <p className="mb-4 text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
           <ReadingItemMenu readingId={reading.id} />
         </div>
-        <Link href={`readings/${reading.id}`} onClick={handleClick} className={"flex flex-col space-y-2"}>
+        <Link
+          href={`readings/${reading.id}`}
+          onClick={handleClick}
+          className={"flex flex-col space-y-2 text-foreground"}
+        >
           <h3 className="truncate-text-2 font-bold">{reading.userQuery}</h3>
           <p className="text-xs text-primary">{reading.spreadType}</p>
-          <p className="truncate-text-7 font-mono text-xs">{reading.aiInterpretation}</p>
+          <p className="truncate-text-7 font-mono text-xs leading-relaxed">{reading.aiInterpretation}</p>
         </Link>
       </>
     </Card>
