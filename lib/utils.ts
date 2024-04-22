@@ -108,3 +108,31 @@ export async function streamToString(stream: ReadableStream<Uint8Array>): Promis
   reader.releaseLock();
   return result;
 }
+
+function toCamel(s) {
+  return s.replace(/(_\w)/g, (m) => m[1].toUpperCase());
+}
+
+function isArray(a) {
+  return Array.isArray(a);
+}
+
+function isObject(o) {
+  return o === Object(o) && !isArray(o) && typeof o !== "function";
+}
+
+export function keysToCamel(o) {
+  if (isObject(o)) {
+    const n = {};
+    Object.keys(o).forEach((k) => {
+      n[toCamel(k)] = keysToCamel(o[k]);
+    });
+    return n;
+  } else if (isArray(o)) {
+    return o.map((i) => {
+      return keysToCamel(i);
+    });
+  }
+
+  return o;
+}

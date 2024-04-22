@@ -2,9 +2,8 @@ import { Metadata } from "next";
 import appConfig from "app.config";
 import dynamic from "next/dynamic";
 import Loading from "components/loading";
-// import { TarotSession } from "./components/tarot-session";
 
-const TarotSession = dynamic(() => import("./components/tarot-session"), {
+const Reading = dynamic(() => import("./reading"), {
   loading: () => <Loading />,
   ssr: false,
 });
@@ -14,6 +13,6 @@ export const metadata: Metadata = {
   description: appConfig.description,
 };
 
-export default async function Home() {
-  return <TarotSession />;
+export default async function Page({ params }: { params: { id: string } }) {
+  return <Reading readingId={params.id} />;
 }

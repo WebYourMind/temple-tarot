@@ -1,62 +1,86 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useChat } from "ai/react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import "./cards.css";
-import ReactMarkdown from "react-markdown";
-import { useCredits } from "lib/contexts/credit-context";
+import { SelectedCardType } from "./tarot-session";
+import { ReadingTemplate } from "app/(views)/readings/[id]/reading";
 import Loading from "components/loading";
 
 export interface InterpreterProps extends React.ComponentProps<"div"> {
   query: string;
-  card: string;
-  orientation: string;
+  cards: SelectedCardType[];
+  spread: { name: string; value: string };
 }
 
-export function Interpreter({ query, card, orientation }: InterpreterProps) {
-  const { fetchCreditBalance } = useCredits();
-  const [loading, setLoading] = useState(true);
-
-  // Simulated API call setup, for later use
-  const { messages, append } = useChat({
-    async onResponse(response) {
-      setLoading(false);
-      if (response.status === 401) {
-        toast.error(response.statusText);
-      }
-    },
-    async onFinish() {
-      setTimeout(async () => {
-        await fetchCreditBalance();
-      }, 1000);
-    },
+export function Interpreter({ query, cards, spread }: InterpreterProps) {
+  // const { fetchCreditBalance } = useCredits();
+  const [reading, setReading] = useState({
+    userQuery: query,
+    createdAt: new Date().toISOString(),
+    cards,
+    spreadType: spread.name,
+    aiInterpretation: "",
   });
 
-  useEffect(() => {
-    append({ role: "user", content: `User's query: ${query}\n\n Chosen card: ${card} ${orientation}` });
+  const generateReading = useCallback(async (content) => {
+    let isSubscribed = true;
+    const controller = new AbortController();
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content, cards, userQuery: query, spreadType: spread.value }),
+        signal: controller.signal,
+      });
+
+      if (!response.body) throw new Error("Failed to get the stream.");
+
+      const reader = response.body.getReader();
+
+      let receivedLength = 0;
+      let chunks = [];
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          // setIsGenerating(false);
+          break;
+        }
+
+        chunks.push(value);
+        receivedLength += value.length;
+
+        const chunk = new TextDecoder("utf-8").decode(value, { stream: true });
+        if (isSubscribed) {
+          setReading((prevReading) => ({ ...prevReading, aiInterpretation: prevReading.aiInterpretation + chunk }));
+        }
+      }
+    } catch (error: any) {
+      if (isSubscribed) {
+        toast.error("Error generating reading: " + error.message);
+      }
+    }
+
+    return () => {
+      isSubscribed = false;
+      controller.abort();
+    };
   }, []);
 
-  return (
-    <>
-      <div className="mt-4 flex justify-center">
-        <p>
-          Your card is: <strong>{card}</strong> and it&apos;s <strong>{orientation}</strong>.
-        </p>
-      </div>
-      {loading && <Loading />}
-      {messages.length > 0 &&
-        messages.map(
-          (message) =>
-            message.role === "assistant" && (
-              <ReactMarkdown
-                key={message.content}
-                className="prose prose-indigo mx-auto mt-10 w-full font-mono text-foreground md:prose-lg"
-              >
-                {message.content}
-              </ReactMarkdown>
-            )
-        )}
-    </>
-  );
+  useEffect(() => {
+    const cardDescriptions = cards
+      .map((card, index) => `Position ${index + 1}: ${card.cardName} (${card.orientation})`)
+      .join(", ");
+
+    const content = `User's query: ${query}\n\nChosen spread: ${spread.name}\n\nChosen cards and their positions in the spread: ${cardDescriptions}`;
+    generateReading(content);
+  }, []);
+
+  if (reading) {
+    return <ReadingTemplate reading={reading} />;
+  }
+  return <Loading />;
 }

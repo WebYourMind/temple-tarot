@@ -10,13 +10,13 @@ import { SidebarList } from "components/navigation/sidebar-list";
 import { useSession } from "next-auth/react";
 import appConfig from "app.config";
 import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
-import { useTheme } from "app/theme";
+import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 // import { CreditBalance } from "./credit-balance";
 
 export default function Header() {
   const { data: session, status } = useSession() as any;
-  const { toggleTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const searchParams = useSearchParams();
 
   const createAuthUrl = (path: string) => {
@@ -32,10 +32,9 @@ export default function Header() {
   const handleTarotClick = (e) => {
     // Check if the target href is the same as the current pathname
     if (pathname === "/") {
-      console.log(pathname);
       e.preventDefault(); // Prevent Link from navigating
       router.refresh(); // Reload the page
-      router.replace("/");
+      router.push("/");
     }
   };
 
@@ -79,12 +78,15 @@ export default function Header() {
             <Link href="/credits/get-credits" className={buttonVariants({ variant: "link" })}>
               Get Lumens
             </Link> */}
+            <Link href="/readings" className={buttonVariants({ variant: "link" })}>
+              My Readings
+            </Link>
             <Link href="/" onClick={handleTarotClick} className={buttonVariants({ variant: "link" })}>
               Tarot
             </Link>
           </>
         )}
-        <button onClick={toggleTheme} aria-label="Theme">
+        <button onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")} aria-label="Theme">
           <Half2Icon />
         </button>
       </div>

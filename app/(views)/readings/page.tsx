@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Loading from "components/loading";
 // import { TarotSession } from "./components/tarot-session";
 
-const TarotSession = dynamic(() => import("./components/tarot-session"), {
+const Readings = dynamic(() => import("./components/readings"), {
   loading: () => <Loading />,
   ssr: false,
 });
@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   description: appConfig.description,
 };
 
-export default async function Home() {
-  return <TarotSession />;
+export default async function Page() {
+  return (
+    <div className="container max-w-4xl py-8 md:py-16 ">
+      <h1 className="mb-16 text-4xl font-bold">My Readings</h1>
+      <Readings />
+    </div>
+  );
 }

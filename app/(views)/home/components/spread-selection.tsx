@@ -1,6 +1,4 @@
 import { Button, buttonVariants } from "components/ui/button";
-import Image from "next/image";
-import TarotBack from "../../../tarot-back.jpg";
 // import { useCredits } from "lib/contexts/credit-context";
 import {
   Dialog,
@@ -12,7 +10,7 @@ import {
 } from "components/ui/dialog";
 import Link from "next/link";
 import { useState } from "react";
-import Card from "./card";
+import Card from "./tarot-card";
 
 const SpreadSelection = ({ onSpreadSelect }: { onSpreadSelect: (spread: string) => void }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -33,10 +31,10 @@ const SpreadSelection = ({ onSpreadSelect }: { onSpreadSelect: (spread: string) 
           <Button
             onClick={() => handleChange("single")}
             className="flex h-full flex-col space-y-2 py-4 transition hover:scale-105"
+            variant="link"
           >
             <Card className="mb-2" />
             <span>Single Card</span>
-            <span>(1 Lumen)</span>
           </Button>
           {/* <Button
             onClick={() => handleChange("three")}

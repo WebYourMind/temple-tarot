@@ -1,0 +1,10 @@
+{
+  "name": "Temple Tarot",
+  "short_name": "Tarot",
+  "theme_color": "#1d1d1d",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/"
+}

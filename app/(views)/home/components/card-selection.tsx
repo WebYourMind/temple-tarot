@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { tarotDeck } from "./tarot-deck";
-import TarotBack from "../../../tarot-back.jpg";
 import "./cards.css";
 import { Button } from "components/ui/button";
 import { IconRotate } from "components/ui/icons";
-import Card from "./card";
+import Card from "./tarot-card";
 
 interface CardSelectionProps {
   onSelect: (cardName: string, orientation: "upright" | "reversed") => void;
+  currentStep: number;
   query: string;
 }
 
@@ -32,25 +31,36 @@ const createShuffledDeck = () => {
   );
 };
 
-const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
+const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => {
+  const [deck, setDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>(createShuffledDeck());
   const [leftDeck, setLeftDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>([]);
   const [rightDeck, setRightDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>([]);
   const [finalCard, setFinalCard] = useState<{ name: string; orientation: "upright" | "reversed" }>();
 
   useEffect(() => {
-    const shuffledDeck = createShuffledDeck();
+    resetSelection(); // Reset to initial state on component mount
+  }, [currentStep]);
+
+  const resetSelection = () => {
+    const shuffledDeck = deck;
+    const midPoint = Math.ceil(shuffledDeck.length / 2);
+    setLeftDeck(shuffledDeck.slice(0, midPoint));
+    setRightDeck(shuffledDeck.slice(midPoint));
+    setFinalCard(null);
+  };
+
+  useEffect(() => {
+    const shuffledDeck = deck;
     const midPoint = Math.ceil(shuffledDeck.length / 2);
     setLeftDeck(shuffledDeck.slice(0, midPoint));
     setRightDeck(shuffledDeck.slice(midPoint));
   }, []);
 
   const onFinalCard = (card) => {
-    console.log(card);
     setFinalCard(card);
   };
 
   const switchOrientation = () => {
-    console.log(finalCard.orientation);
     setFinalCard({ ...finalCard, orientation: finalCard.orientation === "upright" ? "reversed" : "upright" });
   };
 
@@ -61,6 +71,7 @@ const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
     // If the selected deck has only one card, it's the final selection.
     if (selectedDeck.length === 1) {
       // onSelect(selectedDeck[0].name, selectedDeck[0].orientation); // Call onSelect with the final card.
+      setDeck(deck.filter((card) => card.name !== selectedDeck[0].name));
       onFinalCard(selectedDeck[0]);
       return;
     }
@@ -76,11 +87,11 @@ const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
   };
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col items-center justify-center transition-opacity">
+    <div className="mx-auto flex max-w-2xl flex-col items-center justify-center pb-10 transition-opacity">
       <p className="mx-10 mb-4 text-center italic">{query}</p>
       {finalCard ? (
         <>
-          <p className="mb-4 max-w-sm text-center text-xl md:mb-10">Lastly, what is your card&apos;s orientation?</p>
+          <p className="mb-4 max-w-sm text-center text-xl md:mb-10">Which way is your card?</p>
           <button onClick={() => switchOrientation()} className="p-4 transition hover:scale-105">
             <div className="rounded-lg">
               <Card
@@ -124,8 +135,6 @@ const CardSelection = ({ onSelect, query }: CardSelectionProps) => {
                       />
                     </div>
                   ))}
-                  {/* <div className="h-[150px] md:h-[300px]" /> */}
-                  {/* <span>Choose {side.charAt(0).toUpperCase() + side.slice(1)} Deck</span> */}
                 </button>
                 <p className="mt-5 text-center">{side.charAt(0).toUpperCase() + side.slice(1)} Deck</p>
                 <p className="text-center">{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>

@@ -8,6 +8,7 @@ import appConfig from "app.config";
 // import FeedbackWidget from "components/feedback/feedback-widget";
 import CookieNotice from "components/cookie-notice";
 import dynamic from "next/dynamic";
+import type { Viewport } from "next";
 
 import { Suspense } from "react";
 
@@ -32,6 +33,7 @@ export const metadata: Metadata = {
     description,
     // images: [image],
   },
+  manifest: "./manifest.json",
   // twitter: {
   //   card: "summary_large_image",
   //   title,
@@ -40,6 +42,17 @@ export const metadata: Metadata = {
   //   creator: "@vercel",
   // },
   metadataBase: new URL(process.env.NEXTAUTH_URL as string),
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  minimumScale: 1,
+  userScalable: false,
+  themeColor: "white",
+  // Also supported by less commonly used
+  // interactiveWidget: 'resizes-visual',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
