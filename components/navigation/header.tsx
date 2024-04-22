@@ -48,8 +48,8 @@ export default function Header() {
             </React.Suspense>
           </Sidebar>
         ) : (
-          <Link href="/" className="mr-2">
-            <h3 className="mt-0">{appConfig.appName}</h3>
+          <Link href="/" className="mr-2 hover:no-underline">
+            <h3 className="mt-0 text-foreground ">{appConfig.appName}</h3>
           </Link>
         )}
         {status !== "loading" && (
