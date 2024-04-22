@@ -76,7 +76,7 @@ export default function LoginForm() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Link href="/forgot-password" className="text-xs underline opacity-90">
+      <Link href="/forgot-password" className="text-xs font-medium underline underline-offset-4">
         Forgot your password?
       </Link>
     </AuthForm>
