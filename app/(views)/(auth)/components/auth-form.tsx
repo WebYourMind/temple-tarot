@@ -15,7 +15,7 @@ export default function AuthForm({ isLoading, onSubmit, isSubmitDisabled, childr
       <form onSubmit={onSubmit} method="POST">
         <div className="grid gap-4">
           {children}
-          <Button disabled={isLoading || isSubmitDisabled}>
+          <Button className="mt-4" disabled={isLoading || isSubmitDisabled}>
             {isLoading && <StarIcon className="mr-2 h-4 w-4 animate-spin" />}
             {isLoading ? "Processing" : "Submit"}
           </Button>
