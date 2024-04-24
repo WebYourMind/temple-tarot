@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import sgMail from "@sendgrid/mail";
 import { RegisterUser } from "../../../../lib/AppInterface";
 import { insertVerificationToken } from "../../../../lib/database/verificationTokens.database";
-import { getUserByEmail, InsertUser } from "../../../../lib/database/user.database";
+import { getUserByEmail, insertUser } from "../../../../lib/database/user.database";
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     const verifyToken = crypto.randomBytes(32).toString("hex");
 
     // Insert the new user into the database
-    const newUser = await InsertUser(user.name, user.email, hashedPassword);
+    const newUser = await insertUser(user.name, user.email, hashedPassword);
 
     if (!newUser || !newUser.id) {
       return NextResponse.json({ error: "Registration failed. Please try again." }, { status: 500 });

@@ -1,16 +1,16 @@
-import { QueryResultRow, sql } from "@vercel/postgres";
+import { sql } from "@vercel/postgres";
 
-export const InsertUser = async (name: string, email: string, hashedPassword: string) => {
+export const insertUser = async (name: string, email: string, hashedPassword?: string) => {
   try {
-    const { rows } = await sql`INSERT INTO users (email, hashed_password, name)
-                      VALUES (${email}, ${hashedPassword}, ${name})
+    const { rows } = await sql`INSERT INTO users (name, email, hashed_password)
+                      VALUES (${name}, ${email}, ${hashedPassword})
                       RETURNING *`;
     if (rows.length > 0) {
       return rows[0];
     }
     return null;
   } catch (error) {
-    console.error(error);
+    console.error("Failed to insert user:", error);
     return null;
   }
 };

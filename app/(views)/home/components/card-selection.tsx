@@ -100,8 +100,8 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
               />
             </div>
           </button>
-          <Button variant="ghost" size="icon" onClick={() => switchOrientation()}>
-            <IconRotate />
+          <Button variant="ghost" size="icon" className="p-2" onClick={() => switchOrientation()}>
+            <IconRotate className="h-8 w-8" />
           </Button>
           <Button className="mt-4" variant="outline" onClick={() => onSelect(finalCard.name, finalCard.orientation)}>
             CONFIRM

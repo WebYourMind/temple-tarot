@@ -13,7 +13,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
     email VARCHAR(255) UNIQUE NOT NULL,
-    hashed_password TEXT NOT NULL,
+    hashed_password TEXT,
     email_verified TIMESTAMPTZ,
     image TEXT,
     address_id INTEGER REFERENCES addresses(id),
