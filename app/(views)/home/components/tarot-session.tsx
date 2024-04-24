@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import SpreadSelection from "./spread-selection"; // Ensure correct import path
-import CardSelection from "./card-selection"; // Assuming you'll create this
 import QueryInput from "./query-input";
 import { Button } from "components/ui/button";
 import { Interpreter } from "./interpreter";

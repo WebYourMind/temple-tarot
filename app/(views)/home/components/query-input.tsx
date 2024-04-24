@@ -40,7 +40,7 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
       />
       <SpreadSelector onSpreadSelect={onSpreadSelect} selectedSpread={selectedSpread} />
       <Button onClick={handleSubmit} variant={"ghost"} disabled={!selectedSpread || question === ""}>
-        SUBMIT <PaperPlaneIcon className="ml-2" />
+        SEND <PaperPlaneIcon className="ml-2" />
       </Button>
     </div>
   );
