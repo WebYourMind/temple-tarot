@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { isPasswordComplex, isValidEmail } from "lib/utils";
 import toast from "react-hot-toast";
+import { track } from "@vercel/analytics/react";
 
 interface ResponseData {
   ok: boolean;
@@ -80,6 +81,7 @@ export default function RegisterForm() {
     const data = (await res.json()) as ResponseData;
 
     if (res.status === 201) {
+      track("Registration", { email, name });
       const result = await signIn("credentials", {
         email,
         password,
