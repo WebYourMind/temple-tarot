@@ -16,7 +16,7 @@ type ReadingProps = {
 export function ReadingTemplate({ reading }) {
   const route = useRouter();
   return (
-    <div className="mx-auto max-w-2xl pb-16 md:pt-8">
+    <div className="mx-auto max-w-2xl px-4 pb-16 md:pt-8">
       <div className="md:mb-10">
         <Button className="p-0" variant={"link"} onClick={() => route.push("/readings")}>
           <ArrowLeftIcon className="mr-2" />
