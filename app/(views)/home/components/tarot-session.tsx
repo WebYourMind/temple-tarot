@@ -6,6 +6,8 @@ import { Button } from "components/ui/button";
 import { Interpreter } from "./interpreter";
 import { IconClose } from "components/ui/icons";
 import CardSelectionWrapper from "./card-selection-wrapper";
+import { track } from "@vercel/analytics/react";
+import { useSession } from "next-auth/react";
 
 export type SelectedCardType = {
   cardName: string;
@@ -17,6 +19,7 @@ export default function TarotSession() {
   const [selectedCards, setSelectedCards] = useState<SelectedCardType[]>();
   const [spreadType, setSpreadType] = useState<any>(); // To store the selected spread type
   const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
+  const { data: session } = useSession() as { data: { user: { id: string } } };
 
   function handleSubmitQuestion(question: string, spread) {
     setQuery(question);
@@ -30,6 +33,7 @@ export default function TarotSession() {
 
   useEffect(() => {
     if (selectedCards && query) {
+      track("Reading", { spread: spreadType.value, userId: session?.user?.id });
       setPhase("reading");
     }
   }, [selectedCards, query]);
