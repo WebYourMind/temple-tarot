@@ -16,8 +16,8 @@ type ReadingProps = {
 export function ReadingTemplate({ reading }) {
   const route = useRouter();
   return (
-    <div className="container max-w-4xl pb-16 pt-8">
-      <div className="mb-10">
+    <div className="mx-auto max-w-2xl pb-16 md:pt-8">
+      <div className="md:mb-10">
         <Button className="p-0" variant={"link"} onClick={() => route.push("/readings")}>
           <ArrowLeftIcon className="mr-2" />
           My Readings
@@ -38,7 +38,7 @@ export function ReadingTemplate({ reading }) {
             ))}
           </div>
         </div>
-        <ReactMarkdown className="prose prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
+        <ReactMarkdown className="prose prose-sm prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
           {reading.aiInterpretation}
         </ReactMarkdown>
       </div>

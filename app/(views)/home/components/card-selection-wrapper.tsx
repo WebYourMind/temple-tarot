@@ -9,7 +9,7 @@ const SpreadSelectionWrapper = ({ spread, query, onSelectComplete }) => {
     const newSelectedCards = [...selectedCards, { cardName, orientation }];
     setSelectedCards(newSelectedCards);
 
-    if (currentStep < spread.cards - 1) {
+    if (currentStep < spread.numberOfCards - 1) {
       setCurrentStep(currentStep + 1);
     } else {
       onSelectComplete(newSelectedCards);
@@ -19,7 +19,7 @@ const SpreadSelectionWrapper = ({ spread, query, onSelectComplete }) => {
   return (
     <div>
       <p>
-        Card {currentStep + 1} of {spread.cards}
+        Card {currentStep + 1} of {spread.numberOfCards}
       </p>
       <CardSelection onSelect={handleCardSelect} query={query} currentStep={currentStep} />
     </div>

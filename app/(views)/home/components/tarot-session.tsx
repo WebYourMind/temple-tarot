@@ -21,7 +21,7 @@ export default function TarotSession() {
   const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
   const { data: session } = useSession() as { data: { user: { id: string } } };
 
-  function handleSubmitQuestion(question: string, spread) {
+  function handleSubmitQuestion(question = "", spread) {
     setQuery(question);
     setSpreadType(spread);
     setPhase("cards");
@@ -32,7 +32,7 @@ export default function TarotSession() {
   }
 
   useEffect(() => {
-    if (selectedCards && query) {
+    if (selectedCards) {
       track("Reading", { spread: spreadType.value, userId: session?.user?.id });
       setPhase("reading");
     }
@@ -51,7 +51,7 @@ export default function TarotSession() {
       {phase === "cards" && (
         <CardSelectionWrapper onSelectComplete={handleCardSelect} query={query} spread={spreadType} />
       )}
-      {phase === "reading" && query && selectedCards && (
+      {phase === "reading" && selectedCards && (
         <>
           <Interpreter query={query} cards={selectedCards} spread={spreadType} />
           <div className="my-10 flex justify-center">

@@ -6,6 +6,7 @@ import Link from "next/link";
 import ReadingItemMenu from "./reading-item-menu";
 import { useReadingsContext } from "lib/contexts/readings-context";
 import { useRouter } from "next/navigation";
+import ReactMarkdown from "react-markdown";
 
 type ReadingItemProps = {
   reading: Reading;
@@ -31,9 +32,12 @@ function ReadingItem({ reading }: ReadingItemProps) {
           onClick={handleClick}
           className={"flex flex-col space-y-2 text-foreground"}
         >
-          <h3 className="truncate-text-2 font-bold">{reading.userQuery}</h3>
+          <h3 className="truncate-text-2 font-bold">{reading.userQuery || "Open Reading"}</h3>
           <p className="text-xs text-primary">{reading.spreadType}</p>
-          <p className="truncate-text-7 font-mono text-xs leading-relaxed">{reading.aiInterpretation}</p>
+          {/* <p className="truncate-text-7 font-mono text-xs leading-relaxed">{reading.aiInterpretation}</p> */}
+          <ReactMarkdown allowedElements={["p"]} className="truncate-text-7 text-xs">
+            {reading.aiInterpretation}
+          </ReactMarkdown>
         </Link>
       </>
     </Card>
