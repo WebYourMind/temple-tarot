@@ -1,5 +1,5 @@
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai-edge";
+import { Configuration, OpenAIApi } from "openai-edge";
 
 import { NextRequest, NextResponse } from "next/server";
 import { getChatMessagesByUserId } from "lib/database/chatMessages.database";
@@ -7,6 +7,7 @@ import { chatTemplateNoStyles } from "lib/templates/chat.templates";
 import { getSession } from "lib/auth";
 import { Reading, addReadingWithCards } from "lib/database/readings.database";
 import { CardInReading } from "lib/database/cardsInReadings.database";
+import { rateLimitReached } from "lib/database/apiUsageLogs.database";
 
 export const runtime = "nodejs";
 
@@ -32,6 +33,18 @@ export async function POST(req: Request) {
   // if (creditBalance < 1) {
   //   return new Response("Not enough lumens", { status: 401 });
   // }
+  const isLimitReached = await rateLimitReached(user.id);
+
+  if (isLimitReached) {
+    return NextResponse.json(
+      {
+        error: "AI limit reached for today",
+      },
+      {
+        status: 429,
+      }
+    );
+  }
 
   const model = process.env.GPT_MODEL;
 
@@ -44,7 +57,7 @@ export async function POST(req: Request) {
   const contextPrompt = chatTemplateNoStyles;
 
   try {
-    const res = await openai.createChatCompletion({
+    const openAiRes = await openai.createChatCompletion({
       model,
       messages: [
         {
@@ -58,7 +71,7 @@ export async function POST(req: Request) {
       max_tokens: 2500,
     });
 
-    const stream = OpenAIStream(res, {
+    const stream = OpenAIStream(openAiRes, {
       async onCompletion(completion) {
         // console.log(completion);
         // if (user) {
