@@ -4,6 +4,7 @@ import { Label } from "components/ui/label";
 import { Textarea } from "components/ui/textarea";
 import React, { useState } from "react";
 import { SpreadSelector } from "./spread-selector";
+import tarotSpreads from "./tarot-spreads";
 
 interface QueryInputProps {
   onSubmitQuestion: (question: string, selectedSpread: any) => void;
@@ -11,7 +12,7 @@ interface QueryInputProps {
 
 const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
   const [question, setQuestion] = useState("");
-  const [selectedSpread, setSelectedSpread] = useState();
+  const [selectedSpread, setSelectedSpread] = useState(tarotSpreads[0]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +27,7 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
 
   return (
     <div className="container mx-auto flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
-      <Label htmlFor="question" className="font-mono">
+      <Label htmlFor="question" className="font-serif text-xl">
         What guidance are you seeking?
       </Label>
       <Textarea

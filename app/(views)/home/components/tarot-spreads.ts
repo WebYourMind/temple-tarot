@@ -1,6 +1,6 @@
 const tarotSpreads = [
   {
-    name: "Single Card",
+    name: "Single Card Spread",
     description: "Draw a single card to gain insight into a specific situation or question.",
     value: "single_card",
     numberOfCards: 1,
@@ -18,7 +18,7 @@ const tarotSpreads = [
     ],
   },
   {
-    name: "Celtic Cross",
+    name: "Celtic Cross Spread",
     description:
       "One of the most detailed and complex spreads, used for a variety of questions, showing many aspects of a situation.",
     value: "celtic_cross",

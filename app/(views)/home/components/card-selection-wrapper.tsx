@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CardSelection from "./card-selection";
 
-const SpreadSelectionWrapper = ({ spread, query, onSelectComplete }) => {
+const CardSelectionWrapper = ({ spread, query, onSelectComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedCards, setSelectedCards] = useState([]);
 
@@ -26,4 +26,4 @@ const SpreadSelectionWrapper = ({ spread, query, onSelectComplete }) => {
   );
 };
 
-export default SpreadSelectionWrapper;
+export default CardSelectionWrapper;

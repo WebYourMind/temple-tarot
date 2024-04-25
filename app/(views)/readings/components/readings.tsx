@@ -57,7 +57,7 @@ function Readings() {
 
   return (
     <>
-      <div className="my-16 grid max-w-4xl grid-cols-1 gap-16 font-mono md:my-32 md:grid-cols-3 lg:grid-cols-3">
+      <div className="my-16 grid max-w-4xl grid-cols-1 gap-16 font-serif md:my-32 md:grid-cols-3 lg:grid-cols-3">
         {readings && readings.map((reading) => <ReadingItem key={reading.id} reading={reading} />)}
       </div>
       <div className="my-16">
