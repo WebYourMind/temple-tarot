@@ -85,7 +85,6 @@ export function Interpreter({ query, cards, spread }: InterpreterProps) {
     if (query) {
       content += `Seeker's query: ${query}\n\n`;
     }
-    spread.cardMeanings;
     content += `Chosen spread: ${spread.name}\n\nCards drawn with their positions in the spread: ${cardDescriptions}`;
     generateReading(content);
   }, []);
