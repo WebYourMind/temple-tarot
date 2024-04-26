@@ -49,7 +49,7 @@ export function ReadingTemplate({ reading }) {
         )}
         <ReactMarkdown className="my-16">---</ReactMarkdown>
       </div>
-      <FeedbackButtons />
+      <FeedbackButtons content={reading.aiInterpretation} />
     </div>
   );
 }
