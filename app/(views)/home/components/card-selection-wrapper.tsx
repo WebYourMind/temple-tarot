@@ -17,8 +17,8 @@ const CardSelectionWrapper = ({ spread, query, onSelectComplete }) => {
   };
 
   return (
-    <div className="font-serif">
-      <p>
+    <div>
+      <p className="font-serif">
         Card {currentStep + 1} of {spread.numberOfCards}
       </p>
       <CardSelection onSelect={handleCardSelect} query={query} currentStep={currentStep} />

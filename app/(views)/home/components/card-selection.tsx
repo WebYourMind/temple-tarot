@@ -91,7 +91,7 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
       <p className="mx-10 mb-4 text-center italic">{query}</p>
       {finalCard ? (
         <>
-          <p className="mb-4 max-w-sm text-center text-xl md:mb-10">Which way is your card?</p>
+          <p className="mb-4 max-w-sm text-center font-serif text-xl md:mb-10">Which way is your card?</p>
           <button onClick={() => switchOrientation()} className="p-4 transition hover:scale-105">
             <div className="rounded-lg">
               <Card
@@ -109,7 +109,7 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
         </>
       ) : (
         <>
-          <p className="max-w-xs text-center text-xl md:mb-10">
+          <p className="max-w-xs text-center font-serif text-xl md:mb-10">
             The deck is split.<br></br>Where is your card?
           </p>
           <div className="flex w-full justify-between">
@@ -135,8 +135,8 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
                     </div>
                   ))}
                 </button>
-                <p className="mt-5 text-center">{side.charAt(0).toUpperCase() + side.slice(1)} Deck</p>
-                <p className="text-center">{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
+                <p className="mt-5 text-center font-serif">{side.charAt(0).toUpperCase() + side.slice(1)} Deck</p>
+                <p className="text-center font-serif">{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
               </div>
             ))}
           </div>

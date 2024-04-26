@@ -5,7 +5,7 @@ import FeedbackButtons from "app/(views)/home/components/reading-feedback";
 import Loading from "components/loading";
 import { Button } from "components/ui/button";
 import { useReadingsContext } from "lib/contexts/readings-context";
-import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
+import { StarIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -40,9 +40,13 @@ export function ReadingTemplate({ reading }) {
         </div>
 
         <ReactMarkdown className="my-16">---</ReactMarkdown>
-        <ReactMarkdown className="prose prose-sm prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
-          {reading.aiInterpretation}
-        </ReactMarkdown>
+        {reading.aiInterpretation ? (
+          <ReactMarkdown className="prose prose-sm prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
+            {reading.aiInterpretation}
+          </ReactMarkdown>
+        ) : (
+          <StarIcon className="animate-spin-slow h-10 w-full text-center text-foreground" />
+        )}
         <ReactMarkdown className="my-16">---</ReactMarkdown>
       </div>
       <FeedbackButtons />
