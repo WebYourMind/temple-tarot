@@ -33,8 +33,11 @@ export default function TarotSession() {
 
   useEffect(() => {
     if (selectedCards) {
-      track("Reading", { spread: spreadType.value, userId: session?.user?.id });
       setPhase("reading");
+      track("Reading", { spread: spreadType.value, userId: session?.user?.id });
+      selectedCards.forEach((card) => {
+        track("Cards", { cardName: card.cardName, orientation: card.orientation });
+      });
     }
   }, [selectedCards, query]);
 
