@@ -91,7 +91,7 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
       <p className="mx-10 mb-4 text-center italic">{query}</p>
       {finalCard ? (
         <>
-          <p className="mb-4 max-w-sm text-center text-xl md:mb-10">Which way is your card?</p>
+          <p className="mb-4 max-w-sm text-center font-serif text-xl md:mb-10">Which way is your card?</p>
           <button onClick={() => switchOrientation()} className="p-4 transition hover:scale-105">
             <div className="rounded-lg">
               <Card
@@ -109,19 +109,21 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
         </>
       ) : (
         <>
-          <p className="mb-10 max-w-xs text-center text-xl">Where is your card?</p>
+          <p className="max-w-xs text-center font-serif text-xl md:mb-10">
+            The deck is split.<br></br>Where is your card?
+          </p>
           <div className="flex w-full justify-between">
             {["left", "right"].map((side) => (
-              <div key={side} className="mx-md:mx-2">
+              <div key={side} className="md:mx-2">
                 <button
                   // @ts-ignore
                   onClick={() => handleSelectHalf(side)}
-                  className="relative flex h-[200px] w-[150px] flex-col items-center rounded-lg p-4 transition-all hover:scale-105 md:h-[350px] md:w-[300px]"
+                  className="relative flex h-[200px] w-[170px] scale-50 flex-col items-center rounded-lg transition-all hover:scale-105 md:h-[370px] md:w-[300px] md:scale-100 md:p-4"
                 >
                   {(side === "left" ? leftDeck : rightDeck).map((card, cardIndex) => (
                     <div
                       key={cardIndex}
-                      className="absolute top-0 md:top-8"
+                      className="absolute top-0 md:top-8 "
                       style={{
                         transform: `translate(${-leftDeck.length / 2 + cardIndex + 1}px, ${
                           -leftDeck.length / 2 + cardIndex + 1
@@ -129,15 +131,12 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
                         zIndex: cardIndex,
                       }}
                     >
-                      <Card
-                        alt={`${cardIndex + 1}: ${card.name} ${card.orientation}`}
-                        className="scale-50 md:scale-100"
-                      />
+                      <Card alt={`${cardIndex + 1}: ${card.name} ${card.orientation}`} className="" />
                     </div>
                   ))}
                 </button>
-                <p className="mt-5 text-center">{side.charAt(0).toUpperCase() + side.slice(1)} Deck</p>
-                <p className="text-center">{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
+                <p className="mt-5 text-center font-serif">{side.charAt(0).toUpperCase() + side.slice(1)} Deck</p>
+                <p className="text-center font-serif">{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
               </div>
             ))}
           </div>

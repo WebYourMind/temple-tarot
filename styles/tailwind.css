@@ -13,7 +13,7 @@
     --color-primary: #7b26c0;
     --color-primary-foreground: #ffffff;
     --color-secondary: #8550b4;
-    --color-secondary-foreground: #eeeeee;
+    --color-secondary-foreground: #ffffff;
     --color-muted: #a7a7a7;
     --color-muted-foreground: #7b7b7b;
     --color-accent: #f6edfe;
@@ -129,6 +129,13 @@ a {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
+.truncate-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
   overflow: hidden;
 }
 

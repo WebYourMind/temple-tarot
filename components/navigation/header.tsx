@@ -33,8 +33,9 @@ export default function Header() {
     // Check if the target href is the same as the current pathname
     if (pathname === "/") {
       e.preventDefault(); // Prevent Link from navigating
-      router.refresh(); // Reload the page
-      router.push("/");
+      window.location.reload(); // Force a full page reload
+    } else {
+      router.push("/"); // Navigate to the homepage if not already there
     }
   };
 

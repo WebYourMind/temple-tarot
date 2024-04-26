@@ -1,9 +1,11 @@
 "use client";
 
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import FeedbackButtons from "app/(views)/home/components/reading-feedback";
 import Loading from "components/loading";
 import { Button } from "components/ui/button";
 import { useReadingsContext } from "lib/contexts/readings-context";
+import { StarIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -16,32 +18,38 @@ type ReadingProps = {
 export function ReadingTemplate({ reading }) {
   const route = useRouter();
   return (
-    <div className="container max-w-4xl pb-16 pt-8">
-      <div className="mb-10">
+    <div className="mx-auto max-w-2xl px-4 pb-16 md:pt-8">
+      <div>
         <Button className="p-0" variant={"link"} onClick={() => route.push("/readings")}>
           <ArrowLeftIcon className="mr-2" />
           My Readings
         </Button>
       </div>
-      <div className="mx-auto max-w-4xl py-8 font-mono">
+      <div className="mx-auto max-w-4xl py-8 font-serif">
         <div className="flex flex-col">
           <p className="text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
-          <h1 className="my-4 text-4xl font-bold">{reading?.userQuery}</h1>
-          <div className="my-8 text-lg">
+          <h1 className="my-4 text-4xl font-bold">{reading?.userQuery || "Open Reading"}</h1>
+          <div className="md:text-lg">
             <h2 className="mb-2 text-xl font-bold">Cards:</h2>
             {reading.cards.map((card, index) => (
               <p key={card.cardName}>
-                {/* <strong> */}
                 {index + 1}. {card.cardName} ({card.orientation.charAt(0).toUpperCase() + card.orientation.slice(1)})
-                {/* </strong> */}
               </p>
             ))}
           </div>
         </div>
-        <ReactMarkdown className="prose prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
-          {reading.aiInterpretation}
-        </ReactMarkdown>
+
+        <ReactMarkdown className="my-16">---</ReactMarkdown>
+        {reading.aiInterpretation ? (
+          <ReactMarkdown className="prose prose-sm prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
+            {reading.aiInterpretation}
+          </ReactMarkdown>
+        ) : (
+          <StarIcon className="animate-spin-slow h-10 w-full text-center text-foreground" />
+        )}
+        <ReactMarkdown className="my-16">---</ReactMarkdown>
       </div>
+      <FeedbackButtons content={reading.aiInterpretation} />
     </div>
   );
 }

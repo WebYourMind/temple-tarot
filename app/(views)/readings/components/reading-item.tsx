@@ -6,6 +6,8 @@ import Link from "next/link";
 import ReadingItemMenu from "./reading-item-menu";
 import { useReadingsContext } from "lib/contexts/readings-context";
 import { useRouter } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import tarotSpreads from "app/(views)/home/components/tarot-spreads";
 
 type ReadingItemProps = {
   reading: Reading;
@@ -31,9 +33,13 @@ function ReadingItem({ reading }: ReadingItemProps) {
           onClick={handleClick}
           className={"flex flex-col space-y-2 text-foreground"}
         >
-          <h3 className="truncate-text-2 font-bold">{reading.userQuery}</h3>
-          <p className="text-xs text-primary">{reading.spreadType}</p>
-          <p className="truncate-text-7 font-mono text-xs leading-relaxed">{reading.aiInterpretation}</p>
+          <h3 className="truncate-text-2 font-bold">{reading.userQuery || "Open Reading"}</h3>
+          <p className="text-xs text-primary">
+            {tarotSpreads.find((spread) => spread.value === reading.spreadType).name}
+          </p>
+          <ReactMarkdown allowedElements={["p"]} className="truncate-text-7 text-xs font-normal">
+            {reading.aiInterpretation}
+          </ReactMarkdown>
         </Link>
       </>
     </Card>

@@ -10,7 +10,7 @@ import Loading from "components/loading";
 export interface InterpreterProps extends React.ComponentProps<"div"> {
   query: string;
   cards: SelectedCardType[];
-  spread: { name: string; value: string };
+  spread: { name: string; value: string; description: string; numberOfCards: number; cardMeanings: string[] };
 }
 
 export function Interpreter({ query, cards, spread }: InterpreterProps) {
@@ -19,6 +19,7 @@ export function Interpreter({ query, cards, spread }: InterpreterProps) {
     userQuery: query,
     createdAt: new Date().toISOString(),
     cards,
+    spread,
     spreadType: spread.name,
     aiInterpretation: "",
   });
@@ -32,7 +33,7 @@ export function Interpreter({ query, cards, spread }: InterpreterProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ content, cards, userQuery: query, spreadType: spread.value }),
+        body: JSON.stringify({ content, cards, userQuery: query, spread, spreadType: spread.value }),
         signal: controller.signal,
       });
 
@@ -72,10 +73,19 @@ export function Interpreter({ query, cards, spread }: InterpreterProps) {
 
   useEffect(() => {
     const cardDescriptions = cards
-      .map((card, index) => `Position ${index + 1}: ${card.cardName} (${card.orientation})`)
+      .map(
+        (card, index) =>
+          `Position: ${index + 1}, position meaning: ${spread.cardMeanings[index]} \nCard drawn for this position: ${
+            card.cardName
+          } (${card.orientation})\n\n`
+      )
       .join(", ");
 
-    const content = `User's query: ${query}\n\nChosen spread: ${spread.name}\n\nChosen cards and their positions in the spread: ${cardDescriptions}`;
+    let content = "";
+    if (query) {
+      content += `Seeker's query: ${query}\n\n`;
+    }
+    content += `Chosen spread: ${spread.name}\n\nCards drawn with their positions in the spread: ${cardDescriptions}`;
     generateReading(content);
   }, []);
 
