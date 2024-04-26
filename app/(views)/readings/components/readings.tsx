@@ -40,9 +40,14 @@ function Readings() {
     }
   }, [session?.user?.id, page]);
 
-  if (loading && readings?.length === 0) return <LoadingSkeleton />;
+  if (loading && readings?.length === 0)
+    return (
+      <div className="my-16 md:my-20">
+        <LoadingSkeleton />
+      </div>
+    );
   if (error) return <div>Error: {error.message}</div>;
-  console.log(readings?.length, loading);
+
   if ((!readings || readings?.length === 0) && !loading) {
     return <EmptyReadings />;
   }
@@ -57,7 +62,7 @@ function Readings() {
 
   return (
     <>
-      <div className="my-16 grid max-w-4xl grid-cols-1 gap-16 font-serif md:my-32 md:grid-cols-3 lg:grid-cols-3">
+      <div className="my-16 grid max-w-4xl grid-cols-1 gap-16 font-serif md:my-20 md:grid-cols-3 lg:grid-cols-3">
         {readings && readings.map((reading) => <ReadingItem key={reading.id} reading={reading} />)}
       </div>
       <div className="my-16">

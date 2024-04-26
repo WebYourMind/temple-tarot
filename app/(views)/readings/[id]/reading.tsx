@@ -17,7 +17,7 @@ export function ReadingTemplate({ reading }) {
   const route = useRouter();
   return (
     <div className="mx-auto max-w-2xl px-4 pb-16 md:pt-8">
-      <div className="md:mb-10">
+      <div>
         <Button className="p-0" variant={"link"} onClick={() => route.push("/readings")}>
           <ArrowLeftIcon className="mr-2" />
           My Readings
@@ -27,17 +27,17 @@ export function ReadingTemplate({ reading }) {
         <div className="flex flex-col">
           <p className="text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
           <h1 className="my-4 text-4xl font-bold">{reading?.userQuery || "Open Reading"}</h1>
-          <div className="my-8 text-lg">
+          <div className="md:text-lg">
             <h2 className="mb-2 text-xl font-bold">Cards:</h2>
             {reading.cards.map((card, index) => (
               <p key={card.cardName}>
-                {/* <strong> */}
                 {index + 1}. {card.cardName} ({card.orientation.charAt(0).toUpperCase() + card.orientation.slice(1)})
-                {/* </strong> */}
               </p>
             ))}
           </div>
         </div>
+
+        <ReactMarkdown className="my-16">---</ReactMarkdown>
         <ReactMarkdown className="prose prose-sm prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
           {reading.aiInterpretation}
         </ReactMarkdown>
