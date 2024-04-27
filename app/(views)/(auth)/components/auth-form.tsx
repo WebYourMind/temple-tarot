@@ -25,13 +25,13 @@ export default function AuthForm({ isLoading, onSubmit, isSubmitDisabled, childr
     <div className="grid gap-6">
       <form onSubmit={onSubmit} method="POST">
         <div className="grid gap-4">
-          <GoogleButton />
-          <DividerWithText />
           {children}
           <Button className="mt-4" disabled={isLoading || isSubmitDisabled}>
             {isLoading && <StarIcon className="mr-2 h-4 w-4 animate-spin" />}
             {isLoading ? "Processing" : "Submit"}
           </Button>
+          <DividerWithText />
+          <GoogleButton />
         </div>
       </form>
     </div>
