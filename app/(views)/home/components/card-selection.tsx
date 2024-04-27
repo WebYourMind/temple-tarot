@@ -118,7 +118,7 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
                 <button
                   // @ts-ignore
                   onClick={() => handleSelectHalf(side)}
-                  className="relative flex h-[200px] w-[170px] scale-50 flex-col items-center rounded-lg transition-all hover:scale-105 md:h-[370px] md:w-[300px] md:scale-100 md:p-4"
+                  className="relative flex h-[200px] w-[170px] scale-50 flex-col items-center rounded-lg transition-all md:h-[370px] md:w-[300px] md:scale-100 md:p-4 md:hover:scale-105"
                 >
                   {(side === "left" ? leftDeck : rightDeck).map((card, cardIndex) => (
                     <div
