@@ -50,7 +50,7 @@ export default function Header() {
           </Sidebar>
         ) : (
           <Link href="/" className="mr-2 hover:no-underline">
-            <h3 className="mt-0 text-foreground ">{appConfig.appName}</h3>
+            <h3 className="mt-0 text-lg text-foreground">{appConfig.appName}</h3>
           </Link>
         )}
         {status !== "loading" && (
