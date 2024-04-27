@@ -8,9 +8,10 @@ import tarotSpreads from "./tarot-spreads";
 
 interface QueryInputProps {
   onSubmitQuestion: (question: string, selectedSpread: any) => void;
+  closeDialog: () => void;
 }
 
-const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
+const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion, closeDialog }) => {
   const [question, setQuestion] = useState("");
   const [selectedSpread, setSelectedSpread] = useState(tarotSpreads[0]);
 
@@ -23,6 +24,7 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion }) => {
 
   const onSpreadSelect = (spread) => {
     setSelectedSpread(spread);
+    closeDialog();
   };
 
   return (

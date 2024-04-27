@@ -8,6 +8,7 @@ import { IconClose } from "components/ui/icons";
 import CardSelectionWrapper from "./card-selection-wrapper";
 import { track } from "@vercel/analytics/react";
 import { useSession } from "next-auth/react";
+import { Dialog } from "@radix-ui/react-dialog";
 
 export type SelectedCardType = {
   cardName: string;
@@ -16,6 +17,7 @@ export type SelectedCardType = {
 
 export default function TarotSession() {
   const [query, setQuery] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
   const [selectedCards, setSelectedCards] = useState<SelectedCardType[]>();
   const [spreadType, setSpreadType] = useState<any>(); // To store the selected spread type
   const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
@@ -49,7 +51,11 @@ export default function TarotSession() {
 
   return (
     <div className="max-w-4xl p-4 pt-8 md:container">
-      {phase === "question" && <QueryInput onSubmitQuestion={handleSubmitQuestion} />}
+      <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+        {phase === "question" && (
+          <QueryInput onSubmitQuestion={handleSubmitQuestion} closeDialog={() => setOpen(false)} />
+        )}
+      </Dialog>
       {/* {phase === "spread" && <SpreadSelection onSpreadSelect={handleSpreadSelect} />} */}
       {phase === "cards" && (
         <CardSelectionWrapper onSelectComplete={handleCardSelect} query={query} spread={spreadType} />
