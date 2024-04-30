@@ -3,7 +3,7 @@ import Image from "next/image";
 import TarotBack from "../../../tarot-back.jpg";
 import { cn } from "lib/utils";
 
-export default function Card({ className = "", alt, onLoad }) {
+export default function Card({ className = "", alt, onLoad = null }) {
   const [internalLoaded, setInternalLoaded] = useState(false);
 
   // If onLoad is provided, use it to manage load state, else use internal state.
