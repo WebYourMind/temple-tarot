@@ -1,20 +1,37 @@
+import { useState } from "react";
 import Image from "next/image";
 import TarotBack from "../../../tarot-back.jpg";
 import { cn } from "lib/utils";
 
-interface CardProps {
-  className?: string;
-  alt?: string;
-}
+export default function Card({ className = "", alt, onLoad }) {
+  const [internalLoaded, setInternalLoaded] = useState(false);
 
-export default function Card({ className = "", alt }: CardProps) {
+  // If onLoad is provided, use it to manage load state, else use internal state.
+  const handleLoad = () => {
+    if (onLoad) {
+      onLoad(); // External load handling
+    } else {
+      setInternalLoaded(true); // Internal load handling
+    }
+  };
+
   return (
-    <Image
-      className={cn("rounded-lg border-4 border-amber-100 shadow-md", className)}
-      src={TarotBack}
-      alt={alt || "Tarot Card"}
-      width={200}
-      height={350}
-    />
+    <div
+      className={cn(
+        "relative transition-opacity duration-700",
+        className,
+        (onLoad ? true : internalLoaded) ? "opacity-100" : "opacity-0"
+      )}
+    >
+      <Image
+        className={`rounded-lg shadow-md`}
+        src={TarotBack}
+        alt={alt || "Tarot Card"}
+        width={200}
+        height={350}
+        onLoadingComplete={handleLoad} // Adjusted to handle both internal and external loading
+      />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 rounded-lg border-4 border-amber-100 border-opacity-95" />
+    </div>
   );
 }

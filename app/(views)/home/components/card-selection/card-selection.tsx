@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { tarotDeck } from "./tarot-deck";
-import "./cards.css";
-import { Button } from "components/ui/button";
-import { IconRotate } from "components/ui/icons";
-import Card from "./tarot-card";
+import { tarotDeck } from "../tarot-deck";
+import "../cards.css";
+import OrientationPicker from "./orientation-picker";
+import SplitDeck from "./split-deck";
 
 interface CardSelectionProps {
   onSelect: (cardName: string, orientation: "upright" | "reversed") => void;
@@ -90,57 +89,9 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
     <div className="mx-auto flex max-w-2xl flex-col items-center justify-center pb-10 transition-opacity">
       <p className="mx-10 mb-4 text-center italic">{query}</p>
       {finalCard ? (
-        <>
-          <p className="mb-4 max-w-sm text-center font-serif text-xl md:mb-10">Which way is your card?</p>
-          <button onClick={() => switchOrientation()} className="p-4 transition hover:scale-105">
-            <div className="rounded-lg">
-              <Card
-                alt={"Your Card"}
-                className={`${finalCard.orientation === "upright" ? "rotate-0" : "rotate-180"} shadow-none transition`}
-              />
-            </div>
-          </button>
-          <Button variant="ghost" size="icon" className="p-2" onClick={() => switchOrientation()}>
-            <IconRotate className="h-8 w-8" />
-          </Button>
-          <Button className="mt-4" variant="outline" onClick={() => onSelect(finalCard.name, finalCard.orientation)}>
-            CONFIRM
-          </Button>
-        </>
+        <OrientationPicker switchOrientation={switchOrientation} finalCard={finalCard} onSubmit={onSelect} />
       ) : (
-        <>
-          <p className="max-w-xs text-center font-serif text-xl md:mb-10">
-            The deck is split.<br></br>Where is your card?
-          </p>
-          <div className="flex w-full justify-between">
-            {["left", "right"].map((side) => (
-              <div key={side} className="md:mx-2">
-                <button
-                  // @ts-ignore
-                  onClick={() => handleSelectHalf(side)}
-                  className="relative flex h-[200px] w-[170px] scale-50 flex-col items-center rounded-lg transition-all md:h-[370px] md:w-[300px] md:scale-100 md:p-4 md:hover:scale-105"
-                >
-                  {(side === "left" ? leftDeck : rightDeck).map((card, cardIndex) => (
-                    <div
-                      key={cardIndex}
-                      className="absolute top-0 md:top-8 "
-                      style={{
-                        transform: `translate(${-leftDeck.length / 2 + cardIndex + 1}px, ${
-                          -leftDeck.length / 2 + cardIndex + 1
-                        }px)`, // `rotate(${(Math.floor(Math.random() * 6 - 3) + 1) * 2 - 2}deg)`,
-                        zIndex: cardIndex,
-                      }}
-                    >
-                      <Card alt={`${cardIndex + 1}: ${card.name} ${card.orientation}`} className="" />
-                    </div>
-                  ))}
-                </button>
-                <p className="mt-5 text-center font-serif">{side.charAt(0).toUpperCase() + side.slice(1)} Deck</p>
-                <p className="text-center font-serif">{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
-              </div>
-            ))}
-          </div>
-        </>
+        <SplitDeck leftDeck={leftDeck} rightDeck={rightDeck} handleSelectHalf={handleSelectHalf} />
       )}
     </div>
   );
