@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { streamToString } from "lib/utils";
-import { updateCreditsByEmail } from "lib/stripe-credits-utils";
+import { getCustomerEmail, updateCreditsByEmail } from "lib/stripe-credits-utils";
+import { sql } from "@vercel/postgres";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2023-10-16",
@@ -17,15 +18,79 @@ export async function POST(request: Request) {
   try {
     const event = stripe.webhooks.constructEvent(rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET as string);
     switch (event.type) {
-      case "checkout.session.completed":
-        return await handleCheckoutSessionCompleted(event);
-      // case "invoice.payment_succeeded":
-      //   return await handleInvoicePaymentSucceeded(event);
+      // case "checkout.session.completed":
+      //   return await handleCheckoutSessionCompleted(event);
+      case "customer.subscription.created":
+        return await handleSubscriptionUpdated(event);
+      case "customer.subscription.updated":
+        return await handleSubscriptionUpdated(event);
+      case "customer.subscription.deleted":
+        return await handleSubscriptionUpdated(event);
       default:
         return NextResponse.json({ message: "Unhandled event type" }, { status: 400 });
     }
   } catch (error: any) {
     return NextResponse.json({ message: `Webhook Error: ${error.message}` }, { status: 400 });
+  }
+}
+
+export async function handleSubscriptionUpdated(event) {
+  const subscription = event.data.object as Stripe.Subscription;
+
+  if (!subscription.customer) {
+    return NextResponse.json({ message: "Customer ID is missing." }, { status: 400 });
+  }
+
+  const customerEmail = await getCustomerEmail(subscription.customer.toString());
+  const subscriptionId = subscription.id; // Get subscription ID from the event
+  const subscriptionStatus = subscription.status; // Get subscription status from the event
+
+  if (!customerEmail) {
+    return NextResponse.json({ message: "Customer email not found." }, { status: 400 });
+  }
+
+  const subscriptionActive = subscription.status === "active";
+  await updateUserSubscriptionStatus(
+    customerEmail,
+    subscriptionActive,
+    subscriptionId,
+    subscriptionStatus,
+    subscription.customer
+  );
+  await logSubscriptionEvent(subscriptionId, event.type, subscription); // Log the event
+
+  return NextResponse.json({ message: "User subscription updated successfully." }, { status: 200 });
+}
+
+async function updateUserSubscriptionStatus(email, isActive, subscriptionId, subscriptionStatus, customer) {
+  try {
+    await sql`
+      UPDATE users SET 
+        is_subscribed = ${isActive}, 
+        subscription_id = ${subscriptionId}, 
+        subscription_status = ${subscriptionStatus},
+        stripe_customer_id = ${customer} 
+      WHERE email = ${email}`;
+  } catch (error) {
+    console.error("Failed to update user subscription status:", error);
+    throw new Error("Database operation failed");
+  }
+}
+
+async function logSubscriptionEvent(subscriptionId, eventType, eventData) {
+  try {
+    await sql`
+      INSERT INTO subscription_events (user_id, type, stripe_event_id, data, created_at)
+      VALUES (
+        (SELECT id FROM users WHERE subscription_id = ${subscriptionId}),
+        ${eventType},
+        ${eventData.id},
+        ${JSON.stringify(eventData)},
+        NOW()
+      )`;
+  } catch (error) {
+    console.error("Failed to log subscription event:", error);
+    throw new Error("Database operation failed");
   }
 }
 

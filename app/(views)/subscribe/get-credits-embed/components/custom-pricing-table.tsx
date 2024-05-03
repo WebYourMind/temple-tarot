@@ -61,7 +61,7 @@ const CustomPricingTable: React.FC = () => {
   };
 
   if (loading) return <div>Loading plans...</div>;
-  console.log(plans);
+
   return (
     <div className="flex flex-wrap justify-center">
       {plans.map((plan) => (

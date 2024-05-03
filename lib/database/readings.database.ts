@@ -143,7 +143,7 @@ export const getReadingsByUserId = async (userId: number, page: number = 1, limi
 };
 
 // Function to count all readings for a specific user
-export const countReadingsByUserId = async (userId: number): Promise<number> => {
+export const countReadingsByUserId = async (userId): Promise<number> => {
   try {
     const { rows } = await sql`
       SELECT COUNT(*) AS total FROM readings WHERE user_id = ${userId};

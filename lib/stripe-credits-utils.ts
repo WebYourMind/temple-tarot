@@ -30,6 +30,17 @@ export async function findCustomerByEmail(email: string): Promise<Stripe.Custome
   );
 }
 
+export async function getCustomerEmail(customerId) {
+  try {
+    const customer = await stripe.customers.retrieve(customerId);
+    // @ts-ignore
+    return customer.email;
+  } catch (error) {
+    console.error("Failed to retrieve customer:", error);
+    return null; // Or handle the error as appropriate
+  }
+}
+
 export async function getCustomerBalance(email: string) {
   const customer = await findCustomerByEmail(email);
 

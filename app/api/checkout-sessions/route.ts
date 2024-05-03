@@ -1,3 +1,4 @@
+import { addStripeCustomerId } from "lib/database/user.database";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -11,12 +12,14 @@ const stripe = new Stripe(stripeSecretKey as string, {
 
 export async function POST(req: Request) {
   const origin = req.headers.get("origin");
-  const { priceId, customerId, email, mode } = (await req.json()) as {
+  const reqBody = (await req.json()) as {
     priceId: string;
     customerId?: string;
     email?: string;
     mode?: "subscription" | "payment";
   };
+
+  const { priceId, customerId, email, mode } = reqBody;
   try {
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
@@ -31,11 +34,13 @@ export async function POST(req: Request) {
       ],
       mode: mode || "payment",
       // @ts-ignore
-      return_url: `${origin}/credits/purchase-confirmation?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${origin}/subscribe/purchase-confirmation?session_id={CHECKOUT_SESSION_ID}`,
       ...(customerId ? { customer: customerId } : {}),
       ...(email ? { customer_email: email } : {}),
     });
-    //   res.send({ clientSecret: session.client_secret });
+
+    await addStripeCustomerId(email, customerId);
+
     return NextResponse.json({ clientSecret: session.client_secret, sessionId: session.id });
   } catch (err: any) {
     return NextResponse.json(err.message, { status: err.statusCode || 500 });

@@ -44,6 +44,33 @@ export function UserMenu({ user }: UserMenuProps) {
   //   }
   // }
 
+  async function manageSubscription() {
+    // router.push("/subscribe/manage-subscription");
+    try {
+      const response = await fetch("/api/create-portal-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create billing portal session");
+      }
+
+      const data = await response.json();
+      if (response.ok) {
+        // @ts-ignore
+        window.location.href = data.url; // Redirect user to the Stripe portal
+      } else {
+        // @ts-ignore
+        throw new Error(data.message || "Failed to initiate billing portal session");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
   return (
     <div className="flex items-center justify-between">
       <DropdownMenu>
@@ -55,19 +82,19 @@ export function UserMenu({ user }: UserMenuProps) {
             <span className="ml-2 hidden md:block">{user?.name}</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent sideOffset={8} align="start" className="w-[180px] bg-background text-foreground">
+        <DropdownMenuContent sideOffset={8} align="start" className="bg-background text-foreground">
           <DropdownMenuItem className="flex-col items-start">
             <div className="text-xs font-medium">{user?.name}</div>
-            <div className="text-xs text-zinc-500">{user?.email}</div>
+            <div className="text-xs">{user?.email}</div>
           </DropdownMenuItem>
-          {/* {session?.user?.role !== "admin" && (
+          {user.isSubscribed && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => upgradeUser()} className="text-xs">
-                Upgrade Account
+              <DropdownMenuItem onClick={() => manageSubscription()} className="text-xs">
+                Manage Subscription
               </DropdownMenuItem>
             </>
-          )} */}
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() =>

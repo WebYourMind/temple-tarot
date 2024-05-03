@@ -172,3 +172,13 @@ export const upgradeUserToAdmin = async (userId: number) => {
     return null;
   }
 };
+
+export const addStripeCustomerId = async (email, customerId) => {
+  try {
+    await sql`UPDATE users
+      SET stripe_customer_id = ${customerId}
+      WHERE email = ${email};`;
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserById } from "lib/database/user.database";
-import { countReadingsByUserId } from "lib/database/readings.database";
+import { getSession } from "lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    const userId = (await getSession())?.user.id;
 
     // Check if userId is not null or undefined
     if (!userId) {
@@ -35,12 +34,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const lumens = await countReadingsByUserId(userId);
+    const isSubscribed = user.is_subscribed;
 
     return NextResponse.json(
       {
-        message: "Lumens retrieved successfully.",
-        credits: lumens,
+        message: "Subscription status retrieved successfully.",
+        isSubscribed,
       },
       {
         status: 200,

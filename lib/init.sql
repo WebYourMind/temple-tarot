@@ -18,7 +18,10 @@ CREATE TABLE users (
     image TEXT,
     address_id INTEGER REFERENCES addresses(id),
     phone VARCHAR(20),
-    role VARCHAR(50) DEFAULT 'user'
+    role VARCHAR(50) DEFAULT 'user',
+    is_subscribed BOOLEAN DEFAULT FALSE,
+    subscription_id VARCHAR(255),
+    subscription_status VARCHAR(50)
 );
 
 -- Create the rest of the tables as before
@@ -59,4 +62,19 @@ CREATE TABLE cards_in_readings (
     orientation VARCHAR(50),
     position INTEGER,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE users
+ADD COLUMN is_subscribed BOOLEAN DEFAULT FALSE,
+ADD COLUMN subscription_id VARCHAR(255),
+ADD COLUMN subscription_status VARCHAR(50),
+ADD COLUMN stripe_customer_id VARCHAR(255);
+
+CREATE TABLE subscription_events (
+    event_id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    type VARCHAR(50),
+    stripe_event_id VARCHAR(255),
+    data JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );

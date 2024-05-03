@@ -33,17 +33,25 @@ export async function POST(req: Request) {
   // if (creditBalance < 1) {
   //   return new Response("Not enough lumens", { status: 401 });
   // }
-  const isLimitReached = await rateLimitReached(user.id);
+  const { isLimitReached, is_subscribed } = await rateLimitReached(user.id);
 
   if (isLimitReached) {
-    return NextResponse.json(
-      {
-        error: "AI limit reached for today",
-      },
-      {
-        status: 429,
-      }
-    );
+    if (!is_subscribed) {
+      return NextResponse.json(
+        {
+          error: "AI limit reached for today. Consider subscribing for more access.",
+          subscribe: true,
+        },
+        { status: 429 }
+      );
+    } else {
+      return NextResponse.json(
+        {
+          error: "AI limit reached for today",
+        },
+        { status: 429 }
+      );
+    }
   }
 
   const model = process.env.GPT_MODEL;
