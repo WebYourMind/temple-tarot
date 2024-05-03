@@ -12,10 +12,10 @@ import appConfig from "app.config";
 import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-// import { CreditBalance } from "./credit-balance";
+import { CreditBalance } from "./credit-balance";
 
 export default function Header() {
-  const { data: session, status } = useSession() as any;
+  const { data: session, status, update } = useSession() as any;
   const { setTheme, resolvedTheme } = useTheme();
   const searchParams = useSearchParams();
 
@@ -30,6 +30,7 @@ export default function Header() {
   const router = useRouter();
 
   const handleTarotClick = (e) => {
+    update();
     // Check if the target href is the same as the current pathname
     if (pathname === "/") {
       e.preventDefault(); // Prevent Link from navigating
@@ -75,10 +76,12 @@ export default function Header() {
       <div className="flex items-center justify-end space-x-4">
         {session?.user && (
           <div className="hidden items-center justify-end space-x-4 md:flex">
-            {/* <CreditBalance />
-            <Link href="/credits/get-credits" className={buttonVariants({ variant: "link" })}>
-              Get Lumens
-            </Link> */}
+            <CreditBalance />
+            {/* {!session?.user?.isSubscribed && (
+              <Link href="/subscribe" className={buttonVariants({ variant: "link" })}>
+                Upgrade
+              </Link>
+            )} */}
             <Link href="/readings" className={buttonVariants({ variant: "link" })}>
               My Readings
             </Link>

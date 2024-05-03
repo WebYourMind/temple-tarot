@@ -13,6 +13,7 @@ const CardSelectionWrapper = ({ spread, query, onSelectComplete }) => {
     setSelectedCards(newSelectedCards);
 
     if (currentStep < spread.numberOfCards - 1) {
+      console.log(currentStep + 1);
       setCurrentStep(currentStep + 1);
     } else {
       onSelectComplete(newSelectedCards);

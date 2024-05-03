@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import TarotCard from "../tarot-card";
 
-function SplitDeck({ leftDeck, rightDeck, handleSelectHalf }) {
+function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
   const [selectedSide, setSelectedSide] = useState(null);
-  const [allLoaded, setAllLoaded] = useState(false);
+  const [allLoaded, setAllLoaded] = useState(currentStep > 0);
   const [loadStatus, setLoadStatus] = useState(new Array(leftDeck.length + rightDeck.length).fill(false));
 
   useEffect(() => {

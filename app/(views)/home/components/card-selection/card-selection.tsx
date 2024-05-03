@@ -91,7 +91,12 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
       {finalCard ? (
         <OrientationPicker switchOrientation={switchOrientation} finalCard={finalCard} onSubmit={onSelect} />
       ) : (
-        <SplitDeck leftDeck={leftDeck} rightDeck={rightDeck} handleSelectHalf={handleSelectHalf} />
+        <SplitDeck
+          leftDeck={leftDeck}
+          rightDeck={rightDeck}
+          handleSelectHalf={handleSelectHalf}
+          currentStep={currentStep}
+        />
       )}
     </div>
   );
