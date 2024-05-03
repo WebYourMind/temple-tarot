@@ -28,7 +28,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf }) {
       setTimeout(() => {
         handleSelectHalf(side);
         setSelectedSide(null);
-      }, 400);
+      }, 500);
     }
   };
 
