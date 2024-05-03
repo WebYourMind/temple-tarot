@@ -5,7 +5,7 @@ import QueryInput from "./query-input";
 import { Button } from "components/ui/button";
 import { Interpreter } from "./interpreter";
 import { IconClose } from "components/ui/icons";
-import CardSelectionWrapper from "./card-selection-wrapper";
+import CardSelectionWrapper from "./card-selection/card-selection-wrapper";
 import { track } from "@vercel/analytics/react";
 import { useSession } from "next-auth/react";
 import { Dialog } from "@radix-ui/react-dialog";
@@ -50,7 +50,7 @@ export default function TarotSession() {
   }
 
   return (
-    <div className="max-w-4xl p-4 pt-8 md:container">
+    <div className="max-w-4xl p-4 md:container">
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         {phase === "question" && (
           <QueryInput onSubmitQuestion={handleSubmitQuestion} closeDialog={() => setOpen(false)} />
