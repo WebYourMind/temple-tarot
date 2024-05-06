@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   }
 }
 
-export async function handleSubscriptionUpdated(event) {
+async function handleSubscriptionUpdated(event) {
   const subscription = event.data.object as Stripe.Subscription;
 
   if (!subscription.customer) {

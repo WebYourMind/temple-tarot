@@ -43,7 +43,7 @@ export type UserProfile = {
   id?: string;
   address: Address;
   phone?: string;
-  isSubscribed: boolean;
+  isSubscribed?: boolean;
 };
 
 export type TeamForm = {

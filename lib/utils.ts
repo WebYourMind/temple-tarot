@@ -63,12 +63,6 @@ export function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function countUsersWithStyles(users: UserProfile[]) {
-  const usersWithDominantStyle = users.filter((user) => user.dominantStyle && user.dominantStyle.trim() !== "");
-
-  return usersWithDominantStyle;
-}
-
 interface DataItem {
   name: string;
   value: number;

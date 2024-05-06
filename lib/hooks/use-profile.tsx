@@ -16,7 +16,6 @@ export function useProfile() {
       postalCode: "",
       country: "",
     },
-    team: null,
   };
   const [profile, setProfile] = useState<UserProfile>(emptyProfile);
   const [isLoading, setIsLoading] = useState(true);
