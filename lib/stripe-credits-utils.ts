@@ -1,3 +1,4 @@
+import { sql } from "@vercel/postgres";
 import Stripe from "stripe";
 
 // Environment variable check for enhanced security and error handling
@@ -98,4 +99,42 @@ export async function updateCreditsByEmail(
   }
 
   return customer;
+}
+
+export async function updateUserSubscriptionStatus(
+  email: string,
+  isActive: boolean,
+  subscriptionId: string,
+  subscriptionStatus: string,
+  customer: string
+) {
+  try {
+    await sql`
+      UPDATE users SET 
+        is_subscribed = ${isActive}, 
+        subscription_id = ${subscriptionId}, 
+        subscription_status = ${subscriptionStatus},
+        stripe_customer_id = ${customer} 
+      WHERE email = ${email}`;
+  } catch (error) {
+    console.error("Failed to update user subscription status:", error);
+    throw new Error("Database operation failed");
+  }
+}
+
+export async function logSubscriptionEvent(subscriptionId: string, eventType: string, eventData: Stripe.Subscription) {
+  try {
+    await sql`
+      INSERT INTO subscription_events (user_id, type, stripe_event_id, data, created_at)
+      VALUES (
+        (SELECT id FROM users WHERE subscription_id = ${subscriptionId}),
+        ${eventType},
+        ${eventData.id},
+        ${JSON.stringify(eventData)},
+        NOW()
+      )`;
+  } catch (error) {
+    console.error("Failed to log subscription event:", error);
+    throw new Error("Database operation failed");
+  }
 }
