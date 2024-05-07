@@ -13,6 +13,7 @@ import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CreditBalance } from "./credit-balance";
+import { LumenBalance } from "./lumen-balance";
 
 export default function Header() {
   const { data: session, status, update } = useSession() as any;
@@ -76,12 +77,13 @@ export default function Header() {
       <div className="flex items-center justify-end space-x-4">
         {session?.user && (
           <div className="hidden items-center justify-end space-x-4 md:flex">
+            <LumenBalance />
             <CreditBalance />
-            {/* {!session?.user?.isSubscribed && (
+            {!session?.user?.isSubscribed && (
               <Link href="/subscribe" className={buttonVariants({ variant: "link" })}>
                 Upgrade
               </Link>
-            )} */}
+            )}
             <Link href="/readings" className={buttonVariants({ variant: "link" })}>
               My Readings
             </Link>

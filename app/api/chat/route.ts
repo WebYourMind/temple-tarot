@@ -7,7 +7,7 @@ import { chatTemplateNoStyles } from "lib/templates/chat.templates";
 import { getSession } from "lib/auth";
 import { Reading, addReadingWithCards } from "lib/database/readings.database";
 import { CardInReading } from "lib/database/cardsInReadings.database";
-import { rateLimitReached } from "lib/database/apiUsageLogs.database";
+import { useCredits } from "lib/stripe-credits-utils";
 
 export const runtime = "nodejs";
 
@@ -28,30 +28,13 @@ export async function POST(req: Request) {
 
   const user = session.user;
 
-  // const creditBalance = await getCustomerBalance(user.email);
-
-  // if (creditBalance < 1) {
-  //   return new Response("Not enough lumens", { status: 401 });
-  // }
-  const { isLimitReached, is_subscribed } = await rateLimitReached(user.id);
-
-  if (isLimitReached) {
-    if (!is_subscribed) {
-      return NextResponse.json(
-        {
-          error: "AI limit reached for today. Consider subscribing for more access.",
-          subscribe: true,
-        },
-        { status: 429 }
-      );
-    } else {
-      return NextResponse.json(
-        {
-          error: "AI limit reached for today",
-        },
-        { status: 429 }
-      );
-    }
+  try {
+    // Deduct one credit
+    const { newSubCredits, newAddCredits } = await useCredits(user.id, 1);
+    console.log("Credits remaining:", { newSubCredits, newAddCredits });
+  } catch (error: any) {
+    console.error("Error using credits:", error);
+    return NextResponse.json({ message: error.message }, { status: 400 });
   }
 
   const model = process.env.GPT_MODEL;

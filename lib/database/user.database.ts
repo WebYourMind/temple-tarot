@@ -48,6 +48,25 @@ export const getUserById = async (userId: number | string) => {
   }
 };
 
+export const getUserIdByEmail = async (email: string) => {
+  try {
+    const { rows } = await sql`
+            SELECT id
+            FROM users
+            WHERE email = ${email}
+        `;
+
+    if (rows.length > 0) {
+      const { id } = rows[0];
+      return id;
+    }
+    return null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 export const getUserByEmail = async (email: string) => {
   try {
     const { rows } = await sql`

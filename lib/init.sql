@@ -78,3 +78,7 @@ CREATE TABLE subscription_events (
     data JSONB,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+ALTER TABLE users
+ADD COLUMN subscription_credits INTEGER DEFAULT 0,
+ADD COLUMN additional_credits INTEGER DEFAULT 0;

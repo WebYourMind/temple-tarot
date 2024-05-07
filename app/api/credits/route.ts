@@ -1,60 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserById } from "lib/database/user.database";
-import { countReadingsByUserId } from "lib/database/readings.database";
+import { sql } from "@vercel/postgres";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get("userId");
+
+  if (!userId) {
+    return NextResponse.json({ message: "Invalid user ID" }, { status: 400 });
+  }
+
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    // Fetch the user's subscription status and credits
+    const result = await sql`
+      SELECT is_subscribed, subscription_credits, additional_credits FROM users WHERE id = ${userId};
+    `;
 
-    // Check if userId is not null or undefined
-    if (!userId) {
-      return NextResponse.json(
-        {
-          error: "The user ID must be provided.",
-        },
-        {
-          status: 400,
-        }
-      );
+    if (result.rows.length === 0) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    //get user data with address from database
-    const user = await getUserById(parseInt(userId));
-    // Check if we got a result back
-    if (!user) {
-      return NextResponse.json(
-        {
-          error: "No user found for the given user ID.",
-        },
-        {
-          status: 404,
-        }
-      );
-    }
-
-    const lumens = await countReadingsByUserId(userId);
+    const { is_subscribed, subscription_credits, additional_credits } = result.rows[0];
+    const effectiveSubscriptionCredits = is_subscribed ? subscription_credits : 0;
 
     return NextResponse.json(
       {
-        message: "Lumens retrieved successfully.",
-        credits: lumens,
+        subscriptionCredits: effectiveSubscriptionCredits,
+        additionalCredits: additional_credits,
       },
-      {
-        status: 200,
-      }
+      { status: 200 }
     );
   } catch (error) {
-    // Return an error response
-    return NextResponse.json(
-      {
-        error: "An error occurred while processing your request.",
-      },
-      {
-        status: 500,
-      }
-    );
+    console.error("Error fetching user credits:", error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }

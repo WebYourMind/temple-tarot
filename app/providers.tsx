@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { FeedbackDataProvider } from "./feedback-data";
 import { ReadingsProvider } from "lib/contexts/readings-context";
 import { CreditProvider } from "lib/contexts/credit-context";
+import { LumenProvider } from "lib/contexts/lumen-context";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,9 +14,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <SessionProvider>
         <TooltipProvider>
           <CreditProvider>
-            <FeedbackDataProvider>
-              <ReadingsProvider>{children}</ReadingsProvider>
-            </FeedbackDataProvider>
+            <LumenProvider>
+              <FeedbackDataProvider>
+                <ReadingsProvider>{children}</ReadingsProvider>
+              </FeedbackDataProvider>
+            </LumenProvider>
           </CreditProvider>
         </TooltipProvider>
       </SessionProvider>

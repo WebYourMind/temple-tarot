@@ -19,7 +19,7 @@ export const CreditProvider = ({ children }: { children: ReactNode }) => {
     const data = (await response.json()) as any;
 
     if (response.ok) {
-      setCredits(data.credits);
+      setCredits(data.subscriptionCredits + data.additionalCredits);
     } else {
       toast.error(`Failed to fetch credits.`);
     }

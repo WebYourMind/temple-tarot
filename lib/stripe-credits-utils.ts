@@ -42,64 +42,64 @@ export async function getCustomerEmail(customerId) {
   }
 }
 
-export async function getCustomerBalance(email: string) {
-  const customer = await findCustomerByEmail(email);
+// export async function getCustomerBalance(email: string) {
+//   const customer = await findCustomerByEmail(email);
 
-  if (!customer) {
-    return 0;
-  }
+//   if (!customer) {
+//     return 0;
+//   }
 
-  return parseInt(customer.metadata.credit_balance) || 0;
-}
+//   return parseInt(customer.metadata.credit_balance) || 0;
+// }
 
-export async function createCustomerWithCredits(
-  email: string,
-  totalCreditsPurchased: number
-): Promise<Stripe.Customer | null> {
-  return handleStripeAction(
-    stripe.customers.create({
-      email,
-      metadata: { credit_balance: totalCreditsPurchased.toString() },
-    })
-  );
-}
+// export async function createCustomerWithCredits(
+//   email: string,
+//   totalCreditsPurchased: number
+// ): Promise<Stripe.Customer | null> {
+//   return handleStripeAction(
+//     stripe.customers.create({
+//       email,
+//       metadata: { credit_balance: totalCreditsPurchased.toString() },
+//     })
+//   );
+// }
 
-export async function updateCreditsByEmail(
-  email: string,
-  totalCreditsPurchased: number
-): Promise<Stripe.Customer | null> {
-  let customer = await findCustomerByEmail(email);
-  console.log("Attempting to add credit amount of ", totalCreditsPurchased);
+// export async function updateCreditsByEmail(
+//   email: string,
+//   totalCreditsPurchased: number
+// ): Promise<Stripe.Customer | null> {
+//   let customer = await findCustomerByEmail(email);
+//   console.log("Attempting to add credit amount of ", totalCreditsPurchased);
 
-  if (!customer) {
-    console.log("Creating new customer as no existing customer found with email:", email);
-    customer = await createCustomerWithCredits(email, totalCreditsPurchased);
-    if (!customer) {
-      console.error("Failed to create a new customer with email:", email);
-      return null; // Handling the case where customer creation fails
-    }
-    console.log("New customer created with ID:", customer.id);
-  } else {
-    console.log("Updating credit balance for customer with email:", email);
-    const existingCreditBalance = parseInt(customer.metadata.credit_balance || "0", 10);
-    const newCreditBalance = (!isNaN(existingCreditBalance) ? existingCreditBalance : 0) + totalCreditsPurchased;
+//   if (!customer) {
+//     console.log("Creating new customer as no existing customer found with email:", email);
+//     customer = await createCustomerWithCredits(email, totalCreditsPurchased);
+//     if (!customer) {
+//       console.error("Failed to create a new customer with email:", email);
+//       return null; // Handling the case where customer creation fails
+//     }
+//     console.log("New customer created with ID:", customer.id);
+//   } else {
+//     console.log("Updating credit balance for customer with email:", email);
+//     const existingCreditBalance = parseInt(customer.metadata.credit_balance || "0", 10);
+//     const newCreditBalance = (!isNaN(existingCreditBalance) ? existingCreditBalance : 0) + totalCreditsPurchased;
 
-    customer = await handleStripeAction(
-      stripe.customers.update(customer.id, {
-        metadata: { credit_balance: newCreditBalance.toString() },
-      })
-    );
+//     customer = await handleStripeAction(
+//       stripe.customers.update(customer.id, {
+//         metadata: { credit_balance: newCreditBalance.toString() },
+//       })
+//     );
 
-    if (!customer) {
-      console.error("Failed to update credits for customer with email:", email);
-      return null; // Handling the case where customer update fails
-    }
+//     if (!customer) {
+//       console.error("Failed to update credits for customer with email:", email);
+//       return null; // Handling the case where customer update fails
+//     }
 
-    console.log("Customer updated with new credit balance:", customer.metadata.credit_balance);
-  }
+//     console.log("Customer updated with new credit balance:", customer.metadata.credit_balance);
+//   }
 
-  return customer;
-}
+//   return customer;
+// }
 
 export async function updateUserSubscriptionStatus(
   email: string,
@@ -137,4 +137,75 @@ export async function logSubscriptionEvent(subscriptionId: string, eventType: st
     console.error("Failed to log subscription event:", error);
     throw new Error("Database operation failed");
   }
+}
+
+export async function resetSubscriptionCredits(email: string) {
+  try {
+    await sql`
+      UPDATE users SET 
+        subscription_credits = 100
+      WHERE email = ${email}
+    `;
+  } catch (error) {
+    console.error("Failed to reset subscription credits:", error);
+    throw new Error("Database operation failed");
+  }
+}
+
+export async function updateUserAdditionalCredits(email: string, creditsToAdd: number) {
+  try {
+    await sql`
+      UPDATE users 
+      SET additional_credits = additional_credits + ${creditsToAdd}
+      WHERE email = ${email};
+  `;
+  } catch (error) {
+    console.error("Failed to update user subscription status:", error);
+    throw new Error("Database operation failed");
+  }
+}
+
+export async function logCreditEvent(userId: number, credits: number, eventType: string) {
+  await sql`
+    INSERT INTO credit_events (user_id, credits, event_type)
+    VALUES (${userId}, ${credits}, ${eventType})
+  `;
+}
+
+export async function useCredits(userId, amount) {
+  const user =
+    await sql`SELECT is_subscribed, subscription_credits, additional_credits FROM users WHERE id = ${userId}`;
+
+  if (user.rows.length === 0) {
+    throw new Error("User not found");
+  }
+
+  const { is_subscribed, subscription_credits, additional_credits } = user.rows[0];
+  if (!is_subscribed) {
+    throw new Error("User is not subscribed");
+  }
+
+  let newSubCredits = subscription_credits;
+  let newAddCredits = additional_credits;
+
+  if (amount <= subscription_credits) {
+    newSubCredits -= amount;
+  } else {
+    const remaining = amount - subscription_credits;
+    newSubCredits = 0;
+    if (remaining <= additional_credits) {
+      newAddCredits -= remaining;
+    } else {
+      throw new Error("Not enough credits");
+    }
+  }
+
+  await sql`
+    UPDATE users SET
+      subscription_credits = ${newSubCredits},
+      additional_credits = ${newAddCredits}
+    WHERE id = ${userId}
+  `;
+
+  return { newSubCredits, newAddCredits };
 }

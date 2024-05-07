@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 export default function PurchaseConfirmation() {
   const { update } = useSession() as any;
   const [status, setStatus] = useState(null);
-  const [customerEmail, setCustomerEmail] = useState("");
+  // const [customerEmail, setCustomerEmail] = useState("");
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -23,17 +23,18 @@ export default function PurchaseConfirmation() {
       });
       const data = (await response.json()) as any;
       console.log(data);
-      update({ isSubscribed: data.status === "complete" });
+
+      // update the user session
+      await update({ isSubscribed: data.status === "complete" });
 
       setStatus(data.status);
-      setCustomerEmail(data.customer_email);
+      // setCustomerEmail(data.customer_email);
     }
 
     getCheckoutSession();
   }, [searchParams]);
 
   async function manageSubscription() {
-    // router.push("/subscribe/manage-subscription");
     try {
       const response = await fetch("/api/create-portal-session", {
         method: "POST",

@@ -7,6 +7,7 @@ import { SelectedCardType } from "./tarot-session";
 import { ReadingTemplate } from "app/(views)/readings/[id]/reading";
 import Loading from "components/loading";
 import { useCredits } from "lib/contexts/credit-context";
+import { useLumens } from "lib/contexts/lumen-context";
 
 export interface InterpreterProps extends React.ComponentProps<"div"> {
   query: string;
@@ -16,6 +17,7 @@ export interface InterpreterProps extends React.ComponentProps<"div"> {
 
 export function Interpreter({ query, cards, spread }: InterpreterProps) {
   const { fetchCreditBalance } = useCredits();
+  const { fetchLumenBalance } = useLumens();
   const [reading, setReading] = useState({
     userQuery: query,
     createdAt: new Date().toISOString(),
@@ -50,6 +52,7 @@ export function Interpreter({ query, cards, spread }: InterpreterProps) {
         if (done) {
           // setIsGenerating(false);
           fetchCreditBalance();
+          fetchLumenBalance();
           break;
         }
 
