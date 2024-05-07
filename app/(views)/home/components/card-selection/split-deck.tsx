@@ -43,7 +43,10 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
         <br />
         Where is your card?
       </p>
-      <ArrowBigLeft className="pulse-1" size={35} />
+      {/* <div className="flex w-full justify-around">
+        <ArrowBigLeft className="pulse-1" size={35} />
+        <ArrowBigRight className="pulse-2" size={35} />
+      </div> */}
       {/* <ArrowBigLeft /> */}
       <div
         className={`flex w-full justify-between transition-opacity duration-700 ${
@@ -55,9 +58,13 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
             key={side}
             className={`transition fade-in-0 md:mx-2 ${selectedSide && selectedSide !== side ? "opacity-0" : ""}`}
           >
-            {/* <div className="flex w-full animate-pulse justify-center">
-              {side === "left" ? <ArrowLeft /> : <ArrowRight />}
-            </div> */}
+            <div className="pulse flex w-full justify-center">
+              {side === "left" ? (
+                <ArrowBigLeft className="pulse-1" size={35} />
+              ) : (
+                <ArrowBigRight className="pulse-2" size={35} />
+              )}
+            </div>
             <button
               onClick={() => handleDeckSelect(side)}
               className="relative flex h-[250px] w-[170px] scale-75 cursor-default flex-col items-center rounded-lg transition-all duration-500 md:h-[370px] md:w-[300px] md:scale-100 md:p-0"
@@ -92,7 +99,6 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
           </div>
         ))}
       </div>
-      <ArrowBigRight className="pulse-2" size={35} />
     </>
   );
 }
