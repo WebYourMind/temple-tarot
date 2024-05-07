@@ -87,7 +87,7 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col items-center justify-center pb-10 transition-opacity">
-      <p className="mx-10 mb-4 text-center italic">{query}</p>
+      {query && <p className="mx-10 mb-4 text-center italic">{query}</p>}
       {finalCard ? (
         <OrientationPicker switchOrientation={switchOrientation} finalCard={finalCard} onSubmit={onSelect} />
       ) : (

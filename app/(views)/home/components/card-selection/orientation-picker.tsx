@@ -1,27 +1,32 @@
 import { Button } from "components/ui/button";
 import Card from "../tarot-card";
 import { IconRotate } from "components/ui/icons";
+import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 
 function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
   return (
-    <div className="flex flex-col items-center justify-center p-4">
+    <div className="flex flex-col items-center justify-center pb-4">
       <p className="text-center font-serif text-xl">Rotate your card as you feel intuitively.</p>
-      <button
-        onClick={switchOrientation}
-        className="mt-4 p-4 transition-transform duration-300 ease-in-out hover:scale-110"
-      >
-        <div className="relative">
-          <Card
-            alt="Your Card"
-            className={`${
-              finalCard.orientation === "upright" ? "rotate-0" : "rotate-180"
-            } transition-transform duration-500`}
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <IconRotate className="h-6 w-6 text-white" />
+      <div className="flex items-center">
+        <ArrowBigUp className="pulse-1" size={35} />
+        <button
+          onClick={switchOrientation}
+          className="mt-4 p-4 transition-transform duration-300 ease-in-out hover:scale-110"
+        >
+          <div className="relative">
+            <Card
+              alt="Your Card"
+              className={`${
+                finalCard.orientation === "upright" ? "rotate-0" : "rotate-180"
+              } transition-transform duration-500`}
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <IconRotate className="h-6 w-6 text-white" />
+            </div>
           </div>
-        </div>
-      </button>
+        </button>
+        <ArrowBigDown className="pulse-2" size={35} />
+      </div>
       <div className="mt-4 flex w-full justify-around">
         <Button variant="default" className="w-1/3" onClick={switchOrientation}>
           Rotate
