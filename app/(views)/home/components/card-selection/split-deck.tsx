@@ -1,5 +1,8 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import TarotCard from "../tarot-card";
+import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 
 function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
   const [selectedSide, setSelectedSide] = useState(null);
@@ -31,6 +34,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
       }, 500);
     }
   };
+  const isMobile = window.innerWidth <= 768;
 
   return (
     <>
@@ -39,6 +43,8 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
         <br />
         Where is your card?
       </p>
+      <ArrowBigLeft className="pulse-1" size={35} />
+      {/* <ArrowBigLeft /> */}
       <div
         className={`flex w-full justify-between transition-opacity duration-700 ${
           allLoaded ? "opacity-100" : "opacity-0"
@@ -49,9 +55,12 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
             key={side}
             className={`transition fade-in-0 md:mx-2 ${selectedSide && selectedSide !== side ? "opacity-0" : ""}`}
           >
+            {/* <div className="flex w-full animate-pulse justify-center">
+              {side === "left" ? <ArrowLeft /> : <ArrowRight />}
+            </div> */}
             <button
               onClick={() => handleDeckSelect(side)}
-              className="relative flex h-[200px] w-[170px] scale-50 cursor-default flex-col items-center rounded-lg transition-all duration-500 md:h-[370px] md:w-[300px] md:scale-100 md:p-0"
+              className="relative flex h-[250px] w-[170px] scale-75 cursor-default flex-col items-center rounded-lg transition-all duration-500 md:h-[370px] md:w-[300px] md:scale-100 md:p-0"
             >
               {(side === "left" ? leftDeck : rightDeck).map((card, cardIndex) => {
                 const isSideSelected = selectedSide === side;
@@ -59,7 +68,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
                 const defaultPosition = -leftDeck.length / 2 + cardIndex + 1;
 
                 const translate = `translate(${
-                  (isSideSelected ? (isBottomHalf ? -100 : 100) : 0) + defaultPosition
+                  (isSideSelected ? (isBottomHalf ? -100 : 100) : 0) + (isMobile ? 0 : defaultPosition)
                 }px, ${defaultPosition}px)`;
                 return (
                   <div
@@ -78,11 +87,12 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
                 );
               })}
             </button>
-            <p className="mt-5 text-center font-serif">{side.charAt(0).toUpperCase() + side.slice(1)} Deck</p>
+            <p className="text-center font-serif md:mt-5">{side.charAt(0).toUpperCase() + side.slice(1)} Half</p>
             <p className="text-center font-serif">{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
           </div>
         ))}
       </div>
+      <ArrowBigRight className="pulse-2" size={35} />
     </>
   );
 }

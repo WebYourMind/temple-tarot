@@ -3,7 +3,7 @@ import Image from "next/image";
 import TarotBack from "../../../tarot-back.jpg";
 import { cn } from "lib/utils";
 
-export default function Card({ className = "", alt, onLoad = null }) {
+export default function Card({ className = "", alt, onLoad = null, width = 200, height = 350 }) {
   const [internalLoaded, setInternalLoaded] = useState(false);
 
   // If onLoad is provided, use it to manage load state, else use internal state.
@@ -27,8 +27,8 @@ export default function Card({ className = "", alt, onLoad = null }) {
         className={`rounded-lg shadow-md`}
         src={TarotBack}
         alt={alt || "Tarot Card"}
-        width={200}
-        height={350}
+        width={width | 200}
+        height={height | 350}
         onLoadingComplete={handleLoad} // Adjusted to handle both internal and external loading
       />
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 rounded-lg border-4 border-amber-100 border-opacity-95" />

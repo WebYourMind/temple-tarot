@@ -47,3 +47,26 @@
   transform: scale(1.1);
   z-index: 100; /* Ensure the hovered card comes to the top */
 }
+
+/* Base pulse animation */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+}
+
+/* Pulse animation for Component 1 */
+.pulse-1 {
+  animation: pulse 2s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+/* Pulse animation for Component 2 */
+.pulse-2 {
+  animation: pulse 2s ease-in-out infinite;
+  animation-delay: 1s;
+}
