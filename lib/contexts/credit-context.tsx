@@ -15,7 +15,7 @@ export const CreditProvider = ({ children }: { children: ReactNode }) => {
 
   async function fetchCreditBalance() {
     setIsLoading(true);
-    const response = await fetch(`/api/credits/?userId=${session.user.id}`);
+    const response = await fetch(`/api/stripe-credits/credits/?userId=${session.user.id}`);
     const data = (await response.json()) as any;
 
     if (response.ok) {

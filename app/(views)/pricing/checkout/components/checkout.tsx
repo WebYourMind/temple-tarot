@@ -17,7 +17,7 @@ export default function Checkout() {
     const product = searchParams?.get("product");
     const mode = searchParams?.get("mode");
 
-    const res = await fetch("/api/checkout-sessions", {
+    const res = await fetch("/api/stripe-credits/checkout-sessions", {
       method: "POST",
       body: JSON.stringify({ priceId: product, email: user.email, mode }),
       headers: {

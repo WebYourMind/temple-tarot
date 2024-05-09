@@ -23,7 +23,7 @@ export interface UserMenuProps {
 
 export async function manageSubscription() {
   try {
-    const response = await fetch("/api/create-portal-session", {
+    const response = await fetch("/api/stripe-credits/create-portal-session", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

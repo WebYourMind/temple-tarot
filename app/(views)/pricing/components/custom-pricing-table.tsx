@@ -23,7 +23,7 @@ const CustomPricingTable: React.FC = () => {
 
   useEffect(() => {
     const fetchPlans = async () => {
-      const res = await fetch("/api/pricing");
+      const res = await fetch("/api/stripe-credits/pricing");
       const data = (await res.json()) as SimplifiedPrice[];
       setPlans(data.filter((plan) => plan.type === "recurring" || plan.type === "one_time"));
       setLoading(false);

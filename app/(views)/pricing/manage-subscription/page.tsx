@@ -9,7 +9,7 @@ const SubscriptionManager = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/subscription")
+    fetch("/api/stripe-credits/subscription")
       .then((res) => res.json())
       .then((data: { isSubscribed: boolean }) => {
         setSubscription(data.isSubscribed);

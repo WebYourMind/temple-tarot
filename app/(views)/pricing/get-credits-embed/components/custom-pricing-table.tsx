@@ -28,7 +28,7 @@ const CustomPricingTable: React.FC = () => {
   useEffect(() => {
     // Fetch your plans/products from Stripe
     const fetchPlans = async () => {
-      const res = await fetch("/api/pricing"); // Adjust to your API endpoint
+      const res = await fetch("/api/stripe-credits/pricing"); // Adjust to your API endpoint
       const data = (await res.json()) as SimplifiedPrice[];
       setPlans(data);
       setLoading(false);
@@ -40,7 +40,7 @@ const CustomPricingTable: React.FC = () => {
   const handleSelectPlan = async (priceId: string) => {
     // Assuming you have a session ID creation endpoint on your server
     const stripe: Stripe | null = await stripePromise;
-    const sessionRes = await fetch("/api/checkout-sessions", {
+    const sessionRes = await fetch("/api/stripe-credits/checkout-sessions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

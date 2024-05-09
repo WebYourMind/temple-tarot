@@ -18,7 +18,7 @@ export default function PurchaseConfirmation() {
     async function getCheckoutSession() {
       const sessionId = searchParams?.get("session_id");
 
-      const response = await fetch(`/api/checkout-sessions?session_id=${sessionId}`, {
+      const response = await fetch(`/api/stripe-credits/checkout-sessions?session_id=${sessionId}`, {
         method: "GET",
       });
       const data = (await response.json()) as any;
@@ -36,7 +36,7 @@ export default function PurchaseConfirmation() {
 
   async function manageSubscription() {
     try {
-      const response = await fetch("/api/create-portal-session", {
+      const response = await fetch("/api/stripe-credits/create-portal-session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

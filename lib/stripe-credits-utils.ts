@@ -139,11 +139,11 @@ export async function logSubscriptionEvent(subscriptionId: string, eventType: st
   }
 }
 
-export async function resetSubscriptionCredits(email: string) {
+export async function resetSubscriptionCredits(email: string, creditAmount: number) {
   try {
     await sql`
       UPDATE users SET 
-        subscription_credits = 100
+        subscription_credits = ${creditAmount}
       WHERE email = ${email}
     `;
   } catch (error) {
