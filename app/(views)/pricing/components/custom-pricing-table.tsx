@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Button } from "components/ui/button";
 import Loading from "components/loading";
 import { useRouter } from "next/navigation";
-import { manageSubscription } from "components/navigation/user-menu";
 
 interface SimplifiedPrice {
   id: string;
@@ -13,8 +12,19 @@ interface SimplifiedPrice {
   productName: string;
   type: string;
   productDescription: string | null;
-  isSubscribed: boolean; // Assuming this is added to each price object
+  isSubscribed: boolean;
 }
+
+const fetchPlans = async () => {
+  try {
+    const response = await fetch("/api/stripe-credits/pricing");
+    if (!response.ok) throw new Error("Failed to fetch plans.");
+    return response.json() as Promise<SimplifiedPrice[]>;
+  } catch (error) {
+    console.error("Fetching plans failed:", error);
+    return [];
+  }
+};
 
 const CustomPricingTable: React.FC = () => {
   const [plans, setPlans] = useState<SimplifiedPrice[]>([]);
@@ -22,40 +32,48 @@ const CustomPricingTable: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchPlans = async () => {
-      const res = await fetch("/api/stripe-credits/pricing");
-      const data = (await res.json()) as SimplifiedPrice[];
-      setPlans(data.filter((plan) => plan.type === "recurring" || plan.type === "one_time"));
+    fetchPlans().then((data) => {
+      setPlans(data);
       setLoading(false);
-    };
-
-    fetchPlans();
+    });
   }, []);
 
-  const handleSelectPlan = async (priceId: string, type: string, isSubscribed: boolean) => {
-    if (isSubscribed) {
-      // Navigate to manage subscription page
-      // router.push(`/pricing/manage`);
-      await manageSubscription();
-    } else {
-      // Navigate to the checkout page
-      router.push(`/pricing/checkout?product=${priceId}${type === "recurring" ? "&mode=subscription" : ""}`);
-    }
+  const subscriptions = useMemo(() => plans.filter((plan) => plan.type === "recurring"), [plans]);
+  const oneTimeProducts = useMemo(() => plans.filter((plan) => plan.type === "one_time"), [plans]);
+
+  const handleSelectPlan = (priceId: string, type: string, isSubscribed: boolean) => {
+    const path = `/pricing/checkout?product=${priceId}${type === "recurring" ? "&mode=subscription" : ""}`;
+    router.push(isSubscribed ? "/pricing/manage" : path);
   };
 
   if (loading) return <Loading />;
+
   return (
-    <div className="container w-full max-w-5xl justify-center md:flex">
+    <div className="container w-full max-w-5xl justify-center md:flex md:flex-col">
+      <Section title="Subscriptions" plans={subscriptions} handleSelectPlan={handleSelectPlan} />
+      <Section title="One-Time Purchases" plans={oneTimeProducts} handleSelectPlan={handleSelectPlan} />
+    </div>
+  );
+};
+
+const Section: React.FC<{
+  title: string;
+  plans: SimplifiedPrice[];
+  handleSelectPlan: (priceId: string, type: string, isSubscribed: boolean) => void;
+}> = ({ title, plans, handleSelectPlan }) => (
+  <section>
+    <h2 className="mb-4 text-2xl font-bold">{title}</h2>
+    <div className="flex justify-center">
       {plans.map((plan) => (
-        <div key={plan.id} className="rounded-md p-8">
+        <div key={plan.id} className="rounded-md p-8 md:w-1/3">
           <h3 className="mb-4 text-xl font-bold">{plan.productName}</h3>
           <p className="text-sm opacity-70">{plan.productDescription}</p>
           <p className="my-6 text-4xl font-bold">
             {new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: plan.currency,
-            }).format(plan.unitAmount! / 100)}{" "}
-            {plan.type === "recurring" ? <span className="text-sm">/ per month</span> : ""}
+            }).format(plan.unitAmount! / 100)}
+            {plan.type === "recurring" && <span className="text-sm">/ per month</span>}
           </p>
           <Button
             size="lg"
@@ -63,12 +81,12 @@ const CustomPricingTable: React.FC = () => {
             variant="outline"
             onClick={() => handleSelectPlan(plan.id, plan.type, plan.isSubscribed)}
           >
-            {plan.type === "recurring" ? (plan.isSubscribed ? "Manage Subscription" : "Subscribe") : "Buy Credits"}
+            {plan.isSubscribed ? "Manage Subscription" : plan.type === "recurring" ? "Subscribe" : "Buy Credits"}
           </Button>
         </div>
       ))}
     </div>
-  );
-};
+  </section>
+);
 
 export default CustomPricingTable;

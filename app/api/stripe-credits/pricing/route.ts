@@ -9,25 +9,31 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 
 export async function GET(req: NextRequest) {
   try {
-    const priceIds = [
-      process.env.STRIPE_PRICE_ONE,
-      process.env.STRIPE_PRICE_TWO,
-      process.env.STRIPE_PRICE_THREE,
-    ].filter(Boolean); // Filter out undefined
+    // Retrieve all active prices and expand product details
+    const prices = await stripe.prices.list({
+      active: true, // Ensure only active prices are retrieved
+      expand: ["data.product"], // Ensure product details are fetched
+      limit: 100, // Adjust the limit as necessary
+    });
 
-    const pricesPromises = priceIds.map((priceId) => stripe.prices.retrieve(priceId, { expand: ["product"] }));
-    const prices = await Promise.all(pricesPromises);
-
-    const simplifiedPrices = prices
+    // Filter prices to include only those with 'credits' metadata and map the necessary details
+    const simplifiedPrices = prices.data
+      .filter((price) => {
+        // @ts-expect-error
+        // Check both the presence of 'credits' in metadata and a custom 'isArchived' flag
+        return price.product?.metadata?.credits && price.product.active && !price.product?.metadata?.isArchived;
+      })
       .map((price) => ({
         id: price.id,
         unitAmount: price.unit_amount,
         currency: price.currency,
-        // @ts-ignore
-        productName: price.product.name,
-        // @ts-ignore
-        productDescription: price.product.description,
-        type: price.type,
+        // @ts-expect-error
+        productName: price.product?.name,
+        // @ts-expect-error
+        productDescription: price.product?.description,
+        type: price.type, // This already distinguishes between 'one_time' and 'recurring'
+        // @ts-expect-error
+        credits: price.product?.metadata?.credits, // Include the credits from metadata
       }))
       .sort((a, b) => a.unitAmount - b.unitAmount);
 
