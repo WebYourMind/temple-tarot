@@ -79,11 +79,9 @@ export default function Header() {
           <div className="hidden items-center justify-end space-x-4 md:flex">
             <LumenBalance />
             <CreditBalance />
-            {!session?.user?.isSubscribed && (
-              <Link href="/subscribe" className={buttonVariants({ variant: "link" })}>
-                Upgrade
-              </Link>
-            )}
+            <Link href="/pricing" className={buttonVariants({ variant: "link" })}>
+              Pricing
+            </Link>
             <Link href="/readings" className={buttonVariants({ variant: "link" })}>
               My Readings
             </Link>

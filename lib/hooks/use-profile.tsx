@@ -39,7 +39,6 @@ export function useProfile() {
             postalCode: data.user?.address?.postalCode || "",
             country: data.user?.address?.country || "",
           },
-          teamId: data.user?.teamId,
         }));
       } else {
         toast.error(`Failed to fetch profile.`);

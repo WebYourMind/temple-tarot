@@ -21,56 +21,38 @@ export interface UserMenuProps {
   user: UserProfile;
 }
 
+export async function manageSubscription() {
+  try {
+    const response = await fetch("/api/create-portal-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create billing portal session");
+    }
+
+    const data = await response.json();
+    if (response.ok) {
+      // @ts-ignore
+      window.location.href = data.url; // Redirect user to the Stripe portal
+    } else {
+      // @ts-ignore
+      throw new Error(data.message || "Failed to initiate billing portal session");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
 export function getUserInitials(name: string) {
   const [firstName, lastName] = name.split(" ");
   return lastName ? `${firstName[0]}${lastName[0]}` : firstName.slice(0, 2);
 }
 
 export function UserMenu({ user }: UserMenuProps) {
-  // const { update, data: session } = useSession() as any;
-
-  // async function upgradeUser() {
-  //   if (user) {
-  //     const res = await fetch(`/api/upgrade/?userId=${user.id}`, { method: "PATCH" });
-  //     if (res.ok) {
-  //       update({ role: "admin" });
-  //       toast.success(
-  //         "Your account has been upgraded! \nYou now have access to the Teams feature located in the sidemenu.",
-  //         {
-  //           duration: 8000,
-  //         }
-  //       );
-  //     }
-  //   }
-  // }
-
-  async function manageSubscription() {
-    // router.push("/subscribe/manage-subscription");
-    try {
-      const response = await fetch("/api/create-portal-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create billing portal session");
-      }
-
-      const data = await response.json();
-      if (response.ok) {
-        // @ts-ignore
-        window.location.href = data.url; // Redirect user to the Stripe portal
-      } else {
-        // @ts-ignore
-        throw new Error(data.message || "Failed to initiate billing portal session");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-
   return (
     <div className="flex items-center justify-between">
       <DropdownMenu>

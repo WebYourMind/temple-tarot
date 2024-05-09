@@ -1,7 +1,6 @@
 "use client";
 import Loading from "components/loading";
 import { Button } from "components/ui/button";
-// components/SubscriptionManager.js
 import React, { useState, useEffect } from "react";
 
 const SubscriptionManager = () => {

@@ -26,8 +26,8 @@ const menuItems = [
 ];
 
 const upgradeItem = {
-  name: "Upgrade",
-  path: "/subscribe",
+  name: "Pricing",
+  path: "/pricing",
   icon: <IconPlus />,
 };
 

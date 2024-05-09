@@ -46,13 +46,13 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion, closeDialog }
         autoFocus
       />
       <SpreadSelector onSpreadSelect={onSpreadSelect} selectedSpread={selectedSpread} />
-      <Button onClick={handleSubmit} variant={"ghost"} disabled={credits < 1}>
+      <Button onClick={handleSubmit} variant={"ghost"} disabled={!credits || credits === 0}>
         SEND <PaperPlaneIcon className="ml-2" />
       </Button>
-      {credits < 1 && (
+      {credits === 0 && (
         <div className="text-center">
           <p>You do not have enough credits!</p>
-          <Button onClick={() => router.push("/subscribe")} variant={"outline"}>
+          <Button onClick={() => router.push("/pricing")} variant={"outline"}>
             Get Credits
           </Button>
         </div>

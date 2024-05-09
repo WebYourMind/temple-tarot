@@ -9,7 +9,7 @@ export function useCredits() {
 }
 
 export const CreditProvider = ({ children }: { children: ReactNode }) => {
-  const [credits, setCredits] = useState(0);
+  const [credits, setCredits] = useState(undefined);
   const { data: session } = useSession() as any;
   const [isLoading, setIsLoading] = useState(true);
 
