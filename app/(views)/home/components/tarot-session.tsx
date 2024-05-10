@@ -69,9 +69,11 @@ export default function TarotSession() {
   return (
     <div className="max-w-4xl p-4 fade-in md:container">
       <Dialog open={showInfo} onOpenChange={() => setShowInfo(!showInfo)}>
-        <DialogTrigger className="float-right opacity-50">
-          <Info />
-        </DialogTrigger>
+        <div className="flex w-full justify-end">
+          <DialogTrigger className="opacity-50">
+            <Info />
+          </DialogTrigger>
+        </div>
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
           {phase === "question" && (
             <QueryInput onSubmitQuestion={handleSubmitQuestion} closeDialog={() => setOpen(false)} />
