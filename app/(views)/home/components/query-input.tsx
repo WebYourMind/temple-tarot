@@ -7,6 +7,8 @@ import { SpreadSelector } from "./spread-selector";
 import tarotSpreads from "./tarot-spreads";
 import { useCredits } from "lib/contexts/credit-context";
 import { useRouter } from "next/navigation";
+import { tarotFont } from "./interpreter";
+import { cn } from "lib/utils";
 
 interface QueryInputProps {
   onSubmitQuestion: (question: string, selectedSpread: any) => void;
@@ -32,8 +34,8 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion, closeDialog }
   };
 
   return (
-    <div className="container mx-auto flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
-      <Label htmlFor="question" className="font-serif text-xl">
+    <div className="container mx-auto mt-8 flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
+      <Label htmlFor="question" className={cn("mb-2 text-xl", tarotFont.className)}>
         What guidance are you seeking?
       </Label>
       <Textarea
@@ -41,7 +43,7 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion, closeDialog }
         name="question"
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
-        placeholder="Write about it here (or leave blank for an open reading)"
+        placeholder="Write about it here (or leave blank for an open reading)..."
         maxLength={5000}
         autoFocus
       />

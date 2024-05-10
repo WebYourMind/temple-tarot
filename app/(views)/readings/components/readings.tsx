@@ -7,6 +7,8 @@ import { useReadingsContext } from "lib/contexts/readings-context";
 import PaginationComponent from "./pagination-component";
 import LoadingSkeleton from "./loading-skeleton";
 import EmptyReadings from "./empty-readings";
+import { tarotFont } from "app/(views)/home/components/interpreter";
+import { cn } from "lib/utils";
 
 function paginate(currentPage, pageCount, delta = 2) {
   const range = [];
@@ -62,7 +64,12 @@ function Readings() {
 
   return (
     <>
-      <div className="my-16 grid max-w-4xl grid-cols-1 gap-16 font-serif md:my-20 md:grid-cols-3 lg:grid-cols-3">
+      <div
+        className={cn(
+          "my-16 grid max-w-4xl grid-cols-1 gap-16 md:my-20 md:grid-cols-3 lg:grid-cols-3",
+          tarotFont.className
+        )}
+      >
         {readings && readings.map((reading) => <ReadingItem key={reading.id} reading={reading} />)}
       </div>
       <div className="my-16">

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserById } from "lib/database/user.database";
 import { getSession } from "lib/auth";
+// import { getCustomerBalance } from "lib/stripe-credits-utils";
+import { countReadingsByUserId } from "lib/database/readings.database";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +22,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    //get user data with address from database
+    // get user data with address from database
     const user = await getUserById(parseInt(userId));
     // Check if we got a result back
     if (!user) {

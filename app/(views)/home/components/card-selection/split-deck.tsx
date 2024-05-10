@@ -1,5 +1,10 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import TarotCard from "../tarot-card";
+import { ArrowBigLeft, ArrowBigRight, ArrowLeft, ArrowRight } from "lucide-react";
+import { cn } from "lib/utils";
+import { tarotFont } from "../interpreter";
 
 function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
   const [selectedSide, setSelectedSide] = useState(null);
@@ -28,17 +33,23 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
       setTimeout(() => {
         handleSelectHalf(side);
         setSelectedSide(null);
-      }, 500);
+      }, 700);
     }
   };
+  const isMobile = window.innerWidth <= 768;
 
   return (
     <>
-      <p className="max-w-xs text-center font-serif text-xl md:mb-10">
+      <p className={cn("mb-8 max-w-xs text-center text-xl md:mb-10", tarotFont.className)}>
         The deck is split.
         <br />
         Where is your card?
       </p>
+      {/* <div className="flex w-full justify-around">
+        <ArrowBigLeft className="pulse-1" size={35} />
+        <ArrowBigRight className="pulse-2" size={35} />
+      </div> */}
+      {/* <ArrowBigLeft /> */}
       <div
         className={`flex w-full justify-between transition-opacity duration-700 ${
           allLoaded ? "opacity-100" : "opacity-0"
@@ -47,39 +58,58 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
         {["left", "right"].map((side) => (
           <div
             key={side}
-            className={`transition fade-in-0 md:mx-2 ${selectedSide && selectedSide !== side ? "opacity-0" : ""}`}
+            className={`transition duration-300 md:mx-2 ${selectedSide && selectedSide !== side ? "opacity-0" : ""}`}
           >
+            <div className="flex w-full justify-center">
+              {side === "left" ? (
+                <ArrowLeft className="pulse-1 opacity-90" size={25} />
+              ) : (
+                <ArrowRight className="pulse-2 opacity-90" size={25} />
+              )}
+            </div>
             <button
               onClick={() => handleDeckSelect(side)}
-              className="relative flex h-[200px] w-[170px] scale-50 cursor-default flex-col items-center rounded-lg transition-all duration-500 md:h-[370px] md:w-[300px] md:scale-100 md:p-0"
+              className={cn(
+                "relative flex h-[250px] w-[170px] scale-75 cursor-default flex-col items-center rounded-lg transition-all duration-500 fade-in md:h-[370px] md:w-[300px] md:scale-100 md:p-0",
+                selectedSide && selectedSide !== side ? "opacity-0" : ""
+              )}
             >
               {(side === "left" ? leftDeck : rightDeck).map((card, cardIndex) => {
                 const isSideSelected = selectedSide === side;
                 const isBottomHalf = cardIndex < (leftDeck.length - 1) / 2;
                 const defaultPosition = -leftDeck.length / 2 + cardIndex + 1;
+                const distance = isMobile ? 50 : 100;
+
+                const startFade = !isBottomHalf && isSideSelected;
 
                 const translate = `translate(${
-                  (isSideSelected ? (isBottomHalf ? -100 : 100) : 0) + defaultPosition
+                  (isSideSelected ? (isBottomHalf ? -distance : distance) : 0) + (isMobile ? 0 : defaultPosition)
                 }px, ${defaultPosition}px)`;
                 return (
                   <div
                     key={cardIndex}
-                    className={`absolute top-0 cursor-pointer transition fade-in-0 fade-out-0 md:top-8`}
+                    className={cn(`absolute top-0 cursor-pointer transition ease-in-out md:top-8`)}
                     style={{
                       transform: translate,
                       zIndex: cardIndex,
                     }}
                   >
-                    <TarotCard
-                      alt={`${cardIndex + 1}: ${card.name} ${card.orientation}`}
-                      onLoad={() => handleImageLoad(cardIndex + (side === "left" ? 0 : leftDeck.length))}
-                    />
+                    <div className={cn("transition delay-300", startFade && "opacity-0")}>
+                      <TarotCard
+                        alt={`${cardIndex + 1}: ${card.name} ${card.orientation}`}
+                        onLoad={() => handleImageLoad(cardIndex + (side === "left" ? 0 : leftDeck.length))}
+                      />
+                    </div>
                   </div>
                 );
               })}
             </button>
-            <p className="mt-5 text-center font-serif">{side.charAt(0).toUpperCase() + side.slice(1)} Deck</p>
-            <p className="text-center font-serif">{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
+            <p className={cn("text-center md:mt-5", tarotFont.className)}>
+              {side.charAt(0).toUpperCase() + side.slice(1)} Half
+            </p>
+            <p className={cn("text-center", tarotFont.className)}>
+              {side === "left" ? leftDeck.length : rightDeck.length} Cards
+            </p>
           </div>
         ))}
       </div>
