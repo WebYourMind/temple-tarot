@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import CardSelection from "./card-selection";
+import { tarotFont } from "../interpreter";
+import { cn } from "lib/utils";
 
 const ordinalLabels = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"];
 // const numberToWords = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
@@ -25,7 +27,9 @@ const CardSelectionWrapper = ({ spread, query, onSelectComplete }) => {
 
   return (
     <div>
-      <p className="text-center font-serif">{cardOrdinal.charAt(0).toUpperCase() + cardOrdinal.slice(1)} card</p>
+      <p className={cn("text-center", tarotFont.className)}>
+        {cardOrdinal.charAt(0).toUpperCase() + cardOrdinal.slice(1)} card
+      </p>
       <CardSelection onSelect={handleCardSelect} query={query} currentStep={currentStep} />
     </div>
   );

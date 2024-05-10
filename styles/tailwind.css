@@ -154,3 +154,17 @@ a {
 .animate-spin-slow {
   animation: spin 1.5s linear infinite;
 }
+
+.fade-in {
+  animation: fadeInAnimation 1s ease-in-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

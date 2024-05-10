@@ -15,7 +15,7 @@ const FeedbackButtons = ({ content }) => {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-6">
+    <div className="flex flex-col items-center space-y-6 font-sans text-sm fade-in">
       <div>
         <p className="text-center">Did this reading resonate with you?</p>
         <div className="flex justify-center space-x-2">

@@ -50,7 +50,7 @@ export default function TarotSession() {
   }
 
   return (
-    <div className="max-w-4xl p-4 md:container">
+    <div className="max-w-4xl p-4 fade-in md:container">
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         {phase === "question" && (
           <QueryInput onSubmitQuestion={handleSubmitQuestion} closeDialog={() => setOpen(false)} />
@@ -61,18 +61,7 @@ export default function TarotSession() {
         <CardSelectionWrapper onSelectComplete={handleCardSelect} query={query} spread={spreadType} />
       )}
       {phase === "reading" && selectedCards && (
-        <>
-          <Interpreter query={query} cards={selectedCards} spread={spreadType} />
-          <div className="my-10 flex justify-center">
-            <Button
-              variant={"ghost"}
-              className="flex h-14 w-14 items-center justify-center rounded-full hover:text-primary"
-              onClick={handleReset}
-            >
-              <IconClose className="h-20 w-20" />
-            </Button>
-          </div>
-        </>
+        <Interpreter query={query} cards={selectedCards} spread={spreadType} handleReset={handleReset} />
       )}
     </div>
   );
