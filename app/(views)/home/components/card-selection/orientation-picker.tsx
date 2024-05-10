@@ -1,7 +1,6 @@
 import { Button } from "components/ui/button";
 import Card from "../tarot-card";
-import { IconRotate } from "components/ui/icons";
-import { ArrowBigDown, ArrowBigUp, ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import { tarotFont } from "../interpreter";
 import { cn } from "lib/utils";
 
@@ -24,9 +23,6 @@ function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
                 finalCard.orientation === "upright" ? "rotate-0" : "rotate-180"
               } transition-transform duration-700`}
             />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <IconRotate className="h-6 w-6 text-white" />
-            </div>
           </div>
         </button>
         <button onClick={switchOrientation}>
@@ -35,7 +31,7 @@ function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
       </div>
       <div className="mt-4 flex w-full justify-around">
         <Button variant="default" className="w-1/3" onClick={switchOrientation}>
-          Rotate
+          Switch
         </Button>
         <Button variant="outline" className="w-1/3" onClick={() => onSubmit(finalCard.name, finalCard.orientation)}>
           Confirm
