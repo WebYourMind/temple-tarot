@@ -180,6 +180,6 @@ a {
   left: 0;
   right: 0;
   height: 50px;
-  background: linear-gradient(to bottom, transparent, white);
+  background: linear-gradient(to bottom, transparent, var(--color-background));
   pointer-events: none;
 }
