@@ -1,20 +1,25 @@
-"use client";
-
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import "./cards.css";
 import { SelectedCardType } from "./tarot-session";
-import { ReadingTemplate } from "app/(views)/readings/[id]/reading";
 import Loading from "components/loading";
 import { useCredits } from "lib/contexts/credit-context";
+import FeedbackButtons from "./reading-feedback";
+import { Button } from "components/ui/button";
+import { IconClose } from "components/ui/icons";
+import { Baskervville } from "next/font/google";
+import { cn } from "lib/utils";
+
+export const tarotFont = Baskervville({ weight: ["400"], subsets: ["latin"] });
 
 export interface InterpreterProps extends React.ComponentProps<"div"> {
   query: string;
   cards: SelectedCardType[];
   spread: { name: string; value: string; description: string; numberOfCards: number; cardMeanings: string[] };
+  handleReset: () => void;
 }
 
-export function Interpreter({ query, cards, spread }: InterpreterProps) {
+export function Interpreter({ query, cards, spread, handleReset }: InterpreterProps) {
   const { fetchCreditBalance } = useCredits();
   const [reading, setReading] = useState({
     userQuery: query,
@@ -24,6 +29,7 @@ export function Interpreter({ query, cards, spread }: InterpreterProps) {
     spreadType: spread.name,
     aiInterpretation: "",
   });
+  const [isComplete, setIsComplete] = useState(false);
 
   const generateReading = useCallback(async (content) => {
     let isSubscribed = true;
@@ -48,7 +54,7 @@ export function Interpreter({ query, cards, spread }: InterpreterProps) {
         const { done, value } = await reader.read();
 
         if (done) {
-          // setIsGenerating(false);
+          setIsComplete(true);
           fetchCreditBalance();
           break;
         }
@@ -88,11 +94,58 @@ export function Interpreter({ query, cards, spread }: InterpreterProps) {
       content += `Seeker's query: ${query}\n\n`;
     }
     content += `Chosen spread: ${spread.name}\n\nCards drawn with their positions in the spread: ${cardDescriptions}`;
-    generateReading(content);
-  }, []);
 
-  if (reading) {
-    return <ReadingTemplate reading={reading} />;
+    if (!reading.aiInterpretation) {
+      generateReading(content);
+    }
+  }, [query, cards, spread]);
+
+  if (reading.aiInterpretation) {
+    return (
+      <div className={cn("mx-auto max-w-2xl md:pb-16 md:pt-16", tarotFont.className)}>
+        <div className="flex flex-col space-y-4 py-6 text-xs fade-in md:text-sm">
+          <div className="opacity-70">
+            <p>{new Date(reading.createdAt).toLocaleDateString()}</p>
+          </div>
+          <div className="text-sm italic">
+            <p>{reading?.userQuery || "Open Reading"}</p>
+          </div>
+          <div>
+            <h3 className="text-xs font-bold">Cards:</h3>
+            {reading.cards.map((card, index) => (
+              <p key={card.cardName} className="mb-1">
+                {index + 1}. {card.cardName} ({card.orientation.charAt(0).toUpperCase() + card.orientation.slice(1)})
+              </p>
+            ))}
+          </div>
+        </div>
+        <div
+          className={cn(
+            "fade-in-text prose prose-sm prose-indigo mx-auto my-8 mb-20 w-full max-w-full py-6 leading-relaxed text-foreground md:prose-lg md:text-lg",
+            tarotFont.className
+          )}
+        >
+          {/* formatted like a letter */}
+          {reading.aiInterpretation.split(" ").map((word, index) => (
+            <span key={index} className="whitespace-pre-wrap" style={{ opacity: 0 }}>
+              {word}{" "}
+            </span>
+          ))}
+        </div>
+        {isComplete && <FeedbackButtons content={reading.aiInterpretation} />}
+        {isComplete && (
+          <div className="mt-10 flex justify-center fade-in">
+            <Button
+              variant="ghost"
+              className="flex h-14 w-14 items-center justify-center rounded-full hover:text-primary"
+              onClick={handleReset}
+            >
+              <IconClose className="h-20 w-20" />
+            </Button>
+          </div>
+        )}
+      </div>
+    );
   }
   return <Loading />;
 }

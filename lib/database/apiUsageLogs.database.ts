@@ -14,7 +14,7 @@ export async function rateLimitReached(userId) {
         `;
 
     if (rows[0].request_count > 22) {
-      // Limit of 50 requests per day
+      // Limit of 22 requests per day
       return true;
     }
     return false;

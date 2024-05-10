@@ -24,7 +24,7 @@ export default function Card({ className = "", alt, onLoad = null, width = 200, 
       )}
     >
       <Image
-        className={`rounded-lg shadow-md`}
+        className={`rounded-lg md:shadow-md`}
         src={TarotBack}
         alt={alt || "Tarot Card"}
         width={width | 200}

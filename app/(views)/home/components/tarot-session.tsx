@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import QueryInput from "./query-input";
-import { Button } from "components/ui/button";
 import { Interpreter } from "./interpreter";
-import { IconClose } from "components/ui/icons";
 import CardSelectionWrapper from "./card-selection/card-selection-wrapper";
 import { track } from "@vercel/analytics/react";
 import { useSession } from "next-auth/react";
 import { Dialog } from "@radix-ui/react-dialog";
+import { DialogTrigger } from "components/ui/dialog";
+import { Info } from "lucide-react";
+import { infoMap } from "./info";
+import InfoDialog from "./info-dialog";
 
 export type SelectedCardType = {
   cardName: string;
@@ -17,16 +19,19 @@ export type SelectedCardType = {
 
 export default function TarotSession() {
   const [query, setQuery] = useState<string | null>(null);
+  const [showInfo, setShowInfo] = useState(false);
+  const [infoContent, setInfoContent] = useState(infoMap["question"]);
+  const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
   const [open, setOpen] = useState(false);
   const [selectedCards, setSelectedCards] = useState<SelectedCardType[]>();
   const [spreadType, setSpreadType] = useState<any>(); // To store the selected spread type
-  const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
   const { data: session } = useSession() as { data: { user: { id: string } } };
 
   function handleSubmitQuestion(question = "", spread) {
     setQuery(question);
     setSpreadType(spread);
     setPhase("cards");
+    setInfoContent(infoMap["cards"]);
   }
 
   function handleCardSelect(selectedCards) {
@@ -43,6 +48,18 @@ export default function TarotSession() {
     }
   }, [selectedCards, query]);
 
+  useEffect(() => {
+    const phaseKey = `hasSeenInfo-${phase}`;
+    const hasSeenInfo = localStorage.getItem(phaseKey);
+
+    // If it's the user's first time in this phase, show the info dialog
+    setInfoContent(infoMap[phase] || infoMap["question"]);
+    if (!hasSeenInfo && (phase === "cards" || phase === "question")) {
+      setShowInfo(true);
+      localStorage.setItem(phaseKey, "true"); // Mark this phase as seen
+    }
+  }, [phase]);
+
   function handleReset() {
     setPhase("question");
     setSelectedCards(null);
@@ -50,30 +67,27 @@ export default function TarotSession() {
   }
 
   return (
-    <div className="max-w-4xl p-4 md:container">
-      <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-        {phase === "question" && (
-          <QueryInput onSubmitQuestion={handleSubmitQuestion} closeDialog={() => setOpen(false)} />
+    <div className="max-w-4xl p-4 fade-in md:container">
+      <Dialog open={showInfo} onOpenChange={() => setShowInfo(!showInfo)}>
+        <div className="flex w-full justify-end">
+          <DialogTrigger className="opacity-50">
+            <Info />
+          </DialogTrigger>
+        </div>
+        <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+          {phase === "question" && (
+            <QueryInput onSubmitQuestion={handleSubmitQuestion} closeDialog={() => setOpen(false)} />
+          )}
+        </Dialog>
+        {/* {phase === "spread" && <SpreadSelection onSpreadSelect={handleSpreadSelect} />} */}
+        {phase === "cards" && (
+          <CardSelectionWrapper onSelectComplete={handleCardSelect} query={query} spread={spreadType} />
         )}
+        {phase === "reading" && selectedCards && (
+          <Interpreter query={query} cards={selectedCards} spread={spreadType} handleReset={handleReset} />
+        )}
+        <InfoDialog closeDialog={() => setShowInfo(false)} infoContent={infoContent} />
       </Dialog>
-      {/* {phase === "spread" && <SpreadSelection onSpreadSelect={handleSpreadSelect} />} */}
-      {phase === "cards" && (
-        <CardSelectionWrapper onSelectComplete={handleCardSelect} query={query} spread={spreadType} />
-      )}
-      {phase === "reading" && selectedCards && (
-        <>
-          <Interpreter query={query} cards={selectedCards} spread={spreadType} />
-          <div className="my-10 flex justify-center">
-            <Button
-              variant={"ghost"}
-              className="flex h-14 w-14 items-center justify-center rounded-full hover:text-primary"
-              onClick={handleReset}
-            >
-              <IconClose className="h-20 w-20" />
-            </Button>
-          </div>
-        </>
-      )}
     </div>
   );
 }

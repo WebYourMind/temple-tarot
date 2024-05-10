@@ -49,7 +49,7 @@
 }
 
 /* Base pulse animation */
-@keyframes pulse {
+@keyframes pulse-size {
   0%,
   100% {
     transform: scale(1);
@@ -61,12 +61,26 @@
 
 /* Pulse animation for Component 1 */
 .pulse-1 {
-  animation: pulse 2s ease-in-out infinite;
+  animation: pulse-size 2s ease-in-out infinite;
   animation-delay: 0s;
 }
 
 /* Pulse animation for Component 2 */
 .pulse-2 {
-  animation: pulse 2s ease-in-out infinite;
+  animation: pulse-size 2s ease-in-out infinite;
   animation-delay: 1s;
+}
+
+.fade-in-text span {
+  animation: fadeIn 0.5s forwards;
+  animation-delay: calc(0.1s * var(--index));
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

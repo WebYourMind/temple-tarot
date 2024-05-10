@@ -13,6 +13,8 @@ import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CreditBalance } from "./credit-balance";
+import { cn } from "lib/utils";
+import { tarotFont } from "app/(views)/home/components/interpreter";
 
 export default function Header() {
   const { data: session, status, update } = useSession() as any;
@@ -51,7 +53,7 @@ export default function Header() {
           </Sidebar>
         ) : (
           <Link href="/" className="mr-2 hover:no-underline">
-            <h3 className="mt-0 text-lg text-foreground">{appConfig.appName}</h3>
+            <h3 className={cn("mt-0 text-lg text-foreground", tarotFont.className)}>{appConfig.appName}</h3>
           </Link>
         )}
         {status !== "loading" && (

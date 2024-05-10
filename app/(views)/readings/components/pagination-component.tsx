@@ -18,7 +18,7 @@ function PaginationComponent({ pages, page, totalPages, onPaginate }) {
 
         {/* Dynamically generated page numbers */}
         {pages.map((p, index) => (
-          <PaginationItem key={index}>
+          <PaginationItem key={index} className="hidden md:block">
             {p === "..." ? (
               <PaginationEllipsis />
             ) : (
