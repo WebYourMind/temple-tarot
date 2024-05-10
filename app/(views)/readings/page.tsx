@@ -6,7 +6,7 @@ import Loading from "components/loading";
 import { Baskervville } from "next/font/google";
 import { cn } from "lib/utils";
 
-export const tarotFont = Baskervville({ weight: ["400"], subsets: ["latin"] });
+const tarotFont = Baskervville({ weight: ["400"], subsets: ["latin"] });
 
 const Readings = dynamic(() => import("./components/readings"), {
   loading: () => <Loading />,
