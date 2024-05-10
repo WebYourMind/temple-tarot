@@ -27,9 +27,7 @@ const CardSelectionWrapper = ({ spread, query, onSelectComplete }) => {
 
   return (
     <div>
-      <p className={cn("text-center", tarotFont.className)}>
-        {cardOrdinal.charAt(0).toUpperCase() + cardOrdinal.slice(1)} card
-      </p>
+      <p className="text-center text-xs uppercase">{cardOrdinal} card</p>
       <CardSelection onSelect={handleCardSelect} query={query} currentStep={currentStep} />
     </div>
   );

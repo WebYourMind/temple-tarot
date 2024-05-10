@@ -30,8 +30,8 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion, closeDialog }
   };
 
   return (
-    <div className="container mx-auto flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
-      <Label htmlFor="question" className={cn("text-xl", tarotFont.className)}>
+    <div className="container mx-auto mt-8 flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
+      <Label htmlFor="question" className={cn("mb-2 text-xl", tarotFont.className)}>
         What guidance are you seeking?
       </Label>
       <Textarea

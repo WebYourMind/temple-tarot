@@ -40,7 +40,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
 
   return (
     <>
-      <p className={cn("max-w-xs text-center text-xl md:mb-10", tarotFont.className)}>
+      <p className={cn("mb-8 max-w-xs text-center text-xl md:mb-10", tarotFont.className)}>
         The deck is split.
         <br />
         Where is your card?
@@ -69,7 +69,10 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
             </div>
             <button
               onClick={() => handleDeckSelect(side)}
-              className="relative flex h-[250px] w-[170px] scale-75 cursor-default flex-col items-center rounded-lg transition-all duration-500 fade-in md:h-[370px] md:w-[300px] md:scale-100 md:p-0"
+              className={cn(
+                "relative flex h-[250px] w-[170px] scale-75 cursor-default flex-col items-center rounded-lg transition-all duration-500 fade-in md:h-[370px] md:w-[300px] md:scale-100 md:p-0",
+                selectedSide && selectedSide !== side ? "opacity-0" : ""
+              )}
             >
               {(side === "left" ? leftDeck : rightDeck).map((card, cardIndex) => {
                 const isSideSelected = selectedSide === side;
