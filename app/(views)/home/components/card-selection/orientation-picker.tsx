@@ -1,7 +1,7 @@
 import { Button } from "components/ui/button";
 import Card from "../tarot-card";
 import { IconRotate } from "components/ui/icons";
-import { ArrowBigDown, ArrowBigUp } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, ArrowDown, ArrowUp } from "lucide-react";
 import { tarotFont } from "../interpreter";
 import { cn } from "lib/utils";
 
@@ -14,7 +14,7 @@ function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
       </p>
       <div className="flex items-center">
         <button onClick={switchOrientation}>
-          <ArrowBigUp className="pulse-1 opacity-90" size={35} />
+          <ArrowUp className="pulse-1 opacity-90" size={25} />
         </button>
         <button onClick={switchOrientation} className="mt-4 p-4">
           <div className="relative">
@@ -30,7 +30,7 @@ function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
           </div>
         </button>
         <button onClick={switchOrientation}>
-          <ArrowBigDown className="pulse-2 opacity-90" size={35} />
+          <ArrowDown className="pulse-2 opacity-90" size={25} />
         </button>
       </div>
       <div className="mt-4 flex w-full justify-around">

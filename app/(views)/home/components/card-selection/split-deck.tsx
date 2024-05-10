@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import TarotCard from "../tarot-card";
-import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
+import { ArrowBigLeft, ArrowBigRight, ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "lib/utils";
 import { tarotFont } from "../interpreter";
 
@@ -60,11 +60,11 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
             key={side}
             className={`transition duration-300 md:mx-2 ${selectedSide && selectedSide !== side ? "opacity-0" : ""}`}
           >
-            <div className="pulse flex w-full justify-center">
+            <div className="flex w-full justify-center">
               {side === "left" ? (
-                <ArrowBigLeft className="pulse-1 opacity-90" size={35} />
+                <ArrowLeft className="pulse-1 opacity-90" size={25} />
               ) : (
-                <ArrowBigRight className="pulse-2 opacity-90" size={35} />
+                <ArrowRight className="pulse-2 opacity-90" size={25} />
               )}
             </div>
             <button
