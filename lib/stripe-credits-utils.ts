@@ -172,7 +172,7 @@ export async function logCreditEvent(userId: number, credits: number, eventType:
   `;
 }
 
-export async function useCredits(userId, amount) {
+export async function spendCredits(userId, amount) {
   const user =
     await sql`SELECT is_subscribed, subscription_credits, additional_credits FROM users WHERE id = ${userId}`;
 

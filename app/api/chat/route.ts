@@ -7,7 +7,7 @@ import { chatTemplateNoStyles } from "lib/templates/chat.templates";
 import { getSession } from "lib/auth";
 import { Reading, addReadingWithCards } from "lib/database/readings.database";
 import { CardInReading } from "lib/database/cardsInReadings.database";
-import { useCredits } from "lib/stripe-credits-utils";
+import { spendCredits } from "lib/stripe-credits-utils";
 
 export const runtime = "nodejs";
 
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
   try {
     // Deduct one credit
-    const { newSubCredits, newAddCredits } = await useCredits(user.id, 1);
+    const { newSubCredits, newAddCredits } = await spendCredits(user.id, 1);
     console.log("Credits remaining:", { newSubCredits, newAddCredits });
   } catch (error: any) {
     console.error("Error using credits:", error);
