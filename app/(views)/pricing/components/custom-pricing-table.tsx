@@ -63,7 +63,7 @@ const Section: React.FC<{
 }> = ({ title, plans, handleSelectPlan }) => (
   <section>
     <h2 className="mb-4 text-2xl font-bold">{title}</h2>
-    <div className="flex justify-center">
+    <div className="flex justify-center pb-16">
       {plans.map((plan) => (
         <div key={plan.id} className="rounded-md p-8 md:w-1/3">
           <h3 className="mb-4 text-xl font-bold">{plan.productName}</h3>
