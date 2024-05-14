@@ -8,7 +8,7 @@ import {
   resetSubscriptionCredits,
   updateUserAdditionalCredits,
   updateUserSubscriptionStatus,
-} from "lib/stripe-credits-utils";
+} from "app/(ai-payments)/api/stripe-credits/utils/stripe-credits-utils";
 import { getUserIdByEmail } from "lib/database/user.database";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -17,8 +17,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 
 export async function POST(request: Request) {
   const sig = request.headers.get("stripe-signature");
-  if (!sig) return NextResponse.json({ message: "Missing Stripe signature.", status: 400 });
-  if (!request.body) return NextResponse.json({ message: "Missing request body.", status: 400 });
+  if (!sig) {
+    console.error("Missing Stripe signature.");
+    return NextResponse.json({ message: "Missing Stripe signature.", status: 400 });
+  }
+  if (!request.body) {
+    console.error("Missing request body.");
+    return NextResponse.json({ message: "Missing request body.", status: 400 });
+  }
 
   const rawBody = await streamToString(request.body);
   let event;
@@ -26,6 +32,7 @@ export async function POST(request: Request) {
   try {
     event = stripe.webhooks.constructEvent(rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (error: any) {
+    console.error(`Webhook signature verification failed: ${error.message}`);
     return NextResponse.json({ message: `Webhook signature verification failed: ${error.message}`, status: 400 });
   }
 
@@ -39,9 +46,11 @@ export async function POST(request: Request) {
       case "customer.subscription.deleted":
         return await handleSubscriptionUpdated(event);
       default:
-        return NextResponse.json({ message: "Unhandled event type" }, { status: 400 });
+        console.error(`Unhandled event type: ${event.type}`);
+        return NextResponse.json({ message: `Unhandled event type: ${event.type}` }, { status: 400 });
     }
   } catch (error: any) {
+    console.error(`Webhook Error: ${error.message}`);
     return NextResponse.json({ message: `Webhook Error: ${error.message}` }, { status: 400 });
   }
 }
@@ -54,7 +63,10 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
     return NextResponse.json({ message: "Email is required but was not provided." }, { status: 400 });
   }
 
-  const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+  const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+    expand: ["data.price.product"], // Ensure products are fully expanded to access metadata
+  });
+
   if (lineItems.data.length === 0) {
     return NextResponse.json({ message: "No line items found." }, { status: 400 });
   }

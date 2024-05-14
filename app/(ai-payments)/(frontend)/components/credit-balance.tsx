@@ -1,7 +1,7 @@
 "use client";
 
 import { StarIcon } from "@radix-ui/react-icons";
-import { useCredits } from "lib/contexts/credit-context";
+import { useCredits } from "app/(ai-payments)/(frontend)/contexts/credit-context";
 
 export function CreditBalance() {
   const { credits, isLoading } = useCredits();

@@ -26,7 +26,7 @@ const fetchPlans = async () => {
   }
 };
 
-const CustomPricingTable: React.FC = () => {
+const Pricing: React.FC = () => {
   const [plans, setPlans] = useState<SimplifiedPrice[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -42,16 +42,18 @@ const CustomPricingTable: React.FC = () => {
   const oneTimeProducts = useMemo(() => plans.filter((plan) => plan.type === "one_time"), [plans]);
 
   const handleSelectPlan = (priceId: string, type: string, isSubscribed: boolean) => {
-    const path = `/pricing/checkout?product=${priceId}${type === "recurring" ? "&mode=subscription" : ""}`;
-    router.push(isSubscribed ? "/pricing/manage" : path);
+    const path = `/checkout?product=${priceId}${type === "recurring" ? "&mode=subscription" : ""}`;
+    router.push(isSubscribed ? "/manage-subscription" : path);
   };
 
   if (loading) return <Loading />;
 
   return (
-    <div className="container w-full max-w-5xl justify-center md:flex md:flex-col">
-      <Section title="Subscriptions" plans={subscriptions} handleSelectPlan={handleSelectPlan} />
-      <Section title="One-Time Purchases" plans={oneTimeProducts} handleSelectPlan={handleSelectPlan} />
+    <div className="min-h-screen pt-8 md:pt-16">
+      <div className="container w-full max-w-5xl justify-center md:flex md:flex-col">
+        <Section title="Subscriptions" plans={subscriptions} handleSelectPlan={handleSelectPlan} />
+        <Section title="One-Time Purchases" plans={oneTimeProducts} handleSelectPlan={handleSelectPlan} />
+      </div>
     </div>
   );
 };
@@ -89,4 +91,4 @@ const Section: React.FC<{
   </section>
 );
 
-export default CustomPricingTable;
+export default Pricing;

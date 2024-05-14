@@ -3,7 +3,7 @@
 import { EyeOpenIcon, MagicWandIcon, PersonIcon } from "@radix-ui/react-icons";
 import { SidebarItem } from "./sidebar-item";
 import { LumenBalance } from "./lumen-balance";
-import { CreditBalance } from "./credit-balance";
+import { CreditBalance } from "../../app/(ai-payments)/(frontend)/components/credit-balance";
 import { IconPlus } from "components/ui/icons";
 import { useSession } from "next-auth/react";
 

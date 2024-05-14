@@ -66,23 +66,25 @@ export default function PurchaseConfirmation() {
 
   if (status === "complete") {
     return (
-      <div className="container mx-auto max-w-4xl">
-        <section id="success">
-          <Card className="py-8">
-            <>
-              <h1 className="mb-6 text-3xl font-bold">Thank you!</h1>
-              <p>You are now subscribed to Temple Tarot.</p>
-              <div className="space-x-2">
-                <Link className={cn(buttonVariants(), "mt-5")} href={"/"}>
-                  Go to Tarot
-                </Link>
-                <Button variant="outline" onClick={manageSubscription}>
-                  Manage Subscription
-                </Button>
-              </div>
-            </>
-          </Card>
-        </section>
+      <div className="min-h-screen pt-8 md:pt-16">
+        <div className="container mx-auto max-w-4xl">
+          <section id="success">
+            <Card className="py-8">
+              <>
+                <h1 className="mb-6 text-3xl font-bold">Thank you!</h1>
+                <p>We appreciate your business and wish you good fortune on your journey ahead.</p>
+                <div className="space-x-2">
+                  <Link className={cn(buttonVariants(), "mt-5")} href={"/"}>
+                    Go to Tarot
+                  </Link>
+                  <Button variant="outline" onClick={manageSubscription}>
+                    Manage Subscription
+                  </Button>
+                </div>
+              </>
+            </Card>
+          </section>
+        </div>
       </div>
     );
   }

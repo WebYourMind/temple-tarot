@@ -12,7 +12,7 @@ import appConfig from "app.config";
 import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { CreditBalance } from "./credit-balance";
+import { CreditBalance } from "../../app/(ai-payments)/(frontend)/components/credit-balance";
 import { LumenBalance } from "./lumen-balance";
 import { cn } from "lib/utils";
 import { tarotFont } from "app/(views)/home/components/interpreter";

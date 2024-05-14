@@ -79,6 +79,14 @@ CREATE TABLE subscription_events (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE TABLE credit_events (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    credits INTEGER,
+    event_type VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 ALTER TABLE users
 ADD COLUMN subscription_credits INTEGER DEFAULT 0,
 ADD COLUMN additional_credits INTEGER DEFAULT 0;

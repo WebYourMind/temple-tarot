@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import "./cards.css";
 import { SelectedCardType } from "./tarot-session";
 import Loading from "components/loading";
-import { useCredits } from "lib/contexts/credit-context";
+import { useCredits } from "app/(ai-payments)/(frontend)/contexts/credit-context";
 import { useLumens } from "lib/contexts/lumen-context";
 import FeedbackButtons from "./reading-feedback";
 import { Button } from "components/ui/button";

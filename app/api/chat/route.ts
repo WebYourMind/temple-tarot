@@ -7,7 +7,7 @@ import { chatTemplateNoStyles } from "lib/templates/chat.templates";
 import { getSession } from "lib/auth";
 import { Reading, addReadingWithCards } from "lib/database/readings.database";
 import { CardInReading } from "lib/database/cardsInReadings.database";
-import { spendCredits } from "lib/stripe-credits-utils";
+import { spendCredits } from "app/(ai-payments)/api/stripe-credits/utils/stripe-credits-utils";
 
 export const runtime = "nodejs";
 

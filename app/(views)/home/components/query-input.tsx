@@ -5,7 +5,7 @@ import { Textarea } from "components/ui/textarea";
 import React, { useState } from "react";
 import { SpreadSelector } from "./spread-selector";
 import tarotSpreads from "./tarot-spreads";
-import { useCredits } from "lib/contexts/credit-context";
+import { useCredits } from "app/(ai-payments)/(frontend)/contexts/credit-context";
 import { useRouter } from "next/navigation";
 import { tarotFont } from "./interpreter";
 import { cn } from "lib/utils";

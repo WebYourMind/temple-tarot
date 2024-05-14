@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       ],
       mode: mode || "payment",
       // @ts-ignore
-      return_url: `${origin}/pricing/purchase-confirmation?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${origin}/purchase-confirmation?session_id={CHECKOUT_SESSION_ID}`,
       ...(customerId ? { customer: customerId } : {}),
       ...(email ? { customer_email: email } : {}),
     });

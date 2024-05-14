@@ -42,65 +42,6 @@ export async function getCustomerEmail(customerId) {
   }
 }
 
-// export async function getCustomerBalance(email: string) {
-//   const customer = await findCustomerByEmail(email);
-
-//   if (!customer) {
-//     return 0;
-//   }
-
-//   return parseInt(customer.metadata.credit_balance) || 0;
-// }
-
-// export async function createCustomerWithCredits(
-//   email: string,
-//   totalCreditsPurchased: number
-// ): Promise<Stripe.Customer | null> {
-//   return handleStripeAction(
-//     stripe.customers.create({
-//       email,
-//       metadata: { credit_balance: totalCreditsPurchased.toString() },
-//     })
-//   );
-// }
-
-// export async function updateCreditsByEmail(
-//   email: string,
-//   totalCreditsPurchased: number
-// ): Promise<Stripe.Customer | null> {
-//   let customer = await findCustomerByEmail(email);
-//   console.log("Attempting to add credit amount of ", totalCreditsPurchased);
-
-//   if (!customer) {
-//     console.log("Creating new customer as no existing customer found with email:", email);
-//     customer = await createCustomerWithCredits(email, totalCreditsPurchased);
-//     if (!customer) {
-//       console.error("Failed to create a new customer with email:", email);
-//       return null; // Handling the case where customer creation fails
-//     }
-//     console.log("New customer created with ID:", customer.id);
-//   } else {
-//     console.log("Updating credit balance for customer with email:", email);
-//     const existingCreditBalance = parseInt(customer.metadata.credit_balance || "0", 10);
-//     const newCreditBalance = (!isNaN(existingCreditBalance) ? existingCreditBalance : 0) + totalCreditsPurchased;
-
-//     customer = await handleStripeAction(
-//       stripe.customers.update(customer.id, {
-//         metadata: { credit_balance: newCreditBalance.toString() },
-//       })
-//     );
-
-//     if (!customer) {
-//       console.error("Failed to update credits for customer with email:", email);
-//       return null; // Handling the case where customer update fails
-//     }
-
-//     console.log("Customer updated with new credit balance:", customer.metadata.credit_balance);
-//   }
-
-//   return customer;
-// }
-
 export async function updateUserSubscriptionStatus(
   email: string,
   isActive: boolean,
