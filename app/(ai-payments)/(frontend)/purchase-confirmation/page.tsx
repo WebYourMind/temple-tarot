@@ -4,10 +4,9 @@ import React, { useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 import Card from "components/card";
 import Link from "next/link";
-import { Button, buttonVariants } from "components/ui/button";
+import { buttonVariants } from "components/ui/button";
 import { cn } from "lib/utils";
 import { useSession } from "next-auth/react";
-import { manageSubscription } from "components/navigation/user-menu";
 
 export default function PurchaseConfirmation() {
   const { update } = useSession() as any;
@@ -52,9 +51,6 @@ export default function PurchaseConfirmation() {
                   <Link className={cn(buttonVariants(), "mt-5")} href={"/"}>
                     Go to Tarot
                   </Link>
-                  <Button variant="outline" onClick={manageSubscription}>
-                    Manage Subscription
-                  </Button>
                 </div>
               </>
             </Card>
