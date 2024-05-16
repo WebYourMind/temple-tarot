@@ -86,8 +86,8 @@ const Pricing: React.FC = () => {
         <header className="mb-16 text-center">
           <h1 className="mb-4 text-4xl font-bold">Pricing</h1>
           <p className="mb-6 text-lg opacity-70">
-            Discover our flexible pricing options designed to meet your needs. Whether you're looking for a monthly
-            subscription or just a few extra credits, we've got you covered.
+            Discover our flexible pricing options designed to meet your needs. Whether you&apos;re looking for a monthly
+            subscription or just a few extra credits, we&apos;ve got you covered.
           </p>
         </header>
         {subscriptions.length > 0 && (
