@@ -150,3 +150,17 @@ export async function spendCredits(userId, amount) {
 
   return { newSubCredits, newAddCredits };
 }
+
+export async function getUserSubscription(stripeCustomerId: string) {
+  try {
+    const subscriptions = await stripe.subscriptions.list({
+      customer: stripeCustomerId,
+      status: "active",
+      expand: ["data.items.data.price"],
+    });
+    return subscriptions.data[0]; // Assuming the user has only one active subscription
+  } catch (error) {
+    console.error("Failed to fetch user subscription:", error);
+    throw new Error("Failed to fetch user subscription");
+  }
+}

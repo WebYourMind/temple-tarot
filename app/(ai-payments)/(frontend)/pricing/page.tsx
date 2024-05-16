@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "components/ui/button";
 import Loading from "components/loading";
 import Faq from "./faq";
+import { manageSubscription } from "components/navigation/user-menu";
 
 interface SimplifiedPrice {
   id: string;
@@ -43,9 +44,13 @@ const Pricing: React.FC = () => {
   const subscriptions = useMemo(() => plans.filter((plan) => plan.type === "recurring"), [plans]);
   const oneTimeProducts = useMemo(() => plans.filter((plan) => plan.type === "one_time"), [plans]);
 
-  const handleSelectPlan = (priceId: string, type: string, isSubscribed: boolean) => {
+  const handleSelectPlan = async (priceId: string, type: string, isSubscribed: boolean) => {
     const path = `/checkout?product=${priceId}${type === "recurring" ? "&mode=subscription" : ""}`;
-    router.push(isSubscribed ? "/manage-subscription" : path);
+    if (!isSubscribed) {
+      router.push(path);
+    } else {
+      await manageSubscription();
+    }
   };
 
   if (loading) return <Loading />;

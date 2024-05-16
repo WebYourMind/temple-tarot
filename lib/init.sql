@@ -22,6 +22,7 @@ CREATE TABLE users (
     is_subscribed BOOLEAN DEFAULT FALSE,
     subscription_id VARCHAR(255),
     subscription_status VARCHAR(50)
+    stripe_customer_id VARCHAR(255)
 );
 
 -- Create the rest of the tables as before
