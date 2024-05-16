@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "components/ui/button";
 import Loading from "components/loading";
-import { useRouter } from "next/navigation";
+import Faq from "./faq";
 
 interface SimplifiedPrice {
   id: string;
@@ -15,11 +16,12 @@ interface SimplifiedPrice {
   isSubscribed: boolean;
 }
 
-const fetchPlans = async () => {
+const fetchPlans = async (): Promise<SimplifiedPrice[]> => {
   try {
     const response = await fetch("/api/stripe-credits/pricing");
     if (!response.ok) throw new Error("Failed to fetch plans.");
-    return response.json() as Promise<SimplifiedPrice[]>;
+    // @ts-ignore
+    return response.json();
   } catch (error) {
     console.error("Fetching plans failed:", error);
     return [];
@@ -50,9 +52,21 @@ const Pricing: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-8 md:pt-16">
-      <div className="container w-full max-w-5xl justify-center md:flex md:flex-col">
-        <Section title="Subscriptions" plans={subscriptions} handleSelectPlan={handleSelectPlan} />
-        <Section title="One-Time Purchases" plans={oneTimeProducts} handleSelectPlan={handleSelectPlan} />
+      <div className="container mx-auto w-full max-w-5xl">
+        <header className="mb-16 text-center">
+          <h1 className="mb-4 text-4xl font-bold">Pricing</h1>
+          <p className="mb-6 text-lg opacity-70">
+            Discover our flexible pricing options designed to meet your needs. Whether you're looking for a monthly
+            subscription or just a few extra credits, we've got you covered.
+          </p>
+        </header>
+        {subscriptions.length > 0 && (
+          <Section title="Subscriptions" plans={subscriptions} handleSelectPlan={handleSelectPlan} />
+        )}
+        {oneTimeProducts.length > 0 && (
+          <Section title="One-Time Purchases" plans={oneTimeProducts} handleSelectPlan={handleSelectPlan} />
+        )}
+        <Faq />
       </div>
     </div>
   );
@@ -63,11 +77,11 @@ const Section: React.FC<{
   plans: SimplifiedPrice[];
   handleSelectPlan: (priceId: string, type: string, isSubscribed: boolean) => void;
 }> = ({ title, plans, handleSelectPlan }) => (
-  <section>
-    <h2 className="mb-4 text-2xl font-bold">{title}</h2>
-    <div className="flex justify-center pb-16">
+  <section className="mb-16">
+    <h2 className="mb-8 text-center text-3xl font-semibold">{title}</h2>
+    <div className="flex flex-col space-y-8 md:flex-row md:justify-center md:space-x-8 md:space-y-0">
       {plans.map((plan) => (
-        <div key={plan.id} className="rounded-md p-8 md:w-1/3">
+        <div key={plan.id} className="rounded-md p-8 shadow-lg md:w-1/3">
           <h3 className="mb-4 text-xl font-bold">{plan.productName}</h3>
           <p className="text-sm opacity-70">{plan.productDescription}</p>
           <p className="my-6 text-4xl font-bold">
