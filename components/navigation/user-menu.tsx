@@ -15,7 +15,7 @@ import {
 } from "components/ui/dropdown-menu";
 import { UserProfile } from "lib/types";
 import { IconUser } from "components/ui/icons";
-import { manageSubscription } from "app/(ai-payments)/(frontend)/pricing/page";
+import { manageSubscription } from "app/(ai-payments)/(frontend)/utils";
 // import toast from "react-hot-toast";
 
 export interface UserMenuProps {

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "components/ui/button";
 import Loading from "components/loading";
 import Faq from "./faq";
+import { manageSubscription } from "../utils";
 
 interface SimplifiedPrice {
   id: string;
@@ -27,32 +28,6 @@ const fetchPlans = async (): Promise<SimplifiedPrice[]> => {
     return [];
   }
 };
-
-export async function manageSubscription() {
-  try {
-    const response = await fetch("/api/stripe-credits/create-portal-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to create billing portal session");
-    }
-
-    const data = await response.json();
-    if (response.ok) {
-      // @ts-ignore
-      window.location.href = data.url; // Redirect user to the Stripe portal
-    } else {
-      // @ts-ignore
-      throw new Error(data.message || "Failed to initiate billing portal session");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
 
 const Pricing: React.FC = () => {
   const [plans, setPlans] = useState<SimplifiedPrice[]>([]);
