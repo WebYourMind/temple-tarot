@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   const userId = (await getSession())?.user.id;
   try {
     const user = await getUserById(userId);
-    console.log(user);
+
     const { stripe_customer_id } = user;
 
     // This is the url to which the customer will be redirected when they are done

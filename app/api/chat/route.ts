@@ -31,7 +31,6 @@ export async function POST(req: Request) {
   try {
     // Deduct one credit
     const { newSubCredits, newAddCredits } = await spendCredits(user.id, 1);
-    console.log("Credits remaining:", { newSubCredits, newAddCredits });
   } catch (error: any) {
     console.error("Error using credits:", error);
     return NextResponse.json({ message: error.message }, { status: 400 });

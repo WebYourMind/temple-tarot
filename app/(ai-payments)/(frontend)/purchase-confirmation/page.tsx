@@ -22,7 +22,6 @@ export default function PurchaseConfirmation() {
         method: "GET",
       });
       const data = (await response.json()) as any;
-      console.log(data);
 
       // update the user session
       await update({ isSubscribed: data.status === "complete" });
