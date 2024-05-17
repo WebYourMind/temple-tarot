@@ -8,7 +8,6 @@ const FeedbackButtons = ({ content }) => {
   const [feedbackGiven, setFeedbackGiven] = useState({ resonance: false, aiResponse: false });
 
   const submitFeedback = (type, value) => {
-    console.log(`Feedback for ${type}: ${value}`);
     track(type, { feedback: value, content });
     toast.success("Feedback submitted. Thank you!"); // Notify user of successful feedback submission
     setFeedbackGiven({ ...feedbackGiven, [type]: true }); // Update state to reflect feedback given

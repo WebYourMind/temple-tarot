@@ -35,7 +35,7 @@ export default async function middleware(req: NextRequest) {
     "/reset-password",
     "/verify-email",
     "/accept-invite",
-    "/api/stripe-webhook",
+    "/api/stripe-credits/stripe-webhook",
   ];
 
   // Redirect unauthenticated users away from protected paths

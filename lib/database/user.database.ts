@@ -48,6 +48,25 @@ export const getUserById = async (userId: number | string) => {
   }
 };
 
+export const getUserIdByEmail = async (email: string) => {
+  try {
+    const { rows } = await sql`
+            SELECT id
+            FROM users
+            WHERE email = ${email}
+        `;
+
+    if (rows.length > 0) {
+      const { id } = rows[0];
+      return id;
+    }
+    return null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 export const getUserByEmail = async (email: string) => {
   try {
     const { rows } = await sql`
@@ -170,5 +189,15 @@ export const upgradeUserToAdmin = async (userId: number) => {
   } catch (error) {
     console.log(error);
     return null;
+  }
+};
+
+export const addStripeCustomerId = async (email, customerId) => {
+  try {
+    await sql`UPDATE users
+      SET stripe_customer_id = ${customerId}
+      WHERE email = ${email};`;
+  } catch (error) {
+    console.error(error);
   }
 };

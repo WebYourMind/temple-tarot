@@ -25,7 +25,7 @@ import Loading from "components/loading";
 import { Score } from "lib/quiz";
 import { useSuggestedResponses } from "lib/hooks/use-suggested-response";
 import { SuggestedResponses } from "./suggested-responses";
-import { useCredits } from "lib/contexts/credit-context";
+import { useCredits } from "app/(ai-payments)/(frontend)/contexts/credit-context";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 export interface ChatProps extends React.ComponentProps<"div"> {
