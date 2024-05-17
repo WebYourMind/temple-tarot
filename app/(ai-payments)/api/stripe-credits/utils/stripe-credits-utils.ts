@@ -114,17 +114,13 @@ export async function logCreditEvent(userId: number, credits: number, eventType:
 }
 
 export async function spendCredits(userId, amount) {
-  const user =
-    await sql`SELECT is_subscribed, subscription_credits, additional_credits FROM users WHERE id = ${userId}`;
+  const user = await sql`SELECT subscription_credits, additional_credits FROM users WHERE id = ${userId}`;
 
   if (user.rows.length === 0) {
     throw new Error("User not found");
   }
 
-  const { is_subscribed, subscription_credits, additional_credits } = user.rows[0];
-  if (!is_subscribed) {
-    throw new Error("User is not subscribed");
-  }
+  const { subscription_credits, additional_credits } = user.rows[0];
 
   let newSubCredits = subscription_credits;
   let newAddCredits = additional_credits;
