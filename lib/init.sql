@@ -21,8 +21,10 @@ CREATE TABLE users (
     role VARCHAR(50) DEFAULT 'user',
     is_subscribed BOOLEAN DEFAULT FALSE,
     subscription_id VARCHAR(255),
-    subscription_status VARCHAR(50)
-    stripe_customer_id VARCHAR(255)
+    subscription_status VARCHAR(50),
+    stripe_customer_id VARCHAR(255),
+    subscription_credits INTEGER DEFAULT 0,
+    additional_credits INTEGER DEFAULT 0;
 );
 
 -- Create the rest of the tables as before
@@ -69,7 +71,9 @@ ALTER TABLE users
 ADD COLUMN is_subscribed BOOLEAN DEFAULT FALSE,
 ADD COLUMN subscription_id VARCHAR(255),
 ADD COLUMN subscription_status VARCHAR(50),
-ADD COLUMN stripe_customer_id VARCHAR(255);
+ADD COLUMN stripe_customer_id VARCHAR(255),
+ADD COLUMN subscription_credits INTEGER DEFAULT 0,
+ADD COLUMN additional_credits INTEGER DEFAULT 0;
 
 CREATE TABLE subscription_events (
     event_id SERIAL PRIMARY KEY,
@@ -87,7 +91,3 @@ CREATE TABLE credit_events (
     event_type VARCHAR(50),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
-ALTER TABLE users
-ADD COLUMN subscription_credits INTEGER DEFAULT 0,
-ADD COLUMN additional_credits INTEGER DEFAULT 0;
