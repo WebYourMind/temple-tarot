@@ -12,7 +12,8 @@ import appConfig from "app.config";
 import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { CreditBalance } from "./credit-balance";
+import { CreditBalance } from "../../app/(ai-payments)/(frontend)/components/credit-balance";
+import { LumenBalance } from "./lumen-balance";
 import { cn } from "lib/utils";
 import { tarotFont } from "app/(views)/home/components/interpreter";
 
@@ -78,12 +79,11 @@ export default function Header() {
       <div className="flex items-center justify-end space-x-4">
         {session?.user && (
           <div className="hidden items-center justify-end space-x-4 md:flex">
+            <LumenBalance />
             <CreditBalance />
-            {/* {!session?.user?.isSubscribed && (
-              <Link href="/subscribe" className={buttonVariants({ variant: "link" })}>
-                Upgrade
-              </Link>
-            )} */}
+            <Link href="/pricing" className={buttonVariants({ variant: "link" })}>
+              Pricing
+            </Link>
             <Link href="/readings" className={buttonVariants({ variant: "link" })}>
               My Readings
             </Link>

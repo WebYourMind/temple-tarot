@@ -43,10 +43,7 @@ export type UserProfile = {
   id?: string;
   address: Address;
   phone?: string;
-  role?: string;
-  teamId?: string;
-  scores?: Score;
-  dominantStyle?: ThinkingStyle;
+  isSubscribed?: boolean;
 };
 
 export type TeamForm = {

@@ -5,6 +5,8 @@ import { Textarea } from "components/ui/textarea";
 import React, { useState } from "react";
 import { SpreadSelector } from "./spread-selector";
 import tarotSpreads from "./tarot-spreads";
+import { useCredits } from "app/(ai-payments)/(frontend)/contexts/credit-context";
+import { useRouter } from "next/navigation";
 import { tarotFont } from "./interpreter";
 import { cn } from "lib/utils";
 
@@ -14,6 +16,8 @@ interface QueryInputProps {
 }
 
 const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion, closeDialog }) => {
+  const { credits } = useCredits();
+  const router = useRouter();
   const [question, setQuestion] = useState("");
   const [selectedSpread, setSelectedSpread] = useState(tarotSpreads[0]);
 
@@ -44,9 +48,17 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion, closeDialog }
         autoFocus
       />
       <SpreadSelector onSpreadSelect={onSpreadSelect} selectedSpread={selectedSpread} />
-      <Button onClick={handleSubmit} variant={"ghost"}>
+      <Button onClick={handleSubmit} variant={"ghost"} disabled={!credits || credits === 0}>
         SEND <PaperPlaneIcon className="ml-2" />
       </Button>
+      {credits === 0 && (
+        <div className="text-center">
+          <p>You do not have enough credits!</p>
+          <Button onClick={() => router.push("/pricing")} variant={"outline"}>
+            Get Credits
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
