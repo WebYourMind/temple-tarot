@@ -16,6 +16,7 @@ import { CreditBalance } from "../../app/(ai-payments)/(frontend)/components/cre
 import { LumenBalance } from "./lumen-balance";
 import { cn } from "lib/utils";
 import { tarotFont } from "app/(views)/home/components/interpreter";
+import FullscreenComponent from "app/(views)/home/components/fullscreen";
 
 export default function Header() {
   const { data: session, status, update } = useSession() as any;
@@ -95,6 +96,7 @@ export default function Header() {
         <button onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")} aria-label="Theme">
           <Half2Icon />
         </button>
+        <FullscreenComponent />
       </div>
     </header>
   );
