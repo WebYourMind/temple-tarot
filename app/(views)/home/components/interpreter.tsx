@@ -13,14 +13,7 @@ import { cn } from "lib/utils";
 
 export const tarotFont = Baskervville({ weight: ["400"], subsets: ["latin"] });
 
-export interface InterpreterProps extends React.ComponentProps<"div"> {
-  query: string;
-  cards: SelectedCardType[];
-  spread: { name: string; value: string; description: string; numberOfCards: number; cardMeanings: string[] };
-  handleReset: () => void;
-}
-
-export function Interpreter({ query, cards, spread, handleReset }: InterpreterProps) {
+export function Interpreter({ query, cards, spread, handleReset, selectedDeck }) {
   const { fetchCreditBalance } = useCredits();
   const { fetchLumenBalance } = useLumens();
   const [reading, setReading] = useState({
@@ -96,6 +89,7 @@ export function Interpreter({ query, cards, spread, handleReset }: InterpreterPr
     if (query) {
       content += `Seeker's query: ${query}\n\n`;
     }
+    content += `Selected Tarot Deck: ${selectedDeck.promptName}\n\n`;
     content += `Chosen spread: ${spread.name}\n\nCards drawn with their positions in the spread: ${cardDescriptions}`;
 
     if (!reading.aiInterpretation) {
@@ -106,15 +100,15 @@ export function Interpreter({ query, cards, spread, handleReset }: InterpreterPr
   if (reading.aiInterpretation) {
     return (
       <div className={cn("mx-auto max-w-2xl md:pb-16 md:pt-16", tarotFont.className)}>
-        <div className="flex flex-col space-y-4 py-6 text-xs fade-in md:text-sm">
+        <div className="flex flex-col space-y-4 py-6 fade-in md:text-sm">
           <div className="opacity-70">
             <p>{new Date(reading.createdAt).toLocaleDateString()}</p>
           </div>
-          <div className="text-sm italic">
+          <div className="italic">
             <p>{reading?.userQuery || "Open Reading"}</p>
           </div>
           <div>
-            <h3 className="text-xs font-bold">Cards:</h3>
+            <h3 className="text-sm font-bold">Cards:</h3>
             {reading.cards.map((card, index) => (
               <p key={card.cardName} className="mb-1">
                 {index + 1}. {card.cardName} ({card.orientation.charAt(0).toUpperCase() + card.orientation.slice(1)})
@@ -124,7 +118,7 @@ export function Interpreter({ query, cards, spread, handleReset }: InterpreterPr
         </div>
         <div
           className={cn(
-            "fade-in-text prose prose-sm prose-indigo mx-auto my-8 mb-20 w-full max-w-full py-6 leading-relaxed text-foreground md:prose-lg md:text-lg",
+            "fade-in-text prose prose-indigo mx-auto mb-20 w-full max-w-full py-6 leading-relaxed text-foreground md:prose-lg md:text-lg",
             tarotFont.className
           )}
         >

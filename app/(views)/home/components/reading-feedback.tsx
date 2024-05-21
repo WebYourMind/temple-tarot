@@ -23,6 +23,7 @@ const FeedbackButtons = ({ content }) => {
             variant="ghost"
             onClick={() => submitFeedback("resonance", "yes")}
             disabled={feedbackGiven.resonance}
+            className="rounded-full"
           >
             <ThumbsUpIcon />
           </Button>
@@ -31,6 +32,7 @@ const FeedbackButtons = ({ content }) => {
             variant="ghost"
             onClick={() => submitFeedback("resonance", "no")}
             disabled={feedbackGiven.resonance}
+            className="rounded-full"
           >
             <ThumbsDownIcon />
           </Button>
@@ -44,6 +46,7 @@ const FeedbackButtons = ({ content }) => {
             variant="ghost"
             onClick={() => submitFeedback("aiResponse", "good")}
             disabled={feedbackGiven.aiResponse}
+            className="rounded-full"
           >
             <ThumbsUpIcon />
           </Button>
@@ -52,6 +55,7 @@ const FeedbackButtons = ({ content }) => {
             variant="ghost"
             onClick={() => submitFeedback("aiResponse", "poor")}
             disabled={feedbackGiven.aiResponse}
+            className="rounded-full"
           >
             <ThumbsDownIcon />
           </Button>

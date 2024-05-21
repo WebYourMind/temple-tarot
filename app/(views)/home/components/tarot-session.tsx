@@ -24,22 +24,37 @@ export default function TarotSession() {
   const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
   const [open, setOpen] = useState(false);
   const [selectedCards, setSelectedCards] = useState<SelectedCardType[]>();
+  const [selectedDeck, setSelectedDeck] = useState({ promptName: "Thoth Deck by Aleister Crowley" });
   const [spreadType, setSpreadType] = useState<any>(); // To store the selected spread type
   const { data: session } = useSession() as { data: { user: { id: string } } };
+  const [hasOwnCards, setHasOwnCards] = useState(false);
 
   function handleSubmitQuestion(question = "", spread) {
     setQuery(question);
     setSpreadType(spread);
-    setPhase("cards");
-    setInfoContent(infoMap["cards"]);
+
+    if (!hasOwnCards) {
+      setPhase("cards");
+      setInfoContent(infoMap["cards"]);
+    } else {
+      setPhase("reading");
+      track("Reading", { spread: spread.value, userId: session?.user?.id });
+      selectedCards.forEach((card) => {
+        track("Cards", { cardName: card.cardName, orientation: card.orientation });
+      });
+    }
   }
 
   function handleCardSelect(selectedCards) {
     setSelectedCards(selectedCards);
   }
 
+  function handleDeckChange(selectedDeck) {
+    setSelectedDeck(selectedDeck);
+  }
+
   useEffect(() => {
-    if (selectedCards) {
+    if (selectedCards && phase === "cards") {
       setPhase("reading");
       track("Reading", { spread: spreadType.value, userId: session?.user?.id });
       selectedCards.forEach((card) => {
@@ -76,7 +91,14 @@ export default function TarotSession() {
         </div>
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
           {phase === "question" && (
-            <QueryInput onSubmitQuestion={handleSubmitQuestion} closeDialog={() => setOpen(false)} />
+            <QueryInput
+              selectedCards={selectedCards}
+              onSubmitQuestion={handleSubmitQuestion}
+              closeDialog={() => setOpen(false)}
+              onCardChange={handleCardSelect}
+              onDeckChange={handleDeckChange}
+              setHasOwnCards={setHasOwnCards}
+            />
           )}
         </Dialog>
         {/* {phase === "spread" && <SpreadSelection onSpreadSelect={handleSpreadSelect} />} */}
@@ -84,7 +106,13 @@ export default function TarotSession() {
           <CardSelectionWrapper onSelectComplete={handleCardSelect} query={query} spread={spreadType} />
         )}
         {phase === "reading" && selectedCards && (
-          <Interpreter query={query} cards={selectedCards} spread={spreadType} handleReset={handleReset} />
+          <Interpreter
+            query={query}
+            cards={selectedCards}
+            spread={spreadType}
+            handleReset={handleReset}
+            selectedDeck={selectedDeck}
+          />
         )}
         <InfoDialog closeDialog={() => setShowInfo(false)} infoContent={infoContent} />
       </Dialog>
