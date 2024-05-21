@@ -2,24 +2,22 @@ import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { Button } from "components/ui/button";
 import { Label } from "components/ui/label";
 import { Textarea } from "components/ui/textarea";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SpreadSelector } from "./spread-selector";
 import tarotSpreads from "./tarot-spreads";
 import { useCredits } from "app/(ai-payments)/(frontend)/contexts/credit-context";
 import { useRouter } from "next/navigation";
 import { tarotFont } from "./interpreter";
 import { cn } from "lib/utils";
+import { Checkbox } from "components/ui/checkbox";
+import CardInput from "./card-input";
 
-interface QueryInputProps {
-  onSubmitQuestion: (question: string, selectedSpread: any) => void;
-  closeDialog: () => void;
-}
-
-const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion, closeDialog }) => {
+const QueryInput = ({ onSubmitQuestion, closeDialog, onCardChange, onDeckChange, selectedCards, setHasOwnCards }) => {
   const { credits } = useCredits();
   const router = useRouter();
   const [question, setQuestion] = useState("");
   const [selectedSpread, setSelectedSpread] = useState(tarotSpreads[0]);
+  const [showCardInput, setShowCardInput] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +30,16 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion, closeDialog }
     setSelectedSpread(spread);
     closeDialog();
   };
+
+  useEffect(() => {
+    setHasOwnCards(showCardInput);
+    if (!showCardInput) {
+      onCardChange(null);
+    }
+  }, [showCardInput]);
+
+  const isSubmitDisabled =
+    showCardInput && selectedCards && selectedCards.some((selection) => selection.cardName === "");
 
   return (
     <div className="container mx-auto mt-8 flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
@@ -48,7 +56,25 @@ const QueryInput: React.FC<QueryInputProps> = ({ onSubmitQuestion, closeDialog }
         autoFocus
       />
       <SpreadSelector onSpreadSelect={onSpreadSelect} selectedSpread={selectedSpread} />
-      <Button onClick={handleSubmit} variant={"ghost"} disabled={!credits || credits === 0}>
+      <div className="flex items-center space-x-2">
+        <Checkbox id="terms1" checked={showCardInput} onCheckedChange={setShowCardInput as () => void} />
+        <div className="grid leading-none">
+          <label
+            htmlFor="terms1"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            I have my own Tarot deck
+          </label>
+        </div>
+      </div>
+      {showCardInput && (
+        <CardInput selectedSpread={selectedSpread} onCardChange={onCardChange} onDeckChange={onDeckChange} />
+      )}
+      <Button
+        onClick={handleSubmit}
+        variant={"ghost"}
+        disabled={!credits || credits === 0 || (showCardInput && isSubmitDisabled)}
+      >
         SEND <PaperPlaneIcon className="ml-2" />
       </Button>
       {credits === 0 && (
