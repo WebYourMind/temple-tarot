@@ -24,7 +24,8 @@ CREATE TABLE users (
     subscription_status VARCHAR(50),
     stripe_customer_id VARCHAR(255),
     subscription_credits INTEGER DEFAULT 0,
-    additional_credits INTEGER DEFAULT 0;
+    additional_credits INTEGER DEFAULT 0
+    referrer_id INTEGER REFERENCES users(id);
 );
 
 -- Create the rest of the tables as before
@@ -90,4 +91,12 @@ CREATE TABLE credit_events (
     credits INTEGER,
     event_type VARCHAR(50),
     created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE referral_codes (
+    id SERIAL PRIMARY KEY,
+    code VARCHAR(255) UNIQUE NOT NULL,
+    user_id INTEGER REFERENCES users(id),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    used BOOLEAN DEFAULT FALSE
 );
