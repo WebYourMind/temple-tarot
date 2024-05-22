@@ -23,13 +23,12 @@ const menuItems = [
     path: "/profile",
     icon: <PersonIcon />,
   },
+  {
+    name: "Pricing",
+    path: "/pricing",
+    icon: <IconPlus />,
+  },
 ];
-
-const upgradeItem = {
-  name: "Pricing",
-  path: "/pricing",
-  icon: <IconPlus />,
-};
 
 export function SidebarList() {
   const { data: session } = useSession() as any;
@@ -43,7 +42,6 @@ export function SidebarList() {
           </div>
           {/* <div className="h-[1px] w-full bg-muted" /> */}
           {menuItems.map((item) => item && <SidebarItem key={item?.path} menuItem={item} />)}
-          {!session?.user?.isSubscribed && <SidebarItem menuItem={upgradeItem} />}
         </div>
       ) : (
         <div className="p-8 text-center">
