@@ -7,7 +7,9 @@ import { env } from "./env.mjs";
  */
 const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
   reactStrictMode: false,
-
+  images: {
+    domains: ["ekxb0zdvbkmwks1n.public.blob.vercel-storage.com"],
+  },
   experimental: { instrumentationHook: true, missingSuspenseWithCSRBailout: false },
   output: "standalone",
   rewrites() {
