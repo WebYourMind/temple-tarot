@@ -2,10 +2,8 @@ import "styles/tailwind.css";
 import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { Providers } from "app/providers";
-// import { Header } from "components/navigation/header";
 import { Toaster } from "react-hot-toast";
 import appConfig from "app.config";
-// import FeedbackWidget from "components/feedback/feedback-widget";
 import CookieNotice from "components/cookie-notice";
 import dynamic from "next/dynamic";
 import type { Viewport } from "next";
@@ -58,6 +56,12 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+        />
+      </head>
       <body>
         <Providers>
           <div className="flex min-h-screen flex-col bg-background text-foreground">

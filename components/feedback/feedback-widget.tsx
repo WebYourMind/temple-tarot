@@ -93,7 +93,7 @@ const FeedbackWidget = () => {
         </div>
       )}
       <Button
-        variant={"ghost"}
+        // variant={"outline"}
         className={`float-right rounded-full ${isOpen ? "h-14 w-14" : "p-4"}`}
         onClick={() => setIsOpen(!isOpen)}
       >
