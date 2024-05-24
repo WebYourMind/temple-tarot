@@ -14,7 +14,7 @@ export default function Page() {
   const renderSuit = (suit) => (
     <div key={suit}>
       <h2 className="mb-2 mt-4 text-2xl font-bold">{suit}</h2>
-      <div className="grid grid-cols-1 gap-2 gap-y-8 md:grid-cols-6">
+      <div className="grid grid-cols-1 gap-2 gap-y-10 md:grid-cols-6">
         {deck
           .filter((card) => card.suit === suit)
           .map((card) => (
@@ -32,7 +32,7 @@ export default function Page() {
   );
 
   return (
-    <div className="relative p-4">
+    <div className="relative mx-auto max-w-7xl p-4">
       <h1 className="my-8">Card Glossary</h1>
       {suits.map((suit) => renderSuit(suit))}
 

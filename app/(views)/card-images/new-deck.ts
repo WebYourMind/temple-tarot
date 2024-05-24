@@ -1,8 +1,7 @@
 export const deck = [
   {
     cardName: "Origin",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/origin-3StCYcWujZQtnqRmccv4qGi4EzLLTY.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/origin.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -21,8 +20,7 @@ export const deck = [
   },
   {
     cardName: "Magic",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/magic-ZDRYkxQGmPrGSgrScHyJCuCO39ECmf.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/magic.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -41,8 +39,7 @@ export const deck = [
   },
   {
     cardName: "Intuition",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/intuition-JSrMz9V824jkndWgbATeZM4lMXb6KO.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/intuition.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -61,8 +58,7 @@ export const deck = [
   },
   {
     cardName: "Creation",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/creation-eE5us8zyWHl1f1dZwb7Iqe6g5TdynK.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/creation.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -81,8 +77,7 @@ export const deck = [
   },
   {
     cardName: "Order",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/order-90IHrQo4fQpOA7e7znNZfSvfOq5nmZ.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/order.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -101,8 +96,7 @@ export const deck = [
   },
   {
     cardName: "Wisdom",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/wisdom-C8U3BSwWyP9BOmZXLZwqAvUi92ZD11.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/wisdom.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -121,8 +115,7 @@ export const deck = [
   },
   {
     cardName: "Love",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/love-ScXTOZ8a0huSdztLUm9fVYl5212B2K.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/love.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -141,8 +134,7 @@ export const deck = [
   },
   {
     cardName: "Mastery",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/mastery-WzIUL7Qrv0yyAAEsWdvUx9xFZ11Ods.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/mastery.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -161,8 +153,7 @@ export const deck = [
   },
   {
     cardName: "Harmony",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/harmony-aXrxsbPQlW0Q0FZG0TRP6GhCAcLnlQ.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/harmony.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -181,8 +172,7 @@ export const deck = [
   },
   {
     cardName: "Depth",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/depth-whale-nA7VEHTiA08anPihMWmbvmbyRI8JNw.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/depth-whale.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -201,8 +191,7 @@ export const deck = [
   },
   {
     cardName: "Evolution",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/revolution-wheel-2KNmMKSCjsY4WeFxnRRVs3uMVGksbG.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/revolution-wheel.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -221,8 +210,7 @@ export const deck = [
   },
   {
     cardName: "Courage",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/courage-Y1JV11phhS00gTwwKBy8ZUx5yUd9od.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/courage.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -240,29 +228,8 @@ export const deck = [
     },
   },
   {
-    cardName: "Perspective",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/perspective-Z3Q7ef25zbilC5l6ZMJd2UwhjQ1CYP.webp?download=1",
-    suit: "Major Arcana",
-    detail: {
-      oneSentenceSummary:
-        "Perspective emphasizes the transformative impact of viewing life from different angles, promoting enlightenment through shifted viewpoints.",
-      paragraphSummary:
-        "The Perspective card captures the essence of suspending one’s usual frame of reference to gain fresh insights and deeper understanding. It represents the deliberate pause in action to reflect, reconsider, and reevaluate one’s circumstances from an uncommon vantage point. This card suggests that significant revelations and progress often come from stepping back or looking at things in a new way, encouraging a temporary release of prevailing assumptions or beliefs to facilitate a broader understanding of one’s life and challenges.",
-      roleDescription:
-        "Often depicted as a figure suspended upside down, symbolizing a literal shift in viewpoint, the modern Perspective card invites a figurative exploration of alternative perceptions, encouraging open-mindedness and flexibility in thinking.",
-      readingTips:
-        "When Perspective appears in a reading, consider it a call to reassess your current viewpoints. It's an invitation to temporarily step back from your daily routines and problems to gain a fresh, more informed perspective.",
-      uprightGuidance:
-        "An opportunity to see things from a new angle presents itself, offering clarity and insight. Embrace this chance to change your outlook and discover new possibilities.",
-      reversedGuidance:
-        "Resistance to seeing things differently may be hindering your progress. The reversed Perspective card suggests looking beyond your current understanding and questioning long-held beliefs.",
-    },
-  },
-  {
     cardName: "Rebirth",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/rebirth-phoenix-vcIISYeZlyVgoKVcFEwwwfz1ot41FK.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/rebirth-phoenix.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -281,8 +248,7 @@ export const deck = [
   },
   {
     cardName: "Art",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/art-0EHCNcYcwwG8Y5ohCm65UDluQJ66pn.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/art.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -301,8 +267,7 @@ export const deck = [
   },
   {
     cardName: "Truth",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/truth-devil-gSSeThnXbzEwRkenekZTVEnHnAcfdE.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/truth-devil.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -321,8 +286,7 @@ export const deck = [
   },
   {
     cardName: "Perspective",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/perspective-Z3Q7ef25zbilC5l6ZMJd2UwhjQ1CYP.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/perspective.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -341,8 +305,7 @@ export const deck = [
   },
   {
     cardName: "Change",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/change-butterfly-1koLZN35p7zyflhKS8m6xCO8HFDk79.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/change-butterfly.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -361,8 +324,7 @@ export const deck = [
   },
   {
     cardName: "Faith",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/faith-star-2PWhIGpbPwMfN6QTJyRaxXd75hDFVN.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/faith-star.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -380,8 +342,7 @@ export const deck = [
   },
   {
     cardName: "Energy",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/energy-sun-bEuSSWSFAVOyCjU4gJ0MYvcKvfko4o.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/energy-sun.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -399,8 +360,7 @@ export const deck = [
   },
   {
     cardName: "Cycles",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cycles-mMc8hAMrpSxi9rsALHs1VgMIJk7ISZ.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/cycles.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -419,8 +379,7 @@ export const deck = [
   },
   {
     cardName: "Wholeness",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/wholeness-6AermpkJSg8mneHQKME9kZwWk2U5n5.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/wholeness.webp?download=1",
     suit: "Major Arcana",
     detail: {
       oneSentenceSummary:
@@ -438,8 +397,7 @@ export const deck = [
   },
   {
     cardName: "Nature - Steward",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/nature-steward-wDrvn1QsyJJ2q7dRa4w3pyVnkDu0u9.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/nature-steward.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -458,8 +416,7 @@ export const deck = [
   },
   {
     cardName: "Beauty - Artist",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/beauty-artist-lQVDyKFeqtJBZJSEXzgK1SRsfIUYHF.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/beauty-artist.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -478,8 +435,7 @@ export const deck = [
   },
   {
     cardName: "Spirit - Mystic",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/spirit-mystic-Tsen255gHejoQzrzRIYuO8wKPpgAqg.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/spirit-mystic.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -497,8 +453,7 @@ export const deck = [
   },
   {
     cardName: "Truth - Oracle",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/truth-oracle-BVYoXdVdS8ZIS0zv7RpYzQlHMk2svv.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/truth-oracle.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -517,8 +472,7 @@ export const deck = [
   },
   {
     cardName: "Freedom - Sentinel",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/freedom-sentinel-XNhcTnhvBaorH2rzXPzyecIERYAZaA.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/freedom-sentinel.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -537,8 +491,7 @@ export const deck = [
   },
   {
     cardName: "Justice - Advocate",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/justice-advocate-LLXMAagN0k6UW1N1NnZJJc5RsmdJ0E.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/justice-advocate.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -556,8 +509,7 @@ export const deck = [
   },
   {
     cardName: "Health - Healer",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/health-healer-S6C5qqFQRNHyCl9Kv65SefCEei54ro.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/health-healer.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -576,8 +528,7 @@ export const deck = [
   },
   {
     cardName: "Unity - Connector",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/unity-connector-VFQ2YgCdW4d0tVK0J9MIexbkl7cV9y.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/unity-connector.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -596,8 +547,7 @@ export const deck = [
   },
   {
     cardName: "Wisdom - Sage",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/wisdom-sage-I8LomfbrKo6XBHUlD8oFS4AOVhMhwn.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/wisdom-sage.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -616,8 +566,7 @@ export const deck = [
   },
   {
     cardName: "Prosperity - Creator",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/prosperity-creator-aHAKqXs7DvLEsZ3Llr0Jgq8soGT8Ro.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/prosperity-creator.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -635,8 +584,7 @@ export const deck = [
   },
   {
     cardName: "Love - Alchemist",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/love-alchemy-8DcG4VIhUlHVpIX5g2N6obVhQ2N0Dr.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/love-alchemy.webp?download=1",
     suit: "Air",
     detail: {
       oneSentenceSummary:
@@ -655,8 +603,7 @@ export const deck = [
   },
   {
     cardName: "Foundation",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/foundation-RYsYtCjVjEMzjQSMxhroz1aUOC3Za0.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/foundation.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary:
@@ -677,8 +624,7 @@ export const deck = [
   },
   {
     cardName: "Fertility",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/fertility-sLpgUfqlhAzMt8lD7MoqtDfrrffcdh.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/fertility.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary: "The Fertility card represents the potent energy of creation and growth.",
@@ -698,8 +644,7 @@ export const deck = [
   },
   {
     cardName: "Intention",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/intention-j9emvIYNc4dxmcEvlFM7uTVO8HjqCV.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/intention.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary: "This card focuses on setting clear, heartfelt intentions.",
@@ -718,8 +663,7 @@ export const deck = [
   },
   {
     cardName: "Structure",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/structure-iNLYOT3uv2CEI4z7cvbD2D2qkNRMcX.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/structure.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary:
@@ -739,8 +683,7 @@ export const deck = [
   },
   {
     cardName: "Expansion",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/expansion-es1qtPPPZLchIxCUhENmpXWaNWnBu9.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/expansion.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary:
@@ -760,8 +703,7 @@ export const deck = [
   },
   {
     cardName: "Experience",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/experience-Tk5Pgsp1iXwiyM0Nwx6QrOqXsuAqaF.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/experience.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary:
@@ -782,8 +724,7 @@ export const deck = [
   },
   {
     cardName: "Purification",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/purification-9L1joalXi0NDeXcKbO5Z446me2qGHx.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/purification.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary:
@@ -804,8 +745,7 @@ export const deck = [
   },
   {
     cardName: "Abundance",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/abundance-OJz3SlsVUkSQGzmquDmwVY3Zv18DJ6.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/abundance.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary:
@@ -826,8 +766,7 @@ export const deck = [
   },
   {
     cardName: "Sustainability",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/sustainability-MHH9wn85aikR6ZYgwKrxg1oMylbIhV.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/sustainability.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary:
@@ -848,8 +787,7 @@ export const deck = [
   },
   {
     cardName: "Legacy",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/legacy-eNLx1dn0gLZ7OVUpEnmuZo65FF54Tx.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/legacy.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary: "Legacy is about considering the lasting impact of your actions.",
@@ -869,8 +807,7 @@ export const deck = [
   },
   {
     cardName: "Renewal",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/renewal-OcWiESrk54RuocpELHiUJ3CgV7i6Ei.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/renewal.webp?download=1",
     suit: "Earth",
     detail: {
       oneSentenceSummary: "Renewal indicates a phase of new beginnings and fresh starts.",
@@ -890,8 +827,7 @@ export const deck = [
   },
   {
     cardName: "Spark",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/spark-hummingbird-iRZy1ES6SAfnJOjPf0SnGEWeWmAFfc.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/spark-hummingbird.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary: "Ignites the potent energy of new beginnings, creativity, and inspiration.",
@@ -909,8 +845,7 @@ export const deck = [
   },
   {
     cardName: "Speed",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/speed-cheetah-2ZmRMVCl2fHZaM8bO02CvhizsTgkq7.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/speed-cheetah.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary: "Signals a phase of rapid movement and swift progress towards goals.",
@@ -927,8 +862,7 @@ export const deck = [
   },
   {
     cardName: "Strength",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/strength-bear-nEHVyqgo8H9rHiPzCc3ZsfwHM9lsiy.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/strength-bear.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary:
@@ -946,8 +880,7 @@ export const deck = [
   },
   {
     cardName: "Sacrifice",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/sacrifice-ox-c8GMwClLHX1hL0qsFQcmvJt7FPaIIl.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/sacrifice-ox.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary:
@@ -965,8 +898,7 @@ export const deck = [
   },
   {
     cardName: "Purpose",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/purpose-dolphin-fHR6DvgOrPBVsZ1eWrz3HIjdH0FmFq.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/purpose-dolphin.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary:
@@ -985,8 +917,7 @@ export const deck = [
   },
   {
     cardName: "Principles",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/principles-elephant-fqJOiN6OsOtX5nXCyZShZmWduu1M3C.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/principles-elephant.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary:
@@ -1005,8 +936,7 @@ export const deck = [
   },
   {
     cardName: "Practices",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/practices-beaver-BqYs23oA5JHoYTUwprYusJo2ZOxfnj.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/practices-beaver.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary:
@@ -1023,8 +953,7 @@ export const deck = [
   },
   {
     cardName: "Command",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/command-lion-3avR75Wmm17hWae7DHidgUbmuW5mUH.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/command-lion.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary:
@@ -1041,8 +970,7 @@ export const deck = [
   },
   {
     cardName: "Conflict",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/conflict-ram-Xxb2GGdEZI5iWyYcBGPVvYLEyi5mjB.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/conflict-ram.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary:
@@ -1061,8 +989,7 @@ export const deck = [
   },
   {
     cardName: "Community",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/community-beehive-9V03ohUpXlfgRfPoiFkJ1VlHDNrSpT.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/community-beehive.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary:
@@ -1080,8 +1007,7 @@ export const deck = [
   },
   {
     cardName: "Completion",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/completion-horse-rNtO0SqK3a4Uh7gZUJrKRUVhiJDyM1.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/completion-horse.webp?download=1",
     suit: "Fire",
     detail: {
       oneSentenceSummary:
@@ -1099,8 +1025,7 @@ export const deck = [
   },
   {
     cardName: "Fear and Love",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/fear-love-rGg2jiVRTnGXUhn28dY8LJli8WR63M.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/fear-love.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary:
@@ -1118,8 +1043,7 @@ export const deck = [
   },
   {
     cardName: "Anger and Empathy",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/anger-empathy-nh6O5wvFB9Ggj4gHbBYEVOtXP1rA2n.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/anger-empathy.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary: "Channeling feelings of frustration into a deeper understanding and connection with others.",
@@ -1135,8 +1059,7 @@ export const deck = [
   },
   {
     cardName: "Sadness and Joy",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/sadness-joy-0qu4R6jmtzHvCYs6ISMPSQQuNrap0F.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/sadness-joy.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary: "Navigating through grief to rediscover happiness and the beauty of life’s simple pleasures.",
@@ -1153,8 +1076,7 @@ export const deck = [
   },
   {
     cardName: "Pride and Humility",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/pride-humility-bamboo-r6i61ECGS5Ta6ct6tblvCSQ8XasucC.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/pride-humility-bamboo.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary: "Balancing self-worth with an awareness of one’s limitations and the value of others.",
@@ -1172,8 +1094,7 @@ export const deck = [
   },
   {
     cardName: "Anxiety and Serenity",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/anxiety-serenity-IL1hjnOCASKJE4ZDyn5fCeXWqt1EzU.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/anxiety-serenity.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary: "Overcoming inner turmoil by cultivating peace and mental clarity.",
@@ -1190,8 +1111,7 @@ export const deck = [
   },
   {
     cardName: "Apathy and Enthusiasm",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/apathy-enthusiasm-s4I189pVn2BllFB8iFCvBOdkQyp4gQ.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/apathy-enthusiasm.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary: "Reigniting passion and interest from a state of disinterest and detachment.",
@@ -1208,8 +1128,7 @@ export const deck = [
   },
   {
     cardName: "Despair and Hope",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/despair-hope-97Pg9IIkI7Zm3XxsSNh3PyxmR0Surf.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/despair-hope.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary: "Finding light in the darkness, transforming deep despair into hopeful optimism.",
@@ -1226,8 +1145,7 @@ export const deck = [
   },
   {
     cardName: "Guilt and Forgiveness",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/guilt-forgiveness-fFUqsffMoSbDHqIKyi2iXDi7h0eXWy.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/guilt-forgiveness.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary:
@@ -1246,7 +1164,7 @@ export const deck = [
   {
     cardName: "Resentment and Release",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/resentment-release-mushrooms-yJFpCI4dx37NCYlU4rvmRrDxhGBvLR.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/resentment-release-mushrooms.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary:
@@ -1265,8 +1183,7 @@ export const deck = [
   },
   {
     cardName: "Entitlement and Gratitude",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/entitlement-gratitude-AS4LYS1xTGE2ayPGwwhHoluSGgsYL2.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/entitlement-gratitude.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary:
@@ -1284,8 +1201,7 @@ export const deck = [
   },
   {
     cardName: "Jealousy and Generosity",
-    imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/jealousy-generosity-iYARMwI61ICgq1mguqnQYRjnP9yeD8.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/jealousy-generosity.webp?download=1",
     suit: "Water",
     detail: {
       oneSentenceSummary: "Overcoming envy by celebrating and contributing to the success of others.",
@@ -1306,331 +1222,331 @@ export const newDeck = [
   {
     cardName: "abundance",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/abundance-OJz3SlsVUkSQGzmquDmwVY3Zv18DJ6.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/abundance-OJz3SlsVUkSQGzmquDmwVY3Zv18DJ6.webp?download=1",
   },
   {
     cardName: "anger-empathy",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/anger-empathy-nh6O5wvFB9Ggj4gHbBYEVOtXP1rA2n.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/anger-empathy-nh6O5wvFB9Ggj4gHbBYEVOtXP1rA2n.webp?download=1",
   },
   {
     cardName: "anxiety-serenity",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/anxiety-serenity-IL1hjnOCASKJE4ZDyn5fCeXWqt1EzU.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/anxiety-serenity-IL1hjnOCASKJE4ZDyn5fCeXWqt1EzU.webp?download=1",
   },
   {
     cardName: "apathy-enthusiasm",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/apathy-enthusiasm-s4I189pVn2BllFB8iFCvBOdkQyp4gQ.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/apathy-enthusiasm-s4I189pVn2BllFB8iFCvBOdkQyp4gQ.webp?download=1",
   },
   {
     cardName: "art",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/art-0EHCNcYcwwG8Y5ohCm65UDluQJ66pn.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/art-0EHCNcYcwwG8Y5ohCm65UDluQJ66pn.webp?download=1",
   },
   {
     cardName: "beauty-artist",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/beauty-artist-lQVDyKFeqtJBZJSEXzgK1SRsfIUYHF.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/beauty-artist-lQVDyKFeqtJBZJSEXzgK1SRsfIUYHF.webp?download=1",
   },
   {
     cardName: "change-butterfly",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/change-butterfly-1koLZN35p7zyflhKS8m6xCO8HFDk79.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/change-butterfly-1koLZN35p7zyflhKS8m6xCO8HFDk79.webp?download=1",
   },
   {
     cardName: "command-lion",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/command-lion-3avR75Wmm17hWae7DHidgUbmuW5mUH.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/command-lion-3avR75Wmm17hWae7DHidgUbmuW5mUH.webp?download=1",
   },
   {
     cardName: "community-beehive",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/community-beehive-9V03ohUpXlfgRfPoiFkJ1VlHDNrSpT.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/community-beehive-9V03ohUpXlfgRfPoiFkJ1VlHDNrSpT.webp?download=1",
   },
   {
     cardName: "completion-horse",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/completion-horse-rNtO0SqK3a4Uh7gZUJrKRUVhiJDyM1.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/completion-horse-rNtO0SqK3a4Uh7gZUJrKRUVhiJDyM1.webp?download=1",
   },
   {
     cardName: "conflict-ram",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/conflict-ram-Xxb2GGdEZI5iWyYcBGPVvYLEyi5mjB.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/conflict-ram-Xxb2GGdEZI5iWyYcBGPVvYLEyi5mjB.webp?download=1",
   },
   {
     cardName: "courage",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/courage-Y1JV11phhS00gTwwKBy8ZUx5yUd9od.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/courage-Y1JV11phhS00gTwwKBy8ZUx5yUd9od.webp?download=1",
   },
   {
     cardName: "creation",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/creation-eE5us8zyWHl1f1dZwb7Iqe6g5TdynK.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/creation-eE5us8zyWHl1f1dZwb7Iqe6g5TdynK.webp?download=1",
   },
   {
     cardName: "cycles",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cycles-mMc8hAMrpSxi9rsALHs1VgMIJk7ISZ.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/cycles-mMc8hAMrpSxi9rsALHs1VgMIJk7ISZ.webp?download=1",
   },
   {
     cardName: "depth-whale",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/depth-whale-nA7VEHTiA08anPihMWmbvmbyRI8JNw.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/depth-whale-nA7VEHTiA08anPihMWmbvmbyRI8JNw.webp?download=1",
   },
   {
     cardName: "despair-hope",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/despair-hope-97Pg9IIkI7Zm3XxsSNh3PyxmR0Surf.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/despair-hope-97Pg9IIkI7Zm3XxsSNh3PyxmR0Surf.webp?download=1",
   },
   {
     cardName: "energy-sun",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/energy-sun-bEuSSWSFAVOyCjU4gJ0MYvcKvfko4o.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/energy-sun-bEuSSWSFAVOyCjU4gJ0MYvcKvfko4o.webp?download=1",
   },
   {
     cardName: "entitlement-gratitude",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/entitlement-gratitude-AS4LYS1xTGE2ayPGwwhHoluSGgsYL2.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/entitlement-gratitude-AS4LYS1xTGE2ayPGwwhHoluSGgsYL2.webp?download=1",
   },
   {
     cardName: "expansion",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/expansion-es1qtPPPZLchIxCUhENmpXWaNWnBu9.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/expansion-es1qtPPPZLchIxCUhENmpXWaNWnBu9.webp?download=1",
   },
   {
     cardName: "experience",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/experience-Tk5Pgsp1iXwiyM0Nwx6QrOqXsuAqaF.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/experience-Tk5Pgsp1iXwiyM0Nwx6QrOqXsuAqaF.webp?download=1",
   },
   {
     cardName: "faith-star",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/faith-star-2PWhIGpbPwMfN6QTJyRaxXd75hDFVN.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/faith-star-2PWhIGpbPwMfN6QTJyRaxXd75hDFVN.webp?download=1",
   },
   {
     cardName: "fear-love",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/fear-love-rGg2jiVRTnGXUhn28dY8LJli8WR63M.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/fear-love-rGg2jiVRTnGXUhn28dY8LJli8WR63M.webp?download=1",
   },
   {
     cardName: "fertility",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/fertility-sLpgUfqlhAzMt8lD7MoqtDfrrffcdh.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/fertility-sLpgUfqlhAzMt8lD7MoqtDfrrffcdh.webp?download=1",
   },
   {
     cardName: "foundation",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/foundation-RYsYtCjVjEMzjQSMxhroz1aUOC3Za0.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/foundation-RYsYtCjVjEMzjQSMxhroz1aUOC3Za0.webp?download=1",
   },
   {
     cardName: "freedom-sentinel",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/freedom-sentinel-XNhcTnhvBaorH2rzXPzyecIERYAZaA.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/freedom-sentinel-XNhcTnhvBaorH2rzXPzyecIERYAZaA.webp?download=1",
   },
   {
     cardName: "guilt-forgiveness",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/guilt-forgiveness-fFUqsffMoSbDHqIKyi2iXDi7h0eXWy.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/guilt-forgiveness-fFUqsffMoSbDHqIKyi2iXDi7h0eXWy.webp?download=1",
   },
   {
     cardName: "harmony",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/harmony-aXrxsbPQlW0Q0FZG0TRP6GhCAcLnlQ.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/harmony-aXrxsbPQlW0Q0FZG0TRP6GhCAcLnlQ.webp?download=1",
   },
   {
     cardName: "health-healer",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/health-healer-S6C5qqFQRNHyCl9Kv65SefCEei54ro.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/health-healer-S6C5qqFQRNHyCl9Kv65SefCEei54ro.webp?download=1",
   },
   {
     cardName: "intention",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/intention-j9emvIYNc4dxmcEvlFM7uTVO8HjqCV.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/intention-j9emvIYNc4dxmcEvlFM7uTVO8HjqCV.webp?download=1",
   },
   {
     cardName: "intuition",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/intuition-JSrMz9V824jkndWgbATeZM4lMXb6KO.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/intuition-JSrMz9V824jkndWgbATeZM4lMXb6KO.webp?download=1",
   },
   {
     cardName: "jealousy-generosity",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/jealousy-generosity-iYARMwI61ICgq1mguqnQYRjnP9yeD8.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/jealousy-generosity-iYARMwI61ICgq1mguqnQYRjnP9yeD8.webp?download=1",
   },
   {
     cardName: "justice-advocate",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/justice-advocate-LLXMAagN0k6UW1N1NnZJJc5RsmdJ0E.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/justice-advocate-LLXMAagN0k6UW1N1NnZJJc5RsmdJ0E.webp?download=1",
   },
   {
     cardName: "legacy",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/legacy-eNLx1dn0gLZ7OVUpEnmuZo65FF54Tx.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/legacy-eNLx1dn0gLZ7OVUpEnmuZo65FF54Tx.webp?download=1",
   },
   {
     cardName: "love",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/love-ScXTOZ8a0huSdztLUm9fVYl5212B2K.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/love-ScXTOZ8a0huSdztLUm9fVYl5212B2K.webp?download=1",
   },
   {
     cardName: "love-alchemy",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/love-alchemy-8DcG4VIhUlHVpIX5g2N6obVhQ2N0Dr.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/love-alchemy-8DcG4VIhUlHVpIX5g2N6obVhQ2N0Dr.webp?download=1",
   },
   {
     cardName: "magic",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/magic-ZDRYkxQGmPrGSgrScHyJCuCO39ECmf.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/magic-ZDRYkxQGmPrGSgrScHyJCuCO39ECmf.webp?download=1",
   },
   {
     cardName: "mastery",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/mastery-WzIUL7Qrv0yyAAEsWdvUx9xFZ11Ods.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/mastery-WzIUL7Qrv0yyAAEsWdvUx9xFZ11Ods.webp?download=1",
   },
   {
     cardName: "nature-steward",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/nature-steward-wDrvn1QsyJJ2q7dRa4w3pyVnkDu0u9.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/nature-steward-wDrvn1QsyJJ2q7dRa4w3pyVnkDu0u9.webp?download=1",
   },
   {
     cardName: "order",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/order-90IHrQo4fQpOA7e7znNZfSvfOq5nmZ.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/order-90IHrQo4fQpOA7e7znNZfSvfOq5nmZ.webp?download=1",
   },
   {
     cardName: "origin",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/origin-3StCYcWujZQtnqRmccv4qGi4EzLLTY.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/origin-3StCYcWujZQtnqRmccv4qGi4EzLLTY.webp?download=1",
   },
   {
     cardName: "perspective",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/perspective-Z3Q7ef25zbilC5l6ZMJd2UwhjQ1CYP.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/perspective-Z3Q7ef25zbilC5l6ZMJd2UwhjQ1CYP.webp?download=1",
   },
   {
     cardName: "practices-beaver",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/practices-beaver-BqYs23oA5JHoYTUwprYusJo2ZOxfnj.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/practices-beaver-BqYs23oA5JHoYTUwprYusJo2ZOxfnj.webp?download=1",
   },
   {
     cardName: "pride-humility-bamboo",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/pride-humility-bamboo-r6i61ECGS5Ta6ct6tblvCSQ8XasucC.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/pride-humility-bamboo-r6i61ECGS5Ta6ct6tblvCSQ8XasucC.webp?download=1",
   },
   {
     cardName: "principles-elephant",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/principles-elephant-fqJOiN6OsOtX5nXCyZShZmWduu1M3C.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/principles-elephant-fqJOiN6OsOtX5nXCyZShZmWduu1M3C.webp?download=1",
   },
   {
     cardName: "prosperity-creator",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/prosperity-creator-aHAKqXs7DvLEsZ3Llr0Jgq8soGT8Ro.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/prosperity-creator-aHAKqXs7DvLEsZ3Llr0Jgq8soGT8Ro.webp?download=1",
   },
   {
     cardName: "purification",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/purification-9L1joalXi0NDeXcKbO5Z446me2qGHx.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/purification-9L1joalXi0NDeXcKbO5Z446me2qGHx.webp?download=1",
   },
   {
     cardName: "purpose-dolphin",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/purpose-dolphin-fHR6DvgOrPBVsZ1eWrz3HIjdH0FmFq.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/purpose-dolphin-fHR6DvgOrPBVsZ1eWrz3HIjdH0FmFq.webp?download=1",
   },
   {
     cardName: "rebirth-phoenix",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/rebirth-phoenix-vcIISYeZlyVgoKVcFEwwwfz1ot41FK.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/rebirth-phoenix-vcIISYeZlyVgoKVcFEwwwfz1ot41FK.webp?download=1",
   },
   {
     cardName: "renewal",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/renewal-OcWiESrk54RuocpELHiUJ3CgV7i6Ei.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/renewal-OcWiESrk54RuocpELHiUJ3CgV7i6Ei.webp?download=1",
   },
   {
     cardName: "resentment-release-mushrooms",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/resentment-release-mushrooms-yJFpCI4dx37NCYlU4rvmRrDxhGBvLR.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/resentment-release-mushrooms-yJFpCI4dx37NCYlU4rvmRrDxhGBvLR.webp?download=1",
   },
   {
     cardName: "revolution-wheel",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/revolution-wheel-2KNmMKSCjsY4WeFxnRRVs3uMVGksbG.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/revolution-wheel-2KNmMKSCjsY4WeFxnRRVs3uMVGksbG.webp?download=1",
   },
   {
     cardName: "sacrifice-ox",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/sacrifice-ox-c8GMwClLHX1hL0qsFQcmvJt7FPaIIl.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/sacrifice-ox-c8GMwClLHX1hL0qsFQcmvJt7FPaIIl.webp?download=1",
   },
   {
     cardName: "sadness-joy",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/sadness-joy-0qu4R6jmtzHvCYs6ISMPSQQuNrap0F.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/sadness-joy-0qu4R6jmtzHvCYs6ISMPSQQuNrap0F.webp?download=1",
   },
   {
     cardName: "shadow",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/shadow-GeWNl03M3o6K9LohFs1whh3zNUokBK.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/shadow-GeWNl03M3o6K9LohFs1whh3zNUokBK.webp?download=1",
   },
   {
     cardName: "spark-hummingbird",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/spark-hummingbird-iRZy1ES6SAfnJOjPf0SnGEWeWmAFfc.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/spark-hummingbird-iRZy1ES6SAfnJOjPf0SnGEWeWmAFfc.webp?download=1",
   },
   {
     cardName: "speed-cheetah",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/speed-cheetah-2ZmRMVCl2fHZaM8bO02CvhizsTgkq7.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/speed-cheetah-2ZmRMVCl2fHZaM8bO02CvhizsTgkq7.webp?download=1",
   },
   {
     cardName: "spirit-mystic",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/spirit-mystic-Tsen255gHejoQzrzRIYuO8wKPpgAqg.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/spirit-mystic-Tsen255gHejoQzrzRIYuO8wKPpgAqg.webp?download=1",
   },
   {
     cardName: "strength-bear",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/strength-bear-nEHVyqgo8H9rHiPzCc3ZsfwHM9lsiy.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/strength-bear-nEHVyqgo8H9rHiPzCc3ZsfwHM9lsiy.webp?download=1",
   },
   {
     cardName: "structure",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/structure-iNLYOT3uv2CEI4z7cvbD2D2qkNRMcX.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/structure-iNLYOT3uv2CEI4z7cvbD2D2qkNRMcX.webp?download=1",
   },
   {
     cardName: "sustainability",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/sustainability-MHH9wn85aikR6ZYgwKrxg1oMylbIhV.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/sustainability-MHH9wn85aikR6ZYgwKrxg1oMylbIhV.webp?download=1",
   },
   {
     cardName: "truth-devil",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/truth-devil-gSSeThnXbzEwRkenekZTVEnHnAcfdE.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/truth-devil-gSSeThnXbzEwRkenekZTVEnHnAcfdE.webp?download=1",
   },
   {
     cardName: "truth-oracle",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/truth-oracle-BVYoXdVdS8ZIS0zv7RpYzQlHMk2svv.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/truth-oracle-BVYoXdVdS8ZIS0zv7RpYzQlHMk2svv.webp?download=1",
   },
   {
     cardName: "unity-connector",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/unity-connector-VFQ2YgCdW4d0tVK0J9MIexbkl7cV9y.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/unity-connector-VFQ2YgCdW4d0tVK0J9MIexbkl7cV9y.webp?download=1",
   },
   {
     cardName: "wholeness",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/wholeness-6AermpkJSg8mneHQKME9kZwWk2U5n5.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/wholeness-6AermpkJSg8mneHQKME9kZwWk2U5n5.webp?download=1",
   },
   {
     cardName: "wisdom",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/wisdom-C8U3BSwWyP9BOmZXLZwqAvUi92ZD11.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/wisdom-C8U3BSwWyP9BOmZXLZwqAvUi92ZD11.webp?download=1",
   },
   {
     cardName: "wisdom-sage",
     imageUrl:
-      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/wisdom-sage-I8LomfbrKo6XBHUlD8oFS4AOVhMhwn.webp?download=1",
+      "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/wisdom-sage-I8LomfbrKo6XBHUlD8oFS4AOVhMhwn.webp?download=1",
   },
 ];
