@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-
 import { Button, buttonVariants } from "components/ui/button";
 import { Sidebar } from "./sidebar";
 import { UserMenu } from "./user-menu";
@@ -22,6 +22,12 @@ export default function Header() {
   const { data: session, status, update } = useSession() as any;
   const { setTheme, resolvedTheme } = useTheme();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const [isScrolled, setIsScrolled] = useState(false);
+  const scrollThreshold = 50;
+  const bufferZone = 40;
 
   const createAuthUrl = (path: string) => {
     const currentPath = searchParams.get("redirect") || "/";
@@ -30,74 +36,104 @@ export default function Header() {
 
   const registerUrl = createAuthUrl("/register");
   const loginUrl = createAuthUrl("/login");
-  const pathname = usePathname();
-  const router = useRouter();
 
   const handleTarotClick = (e) => {
     update();
-    // Check if the target href is the same as the current pathname
     if (pathname === "/") {
-      e.preventDefault(); // Prevent Link from navigating
-      window.location.reload(); // Force a full page reload
+      e.preventDefault();
+      window.location.reload();
     } else {
-      router.push("/"); // Navigate to the homepage if not already there
+      router.push("/");
     }
   };
 
-  return (
-    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between bg-background px-4">
-      <div className="flex items-center">
-        {session?.user ? (
-          <Sidebar>
-            <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
-              <SidebarList />
-            </React.Suspense>
-          </Sidebar>
-        ) : (
-          <Link href="/" className="mr-2 hover:no-underline">
-            <h3 className={cn("mt-0 text-lg text-foreground", tarotFont.className)}>{appConfig.appName}</h3>
-          </Link>
-        )}
-        {status !== "loading" && (
-          <div className="flex items-center">
-            <DividerVerticalIcon className="h-6 w-6 text-border" />
-            {session?.user ? (
-              <UserMenu user={session.user} />
-            ) : (
-              <>
-                <Button variant="link" asChild className="-ml-2">
-                  <Link href={loginUrl}>Login</Link>
-                </Button>
+  useEffect(() => {
+    let ticking = false;
 
-                <Button variant="link" asChild className="-ml-2">
-                  <Link href={registerUrl}>Register</Link>
-                </Button>
-              </>
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          if (scrollY > scrollThreshold + bufferZone) {
+            setIsScrolled(true);
+          } else if (scrollY < scrollThreshold - bufferZone) {
+            setIsScrolled(false);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  return (
+    <header
+      className={cn(
+        "sticky top-0 z-50 flex w-full shrink-0 items-center justify-between bg-background px-4 transition-all duration-300",
+        isScrolled ? "h-0" : "h-16"
+      )}
+    >
+      {!isScrolled && (
+        <>
+          <div className="flex items-center">
+            {session?.user ? (
+              <Sidebar>
+                <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
+                  <SidebarList />
+                </React.Suspense>
+              </Sidebar>
+            ) : (
+              <Link href="/" className="mr-2 hover:no-underline">
+                <h3 className={cn("mt-0 text-lg text-foreground", tarotFont.className)}>{appConfig.appName}</h3>
+              </Link>
+            )}
+            {status !== "loading" && (
+              <div className="flex items-center">
+                <DividerVerticalIcon className="h-6 w-6 text-border" />
+                {session?.user ? (
+                  <UserMenu user={session.user} />
+                ) : (
+                  <>
+                    <Button variant="link" asChild className="-ml-2">
+                      <Link href={loginUrl}>Login</Link>
+                    </Button>
+
+                    <Button variant="link" asChild className="-ml-2">
+                      <Link href={registerUrl}>Register</Link>
+                    </Button>
+                  </>
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
-      <div className="flex items-center justify-end space-x-4">
-        {session?.user && (
-          <div className="hidden items-center justify-end space-x-4 md:flex">
-            <LumenBalance />
-            <CreditBalance />
-            <Link href="/pricing" className={buttonVariants({ variant: "link" })}>
-              Pricing
-            </Link>
-            <Link href="/readings" className={buttonVariants({ variant: "link" })}>
-              My Readings
-            </Link>
-            <Link href="/" onClick={handleTarotClick} className={buttonVariants({ variant: "link" })}>
-              Tarot
-            </Link>
+          <div className="flex items-center justify-end space-x-4">
+            {session?.user && (
+              <div className="hidden items-center justify-end space-x-4 md:flex">
+                <LumenBalance />
+                <CreditBalance />
+                <Link href="/pricing" className={buttonVariants({ variant: "link" })}>
+                  Pricing
+                </Link>
+                <Link href="/readings" className={buttonVariants({ variant: "link" })}>
+                  My Readings
+                </Link>
+                <Link href="/" onClick={handleTarotClick} className={buttonVariants({ variant: "link" })}>
+                  Tarot
+                </Link>
+              </div>
+            )}
+            <button onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")} aria-label="Theme">
+              <Half2Icon />
+            </button>
+            {/* <FullscreenComponent /> */}
           </div>
-        )}
-        <button onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")} aria-label="Theme">
-          <Half2Icon />
-        </button>
-        {/* <FullscreenComponent /> */}
-      </div>
+        </>
+      )}
     </header>
   );
 }

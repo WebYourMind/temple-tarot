@@ -61,13 +61,7 @@ const CardInput = ({ selectedSpread, onCardChange, onDeckChange }) => {
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select deck" />
           </SelectTrigger>
-          <SelectContent
-            ref={(ref) => {
-              if (!ref) return;
-              ref.ontouchstart = (e) => e.preventDefault();
-            }}
-            className="z-50"
-          >
+          <SelectContent ref={(ref) => ref?.addEventListener("touchend", (e) => e.preventDefault())} className="z-50">
             <SelectGroup>
               <SelectLabel>Decks</SelectLabel>
               {decks.map((deck) => (
@@ -88,10 +82,8 @@ const CardInput = ({ selectedSpread, onCardChange, onDeckChange }) => {
               <SelectValue placeholder="Select card" />
             </SelectTrigger>
             <SelectContent
-              ref={(ref) => {
-                if (!ref) return;
-                ref.ontouchstart = (e) => e.preventDefault();
-              }}
+              onKeyUp={(e) => e.stopPropagation()}
+              ref={(ref) => ref?.addEventListener("touchend", (e) => e.preventDefault())}
               className="z-50"
             >
               <SelectGroup>
