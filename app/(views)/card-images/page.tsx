@@ -13,8 +13,8 @@ export default function Page() {
 
   const renderSuit = (suit) => (
     <div key={suit}>
-      <h2 className="mb-2 mt-4 text-2xl font-bold">{suit}</h2>
-      <div className="grid grid-cols-1 gap-2 gap-y-10 md:grid-cols-6">
+      <h2 className="mb-8 mt-16 text-2xl font-bold">{suit}</h2>
+      <div className="grid grid-cols-1 gap-2 gap-y-10 md:grid-cols-5 lg:grid-cols-7">
         {deck
           .filter((card) => card.suit === suit)
           .map((card) => (
@@ -32,13 +32,13 @@ export default function Page() {
   );
 
   return (
-    <div className="relative mx-auto max-w-7xl p-4">
+    <div className="relative mx-auto p-4 md:max-w-6xl">
       <h1 className="my-8">Card Glossary</h1>
       {suits.map((suit) => renderSuit(suit))}
 
       <Dialog.Root open={!!selectedCard} onOpenChange={() => setSelectedCard(null)}>
         <Dialog.Portal>
-          <DialogContent className="fixed left-1/2 top-1/2 max-h-[90vh] w-[90%] max-w-4xl -translate-x-1/2 -translate-y-1/2 transform overflow-scroll rounded-lg bg-background p-6 shadow-lg">
+          <DialogContent className="fixed left-1/2 top-1/2 max-h-[90vh] w-[90%] -translate-x-1/2 -translate-y-1/2 transform overflow-scroll rounded-lg bg-background p-6 shadow-lg md:max-w-2xl">
             <Dialog.Title className="mb-4 text-center text-3xl font-bold">{selectedCard?.cardName}</Dialog.Title>
             <Dialog.Description className="mb-6 text-center text-lg">{selectedCard?.suit}</Dialog.Description>
             <div className="mb-6 flex flex-col items-center">
