@@ -15,6 +15,8 @@ import InfoDialog from "./info-dialog";
 export type SelectedCardType = {
   cardName: string;
   orientation: string;
+  imageUrl?: string;
+  detail?: {};
 };
 
 export default function TarotSession() {
@@ -24,7 +26,10 @@ export default function TarotSession() {
   const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
   const [open, setOpen] = useState(false);
   const [selectedCards, setSelectedCards] = useState<SelectedCardType[]>();
-  const [selectedDeck, setSelectedDeck] = useState({ promptName: "Thoth Deck by Aleister Crowley" });
+  const [selectedDeck, setSelectedDeck] = useState({
+    promptName: "Custom deck (see card definitions for interpretations)",
+    value: "custom",
+  });
   const [spreadType, setSpreadType] = useState<any>(); // To store the selected spread type
   const { data: session } = useSession() as { data: { user: { id: string } } };
   const [hasOwnCards, setHasOwnCards] = useState(false);

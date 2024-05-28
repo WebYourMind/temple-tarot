@@ -11,15 +11,17 @@ import {
 import { Switch } from "components/ui/switch";
 import { Label } from "components/ui/label";
 import { deckCardsMapping } from "./tarot-deck";
+import { CardType } from "lib/types";
 
 const decks = [
+  // { value: "custom", name: "Custom Deck", promptName: "Custom deck (see card definitions for interpretations)" },
   { value: "thoth", name: "Thoth Deck", promptName: "Thoth Deck by Aleister Crowley" },
   { value: "ryder_waite", name: "Ryder Waite Deck", promptName: "Ryder Waite Deck" },
 ];
 
 const CardInput = ({ selectedSpread, onCardChange, onDeckChange }) => {
   const [selectedDeck, setSelectedDeck] = useState(decks[0].value);
-  const [cardSelections, setCardSelections] = useState(
+  const [cardSelections, setCardSelections] = useState<CardType[]>(
     Array(selectedSpread.numberOfCards).fill({ cardName: "", orientation: "upright" })
   );
   const [availableCards, setAvailableCards] = useState(deckCardsMapping[selectedDeck]);
@@ -41,6 +43,7 @@ const CardInput = ({ selectedSpread, onCardChange, onDeckChange }) => {
   const handleCardChange = (index, cardValue) => {
     const newSelections = [...cardSelections];
     newSelections[index] = { ...newSelections[index], cardName: cardValue };
+    // newSelections[index] = { ...newSelections[index], cardName: cardValue };
     setCardSelections(newSelections);
   };
 
@@ -90,7 +93,7 @@ const CardInput = ({ selectedSpread, onCardChange, onDeckChange }) => {
                 <SelectLabel>Cards</SelectLabel>
                 {availableCards.map((card) => (
                   <SelectItem key={card} value={card}>
-                    {card}
+                    {card.cardName || card}
                   </SelectItem>
                 ))}
               </SelectGroup>

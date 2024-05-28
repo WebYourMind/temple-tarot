@@ -10,6 +10,7 @@ import { Button } from "components/ui/button";
 import { IconClose } from "components/ui/icons";
 import { Baskervville } from "next/font/google";
 import { cn } from "lib/utils";
+import Image from "next/image";
 
 export const tarotFont = Baskervville({ weight: ["400"], subsets: ["latin"] });
 
@@ -25,6 +26,8 @@ export function Interpreter({ query, cards, spread, handleReset, selectedDeck })
     aiInterpretation: "",
   });
   const [isComplete, setIsComplete] = useState(false);
+
+  console.log(reading.cards);
 
   const generateReading = useCallback(async (content) => {
     let isSubscribed = true;
@@ -79,9 +82,12 @@ export function Interpreter({ query, cards, spread, handleReset, selectedDeck })
     const cardDescriptions = cards
       .map(
         (card, index) =>
-          `Position: ${index + 1}, position meaning: ${spread.cardMeanings[index]} \nCard drawn for this position: ${
+          `Position: ${index + 1}, position meaning: ${spread.cardMeanings[index]} \nCard drawn for this position: "${
             card.cardName
-          } (${card.orientation})\n\n`
+          }" (${card.orientation}) ${
+            selectedDeck.value === "custom" &&
+            `\nCard definition: ${card.readingTips} Upright guidance: ${card.uprightGuidance} Reversed guidance: ${card.reversedGuidance}`
+          }\n\n`
       )
       .join(", ");
 
@@ -107,6 +113,18 @@ export function Interpreter({ query, cards, spread, handleReset, selectedDeck })
           <div className="italic">
             <p>{reading?.userQuery || "Open Reading"}</p>
           </div>
+          {reading.cards.map(
+            (card) =>
+              card.imageUrl && (
+                <Image
+                  alt={card?.cardName}
+                  src={card?.imageUrl}
+                  width={256}
+                  height={384}
+                  className="rounded-lg shadow-lg"
+                />
+              )
+          )}
           <div>
             <h3 className="text-sm font-bold">Cards:</h3>
             {reading.cards.map((card, index) => (

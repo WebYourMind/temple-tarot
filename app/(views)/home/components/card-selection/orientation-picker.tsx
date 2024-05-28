@@ -33,7 +33,7 @@ function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
         <Button variant="default" className="w-1/3" onClick={switchOrientation}>
           Switch
         </Button>
-        <Button variant="outline" className="w-1/3" onClick={() => onSubmit(finalCard.name, finalCard.orientation)}>
+        <Button variant="outline" className="w-1/3" onClick={() => onSubmit(finalCard)}>
           Confirm
         </Button>
       </div>

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { tarotDeck } from "../tarot-deck";
+import { customDeck } from "../tarot-deck";
 import "../cards.css";
 import OrientationPicker from "./orientation-picker";
 import SplitDeck from "./split-deck";
+import { CardType } from "lib/types";
 
 interface CardSelectionProps {
-  onSelect: (cardName: string, orientation: "upright" | "reversed") => void;
+  onSelect: (finalCard: CardType) => void;
   currentStep: number;
   query: string;
 }
@@ -23,18 +24,21 @@ const shuffleArray = (array: any[]) => {
 
 const createShuffledDeck = () => {
   return shuffleArray(
-    tarotDeck.map((card) => ({
-      name: card,
+    customDeck.map((card) => ({
+      cardName: card.cardName,
+      suit: card.suit,
+      imageUrl: card.imageUrl,
+      detail: card.detail,
       orientation: Math.random() > 0.5 ? "upright" : "reversed",
     }))
   );
 };
 
 const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => {
-  const [deck, setDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>(createShuffledDeck());
-  const [leftDeck, setLeftDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>([]);
-  const [rightDeck, setRightDeck] = useState<{ name: string; orientation: "upright" | "reversed" }[]>([]);
-  const [finalCard, setFinalCard] = useState<{ name: string; orientation: "upright" | "reversed" }>();
+  const [deck, setDeck] = useState<CardType[]>(createShuffledDeck());
+  const [leftDeck, setLeftDeck] = useState<CardType[]>([]);
+  const [rightDeck, setRightDeck] = useState<CardType[]>([]);
+  const [finalCard, setFinalCard] = useState<CardType>();
 
   useEffect(() => {
     resetSelection(); // Reset to initial state on component mount
@@ -42,6 +46,7 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
 
   const resetSelection = () => {
     const shuffledDeck = deck;
+    console.log({ shuffledDeck });
     const midPoint = Math.ceil(shuffledDeck.length / 2);
     setLeftDeck(shuffledDeck.slice(0, midPoint));
     setRightDeck(shuffledDeck.slice(midPoint));
@@ -70,7 +75,12 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
     // If the selected deck has only one card, it's the final selection.
     if (selectedDeck.length === 1) {
       // onSelect(selectedDeck[0].name, selectedDeck[0].orientation); // Call onSelect with the final card.
-      setDeck(deck.filter((card) => card.name !== selectedDeck[0].name));
+      const chosenCard = selectedDeck[0];
+      const deckMinusCard = deck.filter((card) => card.cardName !== chosenCard.cardName);
+      console.log("chosen card:", chosenCard);
+      console.log("deck without card:", deckMinusCard);
+      setDeck(deckMinusCard);
+      console.log(selectedDeck[0]);
       onFinalCard(selectedDeck[0]);
       return;
     }

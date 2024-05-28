@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { deck } from "./new-deck";
+import { customDeck } from "../home/components/tarot-deck";
 import * as Dialog from "@radix-ui/react-dialog";
 import { DialogContent } from "components/ui/dialog";
 
@@ -15,7 +15,7 @@ export default function Page() {
     <div key={suit}>
       <h2 className="mb-8 mt-16 text-2xl font-bold">{suit}</h2>
       <div className="grid grid-cols-1 gap-2 gap-y-10 md:grid-cols-5 lg:grid-cols-7">
-        {deck
+        {customDeck
           .filter((card) => card.suit === suit)
           .map((card) => (
             <div
