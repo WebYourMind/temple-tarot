@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import TarotCard from "../tarot-card";
-import { ArrowBigLeft, ArrowBigRight, ArrowLeft, ArrowRight } from "lucide-react";
+import TarotCard from "./tarot-card";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "lib/utils";
-import { tarotFont } from "../interpreter";
 
 function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
   const [selectedSide, setSelectedSide] = useState(null);
@@ -12,14 +11,12 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
   const [loadStatus, setLoadStatus] = useState(new Array(leftDeck.length + rightDeck.length).fill(false));
 
   useEffect(() => {
-    // Check if all images are loaded
     if (loadStatus.every((status) => status === true)) {
       setAllLoaded(true);
     }
   }, [loadStatus]);
 
   const handleImageLoad = (index) => {
-    // Update the load status for individual card
     const newLoadStatus = [...loadStatus];
     newLoadStatus[index] = true;
     setLoadStatus(newLoadStatus);
@@ -40,16 +37,11 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
 
   return (
     <>
-      <p className={cn("mb-8 max-w-xs text-center text-xl md:mb-10", tarotFont.className)}>
+      <p className={cn("mb-8 max-w-xs text-center font-sans text-xl md:mb-10")}>
         The deck is split.
         <br />
         Where is your card?
       </p>
-      {/* <div className="flex w-full justify-around">
-        <ArrowBigLeft className="pulse-1" size={35} />
-        <ArrowBigRight className="pulse-2" size={35} />
-      </div> */}
-      {/* <ArrowBigLeft /> */}
       <div
         className={`flex w-full justify-between transition-opacity duration-700 ${
           allLoaded ? "opacity-100" : "opacity-0"
@@ -96,7 +88,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
                   >
                     <div className={cn("transition delay-300", startFade && "opacity-0")}>
                       <TarotCard
-                        alt={`${cardIndex + 1}: ${card.name} ${card.orientation}`}
+                        alt={`${cardIndex + 1}: ${card.cardName} ${card.orientation}`}
                         onLoad={() => handleImageLoad(cardIndex + (side === "left" ? 0 : leftDeck.length))}
                       />
                     </div>
@@ -104,12 +96,8 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
                 );
               })}
             </button>
-            <p className={cn("text-center md:mt-5", tarotFont.className)}>
-              {side.charAt(0).toUpperCase() + side.slice(1)} Half
-            </p>
-            <p className={cn("text-center", tarotFont.className)}>
-              {side === "left" ? leftDeck.length : rightDeck.length} Cards
-            </p>
+            <p className={cn("text-center font-sans md:mt-5")}>{side.charAt(0).toUpperCase() + side.slice(1)} Half</p>
+            <p className={cn("text-center font-sans")}>{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
           </div>
         ))}
       </div>

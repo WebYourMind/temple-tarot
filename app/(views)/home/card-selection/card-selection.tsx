@@ -1,6 +1,7 @@
+// home/card-selection.tsx
 import { useState, useEffect } from "react";
-import { customDeck } from "../tarot-deck";
-import "../cards.css";
+import { customDeck } from "lib/tarot-data/tarot-deck";
+import "styles/cards.css";
 import OrientationPicker from "./orientation-picker";
 import SplitDeck from "./split-deck";
 import { CardType } from "lib/types";
@@ -46,19 +47,11 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
 
   const resetSelection = () => {
     const shuffledDeck = deck;
-    console.log({ shuffledDeck });
     const midPoint = Math.ceil(shuffledDeck.length / 2);
     setLeftDeck(shuffledDeck.slice(0, midPoint));
     setRightDeck(shuffledDeck.slice(midPoint));
     setFinalCard(null);
   };
-
-  useEffect(() => {
-    const shuffledDeck = deck;
-    const midPoint = Math.ceil(shuffledDeck.length / 2);
-    setLeftDeck(shuffledDeck.slice(0, midPoint));
-    setRightDeck(shuffledDeck.slice(midPoint));
-  }, []);
 
   const onFinalCard = (card) => {
     setFinalCard(card);
@@ -69,28 +62,20 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
   };
 
   const handleSelectHalf = (half: "left" | "right") => {
-    // Determine the selected deck based on the user's choice.
     let selectedDeck = half === "left" ? [...leftDeck] : [...rightDeck];
 
-    // If the selected deck has only one card, it's the final selection.
     if (selectedDeck.length === 1) {
-      // onSelect(selectedDeck[0].name, selectedDeck[0].orientation); // Call onSelect with the final card.
       const chosenCard = selectedDeck[0];
       const deckMinusCard = deck.filter((card) => card.cardName !== chosenCard.cardName);
-      console.log("chosen card:", chosenCard);
-      console.log("deck without card:", deckMinusCard);
       setDeck(deckMinusCard);
-      console.log(selectedDeck[0]);
       onFinalCard(selectedDeck[0]);
       return;
     }
 
-    // Split the selected deck into new halves.
     const midPoint = Math.ceil(selectedDeck.length / 2);
-    const newLeftDeck = selectedDeck.slice(0, midPoint); // First half becomes the new left deck.
-    const newRightDeck = selectedDeck.slice(midPoint); // Second half becomes the new right deck.
+    const newLeftDeck = selectedDeck.slice(0, midPoint);
+    const newRightDeck = selectedDeck.slice(midPoint);
 
-    // Update the state with the new decks.
     setLeftDeck(newLeftDeck);
     setRightDeck(newRightDeck);
   };

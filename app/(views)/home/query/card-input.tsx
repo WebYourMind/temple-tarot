@@ -10,34 +10,36 @@ import {
 } from "components/ui/select";
 import { Switch } from "components/ui/switch";
 import { Label } from "components/ui/label";
-import { deckCardsMapping } from "./tarot-deck";
+import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { CardType } from "lib/types";
+import { useTarotSession } from "lib/contexts/tarot-session-context";
 
 const decks = [
-  // { value: "custom", name: "Custom Deck", promptName: "Custom deck (see card definitions for interpretations)" },
+  { value: "custom", name: "Custom Deck", promptName: "Custom deck (see card definitions for interpretations)" },
   { value: "thoth", name: "Thoth Deck", promptName: "Thoth Deck by Aleister Crowley" },
   { value: "ryder_waite", name: "Ryder Waite Deck", promptName: "Ryder Waite Deck" },
 ];
 
-const CardInput = ({ selectedSpread, onCardChange, onDeckChange }) => {
-  const [selectedDeck, setSelectedDeck] = useState(decks[0].value);
+const CardInput = () => {
+  const { spreadType, setSelectedCards, selectedDeck, setSelectedDeck } = useTarotSession();
+  // const [selectedDeck, setSelectedDeck] = useState(decks[0].value);
   const [cardSelections, setCardSelections] = useState<CardType[]>(
-    Array(selectedSpread.numberOfCards).fill({ cardName: "", orientation: "upright" })
+    Array(spreadType.numberOfCards).fill({ cardName: "", orientation: "upright" })
   );
-  const [availableCards, setAvailableCards] = useState(deckCardsMapping[selectedDeck]);
+  const [availableCards, setAvailableCards] = useState(deckCardsMapping[selectedDeck.value]);
 
   useEffect(() => {
-    setAvailableCards(deckCardsMapping[selectedDeck]);
-    setCardSelections(Array(selectedSpread.numberOfCards).fill({ cardName: "", orientation: "upright" }));
-  }, [selectedDeck, selectedSpread]);
+    setAvailableCards(deckCardsMapping[selectedDeck.value]);
+    setCardSelections(Array(spreadType.numberOfCards).fill({ cardName: "", orientation: "upright" }));
+  }, [selectedDeck, spreadType]);
 
   useEffect(() => {
-    onCardChange(cardSelections);
-  }, [cardSelections, onCardChange]);
+    setSelectedCards(cardSelections);
+  }, [cardSelections, setSelectedCards]);
 
   const handleDeckChange = (deckValue) => {
     setSelectedDeck(deckValue);
-    onDeckChange(decks.find((deck) => deck.value === deckValue));
+    setSelectedDeck(decks.find((deck) => deck.value === deckValue));
   };
 
   const handleCardChange = (index, cardValue) => {
@@ -60,7 +62,7 @@ const CardInput = ({ selectedSpread, onCardChange, onDeckChange }) => {
     <div className="container mx-auto p-4">
       <div className="mb-4">
         <Label>Choose a deck</Label>
-        <Select onValueChange={handleDeckChange} value={selectedDeck}>
+        <Select onValueChange={handleDeckChange} value={selectedDeck.value}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select deck" />
           </SelectTrigger>
@@ -92,7 +94,7 @@ const CardInput = ({ selectedSpread, onCardChange, onDeckChange }) => {
               <SelectGroup>
                 <SelectLabel>Cards</SelectLabel>
                 {availableCards.map((card) => (
-                  <SelectItem key={card} value={card}>
+                  <SelectItem key={card.cardName || card} value={card}>
                     {card.cardName || card}
                   </SelectItem>
                 ))}

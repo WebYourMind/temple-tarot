@@ -15,7 +15,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CreditBalance } from "../../app/(ai-payments)/(frontend)/components/credit-balance";
 import { LumenBalance } from "./lumen-balance";
 import { cn } from "lib/utils";
-import { tarotFont } from "app/(views)/home/components/interpreter";
 // import FullscreenComponent from "app/(views)/home/components/fullscreen";
 
 export default function Header() {
@@ -89,7 +88,7 @@ export default function Header() {
               </Sidebar>
             ) : (
               <Link href="/" className="mr-2 hover:no-underline">
-                <h3 className={cn("mt-0 text-lg text-foreground", tarotFont.className)}>{appConfig.appName}</h3>
+                <h3 className={cn("mt-0 font-sans text-lg text-foreground")}>{appConfig.appName}</h3>
               </Link>
             )}
             {status !== "loading" && (

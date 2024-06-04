@@ -1,4 +1,6 @@
-const tarotSpreads = [
+import { SpreadType } from "lib/contexts/tarot-session-context";
+
+const tarotSpreads: SpreadType[] = [
   {
     name: "Single Card Spread",
     description: "Draw a single card to gain insight into a specific situation or question.",

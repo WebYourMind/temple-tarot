@@ -7,7 +7,7 @@ import ReadingItemMenu from "./reading-item-menu";
 import { useReadingsContext } from "lib/contexts/readings-context";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
-import tarotSpreads from "app/(views)/home/components/tarot-spreads";
+import tarotSpreads from "lib/tarot-data/tarot-spreads";
 
 type ReadingItemProps = {
   reading: Reading;

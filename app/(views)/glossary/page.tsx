@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { customDeck } from "../home/components/tarot-deck";
+import { customDeck } from "../../../lib/tarot-data/tarot-deck";
 import * as Dialog from "@radix-ui/react-dialog";
 import { DialogContent } from "components/ui/dialog";
 

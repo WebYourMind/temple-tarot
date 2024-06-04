@@ -1,20 +1,22 @@
+// home/card-selection-wrapper.tsx
 import React, { useState } from "react";
 import CardSelection from "./card-selection";
+import { useTarotSession } from "lib/contexts/tarot-session-context";
 
 const ordinalLabels = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"];
 
-const CardSelectionWrapper = ({ spread, query, onSelectComplete }) => {
+const CardSelectionWrapper = () => {
+  const { spreadType, query, setSelectedCards, selectedCards, setPhase } = useTarotSession();
   const [currentStep, setCurrentStep] = useState(0);
-  const [selectedCards, setSelectedCards] = useState([]);
 
   const handleCardSelect = (card) => {
-    const newSelectedCards = [...selectedCards, card];
+    const newSelectedCards = [...(selectedCards || []), card];
     setSelectedCards(newSelectedCards);
 
-    if (currentStep < spread.numberOfCards - 1) {
+    if (currentStep < spreadType.numberOfCards - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      onSelectComplete(newSelectedCards);
+      setPhase("reading");
     }
   };
 

@@ -1,8 +1,7 @@
 "use client";
 
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
-import { tarotFont } from "app/(views)/home/components/interpreter";
-import FeedbackButtons from "app/(views)/home/components/reading-feedback";
+import FeedbackButtons from "app/(views)/interpretation/reading-feedback";
 import Loading from "components/loading";
 import { Button } from "components/ui/button";
 import { useReadingsContext } from "lib/contexts/readings-context";
@@ -27,7 +26,7 @@ export function ReadingTemplate({ reading }) {
           My Readings
         </Button>
       </div>
-      <div className={cn("mx-auto max-w-4xl py-8", tarotFont.className)}>
+      <div className={cn("mx-auto max-w-4xl py-8")}>
         <div className="flex flex-col">
           <p className="text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
           <h1 className="my-4 text-4xl font-bold">{reading?.userQuery || "Open Reading"}</h1>

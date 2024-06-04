@@ -2,12 +2,11 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import ReadingItem from "./reading-item";
-import Loading from "components/loading";
 import { useReadingsContext } from "lib/contexts/readings-context";
 import PaginationComponent from "./pagination-component";
 import LoadingSkeleton from "./loading-skeleton";
 import EmptyReadings from "./empty-readings";
-import { tarotFont } from "app/(views)/home/components/interpreter";
+import { tarotFont } from "app/(views)/interpretation/interpreter";
 import { cn } from "lib/utils";
 
 function paginate(currentPage, pageCount, delta = 2) {

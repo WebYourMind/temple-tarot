@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import type { Viewport } from "next";
 
 import { Suspense } from "react";
+import { headers } from "next/headers";
 
 const Header = dynamic(() => import("../components/navigation/header"), {
   ssr: false,
@@ -49,11 +50,14 @@ export const viewport: Viewport = {
   minimumScale: 1,
   userScalable: false,
   themeColor: "white",
-  // Also supported by less commonly used
+  // Also supported but less commonly used
   // interactiveWidget: 'resizes-visual',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const headersList = headers();
+  const header_url = headersList.get("x-url") || "";
+  const hideHeader = header_url && header_url.includes("/interpretation");
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -66,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <div className="flex min-h-screen flex-col bg-background text-foreground">
             <Toaster />
-            <Header />
+            {!hideHeader && <Header />}
             <Suspense>{children}</Suspense>
             <FeedbackWidget />
             <CookieNotice />
