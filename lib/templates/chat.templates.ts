@@ -10,7 +10,7 @@ Your response is consumer facing so ensure that it is suitable as a final piece 
 
 Please provide your response entirely in a JSON format with an array of sections where each section will be displayed on a separate slide. Each section should contain a "content", and if relevant to the section, a "cardName" and "orientation".
 Provide additional sections for an introduction and a conclusion also. If the user provided a specific query, you might need an additional section or two to add more depth to the reading.
-Ensure that the value of "content" in each section does not exceed 100 words. Format like so:
+Ensure that the value of "content" in each section does not exceed 100 words. Please ensure the json is correctly formatted and does not contain accidental trailing commas. Format like so:
 [
   {
     "content": "",

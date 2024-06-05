@@ -2,11 +2,12 @@
 
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import FeedbackButtons from "app/(views)/interpretation/reading-feedback";
+import TarotReadingSlides from "app/(views)/interpretation/tarot-reading-slides";
 import Loading from "components/loading";
 import { Button } from "components/ui/button";
 import { useReadingsContext } from "lib/contexts/readings-context";
-import { cn } from "lib/utils";
-import { StarIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
+import { cn, parseJsonSafe } from "lib/utils";
+import { StarIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -67,6 +68,15 @@ function Reading({ readingId }: ReadingProps) {
 
   if (loading || !reading) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
+
+  try {
+    const parsedInterpretation = parseJsonSafe(reading.aiInterpretation) as { content: string }[];
+    if (Array.isArray(parsedInterpretation) && parsedInterpretation.length > 0) {
+      return <TarotReadingSlides interpretation={parsedInterpretation} />;
+    }
+  } catch (error) {
+    return <ReadingTemplate reading={reading} />;
+  }
 
   return <ReadingTemplate reading={reading} />;
 }

@@ -57,6 +57,11 @@ export const useTarotSession = () => {
   return context;
 };
 
+const defaultDeck = {
+  promptName: "Toth 2.0 deck (see card definitions for interpretations)",
+  value: "custom",
+};
+
 export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [query, setQuery] = useState<string>("");
   const [showInfo, setShowInfo] = useState(false);
@@ -64,10 +69,7 @@ export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
   const [spreadPickerOpen, setSpreadPickerOpen] = useState(false);
   const [selectedCards, setSelectedCards] = useState<SelectedCardType[] | null>(null);
-  const [selectedDeck, setSelectedDeck] = useState({
-    promptName: "Custom deck (see card definitions for interpretations)",
-    value: "custom",
-  });
+  const [selectedDeck, setSelectedDeck] = useState(defaultDeck);
   const [spreadType, setSpreadType] = useState<any>(tarotSpreads[0]); // To store the selected spread type
   const { data: session } = useSession() as { data: { user: { id: string } } };
   const [hasOwnCards, setHasOwnCards] = useState(false);
@@ -92,6 +94,10 @@ export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setPhase("question");
     setSelectedCards(null);
     setQuery("");
+    setInterpretationArray(null);
+    setHasOwnCards(false);
+    setSelectedDeck(defaultDeck);
+    setSpreadType(tarotSpreads[0]);
   }
 
   //   useEffect(() => {

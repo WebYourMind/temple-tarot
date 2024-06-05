@@ -5,7 +5,7 @@ import { Textarea } from "components/ui/textarea";
 import { useState, useEffect } from "react";
 import SpreadSelector from "./spread-selector";
 import { useCredits } from "app/(ai-payments)/(frontend)/contexts/credit-context";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { cn } from "lib/utils";
 import { Checkbox } from "components/ui/checkbox";
 import CardInput from "./card-input";
@@ -14,7 +14,7 @@ import { useTarotSession } from "lib/contexts/tarot-session-context";
 const QueryInput = () => {
   const { handleSubmitQuestion, selectedCards, setSelectedCards, setHasOwnCards, query, setQuery } = useTarotSession();
   const { credits } = useCredits();
-  const router = useRouter();
+  // const router = useRouter();
   const [showCardInput, setShowCardInput] = useState(false);
 
   const handleSubmit = (e) => {
@@ -65,14 +65,14 @@ const QueryInput = () => {
       >
         SEND <PaperPlaneIcon className="ml-2" />
       </Button>
-      {credits === 0 && (
+      {/* {credits === 0 && (
         <div className="text-center">
           <p>You do not have enough credits!</p>
           <Button onClick={() => router.push("/pricing")} variant={"outline"}>
             Get Credits
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

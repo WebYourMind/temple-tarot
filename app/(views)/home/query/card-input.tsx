@@ -15,7 +15,7 @@ import { CardType } from "lib/types";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 
 const decks = [
-  { value: "custom", name: "Custom Deck", promptName: "Custom deck (see card definitions for interpretations)" },
+  { value: "custom", name: "Toth 2.0 Deck", promptName: "Toth 2.0 deck (see card definitions for interpretations)" },
   { value: "thoth", name: "Thoth Deck", promptName: "Thoth Deck by Aleister Crowley" },
   { value: "ryder_waite", name: "Ryder Waite Deck", promptName: "Ryder Waite Deck" },
 ];
@@ -44,8 +44,13 @@ const CardInput = () => {
 
   const handleCardChange = (index, cardValue) => {
     const newSelections = [...cardSelections];
-    newSelections[index] = { ...newSelections[index], cardName: cardValue };
-    // newSelections[index] = { ...newSelections[index], cardName: cardValue };
+
+    // if from custom deck
+    if (cardValue.cardName) {
+      newSelections[index] = { ...newSelections[index], ...cardValue };
+    } else {
+      newSelections[index] = { ...newSelections[index], cardName: cardValue };
+    }
     setCardSelections(newSelections);
   };
 
@@ -94,7 +99,7 @@ const CardInput = () => {
               <SelectGroup>
                 <SelectLabel>Cards</SelectLabel>
                 {availableCards.map((card) => (
-                  <SelectItem key={card.cardName || card} value={card}>
+                  <SelectItem key={card.cardName || card} value={card.cardName || card}>
                     {card.cardName || card}
                   </SelectItem>
                 ))}

@@ -9,6 +9,7 @@ import { useLumens } from "lib/contexts/lumen-context";
 import TarotReadingSlides from "app/(views)/interpretation/tarot-reading-slides";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { useRouter } from "next/navigation";
+import { parseJsonSafe } from "lib/utils";
 
 export const tarotFont = { className: "font-sans" }; // Baskervville({ weight: ["400"], subsets: ["latin"] });
 
@@ -63,8 +64,7 @@ function Interpreter() {
         if (done) {
           setIsComplete(true);
           if (interpretationValue) {
-            console.log(interpretationValue);
-            const intArray = JSON.parse(interpretationValue);
+            const intArray = parseJsonSafe(interpretationValue);
             if (Array.isArray(intArray)) {
               setInterpretationArray(intArray);
             }
