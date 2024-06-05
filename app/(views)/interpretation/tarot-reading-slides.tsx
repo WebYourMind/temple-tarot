@@ -84,7 +84,7 @@ const TarotReadingSlides = ({ interpretation }) => {
         </Button>
         <div className="flex">
           {interpretation.map((page, index) => (
-            <Dot className={index === currentSlide ? "text-primary" : "text-muted"} />
+            <Dot key={index.toString()} className={index === currentSlide ? "text-primary" : "text-muted"} />
           ))}
         </div>
         <Button variant="ghost" size="icon" onClick={nextSlide} disabled={currentSlide === interpretation.length - 1}>
