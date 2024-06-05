@@ -1,13 +1,12 @@
 import { Button } from "components/ui/button";
-import Card from "../tarot-card";
+import Card from "./tarot-card";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { tarotFont } from "../interpreter";
 import { cn } from "lib/utils";
 
 function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
   return (
     <div className="flex flex-col items-center justify-center pb-4 fade-in">
-      <p className={cn("text-center text-xl", tarotFont.className)}>
+      <p className={cn("text-center font-sans text-xl")}>
         Is your card this way... <br />
         or that way?
       </p>
@@ -33,7 +32,7 @@ function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
         <Button variant="default" className="w-1/3" onClick={switchOrientation}>
           Switch
         </Button>
-        <Button variant="outline" className="w-1/3" onClick={() => onSubmit(finalCard.name, finalCard.orientation)}>
+        <Button variant="outline" className="w-1/3" onClick={() => onSubmit(finalCard)}>
           Confirm
         </Button>
       </div>

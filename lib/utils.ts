@@ -130,3 +130,17 @@ export function keysToCamel(o) {
 
   return o;
 }
+
+function removeTrailingCommas(jsonString) {
+  return jsonString.replace(/,\s*([\]}])/g, "$1");
+}
+
+export function parseJsonSafe(jsonString) {
+  const cleanedJsonString = removeTrailingCommas(jsonString);
+  try {
+    return JSON.parse(cleanedJsonString);
+  } catch (error) {
+    console.error("Invalid JSON:", error);
+    return null;
+  }
+}

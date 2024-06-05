@@ -1,19 +1,41 @@
-import { Metadata } from "next";
-import appConfig from "app.config";
-import dynamic from "next/dynamic";
-import Loading from "components/loading";
-// import { TarotSession } from "./components/tarot-session";
+"use client";
 
-const TarotSession = dynamic(() => import("./components/tarot-session"), {
-  loading: () => <Loading />,
-  ssr: false,
-});
+import { useEffect } from "react";
+import { Dialog } from "@radix-ui/react-dialog";
+import { DialogTrigger } from "components/ui/dialog";
+import { Info } from "lucide-react";
+import { useTarotSession } from "../../../lib/contexts/tarot-session-context";
+import QueryInput from "./query/query-input";
+import CardSelectionWrapper from "./card-selection/card-selection-wrapper";
+import InfoDialog from "../../../components/info-dialog";
+import { useRouter } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: appConfig.appName,
-  description: appConfig.description,
-};
+export default function Home() {
+  const { phase, selectedCards, showInfo, setShowInfo, infoContent, spreadPickerOpen, setSpreadPickerOpen } =
+    useTarotSession();
 
-export default async function Home() {
-  return <TarotSession />;
+  const router = useRouter();
+
+  useEffect(() => {
+    if (phase === "reading" && selectedCards) {
+      router.push("/interpretation");
+    }
+  }, [phase]);
+
+  return (
+    <div className="max-w-4xl p-4 fade-in md:container">
+      <Dialog open={showInfo} onOpenChange={() => setShowInfo(!showInfo)}>
+        <div className="flex w-full justify-end">
+          <DialogTrigger className="opacity-50">
+            <Info />
+          </DialogTrigger>
+        </div>
+        <Dialog open={spreadPickerOpen} onOpenChange={() => setSpreadPickerOpen(!spreadPickerOpen)}>
+          {phase === "question" && <QueryInput />}
+        </Dialog>
+        {phase === "cards" && <CardSelectionWrapper />}
+        <InfoDialog infoContent={infoContent} closeDialog={() => setShowInfo(false)} />
+      </Dialog>
+    </div>
+  );
 }

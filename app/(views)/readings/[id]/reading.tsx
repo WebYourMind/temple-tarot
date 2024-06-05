@@ -1,13 +1,13 @@
 "use client";
 
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
-import { tarotFont } from "app/(views)/home/components/interpreter";
-import FeedbackButtons from "app/(views)/home/components/reading-feedback";
+import FeedbackButtons from "app/(views)/interpretation/reading-feedback";
+import TarotReadingSlides from "app/(views)/interpretation/tarot-reading-slides";
 import Loading from "components/loading";
 import { Button } from "components/ui/button";
 import { useReadingsContext } from "lib/contexts/readings-context";
-import { cn } from "lib/utils";
-import { StarIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
+import { cn, parseJsonSafe } from "lib/utils";
+import { StarIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -27,7 +27,7 @@ export function ReadingTemplate({ reading }) {
           My Readings
         </Button>
       </div>
-      <div className={cn("mx-auto max-w-4xl py-8", tarotFont.className)}>
+      <div className={cn("mx-auto max-w-4xl py-8")}>
         <div className="flex flex-col">
           <p className="text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
           <h1 className="my-4 text-4xl font-bold">{reading?.userQuery || "Open Reading"}</h1>
@@ -68,6 +68,15 @@ function Reading({ readingId }: ReadingProps) {
 
   if (loading || !reading) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
+
+  try {
+    const parsedInterpretation = parseJsonSafe(reading.aiInterpretation) as { content: string }[];
+    if (Array.isArray(parsedInterpretation) && parsedInterpretation.length > 0) {
+      return <TarotReadingSlides interpretation={parsedInterpretation} />;
+    }
+  } catch (error) {
+    return <ReadingTemplate reading={reading} />;
+  }
 
   return <ReadingTemplate reading={reading} />;
 }

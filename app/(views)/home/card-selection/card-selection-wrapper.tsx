@@ -1,28 +1,26 @@
+// home/card-selection-wrapper.tsx
 import React, { useState } from "react";
 import CardSelection from "./card-selection";
-import { tarotFont } from "../interpreter";
-import { cn } from "lib/utils";
+import { useTarotSession } from "lib/contexts/tarot-session-context";
 
 const ordinalLabels = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"];
-// const numberToWords = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
 
-const CardSelectionWrapper = ({ spread, query, onSelectComplete }) => {
+const CardSelectionWrapper = () => {
+  const { spreadType, query, setSelectedCards, selectedCards, setPhase } = useTarotSession();
   const [currentStep, setCurrentStep] = useState(0);
-  const [selectedCards, setSelectedCards] = useState([]);
 
-  const handleCardSelect = (cardName, orientation) => {
-    const newSelectedCards = [...selectedCards, { cardName, orientation }];
+  const handleCardSelect = (card) => {
+    const newSelectedCards = [...(selectedCards || []), card];
     setSelectedCards(newSelectedCards);
 
-    if (currentStep < spread.numberOfCards - 1) {
+    if (currentStep < spreadType.numberOfCards - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      onSelectComplete(newSelectedCards);
+      setPhase("reading");
     }
   };
 
   const cardOrdinal = ordinalLabels[currentStep] || (currentStep + 1).toString(); // Fallback to numbers if out of predefined range
-  // const totalCardsWord = numberToWords[spread.numberOfCards] || spread.numberOfCards.toString(); // Fallback to numbers if out of predefined range
 
   return (
     <div>
