@@ -122,13 +122,11 @@ function Interpreter() {
         generateReading(content);
       }
     } else {
-      console.log("redirect");
       router.replace("/");
     }
   }, [query, cards, spread]);
 
   if (interpretationArray) {
-    console.log(interpretationArray);
     return <TarotReadingSlides interpretation={interpretationArray} />;
   }
 

@@ -23,9 +23,9 @@ export default function Home() {
   }, [phase]);
 
   return (
-    <div className="max-w-4xl p-4 fade-in md:container">
+    <div className="relative flex w-full max-w-4xl grow p-4 fade-in md:container">
       <Dialog open={showInfo} onOpenChange={() => setShowInfo(!showInfo)}>
-        <div className="flex w-full justify-end">
+        <div className="absolute right-4">
           <DialogTrigger className="opacity-50">
             <Info />
           </DialogTrigger>

@@ -37,20 +37,18 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
 
   return (
     <>
-      <p className={cn("mb-8 max-w-xs text-center font-sans text-xl md:mb-10")}>
-        The deck is split.
-        <br />
-        Where is your card?
-      </p>
+      <p className={cn("mb-8 max-w-xs text-center font-sans text-xl md:mb-10")}>Where is your card?</p>
       <div
-        className={`flex w-full justify-between transition-opacity duration-700 ${
+        className={`flex w-full grow justify-between transition-opacity duration-700 ${
           allLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
         {["left", "right"].map((side) => (
           <div
             key={side}
-            className={`transition duration-300 md:mx-2 ${selectedSide && selectedSide !== side ? "opacity-0" : ""}`}
+            className={`flex h-full grow flex-col items-center transition duration-300 md:mx-2 ${
+              selectedSide && selectedSide !== side ? "opacity-0" : ""
+            }`}
           >
             <div className="flex w-full justify-center">
               {side === "left" ? (
@@ -62,7 +60,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
             <button
               onClick={() => handleDeckSelect(side)}
               className={cn(
-                "relative flex h-[250px] w-[170px] scale-75 cursor-default flex-col items-center rounded-lg transition-all duration-500 fade-in md:h-[370px] md:w-[300px] md:scale-100 md:p-0",
+                "relative flex h-[35vh]  w-full scale-75 cursor-default flex-col items-center rounded-lg pt-36 transition-all duration-500 fade-in md:h-[370px] md:w-[300px] md:scale-100 md:p-0",
                 selectedSide && selectedSide !== side ? "opacity-0" : ""
               )}
             >
@@ -96,8 +94,12 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
                 );
               })}
             </button>
-            <p className={cn("text-center font-sans md:mt-5")}>{side.charAt(0).toUpperCase() + side.slice(1)} Half</p>
-            <p className={cn("text-center font-sans")}>{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
+            <p className={cn("my-0 text-center font-sans md:mt-5")}>
+              {side.charAt(0).toUpperCase() + side.slice(1)} Half
+            </p>
+            <p className={cn("my-0 text-center font-sans")}>
+              {side === "left" ? leftDeck.length : rightDeck.length} Cards
+            </p>
           </div>
         ))}
       </div>
