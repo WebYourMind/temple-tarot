@@ -32,8 +32,8 @@ const QueryInput = () => {
   const isSubmitDisabled = showCardInput && selectedCards?.some((selection) => selection.cardName === "");
 
   return (
-    <div className="container mx-auto mt-8 flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
-      <Label htmlFor="question" className={cn("mb-2 text-center font-sans text-xl")}>
+    <div className="container mx-auto flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
+      <Label htmlFor="question" className={cn("mb-2 px-2 text-center font-sans text-xl md:px-0")}>
         What guidance are you seeking?
       </Label>
       <Textarea
@@ -43,6 +43,7 @@ const QueryInput = () => {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Write about it here (or leave blank for an open reading)..."
         maxLength={5000}
+        rows={4}
         autoFocus
       />
       <SpreadSelector />

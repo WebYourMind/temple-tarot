@@ -16,7 +16,6 @@ const FeedbackWidget = dynamic(() => import("../components/feedback/feedback-wid
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  console.log(pathname);
   const hideHeader = pathname === "/interpretation" || pathname.includes("/readings/");
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">

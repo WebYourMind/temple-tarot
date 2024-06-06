@@ -23,7 +23,7 @@ const CardSelectionWrapper = () => {
   const cardOrdinal = ordinalLabels[currentStep] || (currentStep + 1).toString(); // Fallback to numbers if out of predefined range
 
   return (
-    <div>
+    <div className="w-full">
       <p className="text-center text-xs uppercase">{cardOrdinal} card</p>
       <CardSelection onSelect={handleCardSelect} query={query} currentStep={currentStep} />
     </div>
