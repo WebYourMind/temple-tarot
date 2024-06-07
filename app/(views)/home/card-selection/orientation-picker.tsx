@@ -1,11 +1,11 @@
 import { Button } from "components/ui/button";
-import Card from "./tarot-card";
+import TarotCard from "./tarot-card";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { cn } from "lib/utils";
 
 function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
   return (
-    <div className="flex flex-col items-center justify-center pb-4 fade-in">
+    <div className="flex h-full flex-col items-center justify-center pb-4 fade-in">
       <p className={cn("text-center font-sans text-xl")}>
         Is your card this way... <br />
         or that way?
@@ -14,9 +14,9 @@ function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
         <button onClick={switchOrientation}>
           <ArrowUp className="pulse-1 opacity-90" size={25} />
         </button>
-        <button onClick={switchOrientation} className="mt-4 p-4">
+        <button onClick={switchOrientation} className="mt-4 p-4 px-16">
           <div className="relative">
-            <Card
+            <TarotCard
               alt="Your Card"
               className={`${
                 finalCard.orientation === "upright" ? "rotate-0" : "rotate-180"

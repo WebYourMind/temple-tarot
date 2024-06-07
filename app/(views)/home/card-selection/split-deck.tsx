@@ -46,11 +46,11 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
         {["left", "right"].map((side) => (
           <div
             key={side}
-            className={`flex h-full grow flex-col items-center transition duration-300 md:mx-2 ${
+            className={`flex h-full grow flex-col items-center transition duration-300 md:mx-auto ${
               selectedSide && selectedSide !== side ? "opacity-0" : ""
             }`}
           >
-            <div className="flex w-full justify-center">
+            <div className="mb-4 flex w-full justify-center">
               {side === "left" ? (
                 <ArrowLeft className="pulse-1 opacity-90" size={25} />
               ) : (
@@ -60,25 +60,25 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
             <button
               onClick={() => handleDeckSelect(side)}
               className={cn(
-                "relative flex h-[35vh]  w-full scale-75 cursor-default flex-col items-center rounded-lg pt-36 transition-all duration-500 fade-in md:h-[370px] md:w-[300px] md:scale-100 md:p-0",
+                "relative h-[200px] w-full max-w-[220px] cursor-default transition-all duration-500 fade-in md:h-[330px] md:w-[400px] md:max-w-xs md:p-0",
                 selectedSide && selectedSide !== side ? "opacity-0" : ""
               )}
             >
               {(side === "left" ? leftDeck : rightDeck).map((card, cardIndex) => {
                 const isSideSelected = selectedSide === side;
                 const isBottomHalf = cardIndex < (leftDeck.length - 1) / 2;
-                const defaultPosition = -leftDeck.length / 2 + cardIndex + 1;
+                const defaultPosition = -leftDeck.length / 2 + cardIndex;
                 const distance = isMobile ? 50 : 100;
 
                 const startFade = !isBottomHalf && isSideSelected;
 
-                const translate = `translate(${
+                const translate = `translate(calc(${
                   (isSideSelected ? (isBottomHalf ? -distance : distance) : 0) + (isMobile ? 0 : defaultPosition)
-                }px, ${defaultPosition}px)`;
+                }px - 50%), calc(${defaultPosition}px - 50%))`;
                 return (
                   <div
                     key={cardIndex}
-                    className={cn(`absolute top-0 cursor-pointer transition ease-in-out md:top-8`)}
+                    className={cn(`absolute left-1/2 top-1/2 cursor-pointer transition ease-in-out`)}
                     style={{
                       transform: translate,
                       zIndex: cardIndex,

@@ -49,7 +49,7 @@ const TarotReadingSlides = ({ interpretation }) => {
   return (
     <div
       className={cn(
-        "relative mx-auto flex h-screen w-full max-w-2xl flex-col justify-between p-4 text-center font-sans md:max-w-3xl md:pb-16 md:pt-16"
+        "relative mx-auto flex h-screen w-full max-w-2xl flex-col justify-between p-4 text-center font-sans md:max-w-3xl"
       )}
     >
       <div className="flex items-center justify-between border-b border-b-muted">
