@@ -16,7 +16,7 @@ Make sure each section contains rich, detailed, and comprehensive content. If ne
 Ensure the JSON is correctly formatted and does not contain accidental trailing commas. Format like so:
 [
   {
-    "content": "",
+    "content": "(max 60 words each)",
     "cardName": "(optional)",
     "orientation": "(optional)"
   },
