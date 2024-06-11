@@ -4,7 +4,6 @@ import { Label } from "components/ui/label";
 import { Textarea } from "components/ui/textarea";
 import { useState, useEffect } from "react";
 import SpreadSelector from "./spread-selector";
-import { useCredits } from "app/(ai-payments)/(frontend)/contexts/credit-context";
 // import { useRouter } from "next/navigation";
 import { cn } from "lib/utils";
 import { Checkbox } from "components/ui/checkbox";
@@ -13,7 +12,6 @@ import { useTarotSession } from "lib/contexts/tarot-session-context";
 
 const QueryInput = () => {
   const { handleSubmitQuestion, selectedCards, setSelectedCards, setHasOwnCards, query, setQuery } = useTarotSession();
-  const { credits } = useCredits();
   // const router = useRouter();
   const [showCardInput, setShowCardInput] = useState(false);
 
@@ -59,11 +57,7 @@ const QueryInput = () => {
         </div>
       </div>
       {showCardInput && <CardInput />}
-      <Button
-        onClick={handleSubmit}
-        variant={"ghost"}
-        disabled={!credits || credits === 0 || (showCardInput && isSubmitDisabled)}
-      >
+      <Button onClick={handleSubmit} variant={"ghost"} disabled={showCardInput && isSubmitDisabled}>
         SEND <PaperPlaneIcon className="ml-2" />
       </Button>
       {/* {credits === 0 && (

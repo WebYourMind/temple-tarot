@@ -8,8 +8,9 @@ export async function rateLimitReached(userId) {
       SELECT is_subscribed, subscription_status FROM users WHERE id = ${userId};
   `;
 
-  const { is_subscribed, subscription_status } = userSubscription.rows[0];
-  const maxRequests = is_subscribed && subscription_status === "active" ? 22 : 22; // 1;
+  const { is_subscribed } = userSubscription.rows[0];
+  if (!is_subscribed) return true;
+  const maxRequests = 22; // is_subscribed && subscription_status === "active" ? 22 : 22; // 1;
 
   try {
     const { rows } = await sql`
@@ -20,8 +21,10 @@ export async function rateLimitReached(userId) {
         RETURNING request_count;
     `;
 
+    console.log(rows[0]);
+
     const isLimitReached = rows[0].request_count > maxRequests;
-    return { isLimitReached, is_subscribed };
+    return isLimitReached;
   } catch (error) {
     console.error("Error checking rate limit:", error);
     throw Error(error);
