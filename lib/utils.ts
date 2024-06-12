@@ -1,14 +1,14 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
-import { UserProfile } from "./types";
 
 export const EXPIRY_TIME_ONE_HOUR = 60 * 60 * 1000; // 1 hour
-
+export const EXPIRY_TIME_ONE_DAY = 60 * 60 * 1000 * 24; // 1 day
 export const EXPIRY_TIME_ONE_WEEK = 60 * 60 * 1000 * 24 * 7; // 1 week
 
 export const expiryTypes: { [key: string]: number } = {
   ONE_HOUR: EXPIRY_TIME_ONE_HOUR,
+  ONE_DAY: EXPIRY_TIME_ONE_DAY,
   ONE_WEEK: EXPIRY_TIME_ONE_WEEK,
 };
 

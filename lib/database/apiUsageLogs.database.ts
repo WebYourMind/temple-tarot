@@ -5,11 +5,15 @@ export async function rateLimitReached(userId) {
 
   // Fetch user subscription status
   const userSubscription = await sql`
-      SELECT is_subscribed, subscription_status FROM users WHERE id = ${userId};
+      SELECT is_subscribed, subscription_status, pass_expiry FROM users WHERE id = ${userId};
   `;
 
-  const { is_subscribed } = userSubscription.rows[0];
-  if (!is_subscribed) return true;
+  const { is_subscribed, pass_expiry } = userSubscription.rows[0];
+
+  const isPassValid = pass_expiry && new Date(pass_expiry) > new Date();
+
+  if (!is_subscribed && !isPassValid) return true;
+
   const maxRequests = 22; // is_subscribed && subscription_status === "active" ? 22 : 22; // 1;
 
   try {
@@ -20,8 +24,6 @@ export async function rateLimitReached(userId) {
         DO UPDATE SET request_count = api_usage_logs.request_count + 1
         RETURNING request_count;
     `;
-
-    console.log(rows[0]);
 
     const isLimitReached = rows[0].request_count > maxRequests;
     return isLimitReached;
