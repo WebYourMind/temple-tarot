@@ -10,6 +10,7 @@ import { cn } from "lib/utils";
 import { Checkbox } from "components/ui/checkbox";
 import CardInput from "./card-input";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
+import DeckSelector from "./deck-selector";
 
 const QueryInput = () => {
   const { handleSubmitQuestion, selectedCards, setSelectedCards, setHasOwnCards, query, setQuery } = useTarotSession();
@@ -32,7 +33,7 @@ const QueryInput = () => {
   const isSubmitDisabled = showCardInput && selectedCards?.some((selection) => selection.cardName === "");
 
   return (
-    <div className="container mx-auto flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
+    <div className="container mx-auto flex h-full max-w-xl flex-col items-center justify-center space-y-8 px-2 md:mt-10">
       <Label htmlFor="question" className={cn("mb-2 px-2 text-center font-sans text-xl md:px-0")}>
         What guidance are you seeking?
       </Label>
@@ -46,6 +47,7 @@ const QueryInput = () => {
         rows={4}
         autoFocus
       />
+      <DeckSelector />
       <SpreadSelector />
       <div className="flex items-center space-x-2">
         <Checkbox id="terms1" checked={showCardInput} onCheckedChange={setShowCardInput as () => void} />
@@ -54,7 +56,7 @@ const QueryInput = () => {
             htmlFor="terms1"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-            I have my own Tarot deck
+            I have a physical deck
           </label>
         </div>
       </div>

@@ -190,7 +190,7 @@ function Interpreter() {
   //     </div>
   //   );
   // }
-  return <Loading />;
+  return <Loading message="Reading the cards..." />;
 }
 
 export default Interpreter;

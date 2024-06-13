@@ -14,14 +14,8 @@ import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { CardType } from "lib/types";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 
-const decks = [
-  { value: "custom", name: "Toth 2.0 Deck", promptName: "Toth 2.0 deck (see card definitions for interpretations)" },
-  { value: "thoth", name: "Thoth Deck", promptName: "Thoth Deck by Aleister Crowley" },
-  { value: "ryder_waite", name: "Ryder Waite Deck", promptName: "Ryder Waite Deck" },
-];
-
 const CardInput = () => {
-  const { spreadType, setSelectedCards, selectedDeck, setSelectedDeck } = useTarotSession();
+  const { spreadType, setSelectedCards, selectedDeck } = useTarotSession();
   // const [selectedDeck, setSelectedDeck] = useState(decks[0].value);
   const [cardSelections, setCardSelections] = useState<CardType[]>(
     Array(spreadType.numberOfCards).fill({ cardName: "", orientation: "upright" })
@@ -36,11 +30,6 @@ const CardInput = () => {
   useEffect(() => {
     setSelectedCards(cardSelections);
   }, [cardSelections, setSelectedCards]);
-
-  const handleDeckChange = (deckValue) => {
-    setSelectedDeck(deckValue);
-    setSelectedDeck(decks.find((deck) => deck.value === deckValue));
-  };
 
   const handleCardChange = (index, cardValue) => {
     const newSelections = [...cardSelections];
@@ -64,26 +53,7 @@ const CardInput = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="mb-4">
-        <Label>Choose a deck</Label>
-        <Select onValueChange={handleDeckChange} value={selectedDeck.value}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select deck" />
-          </SelectTrigger>
-          <SelectContent ref={(ref) => ref?.addEventListener("touchend", (e) => e.preventDefault())} className="z-50">
-            <SelectGroup>
-              <SelectLabel>Decks</SelectLabel>
-              {decks.map((deck) => (
-                <SelectItem key={deck.value} value={deck.value}>
-                  {deck.name}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-
+    <div className="container mx-auto">
       {cardSelections.map((selection, index) => (
         <div key={index} className="mb-4">
           <Label>Card {index + 1}</Label>
