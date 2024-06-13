@@ -1,5 +1,5 @@
 import { getSession } from "lib/auth";
-import { getUserPassExpiry } from "lib/database/user.database";
+import { getUserAccessPlan } from "lib/database/user.database";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -19,7 +19,7 @@ export async function GET() {
     }
 
     //get user data with address from database
-    const user = await getUserPassExpiry(parseInt(userId));
+    const user = await getUserAccessPlan(parseInt(userId));
     // Check if we got a result back
     if (!user) {
       return NextResponse.json(
@@ -32,16 +32,11 @@ export async function GET() {
       );
     }
 
-    const hasExpiry = user.pass_expiry !== null;
-
-    if (!hasExpiry) return NextResponse.json({ message: "No pass found" }, { status: 404 });
-
-    console.log(user.pass_expiry);
-
     return NextResponse.json(
       {
         message: "User Pass retrieved successfully.",
         passExpiry: user.pass_expiry,
+        isSubscribed: user.is_subscribed,
       },
       {
         status: 200,

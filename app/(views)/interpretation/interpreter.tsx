@@ -4,8 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import "styles/cards.css";
 import Loading from "components/loading";
-import { useCredits } from "app/(ai-payments)/(frontend)/contexts/credit-context";
-import { useLumens } from "lib/contexts/lumen-context";
 import TarotReadingSlides from "app/(views)/interpretation/tarot-reading-slides";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { useRouter } from "next/navigation";
@@ -25,9 +23,6 @@ function Interpreter() {
   } = useTarotSession();
 
   const router = useRouter();
-
-  const { fetchCreditBalance } = useCredits();
-  const { fetchLumenBalance } = useLumens();
   // const [reading, setReading] = useState({
   //   userQuery: query,
   //   createdAt: new Date().toISOString(),
@@ -69,8 +64,6 @@ function Interpreter() {
               setInterpretationArray(intArray);
             }
           }
-          fetchCreditBalance();
-          fetchLumenBalance();
           break;
         }
 

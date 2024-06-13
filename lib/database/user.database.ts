@@ -202,9 +202,9 @@ export const addStripeCustomerId = async (email, customerId) => {
   }
 };
 
-export const getUserPassExpiry = async (userId) => {
+export const getUserAccessPlan = async (userId) => {
   try {
-    const { rows } = await sql`SELECT pass_expiry
+    const { rows } = await sql`SELECT pass_expiry, is_subscribed
       FROM users
       WHERE id = ${userId};`;
     if (rows.length > 0) {

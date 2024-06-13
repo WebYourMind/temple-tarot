@@ -1,33 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-
-interface CurrentPassData {
-  passExpiry: string;
-}
-
-const fetchPassExpiry = async (): Promise<CurrentPassData> => {
-  try {
-    const response = await fetch("/api/user/passes");
-    if (!response.ok) throw new Error("Failed to fetch user passes.");
-    // @ts-ignore
-    return response.json() as { passExpiry: string };
-  } catch (error) {
-    console.error("Fetching plans failed:", error);
-    return null;
-  }
-};
+import React from "react";
+import { useUserAccessPlan } from "../contexts/user-access-plan-context";
 
 const CurrentPass: React.FC = () => {
-  const [passExpiry, setPassExpiry] = useState<string>();
+  const { isSubscribed, passExpiry } = useUserAccessPlan();
 
-  useEffect(() => {
-    fetchPassExpiry().then((data) => {
-      if (data.passExpiry) {
-        setPassExpiry(data.passExpiry);
-      }
-    });
-  }, []);
+  if (isSubscribed) {
+    return (
+      <div className="mx-auto mb-8 max-w-sm rounded-lg border p-2">
+        <p className="text-center text-sm">You have an active Temple Tarot subscription ✨</p>
+      </div>
+    );
+  }
 
   if (!passExpiry) return null;
 
