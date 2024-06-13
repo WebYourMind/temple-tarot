@@ -201,3 +201,18 @@ export const addStripeCustomerId = async (email, customerId) => {
     console.error(error);
   }
 };
+
+export const getUserPassExpiry = async (userId) => {
+  try {
+    const { rows } = await sql`SELECT pass_expiry
+      FROM users
+      WHERE id = ${userId};`;
+    if (rows.length > 0) {
+      return rows[0];
+    }
+    return null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

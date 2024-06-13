@@ -6,6 +6,7 @@ import { Button } from "components/ui/button";
 import Loading from "components/loading";
 import Faq from "./faq";
 import { manageSubscription } from "../utils";
+import CurrentPass from "./current-pass";
 
 interface SimplifiedPrice {
   id: string;
@@ -58,6 +59,7 @@ const Pricing: React.FC = () => {
   return (
     <div className="min-h-screen pt-8 md:pt-16">
       <div className="container mx-auto w-full max-w-5xl">
+        <CurrentPass />
         <header className="mb-16 text-center">
           <h1 className="mb-4 text-4xl font-bold">Pricing</h1>
           <p className="mb-6 text-lg opacity-70">
