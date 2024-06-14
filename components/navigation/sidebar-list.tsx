@@ -6,6 +6,7 @@ import { SidebarItem } from "./sidebar-item";
 // import { CreditBalance } from "../../app/(ai-payments)/(frontend)/components/credit-balance";
 import { IconPlus } from "components/ui/icons";
 import { useSession } from "next-auth/react";
+import { BookOpenIcon } from "lucide-react";
 
 const menuItems = [
   {
@@ -27,6 +28,11 @@ const menuItems = [
     name: "Pricing",
     path: "/pricing",
     icon: <IconPlus />,
+  },
+  {
+    name: "Toth 2.0 Glossary",
+    path: "/glossary",
+    icon: <BookOpenIcon className="h-4 w-4" />,
   },
 ];
 
