@@ -42,20 +42,21 @@ export const CardDialog = ({ card, open, onOpenChange }) => {
 export default function Page() {
   const [selectedCard, setSelectedCard] = useState(null);
 
-  const renderSuit = (suit) => (
+  const renderSuit = (suit, prevCards) => (
     <div key={suit}>
       <h2 className="mb-8 mt-16 text-2xl font-bold">{suit}</h2>
-      <div className="grid grid-cols-1 gap-2 gap-y-10 md:grid-cols-5 lg:grid-cols-7">
+      <div className="grid grid-cols-3 gap-2 gap-y-10 md:grid-cols-5 lg:grid-cols-7">
         {customDeck
-          .filter((card) => card.suit === suit)
-          .map((card) => (
+          .filter((card) => card.suit === suit) // this?
+          .map((card, index) => (
             <div
               key={card.cardName}
               className="flex cursor-pointer flex-col justify-between"
               onClick={() => setSelectedCard(card)}
             >
               <Image alt={card.cardName} src={card.imageUrl} width={1024} height={1536} />
-              <p className="text-center font-bold">{card.cardName}</p>
+              <p className="mb-0 text-center font-bold">{card.cardName}</p>
+              <p className="mt-0 text-center text-xs font-bold">({prevCards + index + 1})</p>
             </div>
           ))}
       </div>
@@ -65,7 +66,13 @@ export default function Page() {
   return (
     <div className="relative mx-auto p-4 md:max-w-6xl">
       <h1 className="my-8">Toth 2.0 Glossary</h1>
-      {suits.map((suit) => renderSuit(suit))}
+      {/* <p className="opacity-8">Click on each card for more!</p> */}
+      {suits.map((suit, index) => {
+        let prevCardsLength = 0;
+        for (let i = 0; i < index; i++) prevCardsLength += suit[i].length;
+        console.log(prevCardsLength);
+        return renderSuit(suit, prevCardsLength);
+      })}
 
       <CardDialog card={selectedCard} open={!!selectedCard} onOpenChange={() => setSelectedCard(null)} />
     </div>

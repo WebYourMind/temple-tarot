@@ -24,7 +24,7 @@ function SpreadSelector() {
             key={spread.value}
             value={spread.value}
             onClick={() => handleSpreadSelect(spread.value)}
-            className="w-full cursor-pointer rounded py-6 transition hover:bg-accent md:px-4"
+            className="w-full cursor-pointer rounded-md border border-transparent py-6 transition md:px-4 md:hover:border-primary md:hover:underline"
           >
             <div className="flex flex-col justify-start text-left">
               <p className="my-0 text-lg font-semibold">{spread.name}</p>

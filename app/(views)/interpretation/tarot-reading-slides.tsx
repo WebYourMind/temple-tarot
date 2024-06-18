@@ -9,6 +9,7 @@ import { IconClose } from "components/ui/icons";
 import { useRouter } from "next/navigation";
 import FeedbackButtons from "./reading-feedback";
 import { CardDialog } from "../glossary/page";
+import { EnterFullScreenIcon } from "@radix-ui/react-icons";
 
 const TarotReadingSlides = ({ interpretation }) => {
   const { query, selectedDeck, handleReset } = useTarotSession();
@@ -73,20 +74,23 @@ const TarotReadingSlides = ({ interpretation }) => {
             <h2 className="text-xl font-bold">{interpretation[currentSlide].title}</h2>
           )}
           {imageUrl && (
-            <div className="relative flex max-h-[25vh] justify-center md:max-h-96">
-              <Image
-                onClick={() => setOpen(true)}
-                alt={interpretation[currentSlide]?.cardName}
-                src={imageUrl}
-                width={256}
-                height={384}
-                className={cn(
-                  "my-4 h-auto max-h-full w-auto max-w-full rounded-md object-contain",
-                  (interpretation[currentSlide]?.orientation === "reversed" ||
-                    interpretation[currentSlide]?.orientation === "Reversed") &&
-                    "rotate-180"
-                )}
-              />
+            <div className="relative mb-8 flex max-h-[20vh] justify-center md:max-h-96">
+              <div className="relative">
+                <Image
+                  onClick={() => setOpen(true)}
+                  alt={interpretation[currentSlide]?.cardName}
+                  src={imageUrl}
+                  width={256}
+                  height={384}
+                  className={cn(
+                    "my-4 h-auto max-h-full w-auto max-w-full rounded-sm object-contain",
+                    (interpretation[currentSlide]?.orientation === "reversed" ||
+                      interpretation[currentSlide]?.orientation === "Reversed") &&
+                      "rotate-180"
+                  )}
+                />
+                <EnterFullScreenIcon className="pointer-events-none absolute right-2 top-5 cursor-pointer bg-black bg-opacity-20 md:h-6 md:w-6" />
+              </div>
             </div>
           )}
           <p className="text-start text-sm leading-relaxed tracking-wide md:text-base">

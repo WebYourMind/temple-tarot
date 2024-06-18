@@ -116,6 +116,9 @@ export default function Header() {
                 {/* <LumenBalance />
                 <CreditBalance /> */}
                 <Link href="/pricing" className={buttonVariants({ variant: "link" })}>
+                  Toth 2.0 Glossary
+                </Link>
+                <Link href="/pricing" className={buttonVariants({ variant: "link" })}>
                   Pricing
                 </Link>
                 <Link href="/readings" className={buttonVariants({ variant: "link" })}>

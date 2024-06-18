@@ -1487,7 +1487,7 @@ export const decks = [
   },
   {
     value: "thoth",
-    name: "Thoth",
+    name: "Crowley",
     promptName: "Thoth Deck by Aleister Crowley",
     // cards: thothCards
   },

@@ -13,6 +13,8 @@ import { Label } from "components/ui/label";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { CardType } from "lib/types";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { buttonVariants } from "components/ui/button";
+import { cn } from "lib/utils";
 
 const CardInput = () => {
   const { spreadType, setSelectedCards, selectedDeck } = useTarotSession();
@@ -67,9 +69,13 @@ const CardInput = () => {
               className="z-50"
             >
               <SelectGroup>
-                <SelectLabel>Cards</SelectLabel>
+                <SelectLabel className="text-center">Cards</SelectLabel>
                 {availableCards.map((card) => (
-                  <SelectItem key={card.cardName || card} value={card.cardName || card}>
+                  <SelectItem
+                    className={"cursor-pointer bg-background md:hover:underline"}
+                    key={card.cardName || card}
+                    value={card.cardName || card}
+                  >
                     {card.cardName || card}
                   </SelectItem>
                 ))}

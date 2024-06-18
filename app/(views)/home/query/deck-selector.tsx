@@ -1,5 +1,6 @@
 "use client";
 
+import { buttonVariants } from "components/ui/button";
 import { Label } from "components/ui/label";
 import {
   Select,
@@ -32,7 +33,11 @@ export default function DeckSelector() {
           <SelectGroup>
             <SelectLabel>Decks</SelectLabel>
             {decks.map((deck) => (
-              <SelectItem key={deck.value} value={deck.value}>
+              <SelectItem
+                key={deck.value}
+                value={deck.value}
+                className={"cursor-pointer bg-background md:hover:underline"}
+              >
                 {deck.name}
               </SelectItem>
             ))}
