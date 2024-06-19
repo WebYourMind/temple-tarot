@@ -10,11 +10,14 @@ import { Checkbox } from "components/ui/checkbox";
 import CardInput from "./card-input";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { useUserAccessPlan } from "app/(ai-payments)/(frontend)/contexts/user-access-plan-context";
+import DeckSelector from "./deck-selector";
+import { InfoButton } from "components/info-dialog";
 
 const QueryInput = () => {
   const { handleSubmitQuestion, selectedCards, setSelectedCards, setHasOwnCards, query, setQuery } = useTarotSession();
   const { hasAccess } = useUserAccessPlan();
   const router = useRouter();
+  // const router = useRouter();
   const [showCardInput, setShowCardInput] = useState(false);
 
   const handleSubmit = (e) => {
@@ -32,9 +35,10 @@ const QueryInput = () => {
   const isSubmitDisabled = showCardInput && selectedCards?.some((selection) => selection.cardName === "");
 
   return (
-    <div className="container mx-auto flex h-full max-w-xl flex-col items-center justify-center space-y-6 px-2 md:mt-10">
+    <div className="container mx-auto flex h-full max-w-xl flex-col items-center justify-center space-y-8 px-2 md:mt-10">
       <Label htmlFor="question" className={cn("mb-2 px-2 text-center font-sans text-xl md:px-0")}>
         What guidance are you seeking?
+        <InfoButton type="query" />
       </Label>
       <Textarea
         id="question"
@@ -46,15 +50,20 @@ const QueryInput = () => {
         rows={4}
         autoFocus
       />
-      <SpreadSelector />
+      <DeckSelector />
+      <div className="flex">
+        <SpreadSelector />
+        <InfoButton type="spread" />
+      </div>
       <div className="flex items-center space-x-2">
         <Checkbox id="terms1" checked={showCardInput} onCheckedChange={setShowCardInput as () => void} />
         <div className="grid leading-none">
           <label
             htmlFor="terms1"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="flex items-center text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-            I have my own Tarot deck
+            I have a physical deck
+            <InfoButton type="physical" />
           </label>
         </div>
       </div>

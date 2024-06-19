@@ -83,7 +83,7 @@ const FeedbackButtons = ({ content }) => {
       </div>
       <Textarea
         rows={3}
-        placeholder="Anything else you'd like to share?"
+        placeholder="Is there any other feedback you'd like to share?"
         className="inline-block"
         value={additionalFeedback}
         onChange={(e) => setAdditionalFeedback(e.target.value)}

@@ -2,13 +2,14 @@ import { Button } from "components/ui/button";
 import TarotCard from "./tarot-card";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { cn } from "lib/utils";
+import { InfoButton } from "components/info-dialog";
 
 function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
   return (
     <div className="flex h-full flex-col items-center justify-center pb-4 fade-in">
       <p className={cn("text-center font-sans text-xl")}>
         Is your card this way... <br />
-        or that way?
+        or that way? <InfoButton type="orientation" />
       </p>
       <div className="flex items-center">
         <button onClick={switchOrientation}>

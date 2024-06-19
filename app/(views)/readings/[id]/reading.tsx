@@ -6,6 +6,7 @@ import TarotReadingSlides from "app/(views)/interpretation/tarot-reading-slides"
 import Loading from "components/loading";
 import { Button } from "components/ui/button";
 import { useReadingsContext } from "lib/contexts/readings-context";
+import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { cn, parseJsonSafe } from "lib/utils";
 import { StarIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -59,12 +60,23 @@ export function ReadingTemplate({ reading }) {
 function Reading({ readingId }: ReadingProps) {
   const { data: session, status } = useSession() as any;
   const { reading, loading, error, fetchReading } = useReadingsContext();
+  const { setQuery } = useTarotSession();
 
   useEffect(() => {
     if (session?.user?.id && readingId != reading?.id) {
       fetchReading(readingId);
     }
   }, [status]);
+
+  useEffect(() => {
+    if (reading && reading.userQuery) {
+      setQuery(reading.userQuery);
+    }
+
+    return () => {
+      setQuery("");
+    };
+  }, [reading]);
 
   if (loading || !reading) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import TarotCard from "./tarot-card";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "lib/utils";
+import { InfoButton } from "components/info-dialog";
 
 function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
   const [selectedSide, setSelectedSide] = useState(null);
@@ -37,7 +38,10 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
 
   return (
     <>
-      <p className={cn("mb-8 max-w-xs text-center font-sans text-xl md:mb-10")}>Where is your card?</p>
+      <p className={cn("mb-8 max-w-xs text-center font-sans text-xl md:mb-10")}>
+        Where is your card?
+        <InfoButton type="cards" />
+      </p>
       <div
         className={`flex w-full grow justify-between transition-opacity duration-700 ${
           allLoaded ? "opacity-100" : "opacity-0"
@@ -67,7 +71,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
               {(side === "left" ? leftDeck : rightDeck).map((card, cardIndex) => {
                 const isSideSelected = selectedSide === side;
                 const isBottomHalf = cardIndex < (leftDeck.length - 1) / 2;
-                const defaultPosition = -leftDeck.length / 2 + cardIndex;
+                const defaultPosition = -leftDeck.length / 2 + cardIndex / 2;
                 const distance = isMobile ? 50 : 100;
 
                 const startFade = !isBottomHalf && isSideSelected;

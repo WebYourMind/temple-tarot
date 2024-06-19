@@ -8,9 +8,12 @@ import { ArrowLeft, ArrowRight, Dot } from "lucide-react";
 import { IconClose } from "components/ui/icons";
 import { useRouter } from "next/navigation";
 import FeedbackButtons from "./reading-feedback";
+import { CardDialog } from "../glossary/page";
+import { EnterFullScreenIcon } from "@radix-ui/react-icons";
 
 const TarotReadingSlides = ({ interpretation }) => {
   const { query, selectedDeck, handleReset } = useTarotSession();
+  const [open, setOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
 
@@ -37,54 +40,66 @@ const TarotReadingSlides = ({ interpretation }) => {
   };
 
   let imageUrl;
+  let card;
 
   if (selectedDeck.value === "custom") {
     // get the selected deck from reading?
-    const card = deckCardsMapping[selectedDeck.value].find(
+    card = deckCardsMapping[selectedDeck.value].find(
       (card) => card.cardName === interpretation[currentSlide]?.cardName
     );
-    if (card && card.imageUrl) imageUrl = card.imageUrl;
+    if (card && card.imageUrl) {
+      imageUrl = card.imageUrl;
+    }
   }
 
   return (
     <div
       className={cn(
-        "relative mx-auto flex h-screen w-full max-w-2xl flex-col justify-between p-4 text-center font-sans md:max-w-3xl"
+        "relative mx-auto flex h-screen w-full max-w-2xl flex-col justify-between p-4 text-center font-sans fade-in md:max-w-lg"
       )}
     >
-      <div className="flex items-center justify-between border-b border-b-muted">
+      <div className="flex items-center justify-between">
         <h1 className="my-0 text-xs">templetarot.com</h1>
         <Button variant="ghost" size="icon" onClick={handleClose} className="rounded-full">
           <IconClose />
         </Button>
       </div>
-      <h2 className="my-0 mt-2 text-sm font-normal italic">{query || "Open Reading"}</h2>
+      <h2 className="my-0 border-b border-t border-b-muted border-t-muted py-4 text-sm font-normal italic">
+        {query || "Open Reading"}
+      </h2>
       {/* slide content */}
       {interpretation[currentSlide] ? (
-        <div className="mb-4 mt-2 flex grow flex-col justify-center border-t border-t-muted">
+        <div className="my-1 flex grow flex-col justify-center">
           {interpretation[currentSlide].title && (
             <h2 className="text-xl font-bold">{interpretation[currentSlide].title}</h2>
           )}
           {imageUrl && (
-            <div className="relative flex max-h-[33vh] justify-center md:max-h-96">
-              <Image
-                alt={interpretation[currentSlide]?.cardName}
-                src={imageUrl}
-                width={256}
-                height={384}
-                className={cn(
-                  "my-4 h-auto max-h-full w-auto max-w-full rounded-md object-contain",
-                  (interpretation[currentSlide]?.orientation === "reversed" ||
-                    interpretation[currentSlide]?.orientation === "Reversed") &&
-                    "rotate-180"
-                )}
-              />
+            <div className="relative mb-8 flex max-h-[20vh] justify-center md:max-h-[40vh]">
+              <div className="relative">
+                <Image
+                  onClick={() => setOpen(true)}
+                  alt={interpretation[currentSlide]?.cardName}
+                  src={imageUrl}
+                  width={256}
+                  height={384}
+                  className={cn(
+                    "my-4 h-auto max-h-full w-auto max-w-full cursor-pointer rounded-sm object-contain",
+                    (interpretation[currentSlide]?.orientation === "reversed" ||
+                      interpretation[currentSlide]?.orientation === "Reversed") &&
+                      "rotate-180"
+                  )}
+                />
+                <EnterFullScreenIcon className="pointer-events-none absolute right-2 top-5 cursor-pointer bg-black bg-opacity-20 md:h-6 md:w-6" />
+              </div>
             </div>
           )}
-          <p className="text-sm leading-relaxed md:text-base">{interpretation[currentSlide].content}</p>
+          <p className="text-start text-sm leading-relaxed tracking-wide md:text-base">
+            {interpretation[currentSlide].content}
+          </p>
+          <CardDialog card={card} open={open} onOpenChange={() => setOpen(!open)} />
         </div>
       ) : (
-        <div className="mt-2 flex w-full grow items-center justify-center border-t border-t-muted">
+        <div className="flex w-full grow items-center justify-center">
           <FeedbackButtons content={JSON.stringify(interpretation)} />
         </div>
       )}

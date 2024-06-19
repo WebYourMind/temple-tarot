@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Loading from "components/loading";
 import { cn } from "lib/utils";
 
-const Readings = dynamic(() => import("./components/readings"), {
+const ReadingsList = dynamic(() => import("./components/readings-list"), {
   loading: () => <Loading />,
   ssr: false,
 });
@@ -18,7 +18,7 @@ export default async function Page() {
   return (
     <div className="container max-w-4xl py-8">
       <h1 className={cn("mb-8 font-sans text-4xl font-bold")}>My Readings</h1>
-      <Readings />
+      <ReadingsList />
     </div>
   );
 }

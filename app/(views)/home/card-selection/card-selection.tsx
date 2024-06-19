@@ -1,10 +1,11 @@
-// home/card-selection.tsx
+"use client";
 import { useState, useEffect } from "react";
-import { customDeck } from "lib/tarot-data/tarot-deck";
+import { customDeck, deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import "styles/cards.css";
 import OrientationPicker from "./orientation-picker";
 import SplitDeck from "./split-deck";
 import { CardType } from "lib/types";
+import { useTarotSession } from "lib/contexts/tarot-session-context";
 
 interface CardSelectionProps {
   onSelect: (finalCard: CardType) => void;
@@ -23,10 +24,10 @@ const shuffleArray = (array: any[]) => {
   return array;
 };
 
-const createShuffledDeck = () => {
+const createShuffledDeck = (selectedDeck) => {
   return shuffleArray(
-    customDeck.map((card) => ({
-      cardName: card.cardName,
+    deckCardsMapping[selectedDeck.value].map((card) => ({
+      cardName: card.cardName || card,
       suit: card.suit,
       imageUrl: card.imageUrl,
       detail: card.detail,
@@ -36,21 +37,30 @@ const createShuffledDeck = () => {
 };
 
 const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => {
-  const [deck, setDeck] = useState<CardType[]>(createShuffledDeck());
+  const { selectedDeck } = useTarotSession();
+  const [deck, setDeck] = useState<CardType[]>();
   const [leftDeck, setLeftDeck] = useState<CardType[]>([]);
   const [rightDeck, setRightDeck] = useState<CardType[]>([]);
   const [finalCard, setFinalCard] = useState<CardType>();
 
   useEffect(() => {
+    const shuffledDeck = createShuffledDeck(selectedDeck);
+    setDeck(shuffledDeck);
+    resetSelection(shuffledDeck);
+  }, []);
+
+  useEffect(() => {
     resetSelection(); // Reset to initial state on component mount
   }, [currentStep]);
 
-  const resetSelection = () => {
-    const shuffledDeck = deck;
-    const midPoint = Math.ceil(shuffledDeck.length / 2);
-    setLeftDeck(shuffledDeck.slice(0, midPoint));
-    setRightDeck(shuffledDeck.slice(midPoint));
-    setFinalCard(null);
+  const resetSelection = (shuffledDeck = undefined) => {
+    const toSplit = shuffledDeck || deck;
+    if (toSplit) {
+      const midPoint = Math.ceil(toSplit.length / 2);
+      setLeftDeck(toSplit.slice(0, midPoint));
+      setRightDeck(toSplit.slice(midPoint));
+      setFinalCard(null);
+    }
   };
 
   const onFinalCard = (card) => {
@@ -86,12 +96,15 @@ const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => 
       {finalCard ? (
         <OrientationPicker switchOrientation={switchOrientation} finalCard={finalCard} onSubmit={onSelect} />
       ) : (
-        <SplitDeck
-          leftDeck={leftDeck}
-          rightDeck={rightDeck}
-          handleSelectHalf={handleSelectHalf}
-          currentStep={currentStep}
-        />
+        leftDeck &&
+        rightDeck && (
+          <SplitDeck
+            leftDeck={leftDeck}
+            rightDeck={rightDeck}
+            handleSelectHalf={handleSelectHalf}
+            currentStep={currentStep}
+          />
+        )
       )}
     </div>
   );
