@@ -2,7 +2,6 @@
 import CookieNotice from "components/cookie-notice";
 import dynamic from "next/dynamic";
 
-import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import { usePathname } from "next/navigation";
 

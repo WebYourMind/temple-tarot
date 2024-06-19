@@ -1,6 +1,6 @@
 "use client";
 
-import { buttonVariants } from "components/ui/button";
+import Loading from "components/loading";
 import { Label } from "components/ui/label";
 import {
   Select,
@@ -20,7 +20,7 @@ export default function DeckSelector() {
     setSelectedDeck(decks.find((deck) => deck.value === deckValue));
   };
 
-  if (!selectedDeck) return null;
+  if (!selectedDeck || !selectedDeck.value || !decks) return <Loading />;
 
   return (
     <div className="mb-4 space-y-2 text-center">

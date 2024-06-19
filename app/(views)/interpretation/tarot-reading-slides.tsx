@@ -55,7 +55,7 @@ const TarotReadingSlides = ({ interpretation }) => {
   return (
     <div
       className={cn(
-        "relative mx-auto flex h-screen w-full max-w-2xl flex-col justify-between p-4 text-center font-sans fade-in md:max-w-3xl"
+        "relative mx-auto flex h-screen w-full max-w-2xl flex-col justify-between p-4 text-center font-sans fade-in md:max-w-lg"
       )}
     >
       <div className="flex items-center justify-between">
@@ -74,7 +74,7 @@ const TarotReadingSlides = ({ interpretation }) => {
             <h2 className="text-xl font-bold">{interpretation[currentSlide].title}</h2>
           )}
           {imageUrl && (
-            <div className="relative mb-8 flex max-h-[20vh] justify-center md:max-h-96">
+            <div className="relative mb-8 flex max-h-[20vh] justify-center md:max-h-[40vh]">
               <div className="relative">
                 <Image
                   onClick={() => setOpen(true)}
@@ -83,7 +83,7 @@ const TarotReadingSlides = ({ interpretation }) => {
                   width={256}
                   height={384}
                   className={cn(
-                    "my-4 h-auto max-h-full w-auto max-w-full rounded-sm object-contain",
+                    "my-4 h-auto max-h-full w-auto max-w-full cursor-pointer rounded-sm object-contain",
                     (interpretation[currentSlide]?.orientation === "reversed" ||
                       interpretation[currentSlide]?.orientation === "Reversed") &&
                       "rotate-180"

@@ -28,13 +28,13 @@ export async function POST(req: Request) {
 
   const user = session.user;
 
-  try {
-    // Deduct one credit
-    const { newSubCredits, newAddCredits } = await spendCredits(user.id, 1);
-  } catch (error: any) {
-    console.error("Error using credits:", error);
-    return NextResponse.json({ message: error.message }, { status: 400 });
-  }
+  // try {
+  //   // Deduct one credit
+  //   // const { newSubCredits, newAddCredits } = await spendCredits(user.id, 1);
+  // } catch (error: any) {
+  //   console.error("Error using credits:", error);
+  //   return NextResponse.json({ message: error.message }, { status: 400 });
+  // }
 
   const model = process.env.GPT_MODEL;
 

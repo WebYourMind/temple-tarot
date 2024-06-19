@@ -5,7 +5,6 @@ import { Providers } from "app/providers";
 import appConfig from "app.config";
 import type { Viewport } from "next";
 
-import { headers } from "next/headers";
 import ClientLayout from "./client-layout";
 
 const title = appConfig.appName;

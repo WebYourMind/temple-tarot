@@ -24,7 +24,7 @@ const CardSelectionWrapper = () => {
 
   return (
     <>
-      <p className="text-center text-xs uppercase">{cardOrdinal} card</p>
+      {spreadType.numberOfCards > 1 && <p className="text-center text-xs uppercase">{cardOrdinal} card</p>}
       <CardSelection onSelect={handleCardSelect} query={query} currentStep={currentStep} />
     </>
   );

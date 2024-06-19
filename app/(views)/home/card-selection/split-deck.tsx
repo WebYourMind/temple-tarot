@@ -67,7 +67,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
               {(side === "left" ? leftDeck : rightDeck).map((card, cardIndex) => {
                 const isSideSelected = selectedSide === side;
                 const isBottomHalf = cardIndex < (leftDeck.length - 1) / 2;
-                const defaultPosition = -leftDeck.length / 2 + cardIndex;
+                const defaultPosition = -leftDeck.length / 2 + cardIndex / 2;
                 const distance = isMobile ? 50 : 100;
 
                 const startFade = !isBottomHalf && isSideSelected;
