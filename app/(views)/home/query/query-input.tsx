@@ -35,7 +35,7 @@ const QueryInput = () => {
   const isSubmitDisabled = showCardInput && selectedCards?.some((selection) => selection.cardName === "");
 
   return (
-    <div className="container mx-auto flex h-full max-w-xl flex-col items-center justify-center space-y-8 px-2 md:mt-10">
+    <div className="container mx-auto mb-10 flex h-full max-w-xl flex-col items-center justify-center space-y-8 px-2 md:mt-10">
       <Label htmlFor="question" className={cn("mb-2 px-2 text-center font-sans text-xl md:px-0")}>
         What guidance are you seeking?
         <InfoButton type="query" />
@@ -69,7 +69,7 @@ const QueryInput = () => {
       </div>
       {showCardInput && <CardInput />}
       {!isSubscribed && (!passExpiry || new Date(passExpiry) < new Date()) && freeReadings > 0 && (
-        <div className="space-y-0 rounded-md border px-4 py-4 text-center text-xs">
+        <div className="space-y-0 rounded-md border px-4 py-2 text-center text-xs">
           <p>
             You have {freeReadings} free reading{freeReadings > 1 ? "s" : ""}!
           </p>
