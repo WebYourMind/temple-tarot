@@ -69,7 +69,7 @@ const QueryInput = () => {
       </div>
       {showCardInput && <CardInput />}
       {hasAccess ? (
-        <Button onClick={handleSubmit} variant={"ghost"} disabled={(showCardInput && isSubmitDisabled) || hasAccess}>
+        <Button onClick={handleSubmit} variant={"ghost"} disabled={(showCardInput && isSubmitDisabled) || !hasAccess}>
           SEND <PaperPlaneIcon className="ml-2" />
         </Button>
       ) : (
