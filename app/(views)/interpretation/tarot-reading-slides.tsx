@@ -8,8 +8,8 @@ import { ArrowLeft, ArrowRight, Dot } from "lucide-react";
 import { IconClose } from "components/ui/icons";
 import { useRouter } from "next/navigation";
 import FeedbackButtons from "./reading-feedback";
-import { CardDialog } from "../glossary/page";
 import { EnterFullScreenIcon } from "@radix-ui/react-icons";
+import CardInfo from "../glossary/card-info";
 
 const TarotReadingSlides = ({ interpretation }) => {
   const { query, selectedDeck, handleReset } = useTarotSession();
@@ -96,7 +96,7 @@ const TarotReadingSlides = ({ interpretation }) => {
           <p className="text-start text-sm leading-relaxed tracking-wide md:text-base">
             {interpretation[currentSlide].content}
           </p>
-          <CardDialog card={card} open={open} onOpenChange={() => setOpen(!open)} />
+          <CardInfo card={card} open={open} onOpenChange={() => setOpen(!open)} />
         </div>
       ) : (
         <div className="flex w-full grow items-center justify-center">
