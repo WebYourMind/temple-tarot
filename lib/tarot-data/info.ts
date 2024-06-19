@@ -1,8 +1,14 @@
 export const infoMap = {
   query: `## Query Submission
   Start by submitting a query or a question you seek guidance for. It could be about anything that's on your mind—whether it's love, career, personal growth, or even day-to-day decisions.`,
-  deck: `## Choosing a deck
-  There are the 3 decks to choose from, 2 classic decks; The Rider Waite deck and Aleister Crowley's Thoth deck, and the Toth 2.0 deck based on Crowley's deck with updated themes.`,
+  deck: `## Choosing a Deck
+
+You have three decks to choose from:
+
+1. **Rider Waite Deck** - A classic and widely recognized deck.
+2. **Aleister Crowley's Thoth Deck** - Another classic deck known for its rich symbolism.
+3. **Thoth 2.0 Deck** - An updated version of Crowley's Thoth deck with modern themes.
+`,
   spread: `## Spread Selection
   Choose a tarot spread that suits your needs. Each spread focuses on different aspects of life, providing specific insights depending on your query.`,
   physical: `## Using your own cards

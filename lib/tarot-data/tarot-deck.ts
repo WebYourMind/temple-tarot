@@ -1481,19 +1481,19 @@ export const deckCardsMapping = {
 export const decks = [
   {
     value: "custom",
-    name: "Toth 2.0",
+    name: "Toth 2.0 Deck",
     promptName: "Toth 2.0 deck (see card definitions for interpretations)",
     // cards: customDeck,
   },
   {
     value: "thoth",
-    name: "Crowley",
+    name: "Aleister Crowley's Thoth Deck",
     promptName: "Thoth Deck by Aleister Crowley",
     // cards: thothCards
   },
   {
     value: "ryder_waite",
-    name: "Ryder Waite",
+    name: "Ryder Waite Deck",
     promptName: "Ryder Waite Deck",
     // cards: riderWaiteCards
   },

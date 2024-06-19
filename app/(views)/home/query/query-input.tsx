@@ -11,7 +11,6 @@ import { Checkbox } from "components/ui/checkbox";
 import CardInput from "./card-input";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 import DeckSelector from "./deck-selector";
-import { infoMap } from "lib/tarot-data/info";
 import { InfoButton } from "components/info-dialog";
 
 const QueryInput = () => {
