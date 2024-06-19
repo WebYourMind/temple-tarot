@@ -5,10 +5,15 @@ export async function rateLimitReached(userId) {
 
   // Fetch user subscription status
   const userSubscription = await sql`
-      SELECT is_subscribed, subscription_status, pass_expiry FROM users WHERE id = ${userId};
+      SELECT is_subscribed, pass_expiry, free_readings, email_verified FROM users WHERE id = ${userId};
   `;
 
-  const { is_subscribed, pass_expiry } = userSubscription.rows[0];
+  const { is_subscribed, pass_expiry, free_readings, email_verified } = userSubscription.rows[0];
+
+  if (free_readings > 0 && email_verified) {
+    await sql`UPDATE users SET free_readings = ${free_readings - 1} WHERE id = ${userId};`;
+    return false;
+  }
 
   const isPassValid = pass_expiry && new Date(pass_expiry) > new Date();
 

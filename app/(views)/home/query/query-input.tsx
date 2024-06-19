@@ -15,7 +15,7 @@ import { InfoButton } from "components/info-dialog";
 
 const QueryInput = () => {
   const { handleSubmitQuestion, selectedCards, setSelectedCards, setHasOwnCards, query, setQuery } = useTarotSession();
-  const { hasAccess } = useUserAccessPlan();
+  const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed } = useUserAccessPlan();
   const router = useRouter();
   // const router = useRouter();
   const [showCardInput, setShowCardInput] = useState(false);
@@ -68,6 +68,14 @@ const QueryInput = () => {
         </div>
       </div>
       {showCardInput && <CardInput />}
+      {!isSubscribed && (!passExpiry || new Date(passExpiry) < new Date()) && freeReadings > 0 && (
+        <div className="space-y-0 rounded-md border px-4 py-4 text-center text-xs">
+          <p>
+            You have {freeReadings} free reading{freeReadings > 1 ? "s" : ""}!
+          </p>
+          {!emailVerified && <p>Please verify your email to if you would like to use it.</p>}
+        </div>
+      )}
       {hasAccess ? (
         <Button onClick={handleSubmit} variant={"ghost"} disabled={(showCardInput && isSubmitDisabled) || !hasAccess}>
           SEND <PaperPlaneIcon className="ml-2" />

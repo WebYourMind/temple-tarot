@@ -5,6 +5,8 @@ const UserAccessPlanContext = createContext({
   isSubscribed: false,
   passExpiry: null,
   hasAccess: false,
+  freeReadings: 0,
+  emailVerified: false,
   fetchUserAccessPlan: () => {},
   isLoading: false,
 });
@@ -17,6 +19,8 @@ interface UserAccessPlanData {
   passExpiry?: string;
   isSubscribed?: boolean;
   hasAccess?: boolean;
+  emailVerified?: string;
+  freeReadings?: number;
 }
 
 const fetchPassExpiry = async (): Promise<UserAccessPlanData> => {
@@ -33,6 +37,8 @@ const fetchPassExpiry = async (): Promise<UserAccessPlanData> => {
 
 export const UserAccessPlanProvider = ({ children }: { children: ReactNode }) => {
   const [isSubscribed, setIsSubscribed] = useState(undefined);
+  const [freeReadings, setFreeReadings] = useState(undefined);
+  const [emailVerified, setEmailVerified] = useState(undefined);
   const [passExpiry, setPassExpiry] = useState(undefined);
   const [hasAccess, setHasAccess] = useState(false);
   const { data: session } = useSession() as any;
@@ -44,17 +50,19 @@ export const UserAccessPlanProvider = ({ children }: { children: ReactNode }) =>
     fetchPassExpiry().then((data) => {
       setPassExpiry(data.passExpiry);
       setIsSubscribed(data.isSubscribed);
+      setFreeReadings(data.freeReadings);
+      setEmailVerified(data.emailVerified != null);
       setIsLoading(false);
     });
   }
 
   useEffect(() => {
-    if (isSubscribed || (passExpiry && new Date(passExpiry) > new Date())) {
+    if (isSubscribed || (passExpiry && new Date(passExpiry) > new Date()) || (emailVerified && freeReadings > 0)) {
       setHasAccess(true);
     } else if (hasAccess) {
       setHasAccess(false);
     }
-  }, [isSubscribed, passExpiry]);
+  }, [isSubscribed, passExpiry, freeReadings, emailVerified]);
 
   useEffect(() => {
     if (session) {
@@ -63,7 +71,9 @@ export const UserAccessPlanProvider = ({ children }: { children: ReactNode }) =>
   }, [session?.user]);
 
   return (
-    <UserAccessPlanContext.Provider value={{ isSubscribed, passExpiry, hasAccess, fetchUserAccessPlan, isLoading }}>
+    <UserAccessPlanContext.Provider
+      value={{ isSubscribed, passExpiry, hasAccess, emailVerified, freeReadings, fetchUserAccessPlan, isLoading }}
+    >
       {children}
     </UserAccessPlanContext.Provider>
   );

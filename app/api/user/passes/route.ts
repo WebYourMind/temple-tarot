@@ -37,6 +37,8 @@ export async function GET() {
         message: "User Pass retrieved successfully.",
         passExpiry: user.pass_expiry,
         isSubscribed: user.is_subscribed,
+        emailVerified: user.email_verified,
+        freeReadings: user.free_readings,
       },
       {
         status: 200,
