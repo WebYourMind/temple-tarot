@@ -1,5 +1,6 @@
 "use client";
 
+import { InfoButton } from "components/info-dialog";
 import Loading from "components/loading";
 import { Label } from "components/ui/label";
 import {
@@ -24,7 +25,10 @@ export default function DeckSelector() {
 
   return (
     <div className="mb-4 space-y-2 text-center">
-      <Label>Choose a deck:</Label>
+      <Label className="flex">
+        Choose a deck
+        <InfoButton type="deck" />
+      </Label>
       <Select onValueChange={handleDeckChange} value={selectedDeck.value}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Select deck" />

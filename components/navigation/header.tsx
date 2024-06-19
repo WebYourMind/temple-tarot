@@ -73,7 +73,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 flex w-full shrink-0 items-center justify-between bg-background px-4 transition-all duration-300",
+        "sticky top-0 z-50 flex w-full shrink-0 items-center justify-between bg-background px-4 transition-all",
         isScrolled ? "h-0" : "h-16"
       )}
     >

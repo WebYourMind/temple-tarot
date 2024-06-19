@@ -2,8 +2,6 @@
 
 import { useEffect } from "react";
 import { Dialog } from "@radix-ui/react-dialog";
-import { DialogTrigger } from "components/ui/dialog";
-import { Info } from "lucide-react";
 import { useTarotSession } from "../../../lib/contexts/tarot-session-context";
 import QueryInput from "./query/query-input";
 import CardSelectionWrapper from "./card-selection/card-selection-wrapper";
@@ -25,14 +23,7 @@ export default function Home() {
   return (
     <div className="relative flex w-full max-w-4xl grow flex-col p-4 pt-8 md:container md:pt-16">
       <Dialog open={showInfo} onOpenChange={() => setShowInfo(!showInfo)}>
-        <div className="absolute right-4 top-4">
-          <DialogTrigger className="opacity-50">
-            <Info />
-          </DialogTrigger>
-        </div>
-        <Dialog open={spreadPickerOpen} onOpenChange={() => setSpreadPickerOpen(!spreadPickerOpen)}>
-          {phase === "question" && <QueryInput />}
-        </Dialog>
+        {phase === "question" && <QueryInput />}
         {phase === "cards" && <CardSelectionWrapper />}
         <InfoDialog infoContent={infoContent} closeDialog={() => setShowInfo(false)} />
       </Dialog>

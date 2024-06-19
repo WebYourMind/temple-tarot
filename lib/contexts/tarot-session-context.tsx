@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { track } from "@vercel/analytics/react";
 import { useSession } from "next-auth/react";
 import { infoMap } from "lib/tarot-data/info";
@@ -100,27 +100,18 @@ export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setSpreadType(tarotSpreads[0]);
   }
 
-  //   useEffect(() => {
-  //     if (selectedCards && phase === "cards") {
-  //       setPhase("reading");
-  //       track("Reading", { spread: spreadType.value, userId: session?.user?.id });
-  //       selectedCards.forEach((card) => {
-  //         track("Cards", { cardName: card.cardName, orientation: card.orientation });
-  //       });
-  //     }
-  //   }, [selectedCards, query]);
+  // This useEffect shows the info dialog automatically if it hasn't been seen by the user's device before.
+  // useEffect(() => {
+  //   const phaseKey = `hasSeenInfo-${phase}`;
+  //   const hasSeenInfo = localStorage.getItem(phaseKey);
 
-  useEffect(() => {
-    const phaseKey = `hasSeenInfo-${phase}`;
-    const hasSeenInfo = localStorage.getItem(phaseKey);
-
-    // If it's the user's first time in this phase, show the info dialog
-    setInfoContent(infoMap[phase] || infoMap["question"]);
-    if (!hasSeenInfo && (phase === "cards" || phase === "question")) {
-      setShowInfo(true);
-      localStorage.setItem(phaseKey, "true"); // Mark this phase as seen
-    }
-  }, [phase]);
+  //   // If it's the user's first time in this phase, show the info dialog
+  //   setInfoContent(infoMap[phase] || infoMap["question"]);
+  //   if (!hasSeenInfo && (phase === "cards" || phase === "question")) {
+  //     setShowInfo(true);
+  //     localStorage.setItem(phaseKey, "true"); // Mark this phase as seen
+  //   }
+  // }, [phase]);
 
   return (
     <TarotSessionContext.Provider
