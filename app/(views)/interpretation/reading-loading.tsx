@@ -15,7 +15,10 @@ function ReadingLoading({ cards, deckType }) {
             cardWithImage = deckCardsMapping[deckType].find((fullCard) => fullCard.cardName === card.cardName);
           }
           return (
-            <div className={`flex max-w-[${100 / cards.length}%] flex-col justify-center text-center`}>
+            <div
+              key={card.cardName}
+              className={`flex max-w-[${100 / cards.length}%] flex-col justify-center text-center`}
+            >
               {cardWithImage?.imageUrl && (
                 <Image
                   key={cardWithImage.cardName}
