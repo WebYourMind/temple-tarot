@@ -36,7 +36,7 @@ const QueryInput = () => {
 
   return (
     <div className="container mx-auto mb-10 flex h-full max-w-xl flex-col items-center justify-center space-y-8 px-2 md:mt-10">
-      <Label htmlFor="question" className={cn("mb-2 px-2 text-center font-sans text-xl md:px-0")}>
+      <Label htmlFor="question" className={cn("px-2 text-center font-sans text-xl md:px-0")}>
         What guidance are you seeking?
         <InfoButton type="query" />
       </Label>
