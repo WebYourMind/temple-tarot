@@ -33,6 +33,7 @@ const QueryInput = () => {
   }, [showCardInput]);
 
   const isSubmitDisabled = showCardInput && selectedCards?.some((selection) => selection.cardName === "");
+  const showFreeReading = !isSubscribed && (!passExpiry || new Date(passExpiry) < new Date()) && freeReadings > 0;
 
   return (
     <div className="container mx-auto mb-10 flex h-full max-w-xl flex-col items-center justify-center space-y-8 px-2 md:mt-10">
@@ -50,10 +51,12 @@ const QueryInput = () => {
         rows={4}
         autoFocus
       />
-      <DeckSelector />
-      <div className="flex">
-        <SpreadSelector />
-        <InfoButton type="spread" />
+      <div className="items-center md:flex md:space-x-16">
+        <DeckSelector />
+        <div className="flex">
+          <SpreadSelector />
+          <InfoButton type="spread" />
+        </div>
       </div>
       <div className="flex items-center space-x-2">
         <Checkbox id="terms1" checked={showCardInput} onCheckedChange={setShowCardInput as () => void} />
@@ -68,12 +71,12 @@ const QueryInput = () => {
         </div>
       </div>
       {showCardInput && <CardInput />}
-      {!isSubscribed && (!passExpiry || new Date(passExpiry) < new Date()) && freeReadings > 0 && (
-        <div className="space-y-0 rounded-md border px-4 py-2 text-center text-xs">
-          <p>
+      {showFreeReading && (
+        <div className="space-y-0 text-center text-sm text-primary md:text-base">
+          <p className="my-0">
             You have {freeReadings} free reading{freeReadings > 1 ? "s" : ""}!
           </p>
-          {!emailVerified && <p>Please verify your email to if you would like to use it.</p>}
+          {!emailVerified && <p className="my-0">Please verify your email to if you would like to use it.</p>}
         </div>
       )}
       {hasAccess ? (
@@ -81,12 +84,14 @@ const QueryInput = () => {
           SEND <PaperPlaneIcon className="ml-2" />
         </Button>
       ) : (
-        <div className="text-center">
-          <p>Sorry, you do not have an active pass or subscription.</p>
-          <Button onClick={() => router.push("/pricing")} variant={"outline"}>
-            Go To Pricing
-          </Button>
-        </div>
+        !showFreeReading && (
+          <div className="text-center">
+            <p>Sorry, you do not have an active pass or subscription.</p>
+            <Button onClick={() => router.push("/pricing")} variant={"outline"}>
+              Go To Pricing
+            </Button>
+          </div>
+        )
       )}
     </div>
   );
