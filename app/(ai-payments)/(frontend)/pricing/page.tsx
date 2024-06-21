@@ -87,7 +87,7 @@ const Section: React.FC<{
   <section className="mb-16">
     <h2 className="mb-8 text-center text-3xl font-semibold">{title}</h2>
     <div className="flex flex-col space-y-8 md:flex-row md:justify-center md:space-x-8 md:space-y-0">
-      {plans.map((plan) => (
+      {plans.map((plan, i) => (
         <div key={plan.id} className="rounded-md p-8 shadow-lg md:w-1/3">
           <h3 className="mb-4 text-xl font-bold">{plan.productName}</h3>
           <p className="text-sm opacity-70">{plan.productDescription}</p>
@@ -96,7 +96,7 @@ const Section: React.FC<{
               style: "currency",
               currency: plan.currency,
             }).format(plan.unitAmount! / 100)}
-            {plan.type === "recurring" && <span className="text-sm">/ per month</span>}
+            {plan.type === "recurring" && <span className="text-sm">/ per {i === 1 ? "year" : "month"}</span>}
           </p>
           <Button
             size="lg"
