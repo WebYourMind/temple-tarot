@@ -58,7 +58,7 @@ const Pricing: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-8 md:pt-16">
-      <div className="container mx-auto w-full max-w-5xl">
+      <div className="mx-auto w-full max-w-5xl md:container">
         <CurrentPass />
         <header className="mb-16 text-center">
           <h1 className="mb-4 text-4xl font-bold">Pricing</h1>
