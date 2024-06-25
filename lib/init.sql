@@ -75,6 +75,9 @@ ADD COLUMN stripe_customer_id VARCHAR(255),
 ADD COLUMN subscription_credits INTEGER DEFAULT 0,
 ADD COLUMN additional_credits INTEGER DEFAULT 0;
 
+ALTER TABLE users
+ADD COLUMN free_readings INTEGER DEFAULT 1;
+
 CREATE TABLE subscription_events (
     event_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),

@@ -24,14 +24,14 @@ export default function Card({ className = "", alt, onLoad = null, width = 200, 
       )}
     >
       <Image
-        className={`rounded-lg md:shadow-md`}
+        className={`h-auto w-full rounded-lg object-contain md:shadow-md`}
         src={TarotBack}
         alt={alt || "Tarot Card"}
         width={width | 200}
         height={height | 350}
         onLoadingComplete={handleLoad} // Adjusted to handle both internal and external loading
       />
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 rounded-lg border-4 border-amber-100 border-opacity-95" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 rounded-sm border-2 border-amber-100 border-opacity-60 md:rounded-lg md:border-4" />
     </div>
   );
 }

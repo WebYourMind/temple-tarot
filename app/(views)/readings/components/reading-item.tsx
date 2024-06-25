@@ -7,7 +7,8 @@ import ReadingItemMenu from "./reading-item-menu";
 import { useReadingsContext } from "lib/contexts/readings-context";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
-import tarotSpreads from "app/(views)/home/components/tarot-spreads";
+import tarotSpreads from "lib/tarot-data/tarot-spreads";
+import { parseJsonSafe } from "lib/utils";
 
 type ReadingItemProps = {
   reading: Reading;
@@ -21,6 +22,18 @@ function ReadingItem({ reading }: ReadingItemProps) {
     setReading(reading);
     router.push(`/readings/${reading.id}`);
   };
+
+  let interpretationPreview = reading.aiInterpretation;
+
+  try {
+    const parsedInterpretation = parseJsonSafe(reading.aiInterpretation) as { content: string }[];
+    if (Array.isArray(parsedInterpretation) && parsedInterpretation.length > 0) {
+      interpretationPreview = parsedInterpretation[0].content;
+    }
+  } catch (error) {
+    interpretationPreview = reading.aiInterpretation;
+  }
+
   return (
     <Card>
       <>
@@ -38,7 +51,7 @@ function ReadingItem({ reading }: ReadingItemProps) {
             {tarotSpreads.find((spread) => spread.value === reading.spreadType).name}
           </p>
           <ReactMarkdown allowedElements={["p"]} className="truncate-text-7 text-xs font-normal">
-            {reading.aiInterpretation}
+            {interpretationPreview}
           </ReactMarkdown>
         </Link>
       </>

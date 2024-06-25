@@ -7,7 +7,7 @@ function CookieNotice() {
   return (
     <CookieConsent
       disableStyles
-      containerClasses="w-full bg-background fixed flex justify-between items center z-50 p-4 border-t"
+      containerClasses="w-full bg-background fixed flex flex-col md:flex-row justify-between space-y-2 md:items-center z-50 p-4 border-t text-center md:text-start"
       contentClasses="flex items-center"
       buttonClasses={buttonVariants()}
     >

@@ -33,6 +33,7 @@ export async function POST(req: Request) {
         },
       ],
       mode: mode || "payment",
+      allow_promotion_codes: true,
       // @ts-ignore
       return_url: `${origin}/purchase-confirmation?session_id={CHECKOUT_SESSION_ID}`,
       ...(customerId ? { customer: customerId } : {}),

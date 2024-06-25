@@ -25,7 +25,7 @@ import Loading from "components/loading";
 import { Score } from "lib/quiz";
 import { useSuggestedResponses } from "lib/hooks/use-suggested-response";
 import { SuggestedResponses } from "./suggested-responses";
-import { useCredits } from "app/(ai-payments)/(frontend)/contexts/credit-context";
+import { useUserAccessPlan } from "app/(ai-payments)/(frontend)/contexts/user-access-plan-context";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 export interface ChatProps extends React.ComponentProps<"div"> {
@@ -39,7 +39,7 @@ export function Chat({ id, className }: ChatProps) {
   const [scores, setScores] = useState<Score | undefined>();
   const [initLoading, setInitLoading] = useState(true);
   const [initialMessages, setInitialMessages] = useState<Message[] | undefined>();
-  const { fetchCreditBalance } = useCredits();
+  const { fetchUserAccessPlan } = useUserAccessPlan();
   const session = useSession() as any;
   const { messages, append, reload, stop, isLoading, input, setInput } = useChat({
     initialMessages,
@@ -50,7 +50,7 @@ export function Chat({ id, className }: ChatProps) {
       previewToken,
     },
     async onResponse(response) {
-      await fetchCreditBalance();
+      await fetchUserAccessPlan();
       if (response.status === 401) {
         toast.error(response.statusText);
       }

@@ -23,7 +23,7 @@ export function useProfile() {
   useEffect(() => {
     async function getUserProfile() {
       setIsLoading(true);
-      const response = await fetch(`/api/profile/?userId=${session.user.id}`);
+      const response = await fetch(`/api/profile`);
       const data = (await response.json()) as any;
 
       if (response.ok) {

@@ -2,21 +2,10 @@ import "styles/tailwind.css";
 import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { Providers } from "app/providers";
-import { Toaster } from "react-hot-toast";
 import appConfig from "app.config";
-import CookieNotice from "components/cookie-notice";
-import dynamic from "next/dynamic";
 import type { Viewport } from "next";
 
-import { Suspense } from "react";
-
-const Header = dynamic(() => import("../components/navigation/header"), {
-  ssr: false,
-});
-
-const FeedbackWidget = dynamic(() => import("../components/feedback/feedback-widget"), {
-  ssr: false,
-});
+import ClientLayout from "./client-layout";
 
 const title = appConfig.appName;
 const description = appConfig.description;
@@ -49,7 +38,7 @@ export const viewport: Viewport = {
   minimumScale: 1,
   userScalable: false,
   themeColor: "white",
-  // Also supported by less commonly used
+  // Also supported but less commonly used
   // interactiveWidget: 'resizes-visual',
 };
 
@@ -64,13 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Providers>
-          <div className="flex min-h-screen flex-col bg-background text-foreground">
-            <Toaster />
-            <Header />
-            <Suspense>{children}</Suspense>
-            <FeedbackWidget />
-            <CookieNotice />
-          </div>
+          <ClientLayout>{children}</ClientLayout>
         </Providers>
         <Analytics />
       </body>

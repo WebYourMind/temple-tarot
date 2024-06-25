@@ -8,6 +8,7 @@ import { getSession } from "lib/auth";
 import { Reading, addReadingWithCards } from "lib/database/readings.database";
 import { CardInReading } from "lib/database/cardsInReadings.database";
 import { spendCredits } from "app/(ai-payments)/api/stripe-credits/utils/stripe-credits-utils";
+import { rateLimitReached } from "lib/database/apiUsageLogs.database";
 
 export const runtime = "nodejs";
 
@@ -28,12 +29,16 @@ export async function POST(req: Request) {
 
   const user = session.user;
 
-  try {
-    // Deduct one credit
-    const { newSubCredits, newAddCredits } = await spendCredits(user.id, 1);
-  } catch (error: any) {
-    console.error("Error using credits:", error);
-    return NextResponse.json({ message: error.message }, { status: 400 });
+  const isLimitReached = await rateLimitReached(user.id);
+  if (isLimitReached) {
+    return NextResponse.json(
+      {
+        error: "AI limit reached for today",
+      },
+      {
+        status: 429,
+      }
+    );
   }
 
   const model = process.env.GPT_MODEL;

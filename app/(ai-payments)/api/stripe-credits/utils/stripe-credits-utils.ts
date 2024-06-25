@@ -160,3 +160,11 @@ export async function getUserSubscription(stripeCustomerId: string) {
     throw new Error("Failed to fetch user subscription");
   }
 }
+
+export async function addDayPass(userEmail, passExpiry) {
+  await sql`
+    UPDATE users SET
+      pass_expiry = ${passExpiry}
+    WHERE email = ${userEmail}
+  `;
+}

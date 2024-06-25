@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { streamToString } from "lib/utils";
+import { getExpireDate, streamToString } from "lib/utils";
 import {
+  addDayPass,
   getCustomerEmail,
-  logCreditEvent,
   logSubscriptionEvent,
-  resetSubscriptionCredits,
-  updateUserAdditionalCredits,
   updateUserSubscriptionStatus,
 } from "app/(ai-payments)/api/stripe-credits/utils/stripe-credits-utils";
-import { getUserIdByEmail } from "lib/database/user.database";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2023-10-16",
@@ -71,19 +68,16 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
     return NextResponse.json({ message: "No line items found." }, { status: 400 });
   }
 
-  let creditsToAdd = lineItems.data.reduce((acc, item) => {
+  let expiryString = lineItems.data.reduce((acc, item) => {
     // @ts-expect-error
-    const credits = parseInt(item.price.product.metadata.credits || "0", 10);
-    return acc + credits;
+    return item.price.product.metadata.pass_expiry;
   }, 0);
 
-  if (session.mode === "payment") {
-    // Assuming it's a one off payment for a credit bundle
-    await updateUserAdditionalCredits(email, creditsToAdd);
+  if (session.mode === "payment" && expiryString) {
+    //   // Assuming it's a one off payment for day or week pass
+    const passExpiry = getExpireDate(expiryString).toISOString();
+    await addDayPass(email, passExpiry);
   }
-
-  const userId = await getUserIdByEmail(email);
-  await logCreditEvent(userId, creditsToAdd, session.mode); // Log event based on session mode
 
   return NextResponse.json({ message: "Credits updated successfully." }, { status: 200 });
 }
@@ -108,14 +102,14 @@ async function handleInvoicePaymentSucceeded(event: Stripe.Event) {
     invoice.customer as string
   );
 
-  // Calculate total credits based on product metadata
-  const totalCredits = subscription.items.data.reduce((acc, item) => {
-    // @ts-ignore
-    const credits = parseInt(item.price.product.metadata.credits || "0", 10);
-    return acc + credits;
-  }, 0);
+  // // Calculate total credits based on product metadata
+  // const totalCredits = subscription.items.data.reduce((acc, item) => {
+  //   // @ts-ignore
+  //   const credits = parseInt(item.price.product.metadata.credits || "0", 10);
+  //   return acc + credits;
+  // }, 0);
 
-  await resetSubscriptionCredits(invoice.customer_email, totalCredits);
+  // await resetSubscriptionCredits(invoice.customer_email, totalCredits);
 
   await logSubscriptionEvent(subscription.id, event.id, subscription);
 
@@ -152,9 +146,9 @@ async function handleSubscriptionUpdated(event: Stripe.Event) {
   );
 
   // If subscription is not active, reset the credits to zero
-  if (!subscriptionActive) {
-    await resetSubscriptionCredits(customerEmail, 0);
-  }
+  // if (!subscriptionActive) {
+  //   await resetSubscriptionCredits(customerEmail, 0);
+  // }
 
   // Log the subscription event
   await logSubscriptionEvent(subscriptionId, event.type, subscription);

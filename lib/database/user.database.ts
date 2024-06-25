@@ -1,9 +1,9 @@
 import { sql } from "@vercel/postgres";
 
-export const insertUser = async (name: string, email: string, hashedPassword?: string) => {
+export const insertUser = async (name: string, email: string, hashedPassword?: string, verified?: boolean) => {
   try {
-    const { rows } = await sql`INSERT INTO users (name, email, hashed_password)
-                      VALUES (${name}, ${email}, ${hashedPassword})
+    const { rows } = await sql`INSERT INTO users (name, email, hashed_password, email_verified)
+                      VALUES (${name}, ${email}, ${hashedPassword}, ${verified ? "NOW()" : null})
                       RETURNING *`;
     if (rows.length > 0) {
       return rows[0];
@@ -199,5 +199,20 @@ export const addStripeCustomerId = async (email, customerId) => {
       WHERE email = ${email};`;
   } catch (error) {
     console.error(error);
+  }
+};
+
+export const getUserAccessPlan = async (userId) => {
+  try {
+    const { rows } = await sql`SELECT pass_expiry, is_subscribed, email_verified, free_readings
+      FROM users
+      WHERE id = ${userId};`;
+    if (rows.length > 0) {
+      return rows[0];
+    }
+    return null;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };

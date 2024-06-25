@@ -10,18 +10,18 @@
     --color-card-foreground: #333333;
     --color-popover: #ffffff;
     --color-popover-foreground: #333333;
-    --color-primary: #8550b4;
+    --color-primary: #db5b2d;
     --color-primary-foreground: #ffffff;
-    --color-secondary: #8550b4;
+    --color-secondary: #db5b2d;
     --color-secondary-foreground: #ffffff;
     --color-muted: #a7a7a7;
     --color-muted-foreground: #7b7b7b;
-    --color-accent: #f6edfe;
+    --color-accent: #fffdf9;
     --color-accent-foreground: #333333;
     --color-destructive: #e63946;
     --color-destructive-foreground: #ffffff;
     --color-border: #c1c1c1;
-    --color-input: #24073c;
+    --color-input: #000000;
     --color-ring: #cec8ed;
     --radius: 0.7rem;
     font-family:
@@ -32,25 +32,25 @@
   }
 
   .dark {
-    --color-background: #13131b;
+    --color-background: #151212;
     --color-foreground: #eeeeee;
-    --color-card: #1f2937;
+    --color-card: #151212;
     --color-card-foreground: #f7f9fb;
-    --color-popover: #1a1a27;
+    --color-popover: #151212;
     --color-popover-foreground: #f7f9fb;
-    --color-primary: #815eb9;
+    --color-primary: #e4693c;
     --color-primary-foreground: #eeeeee;
-    --color-secondary: #815eb9;
+    --color-secondary: #c46505;
     --color-secondary-foreground: #f2ecf4;
     --color-muted: #788597;
     --color-muted-foreground: #a9b0ba;
-    --color-accent: #513e70;
+    --color-accent: #151212;
     --color-accent-foreground: #eeeeee;
     --color-destructive: #e63946;
     --color-destructive-foreground: #f7f9fb;
     --color-border: #b8b8b8;
-    --color-input: #e7d3f8;
-    --color-ring: #2f2f82;
+    --color-input: #ffffff;
+    --color-ring: #e4693c;
     --radius: 0.7rem;
   }
 }
@@ -81,7 +81,7 @@ p {
 }
 
 a {
-  @apply font-bold text-primary underline-offset-4 hover:underline;
+  @apply font-bold text-foreground underline-offset-4 hover:underline;
 }
 
 @keyframes fadeIn {

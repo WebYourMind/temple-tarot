@@ -18,8 +18,7 @@ import { deleteProfileById } from "lib/database/profile.database";
 
 export async function PATCH(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    const userId = (await getSession())?.user.id;
 
     // Check if userId is not null or undefined
     if (!userId) {
@@ -171,8 +170,7 @@ export async function DELETE(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    const userId = (await getSession())?.user.id;
 
     // Check if userId is not null or undefined
     if (!userId) {

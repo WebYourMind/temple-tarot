@@ -1,23 +1,23 @@
 import { Button } from "components/ui/button";
-import Card from "../tarot-card";
+import TarotCard from "./tarot-card";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { tarotFont } from "../interpreter";
 import { cn } from "lib/utils";
+import { InfoButton } from "components/info-dialog";
 
 function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
   return (
-    <div className="flex flex-col items-center justify-center pb-4 fade-in">
-      <p className={cn("text-center text-xl", tarotFont.className)}>
+    <div className="flex h-full flex-col items-center justify-center pb-4 fade-in">
+      <p className={cn("text-center font-sans text-xl")}>
         Is your card this way... <br />
-        or that way?
+        or that way? <InfoButton type="orientation" />
       </p>
       <div className="flex items-center">
         <button onClick={switchOrientation}>
           <ArrowUp className="pulse-1 opacity-90" size={25} />
         </button>
-        <button onClick={switchOrientation} className="mt-4 p-4">
+        <button onClick={switchOrientation} className="mt-4 p-4 px-16">
           <div className="relative">
-            <Card
+            <TarotCard
               alt="Your Card"
               className={`${
                 finalCard.orientation === "upright" ? "rotate-0" : "rotate-180"
@@ -33,7 +33,7 @@ function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
         <Button variant="default" className="w-1/3" onClick={switchOrientation}>
           Switch
         </Button>
-        <Button variant="outline" className="w-1/3" onClick={() => onSubmit(finalCard.name, finalCard.orientation)}>
+        <Button variant="outline" className="w-1/3" onClick={() => onSubmit(finalCard)}>
           Confirm
         </Button>
       </div>

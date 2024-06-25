@@ -6,6 +6,7 @@ import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { User } from "next-auth";
+import Loading from "components/loading";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
@@ -30,11 +31,15 @@ export default function Checkout() {
 
   const options = { fetchClientSecret };
 
-  return (
-    <div className="py-8" id="checkout">
-      <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
-        <EmbeddedCheckout />
-      </EmbeddedCheckoutProvider>
-    </div>
-  );
+  if (user) {
+    return (
+      <div className="py-8" id="checkout">
+        <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+          <EmbeddedCheckout />
+        </EmbeddedCheckoutProvider>
+      </div>
+    );
+  } else {
+    return <Loading />;
+  }
 }

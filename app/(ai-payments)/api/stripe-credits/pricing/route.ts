@@ -37,8 +37,8 @@ export async function GET(req: NextRequest) {
     const simplifiedPrices = prices.data
       .filter((price) => {
         // @ts-expect-error
-        // Check both the presence of 'credits' in metadata and a custom 'isArchived' flag
-        return price.product?.metadata?.credits && price.product.active && !price.product?.metadata?.isArchived;
+        // Check if product active / not archived
+        return price.product.active;
       })
       .map((price) => ({
         id: price.id,

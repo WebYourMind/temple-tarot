@@ -47,6 +47,9 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-url", req.url);
+
   // if (path === "/team" && session?.user?.role !== "admin" && !session?.user?.teamId) {
   //   return NextResponse.redirect(new URL("/", req.url));
   // }
@@ -54,5 +57,5 @@ export default async function middleware(req: NextRequest) {
   // "/" to show /home content
   if (path === "/") return NextResponse.rewrite(new URL("/home", req.url));
 
-  return NextResponse.next();
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }

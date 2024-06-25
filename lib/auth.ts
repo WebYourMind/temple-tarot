@@ -79,7 +79,7 @@ export const authOptions: NextAuthOptions = {
           return true;
         } else {
           // Create a new user without a password
-          const newUser = await insertUser(profile.name, profile.email);
+          const newUser = await insertUser(profile.name, profile.email, undefined, true);
           if (newUser) {
             user.id = newUser.id;
             return true;

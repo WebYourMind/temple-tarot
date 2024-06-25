@@ -12,10 +12,9 @@ import appConfig from "app.config";
 import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { CreditBalance } from "../../app/(ai-payments)/(frontend)/components/credit-balance";
-import { LumenBalance } from "./lumen-balance";
+// import { CreditBalance } from "../../app/(ai-payments)/(frontend)/components/credit-balance";
+// import { LumenBalance } from "./lumen-balance";
 import { cn } from "lib/utils";
-import { tarotFont } from "app/(views)/home/components/interpreter";
 // import FullscreenComponent from "app/(views)/home/components/fullscreen";
 
 export default function Header() {
@@ -74,7 +73,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 flex w-full shrink-0 items-center justify-between bg-background px-4 transition-all duration-300",
+        "sticky top-0 z-50 flex w-full shrink-0 items-center justify-between bg-background px-4 transition-all",
         isScrolled ? "h-0" : "h-16"
       )}
     >
@@ -89,7 +88,7 @@ export default function Header() {
               </Sidebar>
             ) : (
               <Link href="/" className="mr-2 hover:no-underline">
-                <h3 className={cn("mt-0 text-lg text-foreground", tarotFont.className)}>{appConfig.appName}</h3>
+                <h3 className={cn("mt-0 font-sans text-lg text-foreground")}>{appConfig.appName}</h3>
               </Link>
             )}
             {status !== "loading" && (
@@ -114,8 +113,11 @@ export default function Header() {
           <div className="flex items-center justify-end space-x-4">
             {session?.user && (
               <div className="hidden items-center justify-end space-x-4 md:flex">
-                <LumenBalance />
-                <CreditBalance />
+                {/* <LumenBalance />
+                <CreditBalance /> */}
+                <Link href="/glossary" className={buttonVariants({ variant: "link" })}>
+                  Toth 2.0 Glossary
+                </Link>
                 <Link href="/pricing" className={buttonVariants({ variant: "link" })}>
                   Pricing
                 </Link>

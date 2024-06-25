@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import TarotCard from "../tarot-card";
-import { ArrowBigLeft, ArrowBigRight, ArrowLeft, ArrowRight } from "lucide-react";
+import TarotCard from "./tarot-card";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "lib/utils";
-import { tarotFont } from "../interpreter";
+import { InfoButton } from "components/info-dialog";
 
 function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
   const [selectedSide, setSelectedSide] = useState(null);
@@ -12,14 +12,12 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
   const [loadStatus, setLoadStatus] = useState(new Array(leftDeck.length + rightDeck.length).fill(false));
 
   useEffect(() => {
-    // Check if all images are loaded
     if (loadStatus.every((status) => status === true)) {
       setAllLoaded(true);
     }
   }, [loadStatus]);
 
   const handleImageLoad = (index) => {
-    // Update the load status for individual card
     const newLoadStatus = [...loadStatus];
     newLoadStatus[index] = true;
     setLoadStatus(newLoadStatus);
@@ -40,27 +38,23 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
 
   return (
     <>
-      <p className={cn("mb-8 max-w-xs text-center text-xl md:mb-10", tarotFont.className)}>
-        The deck is split.
-        <br />
+      <p className={cn("mb-8 max-w-xs text-center font-sans text-xl md:mb-10")}>
         Where is your card?
+        <InfoButton type="cards" />
       </p>
-      {/* <div className="flex w-full justify-around">
-        <ArrowBigLeft className="pulse-1" size={35} />
-        <ArrowBigRight className="pulse-2" size={35} />
-      </div> */}
-      {/* <ArrowBigLeft /> */}
       <div
-        className={`flex w-full justify-between transition-opacity duration-700 ${
+        className={`flex w-full grow justify-between transition-opacity duration-700 ${
           allLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
         {["left", "right"].map((side) => (
           <div
             key={side}
-            className={`transition duration-300 md:mx-2 ${selectedSide && selectedSide !== side ? "opacity-0" : ""}`}
+            className={`flex h-full grow flex-col items-center transition duration-300 md:mx-auto ${
+              selectedSide && selectedSide !== side ? "opacity-0" : ""
+            }`}
           >
-            <div className="flex w-full justify-center">
+            <div className="mb-4 flex w-full justify-center">
               {side === "left" ? (
                 <ArrowLeft className="pulse-1 opacity-90" size={25} />
               ) : (
@@ -70,25 +64,25 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
             <button
               onClick={() => handleDeckSelect(side)}
               className={cn(
-                "relative flex h-[250px] w-[170px] scale-75 cursor-default flex-col items-center rounded-lg transition-all duration-500 fade-in md:h-[370px] md:w-[300px] md:scale-100 md:p-0",
+                "relative h-[200px] w-full max-w-[220px] cursor-default transition-all duration-500 fade-in md:h-[330px] md:w-[400px] md:max-w-xs md:p-0",
                 selectedSide && selectedSide !== side ? "opacity-0" : ""
               )}
             >
               {(side === "left" ? leftDeck : rightDeck).map((card, cardIndex) => {
                 const isSideSelected = selectedSide === side;
                 const isBottomHalf = cardIndex < (leftDeck.length - 1) / 2;
-                const defaultPosition = -leftDeck.length / 2 + cardIndex + 1;
+                const defaultPosition = -leftDeck.length / 2 + cardIndex / 2;
                 const distance = isMobile ? 50 : 100;
 
                 const startFade = !isBottomHalf && isSideSelected;
 
-                const translate = `translate(${
+                const translate = `translate(calc(${
                   (isSideSelected ? (isBottomHalf ? -distance : distance) : 0) + (isMobile ? 0 : defaultPosition)
-                }px, ${defaultPosition}px)`;
+                }px - 50%), calc(${defaultPosition}px - 50%))`;
                 return (
                   <div
                     key={cardIndex}
-                    className={cn(`absolute top-0 cursor-pointer transition ease-in-out md:top-8`)}
+                    className={cn(`absolute left-1/2 top-1/2 cursor-pointer transition ease-in-out`)}
                     style={{
                       transform: translate,
                       zIndex: cardIndex,
@@ -96,7 +90,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
                   >
                     <div className={cn("transition delay-300", startFade && "opacity-0")}>
                       <TarotCard
-                        alt={`${cardIndex + 1}: ${card.name} ${card.orientation}`}
+                        alt={`${cardIndex + 1}: ${card.cardName} ${card.orientation}`}
                         onLoad={() => handleImageLoad(cardIndex + (side === "left" ? 0 : leftDeck.length))}
                       />
                     </div>
@@ -104,10 +98,10 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
                 );
               })}
             </button>
-            <p className={cn("text-center md:mt-5", tarotFont.className)}>
+            <p className={cn("my-0 text-center font-sans md:mt-5")}>
               {side.charAt(0).toUpperCase() + side.slice(1)} Half
             </p>
-            <p className={cn("text-center", tarotFont.className)}>
+            <p className={cn("my-0 text-center font-sans")}>
               {side === "left" ? leftDeck.length : rightDeck.length} Cards
             </p>
           </div>

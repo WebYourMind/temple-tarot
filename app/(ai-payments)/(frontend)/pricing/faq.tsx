@@ -5,27 +5,33 @@ import React, { useState } from "react";
 const FAQ = () => {
   const faqs = [
     {
-      question: "What is the difference between subscription credits and credit bundles?",
+      question: "What are the available product options?",
       answer:
-        "Subscription credits are granted each month as part of your subscription plan and do not carry over from month to month. Credit bundles are one-time purchases and carry over month to month until they are used.",
+        "We offer four product options: Unlimited Monthly, Unlimited Yearly, Day Pass, and Week Pass. All options grant 22 readings per day.",
     },
     {
-      question: "How are credits prioritized?",
-      answer: "Subscription credits are always used first before any credits from credit bundles.",
-    },
-    {
-      question: "How many credits do I get with a subscription?",
-      answer: "You receive 100 credits per month with your subscription.",
-    },
-    {
-      question: "Can I purchase additional credits?",
+      question: "Do the passes and subscriptions renew automatically?",
       answer:
-        "Yes, you can purchase additional credit bundles which will be used after your subscription credits are exhausted.",
+        "The Unlimited Monthly and Unlimited Yearly plans renew automatically. The Day Pass and Week Pass do not automatically renew.",
+    },
+    {
+      question: "How many readings do I get per day?",
+      answer: "All our product options, including subscriptions and passes, provide 22 readings per day.",
+    },
+    {
+      question: "Can I purchase additional readings?",
+      answer:
+        "No, additional readings beyond the 22 per day provided by our plans and passes are not currently available.",
     },
     {
       question: "What happens if my subscription is not renewed at the end of the cycle?",
       answer:
-        "If your subscription is not renewed, your subscription credits will reset to zero, but any remaining credit bundles will still be available for use.",
+        "If your subscription is not renewed, you will lose access to the 22 daily readings provided by the subscription. You can purchase a Day Pass or Week Pass to continue using the service.",
+    },
+    {
+      question: "Can I switch between different product options?",
+      answer:
+        "Yes, you can switch between product options. However, please note that passes do not renew automatically, while subscriptions do. There is also no reason to purchase a day or week pass if you already have an active subscription.",
     },
   ];
 

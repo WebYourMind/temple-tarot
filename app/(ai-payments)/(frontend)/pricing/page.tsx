@@ -6,6 +6,7 @@ import { Button } from "components/ui/button";
 import Loading from "components/loading";
 import Faq from "./faq";
 import { manageSubscription } from "../utils";
+import CurrentPass from "./current-pass";
 
 interface SimplifiedPrice {
   id: string;
@@ -57,12 +58,13 @@ const Pricing: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-8 md:pt-16">
-      <div className="container mx-auto w-full max-w-5xl">
+      <div className="mx-auto w-full max-w-5xl px-4 md:container">
+        <CurrentPass />
         <header className="mb-16 text-center">
           <h1 className="mb-4 text-4xl font-bold">Pricing</h1>
           <p className="mb-6 text-lg opacity-70">
-            Discover our flexible pricing options designed to meet your needs. Whether you&apos;re looking for a monthly
-            subscription or just a few extra credits, we&apos;ve got you covered.
+            Discover our flexible pricing options designed to meet your needs. Whether you&apos;re looking for short or
+            long term, we&apos;ve got you covered.
           </p>
         </header>
         {subscriptions.length > 0 && (
@@ -85,7 +87,7 @@ const Section: React.FC<{
   <section className="mb-16">
     <h2 className="mb-8 text-center text-3xl font-semibold">{title}</h2>
     <div className="flex flex-col space-y-8 md:flex-row md:justify-center md:space-x-8 md:space-y-0">
-      {plans.map((plan) => (
+      {plans.map((plan, i) => (
         <div key={plan.id} className="rounded-md p-8 shadow-lg md:w-1/3">
           <h3 className="mb-4 text-xl font-bold">{plan.productName}</h3>
           <p className="text-sm opacity-70">{plan.productDescription}</p>
@@ -94,7 +96,7 @@ const Section: React.FC<{
               style: "currency",
               currency: plan.currency,
             }).format(plan.unitAmount! / 100)}
-            {plan.type === "recurring" && <span className="text-sm">/ per month</span>}
+            {plan.type === "recurring" && <span className="text-sm">/ per {i === 1 ? "year" : "month"}</span>}
           </p>
           <Button
             size="lg"

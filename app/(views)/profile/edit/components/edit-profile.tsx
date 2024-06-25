@@ -68,7 +68,7 @@ export default function EditProfile() {
 
     if (session?.user) {
       setIsLoading(true);
-      const response = await fetch(`/api/profile/?userId=${session?.user.id}`, {
+      const response = await fetch(`/api/profile`, {
         method: "PATCH",
         body: JSON.stringify({
           user: profile,
