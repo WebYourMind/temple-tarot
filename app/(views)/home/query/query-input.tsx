@@ -12,6 +12,9 @@ import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { useUserAccessPlan } from "app/(ai-payments)/(frontend)/contexts/user-access-plan-context";
 import DeckSelector from "./deck-selector";
 import { InfoButton } from "components/info-dialog";
+import Image from "next/image";
+
+import Logo from "../../../logo.png";
 
 const QueryInput = () => {
   const { handleSubmitQuestion, selectedCards, setSelectedCards, setHasOwnCards, query, setQuery } = useTarotSession();
@@ -37,6 +40,9 @@ const QueryInput = () => {
 
   return (
     <div className="container mx-auto mb-10 flex h-full max-w-xl flex-col items-center justify-center space-y-8 px-2 md:mt-10">
+      <div className="mx-auto mb-8 max-w-sm px-10 md:mb-0">
+        <Image src={Logo} height={240} width={1140} alt="Temple Tarot logo" />
+      </div>
       <Label htmlFor="question" className={cn("px-2 text-center font-sans text-xl md:px-0")}>
         What guidance are you seeking?
         <InfoButton type="query" />
