@@ -6,7 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { FeedbackDataProvider } from "./feedback-data";
 import { ReadingsProvider } from "lib/contexts/readings-context";
 import { UserAccessPlanProvider } from "./(ai-payments)/(frontend)/contexts/user-access-plan-context";
-import { LumenProvider } from "lib/contexts/lumen-context";
+// import { LumenProvider } from "lib/contexts/lumen-context";
 import { TarotSessionProvider } from "lib/contexts/tarot-session-context";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -16,11 +16,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <TooltipProvider>
           <TarotSessionProvider>
             <UserAccessPlanProvider>
-              <LumenProvider>
-                <FeedbackDataProvider>
-                  <ReadingsProvider>{children}</ReadingsProvider>
-                </FeedbackDataProvider>
-              </LumenProvider>
+              {/* <LumenProvider> */}
+              <FeedbackDataProvider>
+                <ReadingsProvider>{children}</ReadingsProvider>
+              </FeedbackDataProvider>
+              {/* </LumenProvider> */}
             </UserAccessPlanProvider>
           </TarotSessionProvider>
         </TooltipProvider>
