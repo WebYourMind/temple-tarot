@@ -7,6 +7,8 @@ import { SidebarItem } from "./sidebar-item";
 import { IconPlus } from "components/ui/icons";
 import { useSession } from "next-auth/react";
 import { BookOpenIcon } from "lucide-react";
+import { Button, buttonVariants } from "components/ui/button";
+import Link from "next/link";
 
 const menuItems = [
   {
@@ -41,13 +43,18 @@ export function SidebarList() {
   return (
     <div className="flex-1 overflow-auto">
       {menuItems?.length ? (
-        <div className="space-y-4 px-2">
-          {/* <div className="flex space-x-2 px-4">
+        <div className="flex h-full flex-col justify-between px-2 pb-2">
+          <div className="space-y-4">
+            {/* <div className="flex space-x-2 px-4">
             <LumenBalance />
             <CreditBalance />
           </div> */}
-          {/* <div className="h-[1px] w-full bg-muted" /> */}
-          {menuItems.map((item) => item && <SidebarItem key={item?.path} menuItem={item} />)}
+            {/* <div className="h-[1px] w-full bg-muted" /> */}
+            {menuItems.map((item) => item && <SidebarItem key={item?.path} menuItem={item} />)}
+          </div>
+          <Link href="/privacy" className={buttonVariants({ variant: "link" })}>
+            Privacy Policy
+          </Link>
         </div>
       ) : (
         <div className="p-8 text-center">
