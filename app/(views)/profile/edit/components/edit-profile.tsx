@@ -2,23 +2,23 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Button } from "components/ui/button";
-import InputField from "app/(views)/(auth)/components/input-field";
 import toast from "react-hot-toast";
 import { ArrowLeftIcon, ColorWheelIcon } from "@radix-ui/react-icons";
-import { AsYouType } from "libphonenumber-js";
+import { Button } from "components/ui/button";
+import InputField from "app/(views)/(auth)/components/input-field";
 import AddressInput from "./address-input";
 import { useRouter } from "next/navigation";
 import { isValidEmail, isValidPhoneNumber } from "lib/utils";
 import { useProfile } from "lib/hooks/use-profile";
 import Loading from "components/loading";
+import { PhoneInput } from "./phone-input";
 
 export default function EditProfile() {
   const route = useRouter();
   const { data: session, update } = useSession() as any;
   const [isLoading, setIsLoading] = useState(false);
 
-  const { profile, setProfile, isLoading: profileLoading } = useProfile();
+  const { profile, setProfile } = useProfile();
 
   if (isLoading || !profile) {
     return <Loading />;
@@ -39,11 +39,6 @@ export default function EditProfile() {
     }
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const formattedPhoneNumber = new AsYouType().input(e.target.value);
-    setProfile((prev) => ({ ...prev, phone: formattedPhoneNumber }));
-  };
-
   const validateInput = () => {
     if (!profile.email || !isValidEmail(profile.email)) {
       toast.error("Please enter a valid email.");
@@ -54,7 +49,7 @@ export default function EditProfile() {
       return false;
     }
 
-    if (profile.phone && !isValidPhoneNumber(profile.phone)) {
+    if (profile.phone && profile.phone.length > 4 && !isValidPhoneNumber(profile.phone)) {
       toast.error("Please enter a valid phone number.");
       return false;
     }
@@ -67,11 +62,16 @@ export default function EditProfile() {
     if (!validateInput()) return;
 
     if (session?.user) {
+      let saveProfile = profile;
+      // if phone contains only country code
+      if (profile.phone.length <= 4) {
+        saveProfile = { ...profile, phone: null };
+      }
       setIsLoading(true);
       const response = await fetch(`/api/profile`, {
         method: "PATCH",
         body: JSON.stringify({
-          user: profile,
+          user: saveProfile,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -116,16 +116,22 @@ export default function EditProfile() {
             value={profile.email}
             onChange={handleChange}
           />
-          <InputField
-            placeholder="+1 234 567 8910"
-            label="Phone number:"
-            name="phone"
-            type="tel"
-            id="phone"
-            value={profile.phone}
-            onChange={handlePhoneChange}
+          <PhoneInput
+            onChange={(v) => setProfile((prevState) => ({ ...prevState, phone: v }))}
+            // @ts-ignore
+            label="Phone"
+            defaultCountry="US"
+            international
+            countryCallingCodeEditable={false}
           />
-          <AddressInput address={profile.address} setAddress={handleChange} />
+          <AddressInput
+            address={profile.address}
+            setAddress={handleChange}
+            setCountry={(v) =>
+              setProfile((prevState) => ({ ...prevState, address: { ...prevState.address, country: v } }))
+            }
+            setState={(v) => setProfile((prevState) => ({ ...prevState, address: { ...prevState.address, state: v } }))}
+          />
           <Button type="submit">
             {" "}
             {isLoading && <ColorWheelIcon className="mr-2 h-4 w-4 animate-spin" />}
