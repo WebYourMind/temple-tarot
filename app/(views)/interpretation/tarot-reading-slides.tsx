@@ -74,7 +74,13 @@ const TarotReadingSlides = ({ interpretation }) => {
             <h2 className="text-xl font-bold">{interpretation[currentSlide].title}</h2>
           )}
           {imageUrl && (
-            <div className="relative flex items-center justify-center">
+            <div className="relative my-4 flex flex-col items-center justify-center">
+              {card?.suit && <p className="m-0 text-xs">{card.suit}</p>}
+              {card?.cardName && (
+                <p className="m-0 mb-1 text-xs">
+                  {card.cardName} ({interpretation[currentSlide].orientation})
+                </p>
+              )}
               <div className="relative flex items-center">
                 <Image
                   onClick={() => setOpen(true)}
@@ -83,13 +89,13 @@ const TarotReadingSlides = ({ interpretation }) => {
                   width={256}
                   height={384}
                   className={cn(
-                    "my-4 h-auto max-h-[25vh] w-auto max-w-full cursor-pointer rounded-sm object-contain md:max-h-[40vh]",
+                    "h-auto max-h-[30vh] w-auto max-w-full cursor-pointer rounded-sm object-contain md:max-h-[40vh]",
                     (interpretation[currentSlide]?.orientation === "reversed" ||
                       interpretation[currentSlide]?.orientation === "Reversed") &&
                       "rotate-180"
                   )}
                 />
-                <EnterFullScreenIcon className="pointer-events-none absolute right-2 top-5 cursor-pointer bg-black bg-opacity-20 md:h-6 md:w-6" />
+                <EnterFullScreenIcon className="pointer-events-none absolute right-2 top-2 cursor-pointer bg-black bg-opacity-20 md:h-6 md:w-6" />
               </div>
             </div>
           )}
