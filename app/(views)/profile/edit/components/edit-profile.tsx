@@ -118,6 +118,7 @@ export default function EditProfile() {
           />
           <PhoneInput
             onChange={(v) => setProfile((prevState) => ({ ...prevState, phone: v }))}
+            value={profile.phone}
             // @ts-ignore
             label="Phone"
             defaultCountry="US"

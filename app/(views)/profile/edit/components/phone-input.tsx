@@ -24,7 +24,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> = React.forwa
   React.ElementRef<typeof RPNInput.default>,
   PhoneInputProps
   // @ts-ignore
->(({ className, onChange, label, ...props }, ref) => {
+>(({ className, onChange, value, label, ...props }, ref) => {
   return (
     <div className="grid w-full gap-2">
       {label && <Label htmlFor="phone-input">{label}</Label>}
@@ -34,6 +34,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> = React.forwa
         flagComponent={FlagComponent}
         countrySelectComponent={CountrySelect}
         inputComponent={InputComponent}
+        value={value}
         /**
          * Handles the onChange event.
          *
