@@ -33,12 +33,12 @@ function ReadingItem({ reading }: ReadingItemProps) {
   } catch (error) {
     interpretationPreview = reading.aiInterpretation;
   }
-
+  console.log(reading);
   return (
-    <Card>
+    <Card className="pt-6">
       <>
         <div className="flex items-center justify-between">
-          <p className="mb-4 text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
+          <p className="mb-1 text-xs text-muted">{new Date(reading.createdAt).toDateString()}</p>
           <ReadingItemMenu readingId={reading.id} />
         </div>
         <Link
@@ -46,13 +46,17 @@ function ReadingItem({ reading }: ReadingItemProps) {
           onClick={handleClick}
           className={"flex flex-col space-y-2 text-foreground"}
         >
-          <h3 className="truncate-text-2 font-bold">{reading.userQuery || "Open Reading"}</h3>
-          <p className="text-xs text-primary">
+          {/* <h3 className="truncate-text-2 font-bold">{reading.userQuery || "Open Reading"}</h3> */}
+          {reading.cards.map((card) => (
+            <h3 className="my-0 text-primary">{card.cardName}</h3>
+          ))}
+          {/* <p className="text-xs text-primary">
             {tarotSpreads.find((spread) => spread.value === reading.spreadType).name}
-          </p>
-          <ReactMarkdown allowedElements={["p"]} className="truncate-text-7 text-xs font-normal">
+          </p> */}
+          <p className="font-normal italic">{reading.userQuery || "Open Reading"}</p>
+          {/* <ReactMarkdown allowedElements={["p"]} className="truncate-text-7 text-base font-normal">
             {interpretationPreview}
-          </ReactMarkdown>
+          </ReactMarkdown> */}
         </Link>
       </>
     </Card>

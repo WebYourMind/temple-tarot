@@ -83,7 +83,7 @@ export default function Header() {
             {session?.user ? (
               <Sidebar>
                 <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
-                  <SidebarList />
+                  <SidebarList user={session.user} />
                 </React.Suspense>
               </Sidebar>
             ) : (
@@ -93,10 +93,7 @@ export default function Header() {
             )}
             {status !== "loading" && (
               <div className="flex items-center">
-                <DividerVerticalIcon className="h-6 w-6 text-border" />
-                {session?.user ? (
-                  <UserMenu user={session.user} />
-                ) : (
+                {!session?.user && (
                   <>
                     <Button variant="link" asChild className="-ml-2">
                       <Link href={loginUrl}>Login</Link>

@@ -40,9 +40,7 @@ const QueryInput = () => {
 
   return (
     <div className="container mx-auto mb-10 flex h-full max-w-xl flex-col items-center justify-center space-y-8 px-2 md:mt-10">
-      <div className="mx-auto mb-8 max-w-sm px-10 md:mb-0">
-        <Image src={Logo} height={240} width={1140} alt="Temple Tarot logo" />
-      </div>
+      {" "}
       <Label htmlFor="question" className={cn("px-2 text-center font-sans text-xl md:px-0")}>
         What guidance are you seeking?
         <InfoButton type="query" />
@@ -57,26 +55,6 @@ const QueryInput = () => {
         rows={4}
         autoFocus
       />
-      <div className="items-center md:flex md:space-x-16">
-        <DeckSelector />
-        <div className="flex">
-          <SpreadSelector />
-          <InfoButton type="spread" />
-        </div>
-      </div>
-      <div className="flex items-center space-x-2">
-        <Checkbox id="terms1" checked={showCardInput} onCheckedChange={setShowCardInput as () => void} />
-        <div className="grid leading-none">
-          <label
-            htmlFor="terms1"
-            className="flex items-center text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            I have a physical deck
-            <InfoButton type="physical" />
-          </label>
-        </div>
-      </div>
-      {showCardInput && <CardInput />}
       {showFreeReading && (
         <div className="space-y-0 text-center text-sm text-primary md:text-base">
           <p className="my-0">

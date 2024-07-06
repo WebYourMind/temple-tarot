@@ -10,7 +10,7 @@
     --color-card-foreground: #333333;
     --color-popover: #ffffff;
     --color-popover-foreground: #333333;
-    --color-primary: #db5b2d;
+    --color-primary: #5040ff;
     --color-primary-foreground: #ffffff;
     --color-secondary: #db5b2d;
     --color-secondary-foreground: #ffffff;
@@ -32,13 +32,13 @@
   }
 
   .dark {
-    --color-background: #151212;
+    --color-background: #050505;
     --color-foreground: #eeeeee;
     --color-card: #151212;
     --color-card-foreground: #f7f9fb;
-    --color-popover: #151212;
+    --color-popover: #010210;
     --color-popover-foreground: #f7f9fb;
-    --color-primary: #e4693c;
+    --color-primary: #aaa3f5;
     --color-primary-foreground: #eeeeee;
     --color-secondary: #c46505;
     --color-secondary-foreground: #f2ecf4;

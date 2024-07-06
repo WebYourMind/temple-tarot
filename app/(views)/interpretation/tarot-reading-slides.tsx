@@ -99,7 +99,7 @@ const TarotReadingSlides = ({ interpretation }) => {
               </div>
             </div>
           )}
-          <p className="text-start text-sm leading-relaxed tracking-wide md:text-base">
+          <p className="text-start text-base leading-relaxed tracking-wide md:text-base">
             {interpretation[currentSlide].content}
           </p>
           <CardInfo card={card} open={open} onOpenChange={() => setOpen(!open)} />
