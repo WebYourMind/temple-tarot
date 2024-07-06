@@ -95,7 +95,7 @@ const TarotReadingSlides = ({ interpretation }) => {
                       "rotate-180"
                   )}
                 />
-                <EnterFullScreenIcon className="pointer-events-none absolute right-2 top-2 cursor-pointer bg-black bg-opacity-20 md:h-6 md:w-6" />
+                <EnterFullScreenIcon className="pointer-events-none absolute right-2 top-2 cursor-pointer bg-black bg-opacity-20 text-white md:h-6 md:w-6" />
               </div>
             </div>
           )}
