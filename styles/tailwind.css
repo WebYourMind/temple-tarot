@@ -12,7 +12,7 @@
     --color-popover-foreground: #333333;
     --color-primary: #5040ff;
     --color-primary-foreground: #ffffff;
-    --color-secondary: #db5b2d;
+    --color-secondary: #562ddb;
     --color-secondary-foreground: #ffffff;
     --color-muted: #a7a7a7;
     --color-muted-foreground: #7b7b7b;
@@ -40,7 +40,7 @@
     --color-popover-foreground: #f7f9fb;
     --color-primary: #aaa3f5;
     --color-primary-foreground: #eeeeee;
-    --color-secondary: #c46505;
+    --color-secondary: #4e05c4;
     --color-secondary-foreground: #f2ecf4;
     --color-muted: #788597;
     --color-muted-foreground: #a9b0ba;
@@ -50,7 +50,7 @@
     --color-destructive-foreground: #f7f9fb;
     --color-border: #b8b8b8;
     --color-input: #ffffff;
-    --color-ring: #e4693c;
+    --color-ring: #090a23;
     --radius: 0.7rem;
   }
 }

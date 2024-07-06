@@ -8,15 +8,15 @@ import CardInput from "./card-input";
 function TarotOptions() {
   const [showCardInput, setShowCardInput] = useState();
   return (
-    <>
-      <div className="items-center md:flex md:space-x-16">
+    <div className="space-y-4">
+      <div className="flex flex-col items-center justify-center space-y-8 md:flex-col md:space-x-16">
         <DeckSelector />
         <div className="flex">
           <SpreadSelector />
           <InfoButton type="spread" />
         </div>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center justify-center space-x-2 pt-8">
         <Checkbox id="terms1" checked={showCardInput} onCheckedChange={setShowCardInput as () => void} />
         <div className="grid leading-none">
           <label
@@ -29,7 +29,7 @@ function TarotOptions() {
         </div>
       </div>
       {showCardInput && <CardInput />}
-    </>
+    </div>
   );
 }
 

@@ -126,9 +126,14 @@ export default function Header() {
                 </Link>
               </div>
             )}
-            <button onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")} aria-label="Theme">
+            <Button
+              variant="ghost"
+              className="p-0"
+              onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+              aria-label="Theme"
+            >
               <Half2Icon />
-            </button>
+            </Button>
             {/* <FullscreenComponent /> */}
           </div>
         </>
