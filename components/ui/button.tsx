@@ -5,22 +5,22 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "lib/utils";
 
 const buttonVariants = cva(
-  "font-sans inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "font-sans inline-flex whitespace-nowrap items-center justify-center rounded-full text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-background border border-primary md:hover:bg-primary/80",
+        default: "border border-foreground bg-white/50 dark:bg-black/50 md:hover:bg-primary/80",
         destructive: "bg-destructive text-destructive-foreground md:hover:bg-destructive/90",
-        outline: "border border-input bg-background text-input md:hover:border-primary",
+        outline: "border border-foreground text-input md:hover:border-primary md:hover:text-primary",
         secondary: "bg-background text-secondary-foreground md:hover:bg-secondary/80",
-        ghost: "bg-background border border-transparent focus:ring-offset-0 md:hover:underline md:hover:border-primary",
-        link: "bg-background text-foreground underline-offset-4 md:hover:underline",
+        ghost: "border border-transparent focus:ring-offset-0 md:hover:underline md:hover:text-primary",
+        link: "font-semibold text-foreground underline-offset-4 md:hover:underline",
       },
       size: {
-        default: "h-10 rounded-md px-4 py-2",
-        sm: "h-9 rounded px-3",
-        lg: "h-11 rounded px-8",
-        icon: "h-10 w-10",
+        default: "h-10 px-4 py-2",
+        sm: "h-9 px-3 text-xs",
+        lg: "h-11 px-8",
+        icon: "h-10 w-10 text-foreground",
       },
     },
     defaultVariants: {

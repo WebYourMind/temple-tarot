@@ -34,16 +34,14 @@ export function SidebarItem({ menuItem }: SidebarItemProps) {
 
   if (!menuItem?.path && !menuItem?.onClick) return null;
 
-  console.log(menuItem);
-
   return (
     <div className="relative">
       <SheetClose asChild>
         {menuItem.onClick ? (
           <Button
             className={cn(
-              isActive ? buttonVariants({ variant: "default" }) : buttonVariants({ variant: "outline" }),
-              "group w-full appearance-none pl-4 pr-4"
+              isActive ? buttonVariants({ variant: "outline" }) : buttonVariants({ variant: "outline" }),
+              "group w-full appearance-none bg-transparent pl-4 pr-4"
             )}
           >
             <MenuContents menuItem={menuItem} />

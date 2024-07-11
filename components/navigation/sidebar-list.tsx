@@ -2,8 +2,6 @@
 
 import { EyeOpenIcon, MagicWandIcon, PersonIcon } from "@radix-ui/react-icons";
 import { SidebarItem } from "./sidebar-item";
-// import { LumenBalance } from "./lumen-balance";
-// import { CreditBalance } from "../../app/(ai-payments)/(frontend)/components/credit-balance";
 import { IconPlus } from "components/ui/icons";
 import { signOut, useSession } from "next-auth/react";
 import { BookOpenIcon, LogOutIcon } from "lucide-react";
@@ -21,7 +19,7 @@ export function SidebarList({ user }: { user: UserProfile }) {
       icon: <MagicWandIcon />,
     },
     {
-      name: "My Readings",
+      name: "Past Readings",
       path: "/readings",
       icon: <EyeOpenIcon />,
     },
@@ -52,11 +50,6 @@ export function SidebarList({ user }: { user: UserProfile }) {
       {menuItems?.length ? (
         <div className="flex h-full flex-col justify-between px-2 pb-2">
           <div className="space-y-4">
-            {/* <div className="flex space-x-2 px-4">
-            <LumenBalance />
-            <CreditBalance />
-          </div> */}
-            {/* <div className="h-[1px] w-full bg-muted" /> */}
             {menuItems.map((item) => item && <SidebarItem key={item?.name} menuItem={item} />)}
           </div>
           <Link href="/privacy" className={buttonVariants({ variant: "link" })}>

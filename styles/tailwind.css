@@ -10,7 +10,7 @@
     --color-card-foreground: #333333;
     --color-popover: #ffffff;
     --color-popover-foreground: #333333;
-    --color-primary: #5040ff;
+    --color-primary: #9313d3;
     --color-primary-foreground: #ffffff;
     --color-secondary: #562ddb;
     --color-secondary-foreground: #ffffff;
@@ -38,7 +38,7 @@
     --color-card-foreground: #f7f9fb;
     --color-popover: #010210;
     --color-popover-foreground: #f7f9fb;
-    --color-primary: #aaa3f5;
+    --color-primary: #f3acc3;
     --color-primary-foreground: #eeeeee;
     --color-secondary: #4e05c4;
     --color-secondary-foreground: #f2ecf4;
@@ -59,9 +59,25 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+  html {
+    @apply bg-background;
   }
+  body {
+    @apply /*
+		md:bg-background; */ text-foreground;
+  }
+}
+
+.bg-hero {
+  @apply bg-[url('../app/bg-image-4.webp')] bg-cover bg-center bg-no-repeat dark:bg-[url('../app/bg-image-4.webp')];
+}
+
+.max-h-fill {
+  max-height: -webkit-fill-available;
+}
+
+.h-fill {
+  min-height: -webkit-fill-available;
 }
 
 h1 {

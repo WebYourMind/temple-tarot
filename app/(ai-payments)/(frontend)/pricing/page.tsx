@@ -58,21 +58,25 @@ const Pricing: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-8 md:pt-16">
-      <div className="mx-auto w-full max-w-5xl px-4 md:container">
+      <div className="mx-auto w-full max-w-5xl space-y-16 px-4 md:container">
         <CurrentPass />
-        <header className="mb-16 text-center">
+        <header className="mb-16 md:text-center">
           <h1 className="mb-4 text-4xl font-bold">Pricing</h1>
           <p className="mb-6 text-lg opacity-70">
             Discover our flexible pricing options designed to meet your needs. Whether you&apos;re looking for short or
             long term, we&apos;ve got you covered.
           </p>
         </header>
-        {subscriptions.length > 0 && (
-          <Section title="Subscriptions" plans={subscriptions} handleSelectPlan={handleSelectPlan} />
-        )}
-        {oneTimeProducts.length > 0 && (
-          <Section title="One-Time Purchases" plans={oneTimeProducts} handleSelectPlan={handleSelectPlan} />
-        )}
+        <div>
+          {subscriptions.length > 0 && (
+            <Section title="Subscriptions" plans={subscriptions} handleSelectPlan={handleSelectPlan} />
+          )}
+        </div>
+        <div>
+          {oneTimeProducts.length > 0 && (
+            <Section title="One-Time Purchases" plans={oneTimeProducts} handleSelectPlan={handleSelectPlan} />
+          )}
+        </div>
         <Faq />
       </div>
     </div>
@@ -85,10 +89,10 @@ const Section: React.FC<{
   handleSelectPlan: (priceId: string, type: string, isSubscribed: boolean) => void;
 }> = ({ title, plans, handleSelectPlan }) => (
   <section className="mb-16">
-    <h2 className="mb-8 text-center text-3xl font-semibold">{title}</h2>
+    <h2 className="mb-8 text-3xl font-semibold md:text-center">{title}</h2>
     <div className="flex flex-col space-y-8 md:flex-row md:justify-center md:space-x-8 md:space-y-0">
       {plans.map((plan, i) => (
-        <div key={plan.id} className="rounded-md p-8 shadow-lg md:w-1/3">
+        <div key={plan.id} className="rounded-md shadow-lg md:w-1/3 md:p-8">
           <h3 className="mb-4 text-xl font-bold">{plan.productName}</h3>
           <p className="text-sm opacity-70">{plan.productDescription}</p>
           <p className="my-6 text-4xl font-bold">

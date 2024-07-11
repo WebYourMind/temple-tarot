@@ -11,11 +11,11 @@ function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
         Is your card this way... <br />
         or that way? <InfoButton type="orientation" />
       </p>
-      <div className="flex items-center">
+      <div className="flex items-center px-4">
         <button onClick={switchOrientation}>
           <ArrowUp className="pulse-1 opacity-90" size={25} />
         </button>
-        <button onClick={switchOrientation} className="mt-4 p-4 px-16">
+        <button onClick={switchOrientation} className="mt-4 p-4 px-8">
           <div className="relative">
             <TarotCard
               alt="Your Card"

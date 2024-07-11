@@ -11,7 +11,7 @@ import { TarotSessionProvider } from "lib/contexts/tarot-session-context";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" forcedTheme="light">
       <SessionProvider>
         <TooltipProvider>
           <TarotSessionProvider>
