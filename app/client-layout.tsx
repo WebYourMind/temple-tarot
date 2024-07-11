@@ -17,7 +17,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname();
   const hideHeader = pathname && (pathname === "/interpretation" || pathname.includes("/readings/"));
   return (
-    <div className="relative flex flex-col">
+    <div className="relative flex h-full flex-col">
       <div
         className="bg-hero fixed bottom-0 left-0 right-0 top-0 -z-10 h-screen max-h-screen w-screen bg-cover bg-center bg-no-repeat
 		text-foreground "

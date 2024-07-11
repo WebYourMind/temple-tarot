@@ -56,9 +56,9 @@ const QueryInput = () => {
           )}
         />
       </div>
-      <div>
+      <div className="w-full">
         <div className="mb-4 flex w-full flex-col justify-center">
-          <div className="flex items-center justify-center space-x-6">
+          <div className="flex items-center justify-between space-x-6">
             <div className="flex items-center">
               <InfoButton type="query" className="ml-0" />
               Info

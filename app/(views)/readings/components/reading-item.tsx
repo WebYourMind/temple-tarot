@@ -3,6 +3,9 @@
 import { Reading } from "lib/database/readings.database";
 import { useReadingsContext } from "lib/contexts/readings-context";
 import { useRouter } from "next/navigation";
+import Card from "components/card";
+import ReadingItemMenu from "./reading-item-menu";
+import Link from "next/link";
 
 type ReadingItemProps = {
   reading: Reading;
@@ -26,7 +29,7 @@ function ReadingItem({ reading }: ReadingItemProps) {
   //   }
   // } catch (error) {
   //   interpretationPreview = reading.aiInterpretation;
-  }
+  // }
   return (
     <Card className="pt-6">
       <>
