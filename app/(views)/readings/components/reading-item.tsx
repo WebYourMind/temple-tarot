@@ -43,7 +43,9 @@ function ReadingItem({ reading }: ReadingItemProps) {
           className={"flex flex-col space-y-2 text-foreground"}
         >
           {reading.cards.map((card) => (
-            <h3 className="my-0 text-primary">{card.cardName}</h3>
+            <h3 key={card.cardName} className="my-0 text-primary">
+              {card.cardName}
+            </h3>
           ))}
           <p className="font-normal italic">{reading.userQuery || "Open Reading"}</p>
         </Link>
