@@ -82,7 +82,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
                 return (
                   <div
                     key={cardIndex}
-                    className={cn(`absolute left-1/2 top-1/2 w-full cursor-pointer transition ease-in-out md:w-60`)}
+                    className={cn(`absolute left-1/2 top-1/2 w-32 cursor-pointer transition ease-in-out md:w-60`)}
                     style={{
                       transform: translate,
                       zIndex: cardIndex,
