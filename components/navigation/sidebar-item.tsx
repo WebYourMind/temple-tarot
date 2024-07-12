@@ -39,6 +39,7 @@ export function SidebarItem({ menuItem }: SidebarItemProps) {
       <SheetClose asChild>
         {menuItem.onClick ? (
           <Button
+            onClick={menuItem.onClick}
             className={cn(
               isActive ? buttonVariants({ variant: "outline" }) : buttonVariants({ variant: "outline" }),
               "group w-full appearance-none bg-transparent pl-4 pr-4"
