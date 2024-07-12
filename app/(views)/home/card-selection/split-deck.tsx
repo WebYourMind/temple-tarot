@@ -43,7 +43,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
         <InfoButton type="cards" />
       </p>
       <div
-        className={`flex w-full grow justify-between transition-opacity duration-700 ${
+        className={`flex w-full grow justify-between space-x-4 px-4 transition-opacity duration-700 md:w-auto md:space-x-16 ${
           allLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -54,7 +54,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
               selectedSide && selectedSide !== side ? "opacity-0" : ""
             }`}
           >
-            <div className="mb-4 flex w-full justify-center">
+            <div className="mb-4 flex w-full justify-center md:w-auto">
               {side === "left" ? (
                 <ArrowLeft className="pulse-1 opacity-90" size={25} />
               ) : (
@@ -64,7 +64,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
             <button
               onClick={() => handleDeckSelect(side)}
               className={cn(
-                "relative h-[200px] w-full max-w-[220px] cursor-default transition-all duration-500 fade-in md:h-[330px] md:w-[400px] md:max-w-xs md:p-0",
+                "relative h-[300px] w-full cursor-default transition-all duration-500 fade-in md:h-[450px] md:w-[300px] md:p-0",
                 selectedSide && selectedSide !== side ? "opacity-0" : ""
               )}
             >
@@ -82,13 +82,13 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
                 return (
                   <div
                     key={cardIndex}
-                    className={cn(`absolute left-1/2 top-1/2 cursor-pointer transition ease-in-out`)}
+                    className={cn(`absolute left-1/2 top-1/2 w-full cursor-pointer transition ease-in-out md:w-60`)}
                     style={{
                       transform: translate,
                       zIndex: cardIndex,
                     }}
                   >
-                    <div className={cn("transition delay-300", startFade && "opacity-0")}>
+                    <div className={cn("w-full transition delay-300", startFade && "opacity-0")}>
                       <TarotCard
                         alt={`${cardIndex + 1}: ${card.cardName} ${card.orientation}`}
                         onLoad={() => handleImageLoad(cardIndex + (side === "left" ? 0 : leftDeck.length))}
