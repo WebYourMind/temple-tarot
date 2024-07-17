@@ -1,6 +1,6 @@
 export const infoMap = {
-  query: `## Query Submission
-  Start by submitting a query or a question you seek guidance for. It could be about anything that's on your mind—whether it's love, career, personal growth, or even day-to-day decisions.`,
+  query: `## Begin a reading
+  Start by writing a query or a question you seek guidance for. It could be about anything that's on your mind—whether it's love, career, personal growth, or even day-to-day decisions.`,
   deck: `## Choosing a Deck
 
 You have three decks to choose from:

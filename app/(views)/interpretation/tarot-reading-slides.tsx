@@ -55,7 +55,7 @@ const TarotReadingSlides = ({ interpretation }) => {
   return (
     <div
       className={cn(
-        "relative mx-auto flex h-screen w-full max-w-2xl flex-col justify-between p-4 text-center font-sans fade-in md:max-w-lg"
+        "h-fill relative mx-auto flex w-full max-w-2xl grow flex-col justify-between p-4 text-center font-sans fade-in md:max-w-lg"
       )}
     >
       <div className="flex items-center justify-between">
@@ -74,7 +74,8 @@ const TarotReadingSlides = ({ interpretation }) => {
             <h2 className="text-xl font-bold">{interpretation[currentSlide].title}</h2>
           )}
           {imageUrl && (
-            <div className="relative flex items-center justify-center">
+            <div className="relative my-4 flex flex-col items-center justify-center space-y-2">
+              {card?.suit && <p className="m-0 text-sm">{card.suit}</p>}
               <div className="relative flex items-center">
                 <Image
                   onClick={() => setOpen(true)}
@@ -83,19 +84,26 @@ const TarotReadingSlides = ({ interpretation }) => {
                   width={256}
                   height={384}
                   className={cn(
-                    "my-4 h-auto max-h-[25vh] w-auto max-w-full cursor-pointer rounded-sm object-contain md:max-h-[40vh]",
+                    "h-auto max-h-[25vh] w-auto max-w-full cursor-pointer rounded-sm object-contain md:max-h-[40vh]",
                     (interpretation[currentSlide]?.orientation === "reversed" ||
                       interpretation[currentSlide]?.orientation === "Reversed") &&
                       "rotate-180"
                   )}
                 />
-                <EnterFullScreenIcon className="pointer-events-none absolute right-2 top-5 cursor-pointer bg-black bg-opacity-20 md:h-6 md:w-6" />
+                <EnterFullScreenIcon className="pointer-events-none absolute right-2 top-2 cursor-pointer bg-black bg-opacity-20 text-white md:h-6 md:w-6" />
               </div>
+              {card?.cardName && (
+                <p className="m-0 mb-1 text-xs">
+                  {card.cardName} ({interpretation[currentSlide].orientation})
+                </p>
+              )}
             </div>
           )}
+          {/* <div className="rounded-md bg-black/40 px-2"> */}
           <p className="text-start text-sm leading-relaxed tracking-wide md:text-base">
             {interpretation[currentSlide].content}
           </p>
+          {/* </div> */}
           <CardInfo card={card} open={open} onOpenChange={() => setOpen(!open)} />
         </div>
       ) : (

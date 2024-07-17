@@ -13,8 +13,6 @@ import { Label } from "components/ui/label";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { CardType } from "lib/types";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
-import { buttonVariants } from "components/ui/button";
-import { cn } from "lib/utils";
 
 const CardInput = () => {
   const { spreadType, setSelectedCards, selectedDeck } = useTarotSession();
@@ -58,9 +56,9 @@ const CardInput = () => {
     <div className="container mx-auto">
       {cardSelections.map((selection, index) => (
         <div key={index} className="mb-4">
-          <Label>Card {index + 1}</Label>
+          <Label className="mb-2">Card {index + 1}</Label>
           <Select onValueChange={(value) => handleCardChange(index, value)} value={selection.cardName}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="mt-2 w-full">
               <SelectValue placeholder="Select card" />
             </SelectTrigger>
             <SelectContent
@@ -83,7 +81,7 @@ const CardInput = () => {
             </SelectContent>
           </Select>
 
-          <div className="mt-2 flex items-center">
+          <div className="mt-4 flex items-center">
             <Label className="mr-2">Reversed</Label>
             <Switch
               checked={selection.orientation === "reversed"}

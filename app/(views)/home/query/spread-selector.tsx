@@ -4,6 +4,8 @@ import tarotSpreads from "lib/tarot-data/tarot-spreads";
 import { Dialog, DialogContent, DialogTrigger } from "components/ui/dialog";
 import { ChevronDown } from "lucide-react";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { cn } from "lib/utils";
+import { buttonVariants } from "components/ui/button";
 
 function SpreadSelector() {
   const { spreadType, setSpreadType, setSpreadPickerOpen, spreadPickerOpen } = useTarotSession();
@@ -15,8 +17,8 @@ function SpreadSelector() {
   return (
     <>
       <Dialog open={spreadPickerOpen} onOpenChange={() => setSpreadPickerOpen(!spreadPickerOpen)}>
-        <DialogTrigger className="flex space-x-2">
-          <span>{spreadType?.name}</span> <ChevronDown />
+        <DialogTrigger className={cn("flex w-full items-center justify-center space-x-2", buttonVariants())}>
+          <span>{spreadType?.name}</span> <ChevronDown className="h-4 w-4 opacity-50" />
         </DialogTrigger>
         <DialogContent className="my-16 max-h-[80vh] max-w-[90vw] overflow-scroll rounded-md ">
           <h2>Spreads</h2>

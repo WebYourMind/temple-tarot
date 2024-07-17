@@ -21,12 +21,12 @@ export default function Home() {
   }, [phase]);
 
   return (
-    <div className="relative flex w-full max-w-4xl grow flex-col p-4 md:container md:pt-16">
+    <>
       <Dialog open={showInfo} onOpenChange={() => setShowInfo(!showInfo)}>
         {phase === "question" && <QueryInput />}
         {phase === "cards" && <CardSelectionWrapper />}
         <InfoDialog infoContent={infoContent} closeDialog={() => setShowInfo(false)} />
       </Dialog>
-    </div>
+    </>
   );
 }

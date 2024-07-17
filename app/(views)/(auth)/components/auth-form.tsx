@@ -2,6 +2,7 @@ import { type SyntheticEvent, type ReactNode } from "react";
 import { StarIcon } from "@radix-ui/react-icons";
 import { Button } from "components/ui/button";
 import GoogleButton from "./google-button";
+import DividerWithText from "components/divider-with-text";
 
 interface AuthFormProps {
   isLoading: boolean;
@@ -9,16 +10,6 @@ interface AuthFormProps {
   isSubmitDisabled?: boolean;
   children: ReactNode;
 }
-
-const DividerWithText = () => {
-  return (
-    <div className="my-4 flex items-center justify-center">
-      <div className="mr-3 flex-grow border-t"></div>
-      <span className="text-muted">or</span>
-      <div className="ml-3 flex-grow border-t"></div>
-    </div>
-  );
-};
 
 export default function AuthForm({ isLoading, onSubmit, isSubmitDisabled, children }: AuthFormProps) {
   return (

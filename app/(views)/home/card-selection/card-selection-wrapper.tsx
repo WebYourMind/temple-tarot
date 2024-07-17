@@ -1,4 +1,3 @@
-// home/card-selection-wrapper.tsx
 import React, { useState } from "react";
 import CardSelection from "./card-selection";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
@@ -23,10 +22,10 @@ const CardSelectionWrapper = () => {
   const cardOrdinal = ordinalLabels[currentStep] || (currentStep + 1).toString(); // Fallback to numbers if out of predefined range
 
   return (
-    <>
+    <div className="max-h-screen">
       {spreadType.numberOfCards > 1 && <p className="text-center text-xs uppercase">{cardOrdinal} card</p>}
       <CardSelection onSelect={handleCardSelect} query={query} currentStep={currentStep} />
-    </>
+    </div>
   );
 };
 

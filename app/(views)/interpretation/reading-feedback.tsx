@@ -7,29 +7,28 @@ import { Textarea } from "components/ui/textarea";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 import { Profile } from "next-auth";
+import { cn } from "lib/utils";
 
 const FeedbackButtons = ({ content }) => {
   const { data: session } = useSession();
-  const [feedbackGiven, setFeedbackGiven] = useState({ resonance: false, aiResponse: false });
-  const [additionalFeedback, setAdditionalFeedback] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [resonance, setResonance] = useState(null);
+  const [aiQuality, setAiQuality] = useState(null);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] = useState(false);
 
-  const submitFeedback = (type, value) => {
-    const { id, email, name } = session.user as Profile & { id: string };
-    track(type, { feedback: value, content, userId: id, email, name });
-    toast.success("Feedback submitted. Thank you!"); // Notify user of successful feedback submission
-    setFeedbackGiven({ ...feedbackGiven, [type]: true }); // Update state to reflect feedback given
-  };
-
   const handleSubmitAdditionalFeedback = async () => {
-    if (additionalFeedback.trim() === "") {
-      toast.error("Please provide some feedback.");
-      return;
-    }
     const { id, email, name } = session.user as Profile & { id: string };
 
-    track("comments", { feedback: additionalFeedback, content, userId: id, email, name });
-    toast.success("Additional feedback submitted. Thank you!");
+    track("feedback", {
+      feedbackMessage: feedbackMessage,
+      resonance,
+      aiResponse: aiQuality,
+      content,
+      userId: id,
+      email,
+      name,
+    });
+    toast.success("Feedback submitted. Thank you!");
     setIsFeedbackSubmitted(true);
   };
 
@@ -41,18 +40,18 @@ const FeedbackButtons = ({ content }) => {
           <Button
             size="icon"
             variant="ghost"
-            onClick={() => submitFeedback("resonance", "yes")}
-            disabled={feedbackGiven.resonance}
-            className="rounded-full"
+            onClick={() => setResonance("Good")}
+            className={cn("rounded-full", resonance === "Good" ? "text-green-500" : "")}
+            disabled={isFeedbackSubmitted}
           >
             <ThumbsUpIcon />
           </Button>
           <Button
             size="icon"
             variant="ghost"
-            onClick={() => submitFeedback("resonance", "no")}
-            disabled={feedbackGiven.resonance}
-            className="rounded-full"
+            onClick={() => setResonance("Bad")}
+            className={cn("rounded-full", resonance === "Bad" ? "text-red-500" : "")}
+            disabled={isFeedbackSubmitted}
           >
             <ThumbsDownIcon />
           </Button>
@@ -64,18 +63,18 @@ const FeedbackButtons = ({ content }) => {
           <Button
             size="icon"
             variant="ghost"
-            onClick={() => submitFeedback("aiResponse", "good")}
-            disabled={feedbackGiven.aiResponse}
-            className="rounded-full"
+            onClick={() => setAiQuality("Good")}
+            className={cn("rounded-full", aiQuality === "Good" ? "text-green-500" : "")}
+            disabled={isFeedbackSubmitted}
           >
             <ThumbsUpIcon />
           </Button>
           <Button
             size="icon"
             variant="ghost"
-            onClick={() => submitFeedback("aiResponse", "poor")}
-            disabled={feedbackGiven.aiResponse}
-            className="rounded-full"
+            onClick={() => setAiQuality("Bad")}
+            className={cn("rounded-full", aiQuality === "Bad" ? "text-red-500" : "")}
+            disabled={isFeedbackSubmitted}
           >
             <ThumbsDownIcon />
           </Button>
@@ -85,8 +84,8 @@ const FeedbackButtons = ({ content }) => {
         rows={3}
         placeholder="Is there any other feedback you'd like to share?"
         className="inline-block"
-        value={additionalFeedback}
-        onChange={(e) => setAdditionalFeedback(e.target.value)}
+        value={feedbackMessage}
+        onChange={(e) => setFeedbackMessage(e.target.value)}
       />
       <Button onClick={handleSubmitAdditionalFeedback} disabled={isFeedbackSubmitted}>
         Send Feedback <PaperPlaneIcon className="ml-2" />
