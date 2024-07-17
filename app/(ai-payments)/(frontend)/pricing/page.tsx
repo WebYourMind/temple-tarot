@@ -92,7 +92,7 @@ const Section: React.FC<{
     <h2 className="mb-8 text-3xl font-semibold md:text-center">{title}</h2>
     <div className="flex flex-col space-y-8 md:flex-row md:justify-center md:space-x-8 md:space-y-0">
       {plans.map((plan, i) => (
-        <div key={plan.id} className="rounded-md shadow-lg md:w-1/3 md:p-8">
+        <div key={plan.id} className="rounded-md md:w-1/3 md:p-8">
           <h3 className="mb-4 text-xl font-bold">{plan.productName}</h3>
           <p className="text-sm opacity-70">{plan.productDescription}</p>
           <p className="my-6 text-4xl font-bold">

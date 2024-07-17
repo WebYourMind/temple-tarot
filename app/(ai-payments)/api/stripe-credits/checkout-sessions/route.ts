@@ -44,6 +44,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ clientSecret: session.client_secret, sessionId: session.id });
   } catch (err: any) {
+    console.error(err.message);
     return NextResponse.json(err.message, { status: err.statusCode || 500 });
   }
 }
