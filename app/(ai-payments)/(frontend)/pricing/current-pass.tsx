@@ -9,7 +9,7 @@ const CurrentPass: React.FC = () => {
   if (isSubscribed) {
     return (
       <div className="mx-auto mb-8 max-w-sm rounded-lg border p-2">
-        <p className="text-center text-sm md:text-base">You have an active Temple Tarot subscription ✨</p>
+        <p className="text-center text-base md:text-base">You have an active Temple Tarot subscription ✨</p>
       </div>
     );
   }
@@ -27,7 +27,7 @@ const CurrentPass: React.FC = () => {
 
   return (
     <div className="mx-auto mb-8 max-w-sm rounded-lg border p-2">
-      <p className="text-center text-sm md:text-base">
+      <p className="text-center text-base md:text-base">
         {isPassActive ? "You have an active Temple Tarot pass until:" : "Your last Temple Tarot pass expired on:"}
       </p>
       <p className="text-center text-sm md:text-base">

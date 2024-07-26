@@ -51,6 +51,7 @@ CREATE TABLE chat_messages (
 CREATE TABLE readings (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
+    tarot_session_id INTEGER REFERENCES tarot_sessions(id)
     user_query TEXT,
     spread_type VARCHAR(255),
     ai_interpretation TEXT,
@@ -94,3 +95,13 @@ CREATE TABLE credit_events (
     event_type VARCHAR(50),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+CREATE TABLE tarot_sessions (
+  id SERIAL PRIMARY KEY,
+  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  user_id INTEGER REFERENCES users(id),
+  markdown_preview TEXT
+);
+
+ALTER TABLE readings
+ADD COLUMN tarot_session_id INTEGER REFERENCES tarot_sessions(id);

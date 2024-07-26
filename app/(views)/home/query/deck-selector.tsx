@@ -2,7 +2,7 @@
 
 import { InfoButton } from "components/info-dialog";
 import Loading from "components/loading";
-import { Label } from "components/ui/label";
+import { buttonVariants } from "components/ui/button";
 import {
   Select,
   SelectContent,
@@ -14,6 +14,7 @@ import {
 } from "components/ui/select";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { decks } from "lib/tarot-data/tarot-deck";
+import { cn } from "lib/utils";
 
 export default function DeckSelector() {
   const { selectedDeck, setSelectedDeck } = useTarotSession();
@@ -24,15 +25,14 @@ export default function DeckSelector() {
   if (!selectedDeck || !selectedDeck.value || !decks) return <Loading />;
 
   return (
-    <div className="mb-4 space-y-2 text-center">
-      <Label className="flex">
-        Choose a deck
-        <InfoButton type="deck" />
-      </Label>
+    <div className="mb-4 w-full space-y-2 text-center">
       <Select onValueChange={handleDeckChange} value={selectedDeck.value}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select deck" />
-        </SelectTrigger>
+        <div className="flex w-full">
+          <SelectTrigger className={cn(buttonVariants())}>
+            <SelectValue placeholder="Select deck" />
+          </SelectTrigger>
+          <InfoButton type="deck" />
+        </div>
         <SelectContent ref={(ref) => ref?.addEventListener("touchend", (e) => e.preventDefault())} className="z-50">
           <SelectGroup>
             <SelectLabel>Decks</SelectLabel>

@@ -5,17 +5,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "components/ui/button";
 import { Sidebar } from "./sidebar";
-import { UserMenu } from "./user-menu";
 import { SidebarList } from "components/navigation/sidebar-list";
 import { useSession } from "next-auth/react";
 import appConfig from "app.config";
-import { DividerVerticalIcon, Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-// import { CreditBalance } from "../../app/(ai-payments)/(frontend)/components/credit-balance";
-// import { LumenBalance } from "./lumen-balance";
 import { cn } from "lib/utils";
-// import FullscreenComponent from "app/(views)/home/components/fullscreen";
+import { MagicFont } from "app/(views)/home/query/query-input";
 
 export default function Header() {
   const { data: session, status, update } = useSession() as any;
@@ -73,30 +69,19 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 flex w-full shrink-0 items-center justify-between bg-background px-4 transition-all",
-        isScrolled ? "h-0" : "h-16"
+        "sticky top-0 z-50 flex w-full shrink-0 items-center justify-between px-4 transition-all",
+        isScrolled ? "h-0" : "h-20"
       )}
     >
       {!isScrolled && (
         <>
-          <div className="flex items-center">
-            {session?.user ? (
-              <Sidebar>
-                <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
-                  <SidebarList />
-                </React.Suspense>
-              </Sidebar>
-            ) : (
-              <Link href="/" className="mr-2 hover:no-underline">
-                <h3 className={cn("mt-0 font-sans text-lg text-foreground")}>{appConfig.appName}</h3>
-              </Link>
-            )}
+          <div className="flex w-full items-center justify-between">
+            <Link href="/" className="mr-2 hidden hover:no-underline md:block">
+              <h3 className={cn("mt-0 font-sans text-lg text-foreground", MagicFont.className)}>{appConfig.appName}</h3>
+            </Link>
             {status !== "loading" && (
               <div className="flex items-center">
-                <DividerVerticalIcon className="h-6 w-6 text-border" />
-                {session?.user ? (
-                  <UserMenu user={session.user} />
-                ) : (
+                {!session?.user && (
                   <>
                     <Button variant="link" asChild className="-ml-2">
                       <Link href={loginUrl}>Login</Link>
@@ -113,8 +98,6 @@ export default function Header() {
           <div className="flex items-center justify-end space-x-4">
             {session?.user && (
               <div className="hidden items-center justify-end space-x-4 md:flex">
-                {/* <LumenBalance />
-                <CreditBalance /> */}
                 <Link href="/glossary" className={buttonVariants({ variant: "link" })}>
                   Toth 2.0 Glossary
                 </Link>
@@ -129,10 +112,22 @@ export default function Header() {
                 </Link>
               </div>
             )}
-            <button onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")} aria-label="Theme">
+            {session?.user && (
+              <Sidebar>
+                <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
+                  <SidebarList user={session.user} />
+                </React.Suspense>
+              </Sidebar>
+            )}
+            {/* <Button
+              variant="ghost"
+              size="icon"
+              className="p-0"
+              onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+              aria-label="Theme"
+            >
               <Half2Icon />
-            </button>
-            {/* <FullscreenComponent /> */}
+            </Button> */}
           </div>
         </>
       )}

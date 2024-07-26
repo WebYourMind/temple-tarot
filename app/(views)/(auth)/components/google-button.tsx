@@ -3,7 +3,7 @@ import "./google.css";
 
 export default function GoogleButton() {
   return (
-    <button onClick={() => signIn("google")} className="gsi-material-button">
+    <button onClick={() => signIn("google")} className="gsi-material-button" type="button">
       <div className="gsi-material-button-state"></div>
       <div className="gsi-material-button-content-wrapper">
         <div className="gsi-material-button-icon">

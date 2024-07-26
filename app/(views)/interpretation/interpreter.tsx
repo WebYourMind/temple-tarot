@@ -18,6 +18,8 @@ function Interpreter() {
     setInterpretationArray,
     selectedDeck,
     setPhase,
+    interpretationString,
+    setInterpretationString,
   } = useTarotSession();
 
   const router = useRouter();
@@ -60,6 +62,9 @@ function Interpreter() {
             const intArray = parseJsonSafe(interpretationValue);
             if (Array.isArray(intArray)) {
               setInterpretationArray(intArray);
+            } else {
+              console.log(interpretationString);
+              setInterpretationString(interpretationValue);
             }
           }
           break;
@@ -70,7 +75,7 @@ function Interpreter() {
 
         const chunk = new TextDecoder("utf-8").decode(value, { stream: true });
         if (isSubscribed) {
-          interpretationValue += chunk;
+          setInterpretationString((prevState) => (prevState ? prevState + chunk : chunk));
         }
       }
     } catch (error: any) {
@@ -102,10 +107,8 @@ function Interpreter() {
         .join(", ");
 
       let content = "";
-      if (query) {
-        content += `User's query: ${query}\n\n`;
-      }
-      content += `Selected Tarot Deck: ${selectedDeck.promptName}\n\n`;
+      content += `Query: ${query || "Open Reading"}\n\n`;
+      content += `Chosen Tarot Deck: ${selectedDeck.promptName}\n\n`;
       content += `Chosen spread: ${spread.name}\n\nCards drawn with their positions in the spread: ${cardDescriptions}`;
 
       if (!interpretationArray) {
@@ -116,8 +119,12 @@ function Interpreter() {
     }
   }, [query, cards, spread]);
 
-  if (interpretationArray) {
-    return <TarotReadingSlides interpretation={interpretationArray} />;
+  if (interpretationArray || interpretationString) {
+    return <TarotReadingSlides cards={cards} />;
+  }
+  console.log(cards);
+  if (!cards) {
+    router.replace("/");
   }
 
   return <ReadingLoading cards={cards} deckType={selectedDeck.value} />;

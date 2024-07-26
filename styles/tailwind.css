@@ -4,19 +4,19 @@
 
 @layer base {
   :root {
-    --color-background: #fffdf9;
+    --color-background: #ffffff;
     --color-foreground: #333333;
     --color-card: #f9fafb;
     --color-card-foreground: #333333;
     --color-popover: #ffffff;
     --color-popover-foreground: #333333;
-    --color-primary: #db5b2d;
+    --color-primary: #580ea1;
     --color-primary-foreground: #ffffff;
-    --color-secondary: #db5b2d;
+    --color-secondary: #562ddb;
     --color-secondary-foreground: #ffffff;
     --color-muted: #a7a7a7;
     --color-muted-foreground: #7b7b7b;
-    --color-accent: #fffdf9;
+    --color-accent: #f8f4ed;
     --color-accent-foreground: #333333;
     --color-destructive: #e63946;
     --color-destructive-foreground: #ffffff;
@@ -32,25 +32,25 @@
   }
 
   .dark {
-    --color-background: #151212;
+    --color-background: #050505;
     --color-foreground: #eeeeee;
     --color-card: #151212;
     --color-card-foreground: #f7f9fb;
-    --color-popover: #151212;
+    --color-popover: #010210;
     --color-popover-foreground: #f7f9fb;
-    --color-primary: #e4693c;
+    --color-primary: #f3acc3;
     --color-primary-foreground: #eeeeee;
-    --color-secondary: #c46505;
+    --color-secondary: #4e05c4;
     --color-secondary-foreground: #f2ecf4;
     --color-muted: #788597;
     --color-muted-foreground: #a9b0ba;
-    --color-accent: #151212;
+    --color-accent: #241e1e;
     --color-accent-foreground: #eeeeee;
     --color-destructive: #e63946;
     --color-destructive-foreground: #f7f9fb;
     --color-border: #b8b8b8;
     --color-input: #ffffff;
-    --color-ring: #e4693c;
+    --color-ring: #090a23;
     --radius: 0.7rem;
   }
 }
@@ -59,9 +59,25 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+  html {
+    @apply bg-background;
   }
+  body {
+    @apply /*
+		md:bg-background; */ text-foreground;
+  }
+}
+
+.bg-hero {
+  @apply bg-[url('../app/bg-image-4.webp')] bg-cover bg-center bg-no-repeat dark:bg-[url('../app/bg-image-4.webp')];
+}
+
+.max-h-fill {
+  max-height: -webkit-fill-available;
+}
+
+.h-fill {
+  min-height: -webkit-fill-available;
 }
 
 h1 {
@@ -182,4 +198,8 @@ a {
   height: 50px;
   background: linear-gradient(to bottom, transparent, var(--color-background));
   pointer-events: none;
+}
+
+.react-swipeable-view-container {
+  @apply h-full max-h-full overflow-y-clip;
 }

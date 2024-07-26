@@ -44,7 +44,7 @@ export function ReadingTemplate({ reading }) {
 
         <ReactMarkdown className="my-16">---</ReactMarkdown>
         {reading.aiInterpretation ? (
-          <ReactMarkdown className="prose prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
+          <ReactMarkdown className="prose prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground fade-in md:prose-lg">
             {reading.aiInterpretation}
           </ReactMarkdown>
         ) : (
@@ -60,6 +60,7 @@ export function ReadingTemplate({ reading }) {
 function Reading({ readingId }: ReadingProps) {
   const { data: session, status } = useSession() as any;
   const { reading, loading, error, fetchReading } = useReadingsContext();
+  const { setInterpretationArray, setInterpretationString } = useTarotSession();
   const { setQuery } = useTarotSession();
 
   useEffect(() => {
@@ -69,8 +70,14 @@ function Reading({ readingId }: ReadingProps) {
   }, [status]);
 
   useEffect(() => {
-    if (reading && reading.userQuery) {
-      setQuery(reading.userQuery);
+    if (reading) {
+      if (reading.userQuery) setQuery(reading.userQuery);
+      const parsedInterpretation = parseJsonSafe(reading.aiInterpretation) as { content: string }[];
+      if (Array.isArray(parsedInterpretation) && parsedInterpretation.length > 0) {
+        setInterpretationArray(parsedInterpretation);
+      } else {
+        setInterpretationString(reading.aiInterpretation);
+      }
     }
 
     return () => {
@@ -81,16 +88,7 @@ function Reading({ readingId }: ReadingProps) {
   if (loading || !reading) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
 
-  try {
-    const parsedInterpretation = parseJsonSafe(reading.aiInterpretation) as { content: string }[];
-    if (Array.isArray(parsedInterpretation) && parsedInterpretation.length > 0) {
-      return <TarotReadingSlides interpretation={parsedInterpretation} />;
-    }
-  } catch (error) {
-    return <ReadingTemplate reading={reading} />;
-  }
-
-  return <ReadingTemplate reading={reading} />;
+  return <TarotReadingSlides cards={reading.cards} />;
 }
 
 export default Reading;

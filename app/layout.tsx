@@ -44,14 +44,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="h-full">
       <head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
         />
       </head>
-      <body>
+      <body className="h-full">
         <Providers>
           <ClientLayout>{children}</ClientLayout>
         </Providers>

@@ -27,7 +27,7 @@ function ReadingLoading({ cards, deckType }) {
                   width={256}
                   height={384}
                   className={cn(
-                    "mx-auto max-h-[20vh] w-auto rounded-lg shadow-lg",
+                    `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : "max-h-[30vh]"} w-auto rounded-lg shadow-lg`,
                     (card.orientation === "reversed" || card.orientation === "Reversed") && "rotate-180"
                   )}
                 />

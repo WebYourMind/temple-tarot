@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "components/ui/button";
+import { QuestionMarkIcon } from "@radix-ui/react-icons";
+import { Button, buttonVariants } from "components/ui/button";
 
 import { DialogContent, DialogTrigger } from "components/ui/dialog";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
@@ -18,8 +19,11 @@ export const InfoButton = ({ type, className = "" }) => {
   }
 
   return (
-    <DialogTrigger className={cn("ml-2 opacity-50", className)} onClick={() => handleInfoClick()}>
-      <Info className="h-4 w-4" />
+    <DialogTrigger
+      className={cn("ml-2", buttonVariants({ variant: "ghost", size: "icon" }), className)}
+      onClick={() => handleInfoClick()}
+    >
+      <Info />
     </DialogTrigger>
   );
 };

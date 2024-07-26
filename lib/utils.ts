@@ -16,6 +16,32 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Function to capitalize the first letter
+export const capitalizeFirstLetter = (string: string): string => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+// Function to lowercase the first letter
+export const lowercaseFirstLetter = (string: string): string => {
+  return string.charAt(0).toLowerCase() + string.slice(1);
+};
+
+export const sentenceCase = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
+export const lowerCase = (str: string): string => {
+  return str.charAt(0).toLowerCase() + str.slice(1).toLowerCase();
+};
+
+export const titleCase = (str: string): string => {
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
 export const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 7); // 7-character random string
 
 export function formatDate(input: string | number): string {
@@ -51,16 +77,6 @@ export function isValidPhoneNumber(phoneNumber: string) {
 export function isValidEmail(email: string) {
   const regex = /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   return regex.test(email);
-}
-
-export function capitalizeFirstLetter(str: string) {
-  // Check if the input string is not empty
-  if (str.length === 0) {
-    return str;
-  }
-
-  // Capitalize the first letter and concatenate it with the rest of the string
-  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 interface DataItem {
