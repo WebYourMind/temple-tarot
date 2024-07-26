@@ -260,7 +260,7 @@ const TarotReadingSlides = ({ cards }) => {
             />
           ))}
         </div>
-        <Button variant="ghost" size="icon" onClick={nextSlide} disabled={currentIndex === slides.length}>
+        <Button variant="ghost" size="icon" onClick={nextSlide} disabled={currentIndex === slides.length - 1}>
           <ArrowRight />
         </Button>
       </div>
