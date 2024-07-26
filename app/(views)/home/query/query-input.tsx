@@ -12,30 +12,23 @@ import { SendIcon, Settings2Icon } from "lucide-react";
 import TarotOptions from "./tarot-options";
 import { Dialog, DialogContent, DialogTrigger } from "components/ui/dialog";
 import { cn } from "lib/utils";
+import { Switch } from "components/ui/switch";
+import { Label } from "components/ui/label";
 
 export const MagicFont = Quicksand({ subsets: ["latin"], weight: "400" });
 
-const QueryInput = () => {
-  const { handleSubmitQuestion, selectedCards, setSelectedCards, setHasOwnCards, query, setQuery } = useTarotSession();
+const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFollowUp }) => {
+  const { query, setQuery, selectedCards } = useTarotSession();
   const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed } = useUserAccessPlan();
   const router = useRouter();
-  // const router = useRouter();
-  const [showCardInput, setShowCardInput] = useState(false);
-  const [showOptions, setShowOptions] = useState(false);
+  const [drawCards, setDrawCards] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleSubmitQuestion();
+    handleSubmitQuery();
   };
 
-  useEffect(() => {
-    setHasOwnCards(showCardInput);
-    if (!showCardInput) {
-      setSelectedCards(null);
-    }
-  }, [showCardInput]);
-
-  const isSubmitDisabled = showCardInput && selectedCards?.some((selection) => selection.cardName === "");
+  const isSubmitDisabled = selectedCards?.some((selection) => selection.cardName === "");
   const showFreeReading = !isSubscribed && (!passExpiry || new Date(passExpiry) < new Date()) && freeReadings > 0;
 
   return (
@@ -46,7 +39,7 @@ const QueryInput = () => {
           name="question"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="What is your heart's desire?"
+          placeholder={placeholder}
           maxLength={5000}
           rows={4}
           autoFocus
@@ -55,16 +48,24 @@ const QueryInput = () => {
             MagicFont.className
           )}
         />
+        {isFollowUp && (
+          <div className="flex w-full items-center justify-between space-x-2 py-2">
+            <Label htmlFor="draw-cards-switch" className={cn("text-sm", MagicFont.className)}>
+              {drawCards ? "Draw new cards" : "Ask without drawing new cards"}
+            </Label>
+            <Switch id="draw-cards-switch" checked={drawCards} onCheckedChange={(checked) => setDrawCards(checked)} />
+          </div>
+        )}
       </div>
-      <div className="w-full">
+      <div className={cn("w-full", MagicFont.className)}>
         <div className="mb-4 flex w-full flex-col justify-center">
           <div className="flex items-center justify-between space-x-6">
             <div className="flex items-center">
-              <InfoButton type="query" className="ml-0" />
+              <InfoButton type={infoType} className="ml-0" />
               Info
             </div>
             <Dialog>
-              <DialogTrigger className="flex items-center">
+              <DialogTrigger className={"flex items-center"}>
                 <Settings2Icon className="mr-2" />
                 Customize
               </DialogTrigger>
@@ -80,16 +81,12 @@ const QueryInput = () => {
               <p className="my-0">
                 You have {freeReadings} free reading{freeReadings > 1 ? "s" : ""}!
               </p>
-              {!emailVerified && <p className="my-0">Please verify your email to if you would like to use it.</p>}
+              {!emailVerified && <p className="my-0">Please verify your email to use it.</p>}
             </div>
           )}
           {hasAccess ? (
-            <Button
-              onClick={handleSubmit}
-              variant={"outline"}
-              disabled={(showCardInput && isSubmitDisabled) || !hasAccess}
-            >
-              START READING <SendIcon className="ml-2" />
+            <Button onClick={handleSubmit} variant={"outline"} disabled={isSubmitDisabled || !hasAccess}>
+              {buttonText} <SendIcon className="ml-2" />
             </Button>
           ) : (
             !showFreeReading && (
@@ -104,6 +101,34 @@ const QueryInput = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+// Higher-order component for new reading
+export const NewReadingInput = () => {
+  const { handleSubmitQuestion } = useTarotSession();
+  return (
+    <QueryInput
+      placeholder="What is your heart's desire?"
+      infoType="query"
+      buttonText="START"
+      handleSubmitQuery={handleSubmitQuestion}
+      isFollowUp={false}
+    />
+  );
+};
+
+// Higher-order component for follow-up reading
+export const FollowUpReadingInput = () => {
+  const { handleSubmitFollowUpQuestion } = useTarotSession();
+  return (
+    <QueryInput
+      placeholder="What do you seek to clarify or explore further?"
+      infoType="followup-query"
+      buttonText="FOLLOW UP"
+      handleSubmitQuery={handleSubmitFollowUpQuestion}
+      isFollowUp={true}
+    />
   );
 };
 

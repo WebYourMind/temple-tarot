@@ -15,7 +15,7 @@ function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
         <button onClick={switchOrientation}>
           <ArrowUp className="pulse-1 opacity-90" size={25} />
         </button>
-        <button onClick={switchOrientation} className="mt-4 p-4 px-8">
+        <button onClick={() => onSubmit(finalCard)} className="mt-4 p-4 px-8">
           <div className="relative">
             <TarotCard
               alt="Your Card"

@@ -199,3 +199,7 @@ a {
   background: linear-gradient(to bottom, transparent, var(--color-background));
   pointer-events: none;
 }
+
+.react-swipeable-view-container {
+  @apply h-full max-h-full overflow-y-clip;
+}
