@@ -110,13 +110,18 @@ const TarotReadingSlides = ({ cards }) => {
   function getInterpretationSlides() {
     if (interpretationArray) {
       return [
-        ...interpretationArray.map((currentSlide) => () => (
-          <div className="my-1 flex grow flex-col justify-center">
-            <Markdown className="text-start text-sm leading-relaxed tracking-wide md:text-base">
-              {currentSlide.content}
-            </Markdown>
-          </div>
-        )),
+        ...interpretationArray.map((currentSlide, index) => {
+          const SlideComponent = () => (
+            <div className="my-1 flex grow flex-col justify-center">
+              <Markdown className="text-start text-sm leading-relaxed tracking-wide md:text-base">
+                {currentSlide.content}
+              </Markdown>
+            </div>
+          );
+
+          SlideComponent.displayName = `SlideComponent_${index}`;
+          return SlideComponent;
+        }),
       ];
     }
     if (interpretationString) {
@@ -134,7 +139,7 @@ const TarotReadingSlides = ({ cards }) => {
                       );
                     }
                     return (
-                      <div className="my-4">
+                      <div className="my-4" key="interpretationString">
                         {cardWithImage?.imageUrl && (
                           <Image
                             onClick={() => {
