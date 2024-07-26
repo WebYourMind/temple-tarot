@@ -65,7 +65,7 @@ const TarotReadingSlides = ({ cards }) => {
 
   function renderCardSlide() {
     return (
-      <div className="absolute bottom-0 left-0 right-0 top-0 flex items-center space-x-2">
+      <div className="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center space-x-2">
         {cards.length > 0 &&
           cards.map((card) => {
             let cardWithImage;
