@@ -108,7 +108,7 @@ const Section: React.FC<{
             variant="outline"
             onClick={() => handleSelectPlan(plan.id, plan.type, plan.isSubscribed)}
           >
-            {plan.isSubscribed ? "Manage Subscription" : plan.type === "recurring" ? "Subscribe" : "Buy Credits"}
+            {plan.isSubscribed ? "Manage Subscription" : plan.type === "recurring" ? "Subscribe" : "Buy"}
           </Button>
         </div>
       ))}

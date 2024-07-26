@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { track } from "@vercel/analytics/react";
 import { useSession } from "next-auth/react";
 import { infoMap } from "lib/tarot-data/info";
@@ -45,6 +45,9 @@ interface TarotSessionContextProps {
   handleReset: () => void;
   setInterpretationArray: React.Dispatch<React.SetStateAction<any>>;
   interpretationArray: any[];
+  setInterpretationString: React.Dispatch<React.SetStateAction<any>>;
+  interpretationString: string;
+  handleSubmitFollowUpQuestion: () => void;
 }
 
 const TarotSessionContext = createContext<TarotSessionContextProps | undefined>(undefined);
@@ -74,9 +77,39 @@ export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const { data: session } = useSession() as { data: { user: { id: string } } };
   const [hasOwnCards, setHasOwnCards] = useState(false);
   const [interpretationArray, setInterpretationArray] = useState<any>();
+  const [interpretationString, setInterpretationString] = useState<any>();
+
+  // Load selected deck from localStorage on component mount
+  useEffect(() => {
+    const storedDeck = localStorage.getItem("selectedDeck");
+    if (storedDeck) {
+      setSelectedDeck(JSON.parse(storedDeck) as { value: string; promptName: string });
+    }
+  }, []);
+
+  // Update localStorage whenever selectedDeck changes
+  useEffect(() => {
+    localStorage.setItem("selectedDeck", JSON.stringify(selectedDeck));
+  }, [selectedDeck]);
 
   function handleSubmitQuestion() {
     if (!hasOwnCards) {
+      setPhase("cards");
+      setInfoContent(infoMap["cards"]);
+    } else {
+      setPhase("reading");
+
+      // analytics
+      track("Reading", { spread: spreadType.value, userId: session?.user?.id });
+      selectedCards?.forEach((card) => {
+        track("Cards", { cardName: card.cardName, orientation: card.orientation });
+      });
+    }
+  }
+
+  function handleSubmitFollowUpQuestion() {
+    if (!hasOwnCards) {
+      // or no cards
       setPhase("cards");
       setInfoContent(infoMap["cards"]);
     } else {
@@ -95,6 +128,7 @@ export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setSelectedCards(null);
     setQuery("");
     setInterpretationArray(null);
+    setInterpretationString(null);
     setHasOwnCards(false);
     setSelectedDeck(defaultDeck);
     setSpreadType(tarotSpreads[0]);
@@ -135,9 +169,12 @@ export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         setInfoContent,
         setSpreadPickerOpen,
         handleSubmitQuestion,
+        handleSubmitFollowUpQuestion,
         handleReset,
         interpretationArray,
         setInterpretationArray,
+        interpretationString,
+        setInterpretationString,
       }}
     >
       {children}

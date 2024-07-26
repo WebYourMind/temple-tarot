@@ -44,7 +44,7 @@ export function ReadingTemplate({ reading }) {
 
         <ReactMarkdown className="my-16">---</ReactMarkdown>
         {reading.aiInterpretation ? (
-          <ReactMarkdown className="prose prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground md:prose-lg">
+          <ReactMarkdown className="prose prose-indigo mx-auto my-4 w-full max-w-full leading-relaxed text-foreground fade-in md:prose-lg">
             {reading.aiInterpretation}
           </ReactMarkdown>
         ) : (
@@ -60,6 +60,7 @@ export function ReadingTemplate({ reading }) {
 function Reading({ readingId }: ReadingProps) {
   const { data: session, status } = useSession() as any;
   const { reading, loading, error, fetchReading } = useReadingsContext();
+  const { setInterpretationArray, setInterpretationString } = useTarotSession();
   const { setQuery } = useTarotSession();
 
   useEffect(() => {
@@ -84,13 +85,14 @@ function Reading({ readingId }: ReadingProps) {
   try {
     const parsedInterpretation = parseJsonSafe(reading.aiInterpretation) as { content: string }[];
     if (Array.isArray(parsedInterpretation) && parsedInterpretation.length > 0) {
-      return <TarotReadingSlides interpretation={parsedInterpretation} />;
+      setInterpretationArray(parsedInterpretation);
+    } else {
+      setInterpretationString(reading.aiInterpretation);
     }
+    return <TarotReadingSlides cards={reading.cards} />;
   } catch (error) {
     return <ReadingTemplate reading={reading} />;
   }
-
-  return <ReadingTemplate reading={reading} />;
 }
 
 export default Reading;
