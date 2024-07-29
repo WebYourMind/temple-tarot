@@ -95,7 +95,7 @@ const TarotReadingSlides = ({ cards }) => {
                     width={256}
                     height={384}
                     className={cn(
-                      `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : "h-full"} w-auto rounded-lg`,
+                      `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : ""} h-full w-auto rounded-lg`,
                       (card.orientation === "reversed" || card.orientation === "Reversed") && "rotate-180"
                     )}
                   />

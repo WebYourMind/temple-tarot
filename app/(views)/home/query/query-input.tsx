@@ -109,7 +109,7 @@ export const NewReadingInput = () => {
   const { handleSubmitQuestion } = useTarotSession();
   return (
     <QueryInput
-      placeholder="What is your heart's desire?"
+      placeholder="What guidance are you seeking?"
       infoType="query"
       buttonText="START"
       handleSubmitQuery={handleSubmitQuestion}
