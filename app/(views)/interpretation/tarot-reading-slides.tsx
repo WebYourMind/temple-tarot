@@ -77,7 +77,7 @@ const TarotReadingSlides = ({ cards }) => {
             return (
               <div
                 key={card.cardName}
-                className={`max-w-[${100 / cards.length}%] flex h-full flex-col items-center py-4 text-center`}
+                className={`max-w-[${100 / cards.length}%] flex h-full w-full flex-col items-center py-4 text-center`}
               >
                 <div className="mb-2 w-full">
                   <p className="my-0">{card.cardName}</p>
