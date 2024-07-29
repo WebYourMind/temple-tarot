@@ -81,8 +81,8 @@ const FeedbackButtons = ({ content }) => {
         </div>
       </div> */}
       <Textarea
-        rows={3}
-        placeholder="Is there any feedback you'd like to share?"
+        rows={4}
+        placeholder="Your feedback is valuable to us; please share any suggestions or experiences to help us improve future updates."
         className="inline-block w-full"
         value={feedbackMessage}
         onChange={(e) => setFeedbackMessage(e.target.value)}

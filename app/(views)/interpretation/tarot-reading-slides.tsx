@@ -77,7 +77,7 @@ const TarotReadingSlides = ({ cards }) => {
             return (
               <div
                 key={card.cardName}
-                className={`max-w-[${100 / cards.length}%] flex h-full flex-col items-center py-4 text-center`}
+                className={`max-w-[${100 / cards.length}%] flex h-full w-full flex-col items-center py-4 text-center`}
               >
                 <div className="mb-2 w-full">
                   <p className="my-0">{card.cardName}</p>
@@ -95,7 +95,7 @@ const TarotReadingSlides = ({ cards }) => {
                     width={256}
                     height={384}
                     className={cn(
-                      `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : "h-full"} w-auto rounded-lg`,
+                      `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : ""} h-full w-auto rounded-lg`,
                       (card.orientation === "reversed" || card.orientation === "Reversed") && "rotate-180"
                     )}
                   />
