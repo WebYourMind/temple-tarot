@@ -1,15 +1,22 @@
 import { QueryResult, sql } from "@vercel/postgres";
 import { CardInReading } from "./cardsInReadings.database";
-import { Reading } from "./readings.database";
 
 // Interface for a TarotSession
-export interface TarotSession {
-  id?: string;
+export interface Reading {
+  id: string;
   userId: string;
   userQuery: string;
-  createdAt?: Date;
-  markdownPreview?: string;
-  readings?: Reading[];
+  spreadType: string;
+  aiInterpretation: string;
+  createdAt: Date;
+  cards: CardInReading[];
+}
+
+export interface TarotSession {
+  id: string;
+  userId: string;
+  createdAt: Date;
+  readings: Reading[];
 }
 
 // Function to add a new tarot session with readings
@@ -18,8 +25,8 @@ export const addTarotSessionWithReadings = async (tarotSession: TarotSession, re
     await sql`BEGIN`;
 
     const { rows: sessionRows } = await sql`
-      INSERT INTO tarot_sessions (user_id, user_query, markdown_preview)
-      VALUES (${tarotSession.userId}, ${tarotSession.userQuery}, ${tarotSession.markdownPreview})
+      INSERT INTO tarot_sessions (user_id)
+      VALUES (${tarotSession.userId})
       RETURNING id;
     `;
     const tarotSessionId = sessionRows[0].id;
@@ -52,8 +59,8 @@ export const addTarotSessionWithReadings = async (tarotSession: TarotSession, re
 export const addTarotSession = async (tarotSession: TarotSession): Promise<TarotSession> => {
   try {
     const { rows } = await sql`
-      INSERT INTO tarot_sessions (user_id, user_query, markdown_preview, created_at)
-      VALUES (${tarotSession.userId}, ${tarotSession.userQuery}, ${tarotSession.markdownPreview}, NOW())
+      INSERT INTO tarot_sessions (user_id, created_at)
+      VALUES (${tarotSession.userId}, NOW())
       RETURNING *;
     `;
     return rows[0] as TarotSession;
@@ -64,19 +71,76 @@ export const addTarotSession = async (tarotSession: TarotSession): Promise<Tarot
 };
 
 // Function to retrieve a tarot session by ID
-export const getTarotSessionById = async (id: number): Promise<TarotSession | null> => {
+export const getTarotSessionById = async (id: string): Promise<TarotSession | null> => {
   try {
+    // Fetch session, readings, and cards in a single query with multiple joins
     const { rows } = await sql`
-      SELECT * FROM tarot_sessions WHERE id = ${id};
+      SELECT 
+        ts.id AS session_id, ts.user_id AS session_user_id, ts.created_at AS session_created_at,
+        r.id AS reading_id, r.user_query, r.spread_type, r.ai_interpretation, r.created_at AS reading_created_at,
+        c.id AS card_id, c.card_name, c.orientation, c.position
+      FROM tarot_sessions ts
+      LEFT JOIN readings r ON ts.id = r.tarot_session_id
+      LEFT JOIN cards_in_readings c ON r.id = c.reading_id
+      WHERE ts.id = ${id}
+      ORDER BY r.created_at DESC, c.position ASC;
     `;
-    return (rows[0] as TarotSession) || null;
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    // Initialize maps to hold session and readings
+    const sessionsMap = new Map<number, TarotSession>();
+    const readingsMap = new Map<number, Reading>();
+
+    // Populate session and readings
+    rows.forEach((row) => {
+      // Initialize session if not already in the map
+      if (!sessionsMap.has(row.session_id)) {
+        sessionsMap.set(row.session_id, {
+          id: row.session_id,
+          userId: row.session_user_id,
+          createdAt: row.session_created_at,
+          readings: [],
+        });
+      }
+
+      // Initialize reading if not already in the map
+      if (row.reading_id && !readingsMap.has(row.reading_id)) {
+        const newReading = {
+          id: row.reading_id,
+          userId: row.session_user_id,
+          userQuery: row.user_query,
+          spreadType: row.spread_type,
+          aiInterpretation: row.ai_interpretation,
+          createdAt: row.reading_created_at,
+          cards: [],
+        };
+
+        readingsMap.set(row.reading_id, newReading);
+        sessionsMap.get(row.session_id)?.readings.push(newReading);
+      }
+
+      // Add card to the corresponding reading
+      if (row.card_id) {
+        readingsMap.get(row.reading_id)?.cards.push({
+          id: row.card_id,
+          cardName: row.card_name,
+          orientation: row.orientation,
+          position: row.position,
+        });
+      }
+    });
+
+    return Array.from(sessionsMap.values())[0] || null;
   } catch (error) {
     console.error("Failed to get tarot session:", error);
     throw error;
   }
 };
 
-// Function to list tarot sessions for a specific user
+// Function to get tarot sessions by user ID with pagination
 export const getTarotSessionsByUserId = async (
   userId: number,
   page: number = 1,
@@ -85,73 +149,66 @@ export const getTarotSessionsByUserId = async (
   const offset = (page - 1) * limit;
 
   try {
-    const { rows: sessionRows } = await sql`
-      SELECT id, user_id, user_query, created_at, markdown_preview
-      FROM tarot_sessions
-      WHERE user_id = ${userId}
-      ORDER BY created_at DESC
+    // Fetch sessions, readings, and cards in a single query with multiple joins
+    const { rows: sessionData } = await sql`
+      SELECT 
+        ts.id AS session_id, ts.user_id AS session_user_id, ts.created_at AS session_created_at,
+        r.id AS reading_id, r.user_query, r.spread_type, r.ai_interpretation, r.created_at AS reading_created_at,
+        c.id AS card_id, c.card_name, c.orientation, c.position
+      FROM tarot_sessions ts
+      LEFT JOIN readings r ON ts.id = r.tarot_session_id
+      LEFT JOIN cards_in_readings c ON r.id = c.reading_id
+      WHERE ts.user_id = ${userId}
+      ORDER BY ts.created_at DESC, r.created_at DESC, c.position ASC
       LIMIT ${limit} OFFSET ${offset};
     `;
 
-    if (sessionRows.length === 0) {
+    if (sessionData.length === 0) {
       return [];
     }
 
-    const sessionIds = sessionRows.map((s) => s.id);
+    // Initialize maps to hold sessions and their readings
+    const sessionsMap = new Map<number, TarotSession>();
+    const readingsMap = new Map<number, Reading>();
 
-    const sessionsMap = new Map(
-      sessionRows.map((s) => [
-        s.id,
-        {
-          ...s,
+    // Populate sessions and readings
+    sessionData.forEach((row) => {
+      // Initialize session if not already in the map
+      if (!sessionsMap.has(row.session_id)) {
+        sessionsMap.set(row.session_id, {
+          id: row.session_id,
+          userId: row.session_user_id,
+          createdAt: row.session_created_at,
           readings: [],
-        },
-      ])
-    );
-
-    for (let sessionId of sessionIds) {
-      const { rows: readingRows } = await sql`
-        SELECT id, tarot_session_id, user_id, user_query, spread_type, created_at, ai_interpretation
-        FROM readings
-        WHERE tarot_session_id = ${sessionId}
-        ORDER BY created_at DESC;
-      `;
-
-      const readingIds = readingRows.map((r) => r.id);
-
-      const readingsMap = new Map(
-        readingRows.map((r) => [
-          r.id,
-          {
-            ...r,
-            cards: [],
-          },
-        ])
-      );
-
-      for (let readingId of readingIds) {
-        const { rows: cardRows } = await sql`
-          SELECT id, reading_id, card_name, orientation, position
-          FROM cards_in_readings
-          WHERE reading_id = ${readingId}
-          ORDER BY position ASC;
-        `;
-
-        cardRows.forEach((card) => {
-          if (readingsMap.has(card.reading_id)) {
-            readingsMap.get(card.reading_id).cards.push({
-              id: card.id,
-              cardName: card.card_name,
-              orientation: card.orientation,
-              position: card.position,
-            });
-          }
         });
       }
 
-      const readings = Array.from(readingsMap.values()) as Reading[];
-      sessionsMap.get(sessionId).readings = readings;
-    }
+      // Initialize reading if not already in the map
+      if (row.reading_id && !readingsMap.has(row.reading_id)) {
+        const newReading = {
+          id: row.reading_id,
+          userId: row.session_user_id,
+          userQuery: row.user_query,
+          spreadType: row.spread_type,
+          aiInterpretation: row.ai_interpretation,
+          createdAt: row.reading_created_at,
+          cards: [],
+        };
+
+        readingsMap.set(row.reading_id, newReading);
+        sessionsMap.get(row.session_id)?.readings.push(newReading);
+      }
+
+      // Add card to the corresponding reading
+      if (row.card_id) {
+        readingsMap.get(row.reading_id)?.cards.push({
+          id: row.card_id,
+          cardName: row.card_name,
+          orientation: row.orientation,
+          position: row.position,
+        });
+      }
+    });
 
     return Array.from(sessionsMap.values()) as TarotSession[];
   } catch (error) {

@@ -76,8 +76,8 @@ export default function Header() {
       {!isScrolled && (
         <>
           <div className="flex w-full items-center justify-between">
-            <Link href="/" className="mr-2 hidden hover:no-underline md:block">
-              <h3 className={cn("mt-0 font-sans text-lg text-foreground", MagicFont.className)}>{appConfig.appName}</h3>
+            <Link href="/" className="mr-2 hover:no-underline">
+              <h3 className={cn("mt-0 text-lg text-foreground", MagicFont.className)}>{appConfig.appName}</h3>
             </Link>
             {status !== "loading" && (
               <div className="flex items-center">

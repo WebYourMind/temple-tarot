@@ -64,10 +64,10 @@ function ReadingsList() {
     <>
       <div
         className={cn(
-          "my-8 grid max-w-4xl grid-cols-1 gap-8 divide-y-2 divide-dotted md:my-20 md:grid-cols-3 lg:grid-cols-3"
+          "my-8 grid max-w-4xl grid-cols-1 gap-8 divide-y-2 divide-dotted md:my-20 md:grid-cols-3 md:divide-y-0 lg:grid-cols-3"
         )}
       >
-        {readings && readings.map((reading) => <ReadingItem key={reading.id} reading={reading} />)}
+        {readings && readings.map((reading) => <ReadingItem key={reading.id} tarotSession={reading} />)}
       </div>
       <div className="my-16">
         {totalPages > 1 && (

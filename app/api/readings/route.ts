@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  addReadingWithCards,
-  getReadingById,
-  deleteReading,
-  getReadingsByUserId,
-  countReadingsByUserId,
-} from "lib/database/readings.database";
+import { addReadingWithCards, deleteReading } from "lib/database/readings.database";
 import { CardInReading, getCardsByReadingId } from "lib/database/cardsInReadings.database";
 import { getSession } from "lib/auth";
 import { Reading } from "lib/database/readings.database";
 import { sql } from "@vercel/postgres";
+import {
+  countTarotSessionsByUserId,
+  getTarotSessionById,
+  getTarotSessionsByUserId,
+} from "lib/database/tarotSessions.database";
 
 // POST method to add a new reading and associated cards
 export async function POST(request: NextRequest) {
@@ -41,12 +40,12 @@ export async function GET(request: NextRequest) {
 
   try {
     if (readingId) {
-      const reading = await getReadingById(parseInt(readingId));
+      const reading = await getTarotSessionById(readingId);
       if (!reading) {
         return NextResponse.json({ error: "Reading not found" }, { status: 404 });
       }
       // @ts-ignore
-      if (reading.user_id == userSessionId) {
+      if (reading.userId == userSessionId) {
         const cards = await getCardsByReadingId(parseInt(readingId));
         return NextResponse.json({ ...reading, cards }, { status: 200 });
       } else {
@@ -56,8 +55,8 @@ export async function GET(request: NextRequest) {
       if (userId == userSessionId) {
         // Fetch paginated readings and count total readings
         const [readings, total] = await Promise.all([
-          getReadingsByUserId(parseInt(userId), page, limit),
-          countReadingsByUserId(parseInt(userId)),
+          getTarotSessionsByUserId(parseInt(userId), page, limit),
+          countTarotSessionsByUserId(userId),
         ]);
 
         const totalPages = Math.ceil(total / limit); // Calculate the total number of pages

@@ -1,12 +1,13 @@
 import { CardInReading } from "lib/database/cardsInReadings.database";
 import { Reading } from "lib/database/readings.database";
+import { TarotSession } from "lib/database/tarotSessions.database";
 import { keysToCamel } from "lib/utils";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 export function useReadings() {
-  const [readings, setReadings] = useState<Reading[]>([]);
-  const [reading, setReading] = useState<Reading>();
+  const [readings, setReadings] = useState<TarotSession[]>([]);
+  const [reading, setReading] = useState<TarotSession>();
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

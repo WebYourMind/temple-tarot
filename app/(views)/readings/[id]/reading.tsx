@@ -71,12 +71,12 @@ function Reading({ readingId }: ReadingProps) {
 
   useEffect(() => {
     if (reading) {
-      if (reading.userQuery) setQuery(reading.userQuery);
-      const parsedInterpretation = parseJsonSafe(reading.aiInterpretation) as { content: string }[];
+      if (reading.readings[0].userQuery) setQuery(reading.readings[0].userQuery);
+      const parsedInterpretation = parseJsonSafe(reading.readings[0].aiInterpretation) as { content: string }[];
       if (Array.isArray(parsedInterpretation) && parsedInterpretation.length > 0) {
         setInterpretationArray(parsedInterpretation);
       } else {
-        setInterpretationString(reading.aiInterpretation);
+        setInterpretationString(reading.readings[0].aiInterpretation);
       }
     }
 
@@ -88,7 +88,7 @@ function Reading({ readingId }: ReadingProps) {
   if (loading || !reading) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
 
-  return <TarotReadingSlides cards={reading.cards} />;
+  return <TarotReadingSlides cards={reading.readings[0].cards} />;
 }
 
 export default Reading;
