@@ -31,7 +31,7 @@ function paginate(currentPage, pageCount, delta = 2) {
 
 function ReadingsList() {
   const { data: session } = useSession() as any;
-  const { readings, loading, error, fetchReadings, totalPages } = useReadingsContext();
+  const { tarotSessions, loading, error, fetchReadings, totalPages } = useReadingsContext();
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function ReadingsList() {
     }
   }, [session?.user?.id, page]);
 
-  if (loading && readings?.length === 0)
+  if (loading && tarotSessions?.length === 0)
     return (
       <div className="my-16 md:my-20">
         <LoadingSkeleton />
@@ -48,7 +48,7 @@ function ReadingsList() {
     );
   if (error) return <div>Error: {error.message}</div>;
 
-  if ((!readings || readings?.length === 0) && !loading) {
+  if ((!tarotSessions || tarotSessions?.length === 0) && !loading) {
     return <EmptyReadings />;
   }
 
@@ -67,7 +67,10 @@ function ReadingsList() {
           "my-8 grid max-w-4xl grid-cols-1 gap-8 divide-y-2 divide-dotted md:my-20 md:grid-cols-3 md:divide-y-0 lg:grid-cols-3"
         )}
       >
-        {readings && readings.map((reading) => <ReadingItem key={reading.id} tarotSession={reading} />)}
+        {tarotSessions &&
+          tarotSessions.map(
+            (reading) => reading.readings.length > 0 && <ReadingItem key={reading.id} tarotSession={reading} />
+          )}
       </div>
       <div className="my-16">
         {totalPages > 1 && (

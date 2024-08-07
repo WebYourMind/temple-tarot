@@ -1,21 +1,13 @@
 import { QueryResult, sql } from "@vercel/postgres";
 import { CardInReading } from "./cardsInReadings.database";
+import { SpreadType } from "lib/contexts/tarot-session-context";
 
 // Interface for a Reading
 export interface Reading {
   id?: string;
-  userId: string;
+  userId?: string;
   userQuery: string;
-  spreadType:
-    | "single_card"
-    | "three_card"
-    | "celtic_cross"
-    | "love"
-    | "career"
-    | "daily"
-    | "year_ahead"
-    | "birthday"
-    | "spiritual_guidance";
+  spread?: SpreadType;
   aiInterpretation?: string;
   createdAt?: Date;
   cards?: CardInReading[];
@@ -30,7 +22,7 @@ export const addReadingWithCards = async (reading: Reading, cards: CardInReading
     // Insert the reading with AI interpretation and retrieve the new ID
     const { rows: readingRows } = await sql`
             INSERT INTO readings (user_id, user_query, spread_type, ai_interpretation)
-            VALUES (${reading.userId}, ${reading.userQuery}, ${reading.spreadType}, ${reading.aiInterpretation})
+            VALUES (${reading.userId}, ${reading.userQuery}, ${reading.spread.value}, ${reading.aiInterpretation})
             RETURNING id;
         `;
     const readingId = readingRows[0].id;
@@ -58,7 +50,7 @@ export const addReading = async (reading: Reading): Promise<Reading> => {
   try {
     const { rows } = await sql`
             INSERT INTO readings (user_id, user_query, spread_type, ai_interpretation, created_at)
-            VALUES (${reading.userId}, ${reading.userQuery}, ${reading.spreadType}, ${reading.aiInterpretation}, NOW())
+            VALUES (${reading.userId}, ${reading.userQuery}, ${reading.spread.value}, ${reading.aiInterpretation}, NOW())
             RETURNING *;
         `;
     return rows[0] as Reading;

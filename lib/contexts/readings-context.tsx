@@ -7,15 +7,15 @@ import React, { ReactNode, createContext, useContext } from "react";
 export interface ReadingsContextType {
   loading: boolean;
   error: Error | null;
-  readings: TarotSession[];
-  reading?: TarotSession;
+  tarotSessions: TarotSession[];
+  tarotSession?: TarotSession;
   fetchReadings: (userId: string, page: number, limit: number) => Promise<void>;
   fetchReading: (id: string) => Promise<void>;
-  addReading: (reading: Reading, cards: CardInReading[]) => Promise<void>;
+  addReading: (reading: Reading, cards: CardInReading[], tarotSessionId?: string) => Promise<void>;
   updateReading: (readingId: number, reading: Reading, cards: CardInReading[]) => Promise<void>;
   deleteReading: (readingId: number) => Promise<void>;
-  setReadings: (readings: TarotSession[]) => void;
-  setReading: (reading: TarotSession) => void;
+  setTarotSessions: (tarotSessions: TarotSession[]) => void;
+  setTarotSession: (tarotSession: TarotSession) => void;
   totalPages: number;
 }
 

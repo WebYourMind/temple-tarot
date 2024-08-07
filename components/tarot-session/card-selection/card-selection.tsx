@@ -4,11 +4,11 @@ import { customDeck, deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import "styles/cards.css";
 import OrientationPicker from "./orientation-picker";
 import SplitDeck from "./split-deck";
-import { CardType } from "lib/types";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { CardInReading } from "lib/database/cardsInReadings.database";
 
 interface CardSelectionProps {
-  onSelect: (finalCard: CardType) => void;
+  onSelect: (finalCard: CardInReading) => void;
   currentStep: number;
   query: string;
 }
@@ -38,10 +38,10 @@ const createShuffledDeck = (selectedDeck) => {
 
 const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => {
   const { selectedDeck } = useTarotSession();
-  const [deck, setDeck] = useState<CardType[]>();
-  const [leftDeck, setLeftDeck] = useState<CardType[]>([]);
-  const [rightDeck, setRightDeck] = useState<CardType[]>([]);
-  const [finalCard, setFinalCard] = useState<CardType>();
+  const [deck, setDeck] = useState<CardInReading[]>();
+  const [leftDeck, setLeftDeck] = useState<CardInReading[]>([]);
+  const [rightDeck, setRightDeck] = useState<CardInReading[]>([]);
+  const [finalCard, setFinalCard] = useState<CardInReading>();
 
   useEffect(() => {
     const shuffledDeck = createShuffledDeck(selectedDeck);

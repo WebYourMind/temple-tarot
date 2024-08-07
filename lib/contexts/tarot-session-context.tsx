@@ -3,6 +3,9 @@ import { track } from "@vercel/analytics/react";
 import { useSession } from "next-auth/react";
 import { infoMap } from "lib/tarot-data/info";
 import tarotSpreads from "lib/tarot-data/tarot-spreads";
+import { Reading } from "lib/database/readings.database";
+import { CardInReading } from "lib/database/cardsInReadings.database";
+import { TarotSession } from "lib/database/tarotSessions.database";
 
 export type SpreadType = {
   numberOfCards: number;
@@ -25,18 +28,18 @@ export type SelectedCardType = {
 interface TarotSessionContextProps {
   query: string;
   phase: "question" | "spread" | "cards" | "reading";
-  selectedCards: SelectedCardType[] | null;
+  selectedCards: CardInReading[] | null;
   selectedDeck: { promptName: string; value: string };
-  spreadType: SpreadType;
+  spread: SpreadType;
   hasOwnCards: boolean;
   showInfo: boolean;
   infoContent: string;
   spreadPickerOpen: boolean;
   setQuery: React.Dispatch<React.SetStateAction<string | null>>;
   setPhase: React.Dispatch<React.SetStateAction<"question" | "spread" | "cards" | "reading">>;
-  setSelectedCards: React.Dispatch<React.SetStateAction<SelectedCardType[] | null>>;
+  setSelectedCards: React.Dispatch<React.SetStateAction<CardInReading[] | null>>;
   setSelectedDeck: React.Dispatch<React.SetStateAction<{ promptName: string; value: string }>>;
-  setSpreadType: React.Dispatch<React.SetStateAction<SpreadType>>;
+  setSpread: React.Dispatch<React.SetStateAction<SpreadType>>;
   setHasOwnCards: React.Dispatch<React.SetStateAction<boolean>>;
   setShowInfo: React.Dispatch<React.SetStateAction<boolean>>;
   setInfoContent: React.Dispatch<React.SetStateAction<string>>;
@@ -45,9 +48,14 @@ interface TarotSessionContextProps {
   handleReset: () => void;
   setInterpretationArray: React.Dispatch<React.SetStateAction<any>>;
   interpretationArray: any[];
-  setInterpretationString: React.Dispatch<React.SetStateAction<any>>;
-  interpretationString: string;
-  handleSubmitFollowUpQuestion: () => void;
+  setAiResponse: React.Dispatch<React.SetStateAction<any>>;
+  aiResponse: string;
+  handleSubmitFollowUpQuestion: (drawCards?: boolean) => void;
+  setIsFollowUp: React.Dispatch<React.SetStateAction<any>>;
+  isFollowUp?: boolean;
+  tarotSessionId?: string;
+  onResponseComplete?: (reading: Reading) => void;
+  followUpContext?: TarotSession;
 }
 
 const TarotSessionContext = createContext<TarotSessionContextProps | undefined>(undefined);
@@ -65,19 +73,26 @@ const defaultDeck = {
   value: "custom",
 };
 
-export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const TarotSessionProvider: React.FC<{
+  children: React.ReactNode;
+  isFollowUp?: boolean;
+  tarotSessionId?: string;
+  onResponseComplete?: (reading: Reading) => void;
+  followUpContext?: TarotSession;
+}> = ({ children, isFollowUp: isFollowUpProp = false, tarotSessionId = null, onResponseComplete, followUpContext }) => {
   const [query, setQuery] = useState<string>("");
   const [showInfo, setShowInfo] = useState(false);
   const [infoContent, setInfoContent] = useState(infoMap["question"]);
   const [phase, setPhase] = useState<"question" | "spread" | "cards" | "reading">("question");
   const [spreadPickerOpen, setSpreadPickerOpen] = useState(false);
-  const [selectedCards, setSelectedCards] = useState<SelectedCardType[] | null>(null);
+  const [selectedCards, setSelectedCards] = useState<CardInReading[] | null>(null);
   const [selectedDeck, setSelectedDeck] = useState(defaultDeck);
-  const [spreadType, setSpreadType] = useState<any>(tarotSpreads[0]); // To store the selected spread type
+  const [spread, setSpread] = useState<SpreadType>(tarotSpreads[0]); // To store the selected spread type
   const { data: session } = useSession() as { data: { user: { id: string } } };
   const [hasOwnCards, setHasOwnCards] = useState(false);
+  const [isFollowUp, setIsFollowUp] = useState(isFollowUpProp);
   const [interpretationArray, setInterpretationArray] = useState<any>();
-  const [interpretationString, setInterpretationString] = useState<any>();
+  const [aiResponse, setAiResponse] = useState<any>();
 
   // Load selected deck from localStorage on component mount
   useEffect(() => {
@@ -100,15 +115,18 @@ export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setPhase("reading");
 
       // analytics
-      track("Reading", { spread: spreadType.value, userId: session?.user?.id });
+      track("Reading", { spread: spread.value, userId: session?.user?.id });
       selectedCards?.forEach((card) => {
         track("Cards", { cardName: card.cardName, orientation: card.orientation });
       });
     }
   }
 
-  function handleSubmitFollowUpQuestion() {
-    if (!hasOwnCards) {
+  function handleSubmitFollowUpQuestion(drawCards: boolean) {
+    if (!drawCards) {
+      console.log("phase now reading");
+      setPhase("reading");
+    } else if (!hasOwnCards) {
       // or no cards
       setPhase("cards");
       setInfoContent(infoMap["cards"]);
@@ -116,7 +134,7 @@ export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setPhase("reading");
 
       // analytics
-      track("Reading", { spread: spreadType.value, userId: session?.user?.id });
+      track("Reading", { spread: spread.value, userId: session?.user?.id });
       selectedCards?.forEach((card) => {
         track("Cards", { cardName: card.cardName, orientation: card.orientation });
       });
@@ -124,14 +142,16 @@ export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }
 
   function handleReset() {
+    console.log("*******************reset state");
     setPhase("question");
     setSelectedCards(null);
     setQuery("");
     setInterpretationArray(null);
-    setInterpretationString(null);
+    setAiResponse(null);
     setHasOwnCards(false);
     setSelectedDeck(defaultDeck);
-    setSpreadType(tarotSpreads[0]);
+    setSpread(tarotSpreads[0]);
+    setIsFollowUp(false);
   }
 
   // This useEffect shows the info dialog automatically if it hasn't been seen by the user's device before.
@@ -147,37 +167,40 @@ export const TarotSessionProvider: React.FC<{ children: React.ReactNode }> = ({ 
   //   }
   // }, [phase]);
 
-  return (
-    <TarotSessionContext.Provider
-      value={{
-        query,
-        phase,
-        selectedCards,
-        selectedDeck,
-        spreadType,
-        hasOwnCards,
-        showInfo,
-        infoContent,
-        spreadPickerOpen,
-        setQuery,
-        setPhase,
-        setSelectedCards,
-        setSelectedDeck,
-        setSpreadType,
-        setHasOwnCards,
-        setShowInfo,
-        setInfoContent,
-        setSpreadPickerOpen,
-        handleSubmitQuestion,
-        handleSubmitFollowUpQuestion,
-        handleReset,
-        interpretationArray,
-        setInterpretationArray,
-        interpretationString,
-        setInterpretationString,
-      }}
-    >
-      {children}
-    </TarotSessionContext.Provider>
-  );
+  const value = {
+    query,
+    phase,
+    selectedCards,
+    selectedDeck,
+    spread,
+    hasOwnCards,
+    showInfo,
+    infoContent,
+    spreadPickerOpen,
+    setQuery,
+    setPhase,
+    setSelectedCards,
+    setSelectedDeck,
+    setSpread,
+    setHasOwnCards,
+    setShowInfo,
+    setInfoContent,
+    setSpreadPickerOpen,
+    handleSubmitQuestion,
+    handleSubmitFollowUpQuestion,
+    handleReset,
+    interpretationArray,
+    setInterpretationArray,
+    aiResponse,
+    setAiResponse,
+    isFollowUp,
+    setIsFollowUp,
+    tarotSessionId,
+    onResponseComplete,
+    followUpContext,
+  };
+
+  console.log(value);
+
+  return <TarotSessionContext.Provider value={value}>{children}</TarotSessionContext.Provider>;
 };

@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 
 import { Toaster } from "react-hot-toast";
 import { usePathname } from "next/navigation";
+import { useTarotSession } from "lib/contexts/tarot-session-context";
 
 const Header = dynamic(() => import("../components/navigation/header"), {
   ssr: false,
@@ -15,7 +16,9 @@ const FeedbackWidget = dynamic(() => import("../components/feedback/feedback-wid
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const hideHeader = pathname && (pathname === "/interpretation" || pathname.includes("/readings/"));
+  const { phase } = useTarotSession();
+  const hideHeader =
+    phase === "reading" || (pathname && (pathname === "/interpretation" || pathname.includes("/readings/")));
   return (
     <div className="relative flex h-full flex-col">
       <div

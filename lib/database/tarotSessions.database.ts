@@ -1,16 +1,5 @@
 import { QueryResult, sql } from "@vercel/postgres";
-import { CardInReading } from "./cardsInReadings.database";
-
-// Interface for a TarotSession
-export interface Reading {
-  id: string;
-  userId: string;
-  userQuery: string;
-  spreadType: string;
-  aiInterpretation: string;
-  createdAt: Date;
-  cards: CardInReading[];
-}
+import { Reading } from "./readings.database";
 
 export interface TarotSession {
   id: string;
@@ -19,22 +8,32 @@ export interface TarotSession {
   readings: Reading[];
 }
 
-// Function to add a new tarot session with readings
-export const addTarotSessionWithReadings = async (tarotSession: TarotSession, readings: Reading[]): Promise<void> => {
+// Function to add a new tarot session with readings or add a reading to an existing tarot session
+export const addReadingToTarotSession = async (
+  userId: string,
+  reading: Reading,
+  tarotSessionId?: string
+): Promise<void> => {
   try {
     await sql`BEGIN`;
-
-    const { rows: sessionRows } = await sql`
+    if (!tarotSessionId) {
+      const { rows: sessionRows } = await sql`
       INSERT INTO tarot_sessions (user_id)
-      VALUES (${tarotSession.userId})
+      VALUES (${userId})
       RETURNING id;
     `;
-    const tarotSessionId = sessionRows[0].id;
+      tarotSessionId = sessionRows[0].id;
+    }
 
-    for (const reading of readings) {
+    if (!reading.spread || !reading.cards) {
+      await sql`
+        INSERT INTO readings (tarot_session_id, user_id, user_query, ai_interpretation)
+        VALUES (${tarotSessionId}, ${reading.userId}, ${reading.userQuery}, ${reading.aiInterpretation});
+      `;
+    } else {
       const { rows: readingRows } = await sql`
         INSERT INTO readings (tarot_session_id, user_id, user_query, spread_type, ai_interpretation)
-        VALUES (${tarotSessionId}, ${reading.userId}, ${reading.userQuery}, ${reading.spreadType}, ${reading.aiInterpretation})
+        VALUES (${tarotSessionId}, ${reading.userId}, ${reading.userQuery}, ${reading.spread.value}, ${reading.aiInterpretation})
         RETURNING id;
       `;
       const readingId = readingRows[0].id;
@@ -83,7 +82,7 @@ export const getTarotSessionById = async (id: string): Promise<TarotSession | nu
       LEFT JOIN readings r ON ts.id = r.tarot_session_id
       LEFT JOIN cards_in_readings c ON r.id = c.reading_id
       WHERE ts.id = ${id}
-      ORDER BY r.created_at DESC, c.position ASC;
+      ORDER BY r.created_at ASC, c.position ASC;
     `;
 
     if (rows.length === 0) {

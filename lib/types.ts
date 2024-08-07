@@ -20,8 +20,3 @@ export type UserProfile = {
   phone?: string;
   isSubscribed?: boolean;
 };
-
-export type CardType = {
-  cardName: string;
-  orientation: "upright" | "reversed";
-};

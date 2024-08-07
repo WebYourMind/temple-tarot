@@ -40,14 +40,16 @@ export async function GET(request: NextRequest) {
 
   try {
     if (readingId) {
-      const reading = await getTarotSessionById(readingId);
-      if (!reading) {
+      console.log(readingId);
+      const tarotSession = await getTarotSessionById(readingId);
+      if (!tarotSession) {
         return NextResponse.json({ error: "Reading not found" }, { status: 404 });
       }
       // @ts-ignore
-      if (reading.userId == userSessionId) {
-        const cards = await getCardsByReadingId(parseInt(readingId));
-        return NextResponse.json({ ...reading, cards }, { status: 200 });
+      if (tarotSession.userId == userSessionId) {
+        console.log(tarotSession);
+        // const cards = await getCardsByReadingId(tarotSession.);
+        return NextResponse.json(tarotSession, { status: 200 });
       } else {
         return NextResponse.json({ error: "You are not authorized to view this reading." }, { status: 401 });
       }

@@ -14,5 +14,5 @@ export const metadata: Metadata = {
 };
 
 export default async function Page({ params }: { params: { id: string } }) {
-  return <Reading readingId={params.id} />;
+  return <Reading tarotSessionId={params.id} />;
 }

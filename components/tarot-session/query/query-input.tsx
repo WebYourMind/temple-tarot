@@ -19,13 +19,14 @@ export const MagicFont = Quicksand({ subsets: ["latin"], weight: "400" });
 
 const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFollowUp }) => {
   const { query, setQuery, selectedCards } = useTarotSession();
-  const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed } = useUserAccessPlan();
+  const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed, isLoading } = useUserAccessPlan();
   const router = useRouter();
   const [drawCards, setDrawCards] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleSubmitQuery();
+    console.log(drawCards);
+    handleSubmitQuery(drawCards);
   };
 
   const isSubmitDisabled = selectedCards?.some((selection) => selection.cardName === "");
@@ -89,7 +90,8 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
               {buttonText} <SendIcon className="ml-2" />
             </Button>
           ) : (
-            !showFreeReading && (
+            !showFreeReading &&
+            !isLoading && (
               <div className="text-center">
                 <p>Sorry, you do not have an active pass or subscription.</p>
                 <Button onClick={() => router.push("/pricing")} variant={"outline"}>

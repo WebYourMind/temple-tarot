@@ -11,21 +11,21 @@ import {
 import { Switch } from "components/ui/switch";
 import { Label } from "components/ui/label";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
-import { CardType } from "lib/types";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { CardInReading } from "lib/database/cardsInReadings.database";
 
 const CardInput = () => {
-  const { spreadType, setSelectedCards, selectedDeck } = useTarotSession();
+  const { spread, setSelectedCards, selectedDeck } = useTarotSession();
   // const [selectedDeck, setSelectedDeck] = useState(decks[0].value);
-  const [cardSelections, setCardSelections] = useState<CardType[]>(
-    Array(spreadType.numberOfCards).fill({ cardName: "", orientation: "upright" })
+  const [cardSelections, setCardSelections] = useState<CardInReading[]>(
+    Array(spread.numberOfCards).fill({ cardName: "", orientation: "upright" })
   );
   const [availableCards, setAvailableCards] = useState(deckCardsMapping[selectedDeck.value]);
 
   useEffect(() => {
     setAvailableCards(deckCardsMapping[selectedDeck.value]);
-    setCardSelections(Array(spreadType.numberOfCards).fill({ cardName: "", orientation: "upright" }));
-  }, [selectedDeck, spreadType]);
+    setCardSelections(Array(spread.numberOfCards).fill({ cardName: "", orientation: "upright" }));
+  }, [selectedDeck, spread]);
 
   useEffect(() => {
     setSelectedCards(cardSelections);

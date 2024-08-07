@@ -11,7 +11,7 @@ import appConfig from "app.config";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "lib/utils";
-import { MagicFont } from "app/(views)/home/query/query-input";
+import { MagicFont } from "components/tarot-session/query/query-input";
 
 export default function Header() {
   const { data: session, status, update } = useSession() as any;

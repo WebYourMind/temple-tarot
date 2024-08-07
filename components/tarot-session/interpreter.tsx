@@ -3,35 +3,41 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import "styles/cards.css";
-import TarotReadingSlides from "app/(views)/interpretation/tarot-reading-slides";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { useRouter } from "next/navigation";
 import { parseJsonSafe } from "lib/utils";
-import ReadingLoading from "./reading-loading";
+import ReadingLoading from "../../app/(views)/interpretation/reading-loading";
+import TarotReadingSlides from "./tarot-reading-slides";
+import InterpretationSlide from "./interpretation-slide";
 
-function Interpreter() {
+function Interpreter({ tarotSessionId }) {
   const {
     query,
-    selectedCards: cards,
-    spreadType: spread,
+    selectedCards,
+    spread,
     interpretationArray,
     setInterpretationArray,
     selectedDeck,
     setPhase,
-    interpretationString,
-    setInterpretationString,
+    aiResponse,
+    setAiResponse,
+    isFollowUp,
+    onResponseComplete,
+    followUpContext,
   } = useTarotSession();
-
   const router = useRouter();
-  // const [reading, setReading] = useState({
-  //   userQuery: query,
-  //   createdAt: new Date().toISOString(),
-  //   cards,
-  //   spread,
-  //   spreadType: spread.name,
-  //   aiInterpretation: "",
-  // });
   const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    if (onResponseComplete && isComplete) {
+      const reading = {
+        aiInterpretation: aiResponse,
+        cards: selectedCards,
+        userQuery: query,
+      };
+      onResponseComplete(reading);
+    }
+  }, [isComplete]);
 
   const generateReading = useCallback(async (content) => {
     let isSubscribed = true;
@@ -42,7 +48,14 @@ function Interpreter() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ content, cards, userQuery: query, spread, spreadType: spread.value }),
+        body: JSON.stringify({
+          content,
+          cards: selectedCards,
+          userQuery: query,
+          spread,
+          tarotSessionId,
+          followUpContext,
+        }),
         signal: controller.signal,
       });
 
@@ -57,16 +70,16 @@ function Interpreter() {
         const { done, value } = await reader.read();
 
         if (done) {
-          setIsComplete(true);
           if (interpretationValue) {
             const intArray = parseJsonSafe(interpretationValue);
             if (Array.isArray(intArray)) {
               setInterpretationArray(intArray);
             } else {
-              console.log(interpretationString);
-              setInterpretationString(interpretationValue);
+              console.log(aiResponse);
+              setAiResponse(interpretationValue);
             }
           }
+          setIsComplete(true);
           break;
         }
 
@@ -75,7 +88,7 @@ function Interpreter() {
 
         const chunk = new TextDecoder("utf-8").decode(value, { stream: true });
         if (isSubscribed) {
-          setInterpretationString((prevState) => (prevState ? prevState + chunk : chunk));
+          setAiResponse((prevState) => (prevState ? prevState + chunk : chunk));
         }
       }
     } catch (error: any) {
@@ -91,10 +104,10 @@ function Interpreter() {
     };
   }, []);
 
+  // calls generate reading on mount if there's selected cards and no exisisting aiResponse
   useEffect(() => {
-    setPhase("question");
-    if (cards && !interpretationArray) {
-      const cardDescriptions = cards
+    if (selectedCards && !aiResponse) {
+      const cardDescriptions = selectedCards
         .map(
           (card, index) =>
             `Position: ${index + 1}, position meaning: ${spread.cardMeanings[index]} \nCard drawn for this position: "${
@@ -106,28 +119,35 @@ function Interpreter() {
         )
         .join(", ");
 
-      let content = "";
-      content += `Query: ${query || "Open Reading"}\n\n`;
-      content += `Chosen Tarot Deck: ${selectedDeck.promptName}\n\n`;
-      content += `Chosen spread: ${spread.name}\n\nCards drawn with their positions in the spread: ${cardDescriptions}`;
+      const content = `Query: ${query || "Open Reading"}
+      Chosen Tarot Deck: ${selectedDeck.promptName}
+      Chosen spread: ${spread.name}
+      Cards drawn with their positions in the spread: ${cardDescriptions}`;
 
-      if (!interpretationArray) {
-        generateReading(content);
-      }
+      generateReading(content);
+    } else if (isFollowUp && !aiResponse) {
+      const content = `User's follow up query based on previous readings: ${query}`;
+      generateReading(content);
     } else {
       router.replace("/");
     }
-  }, [query, cards, spread]);
+  }, [query, selectedCards, spread]);
 
-  if (interpretationArray || interpretationString) {
-    return <TarotReadingSlides cards={cards} />;
-  }
-  console.log(cards);
-  if (!cards) {
-    router.replace("/");
+  if (isFollowUp && (interpretationArray || aiResponse)) {
+    console.log("is follow up");
+    return <InterpretationSlide cards={selectedCards} selectedDeck={selectedDeck} aiResponse={aiResponse} />;
   }
 
-  return <ReadingLoading cards={cards} deckType={selectedDeck.value} />;
+  if (interpretationArray || aiResponse) {
+    console.log("not follow up");
+    return <TarotReadingSlides />;
+  }
+  console.log(selectedCards);
+  // if (!selectedCards) {
+  //   router.replace("/");
+  // }
+
+  return <ReadingLoading cards={selectedCards} deckType={selectedDeck.value} />;
 }
 
 export default Interpreter;

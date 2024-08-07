@@ -2,40 +2,41 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "components/ui/button";
 import { cn } from "lib/utils";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { TarotSessionProvider, useTarotSession } from "lib/contexts/tarot-session-context";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { ArrowLeft, ArrowRight, Dot } from "lucide-react";
-import { IconClose, IconEdit } from "components/ui/icons";
+import { IconClose } from "components/ui/icons";
 import { useRouter } from "next/navigation";
-import ReadingFeedback from "./reading-feedback";
 import { EnterFullScreenIcon } from "@radix-ui/react-icons";
-import CardInfo from "../glossary/card-info";
-import { FollowUpReadingInput, MagicFont } from "../home/query/query-input";
-import { Dialog } from "components/ui/dialog";
-import InfoDialog from "components/info-dialog";
+import CardInfo from "../../app/(views)/glossary/card-info";
+import { MagicFont } from "components/tarot-session/query/query-input";
 import DividerWithText from "components/divider-with-text";
 import SwipeableViews from "react-swipeable-views-react-18-fix";
 import Markdown from "react-markdown";
+import ReadingFeedback from "app/(views)/interpretation/reading-feedback";
+import InterpretationSlide from "./interpretation-slide";
+import TarotSession from "./tarot-session";
+import { useReadingsContext } from "lib/contexts/readings-context";
+import { Reading } from "lib/database/readings.database";
+import { CardInReading } from "lib/database/cardsInReadings.database";
 
-const TarotReadingSlides = ({ cards }) => {
-  const {
-    query,
-    selectedDeck,
-    handleReset,
-    showInfo,
-    setShowInfo,
-    infoContent,
-    interpretationString,
-    interpretationArray,
-  } = useTarotSession();
+const TarotReadingSlides = () => {
+  const { query, selectedDeck, handleReset, interpretationArray, aiResponse, setIsFollowUp, selectedCards } =
+    useTarotSession();
+  const { tarotSession, setTarotSession } = useReadingsContext();
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [goDeeper, setGoDeeper] = useState(false);
   const [focusedCard, setFocusedCard] = useState(null);
   const router = useRouter();
 
+  const cards = selectedCards || tarotSession?.readings[0]?.cards;
+  console.log(cards);
+  console.log(tarotSession);
+
   useEffect(() => {
     return () => {
+      setTarotSession(null);
       handleReset();
     };
   }, []);
@@ -45,7 +46,6 @@ const TarotReadingSlides = ({ cards }) => {
   }
 
   function handleNewReading() {
-    // router.back();
     router.push("/");
   }
 
@@ -63,12 +63,40 @@ const TarotReadingSlides = ({ cards }) => {
   //   });
   // }
 
-  function renderCardSlide() {
+  function renderCardSlide(currentSlideCards) {
     return (
-      <div className="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center space-x-2">
-        {cards.length > 0 &&
-          cards.map((card) => {
-            let cardWithImage;
+      <div key={"cardslide"} className="relative inset-0 flex h-full items-center justify-center space-x-2">
+        {currentSlideCards?.length > 0 &&
+          currentSlideCards.map((card: CardInReading) => {
+            let cardWithImage:
+              | {
+                  cardName: string;
+                  imageUrl: string;
+                  suit: string;
+                  detail: {
+                    oneSentenceSummary: string;
+                    paragraphSummary: string;
+                    roleDescription: string;
+                    readingTips: string;
+                    uprightGuidance: string;
+                    reversedGuidance: string;
+                    crystal?: undefined;
+                  };
+                }
+              | {
+                  cardName: string;
+                  imageUrl: string;
+                  suit: string;
+                  detail: {
+                    oneSentenceSummary: string;
+                    paragraphSummary: string;
+                    roleDescription: string;
+                    readingTips: string;
+                    uprightGuidance: string;
+                    reversedGuidance: string;
+                    crystal: string;
+                  };
+                };
             if (selectedDeck.value === "custom") {
               cardWithImage = deckCardsMapping[selectedDeck.value].find(
                 (fullCard) => fullCard.cardName === card.cardName
@@ -77,6 +105,7 @@ const TarotReadingSlides = ({ cards }) => {
             return (
               <div
                 key={card.cardName}
+                // eslint-disable-next-line tailwindcss/no-custom-classname
                 className={`max-w-[${100 / cards.length}%] flex h-full w-full flex-col items-center py-4 text-center`}
               >
                 <div className="mb-2 w-full">
@@ -96,7 +125,7 @@ const TarotReadingSlides = ({ cards }) => {
                     height={384}
                     className={cn(
                       `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : ""} h-full w-auto rounded-lg`,
-                      (card.orientation === "reversed" || card.orientation === "Reversed") && "rotate-180"
+                      card.orientation.toLowerCase() === "reversed" && "rotate-180"
                     )}
                   />
                 )}
@@ -108,6 +137,26 @@ const TarotReadingSlides = ({ cards }) => {
   }
 
   function getInterpretationSlides() {
+    console.log(tarotSession);
+    if (tarotSession?.readings) {
+      const renderInterpretationSlide = (currentSlide) => (
+        <InterpretationSlide
+          cards={currentSlide.cards}
+          selectedDeck={selectedDeck}
+          aiResponse={currentSlide.aiInterpretation}
+        />
+      );
+      return [
+        ...tarotSession.readings.flatMap((currentReading, index) => {
+          if (currentReading.cards && currentReading.cards.length > 0) {
+            console.log(currentReading);
+            return [() => renderCardSlide(currentReading.cards), () => renderInterpretationSlide(currentReading)];
+          }
+          return [() => renderInterpretationSlide(currentReading)];
+        }),
+      ];
+    }
+
     if (interpretationArray) {
       return [
         ...interpretationArray.map((currentSlide, index) => {
@@ -124,86 +173,74 @@ const TarotReadingSlides = ({ cards }) => {
         }),
       ];
     }
-    if (interpretationString) {
+    console.log(aiResponse);
+    if (aiResponse && cards) {
       return [
-        () => (
-          <div className="flex h-full w-full flex-col text-center">
-            <div className="absolute bottom-0 top-0 w-full overflow-scroll py-4">
-              <div className="flex space-x-4">
-                {cards.length > 0 &&
-                  cards.map((card) => {
-                    let cardWithImage;
-                    if (selectedDeck.value === "custom") {
-                      cardWithImage = deckCardsMapping[selectedDeck.value].find(
-                        (fullCard) => fullCard.cardName === card.cardName
-                      );
-                    }
-                    return (
-                      <div className="my-4" key="interpretationString">
-                        {cardWithImage?.imageUrl && (
-                          <Image
-                            onClick={() => {
-                              setFocusedCard(cardWithImage);
-                              setOpen(true);
-                            }}
-                            key={cardWithImage.cardName}
-                            alt={cardWithImage.cardName}
-                            src={cardWithImage.imageUrl}
-                            width={256}
-                            height={384}
-                            className={cn(
-                              `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : "max-h-24"} w-auto rounded-lg`,
-                              (card.orientation === "reversed" || card.orientation === "Reversed") && "rotate-180"
-                            )}
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
-              </div>
-              <Markdown className="prose prose-indigo text-start font-sans text-base leading-relaxed tracking-wide">
-                {interpretationString}
-              </Markdown>
-            </div>
-            {/* <CardInfo card={card} open={open} onOpenChange={() => setOpen(!open)} /> */}
-          </div>
-        ),
+        () => renderCardSlide(cards),
+        () => <InterpretationSlide cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />,
       ];
+    }
+    if (aiResponse) {
+      return [() => <InterpretationSlide cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />];
     }
     return [];
   }
 
   function renderFeedbackSlide() {
     return (
-      <div className="flex h-full w-full grow flex-col items-center justify-center space-y-4 px-4">
-        <Button className="w-full" onClick={handleGoDeeper} disabled>
-          Go Deeper (Coming Soon)
+      <div key={"feedback"} className="flex h-full w-full grow flex-col items-center justify-center space-y-4 px-4">
+        <Button className="w-full" onClick={handleGoDeeper}>
+          Go Deeper
         </Button>
         <Button className="w-full" onClick={handleNewReading}>
           New Reading
         </Button>
         <DividerWithText />
-        <ReadingFeedback content={JSON.stringify(interpretationString || interpretationArray)} />
+        <ReadingFeedback content={JSON.stringify(aiResponse || interpretationArray)} />
       </div>
     );
+  }
+
+  function handleDeeperComplete(newReading: Reading) {
+    console.log({ newReading });
+    console.log({ tarotSession });
+    if (tarotSession) {
+      setTarotSession({ ...tarotSession, readings: [...tarotSession?.readings, newReading] });
+    } else {
+      setTarotSession({
+        ...tarotSession,
+        readings: [
+          {
+            aiInterpretation: aiResponse,
+            cards: selectedCards,
+            userQuery: query,
+          },
+          newReading,
+        ],
+      });
+    }
+    setGoDeeper(false);
   }
 
   function renderGoDeeperSlide() {
+    // card selection like followupreadinginput
+    console.log(tarotSession);
     return (
-      <div className="h-full w-full">
-        <Dialog open={showInfo} onOpenChange={() => setShowInfo(!showInfo)}>
-          <FollowUpReadingInput />
-          <InfoDialog infoContent={infoContent} closeDialog={() => setShowInfo(false)} />
-        </Dialog>
+      <div className="h-full w-full" key={"godeeper"}>
+        <TarotSessionProvider
+          followUpContext={tarotSession}
+          isFollowUp
+          tarotSessionId={tarotSession?.id}
+          onResponseComplete={handleDeeperComplete}
+        >
+          <TarotSession />
+        </TarotSessionProvider>
       </div>
     );
   }
 
-  let slides = [];
-  if (cards.length > 0) slides.push(renderCardSlide);
-  slides = [...slides, ...getInterpretationSlides()];
-  slides.push(renderFeedbackSlide);
-  if (goDeeper) slides.push(renderGoDeeperSlide);
+  let slides = [...getInterpretationSlides(), goDeeper ? renderGoDeeperSlide : renderFeedbackSlide];
+  // if (goDeeper) slides.push(renderGoDeeperSlide);
 
   const nextSlide = () => {
     if (currentIndex < slides.length) {
@@ -218,6 +255,7 @@ const TarotReadingSlides = ({ cards }) => {
   };
 
   function handleGoDeeper() {
+    // setIsFollowUp(true);
     setGoDeeper(true);
   }
 
@@ -234,7 +272,7 @@ const TarotReadingSlides = ({ cards }) => {
           <IconClose />
         </Button>
       </div>
-      <div className="my-0 flex items-center justify-center border-b border-t border-b-muted border-t-muted py-4 text-sm font-normal italic">
+      <div className="my-0 flex items-center justify-center border-y border-y-muted py-4 text-sm font-normal italic">
         <h2 className="my-0 text-sm font-normal italic">{query || "Open Reading"}</h2>
         {/* <IconEdit className="ml-2" /> */}
       </div>

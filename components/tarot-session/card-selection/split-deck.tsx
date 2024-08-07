@@ -31,7 +31,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
       setTimeout(() => {
         handleSelectHalf(side);
         setSelectedSide(null);
-      }, 700);
+      }, 200);
     }
   };
   const isMobile = window.innerWidth <= 768;
