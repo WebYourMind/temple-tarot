@@ -20,15 +20,17 @@ interface InterpretationSlideProps {
   cards: Card[];
   selectedDeck: Deck;
   aiResponse: string;
+  query?: string;
 }
 
-const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, selectedDeck, aiResponse }) => {
+const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, selectedDeck, aiResponse, query }) => {
   const [open, setOpen] = useState(false);
   const [focusedCard, setFocusedCard] = useState<any>(null);
 
   return (
     <div className="flex h-full w-full flex-col text-center">
       <div className="absolute bottom-0 top-0 w-full overflow-scroll py-4">
+        {query && <p className="text-left italic">{query}</p>}
         <div className="flex space-x-4">
           {cards?.length > 0 &&
             cards.map((card) => {

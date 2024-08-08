@@ -32,31 +32,32 @@ function prevReadingContent(reading: Reading) {
   //     Chosen spread: ${reading.spread}
   //     Cards drawn with their positions in the spread: ${cardDescriptions}`;
   return `
-  User query:
-  ${reading.userQuery || "Open Reading"}
+  Query
+  "${reading.userQuery || "Open Reading"}"
 
-  AI reading interpretation:
   ${reading.aiInterpretation}
   `;
 }
 
 const interpretationInstructions = `
 A reading may include a query, along with selected cards and their positions, in a tarot spread from a specified Tarot Deck.
-You will respond with your interpretation of this reading based on the positions.
+Begin with a single creative sentence that encapsulates the overall meaning of the reading, setting the tone for the interpretation.
+You will then follow with a complete interpretation of this reading based on all relevant factors.
 Ensure your interpretation is based on the specified Tarot deck.
 Unless it's a single card spread, ensure that you explain the meaning and significance of each position in the spread when interpreting the cards.
-Tell a story with the reading, connecting the cards and the user query to weave a meaningful narrative rich with symbolism.
+Incorporate unique elements that resonate with the reading, ensuring each conclusion feels distinct and fresh.
+Use vivid and engaging language inspired by modern writers like Maya Angelou or Paulo Coelho to infuse the response with warmth, clarity, and depth.
 `;
 
 export const getContextPrompt = (isReading) => `
-This is a tarot reading interpeter AI application for individuals seeking guidance.
-You will receive a tarot reading or a follow-up query based on previous readings.
+This is a tarot reading interpreter AI application for individuals seeking guidance.
+You will receive a tarot reading or a follow-up query based on previous readings, allowing for a personalized experience.
 Please ensure that you reference past interactions if they can be relevant.
 ${isReading ? interpretationInstructions : ""}
-Use emojis and make the text vivid and visual. The tone should be positive, encouraging, and empowering, providing deep insights and actionable advice.
-Your response is consumer facing so ensure that it is suitable as a published content and do not use any placeholders.
-Remain grounded and avoid being theatrical.
-Do not list the provided data at the beginning of your response as it will already be displayed in the UI.
+Use emojis and make the text vivid and visual. The tone should be positive, encouraging, and empowering, providing deep insights without giving unsolicited advice or directing the seeker's actions.
+Your response should be consumer-facing, suitable for publication, and free of placeholders.
+Remain grounded and avoid being overly theatrical.
+Do not list the provided data at the beginning of your response, as it will already be displayed in the UI.
 Now, provide an engaging response with subtle markdown formatting.
 `;
 
@@ -65,6 +66,7 @@ export async function POST(req: Request) {
   const { cards, userQuery, spread, content, tarotSessionId, followUpContext } = json as Reading &
     CardInReading & { content: string; tarotSessionId?: string; followUpContext?: TarotSession };
   const session = await getSession();
+  console.log("route.ts", tarotSessionId);
 
   if (!session?.user || !session.user.id) {
     return new Response("Unauthorized", { status: 401 });
@@ -111,6 +113,10 @@ export async function POST(req: Request) {
   }
 
   messages.push({ role: "user", content });
+
+  messages.forEach((msg) => {
+    console.log(msg.content);
+  });
 
   try {
     const openAiRes = await openai.createChatCompletion({

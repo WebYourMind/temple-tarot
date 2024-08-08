@@ -19,8 +19,9 @@ import TarotSession from "./tarot-session";
 import { useReadingsContext } from "lib/contexts/readings-context";
 import { Reading } from "lib/database/readings.database";
 import { CardInReading } from "lib/database/cardsInReadings.database";
+import Interpreter from "./interpreter";
 
-const TarotReadingSlides = () => {
+const TarotReadingSlides = ({ tarotSessionId }) => {
   const { query, selectedDeck, handleReset, interpretationArray, aiResponse, setIsFollowUp, selectedCards } =
     useTarotSession();
   const { tarotSession, setTarotSession } = useReadingsContext();
@@ -40,6 +41,13 @@ const TarotReadingSlides = () => {
       handleReset();
     };
   }, []);
+
+  // useEffect(() => {
+  //   console.log(tarotSession.readings);
+  //   if (tarotSession?.readings && currentIndex !== 0) {
+  //     setCurrentIndex(tarotSession.readings.length * 2 - 1);
+  //   }
+  // }, [tarotSession?.readings]);
 
   function handleClose() {
     router.back();
@@ -139,13 +147,24 @@ const TarotReadingSlides = () => {
   function getInterpretationSlides() {
     console.log(tarotSession);
     if (tarotSession?.readings) {
-      const renderInterpretationSlide = (currentSlide) => (
-        <InterpretationSlide
-          cards={currentSlide.cards}
-          selectedDeck={selectedDeck}
-          aiResponse={currentSlide.aiInterpretation}
-        />
-      );
+      const renderInterpretationSlide = (currentReading: Reading) => {
+        if (!currentReading.aiInterpretation) {
+          // @ts-ignore
+          return (
+            <TarotSessionProvider isPropped tarotSessionId={tarotSessionId}>
+              <Interpreter tarotSessionId={tarotSessionId} proppedTarotSession={currentReading.proppedTarotSession} />
+            </TarotSessionProvider>
+          );
+        }
+        return (
+          <InterpretationSlide
+            query={query}
+            cards={currentReading.cards}
+            selectedDeck={selectedDeck}
+            aiResponse={currentReading.aiInterpretation}
+          />
+        );
+      };
       return [
         ...tarotSession.readings.flatMap((currentReading, index) => {
           if (currentReading.cards && currentReading.cards.length > 0) {
@@ -177,11 +196,13 @@ const TarotReadingSlides = () => {
     if (aiResponse && cards) {
       return [
         () => renderCardSlide(cards),
-        () => <InterpretationSlide cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />,
+        () => <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />,
       ];
     }
     if (aiResponse) {
-      return [() => <InterpretationSlide cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />];
+      return [
+        () => <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />,
+      ];
     }
     return [];
   }
@@ -224,13 +245,13 @@ const TarotReadingSlides = () => {
 
   function renderGoDeeperSlide() {
     // card selection like followupreadinginput
-    console.log(tarotSession);
+    console.log("slides.tsx", tarotSessionId);
     return (
       <div className="h-full w-full" key={"godeeper"}>
         <TarotSessionProvider
           followUpContext={tarotSession}
           isFollowUp
-          tarotSessionId={tarotSession?.id}
+          tarotSessionId={tarotSessionId}
           onResponseComplete={handleDeeperComplete}
         >
           <TarotSession />
@@ -272,10 +293,9 @@ const TarotReadingSlides = () => {
           <IconClose />
         </Button>
       </div>
-      <div className="my-0 flex items-center justify-center border-y border-y-muted py-4 text-sm font-normal italic">
+      {/* <div className="my-0 flex items-center justify-center border-y border-y-muted py-4 text-sm font-normal italic">
         <h2 className="my-0 text-sm font-normal italic">{query || "Open Reading"}</h2>
-        {/* <IconEdit className="ml-2" /> */}
-      </div>
+      </div> */}
       <SwipeableViews
         index={currentIndex}
         onChangeIndex={setCurrentIndex}

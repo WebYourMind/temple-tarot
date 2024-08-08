@@ -18,22 +18,19 @@ export default function TarotSession() {
 
   console.log("isFollowUp", isFollowUp);
 
-  const handleCreateSession = async () => {
-    startTransition(async () => {
-      try {
-        const tarotSessionId = await createTarotSession();
-        router.push(`/readings/${tarotSessionId}`);
-      } catch (error) {
-        console.error("Failed to create session:", error);
-      }
-    });
-  };
+  // const handleCreateSession = async () => {
+  //   startTransition(async () => {
+  //     try {
+  //       const tarotSessionId = await createTarotSession();
+  //       router.push(`/readings/${tarotSessionId}`);
+  //     } catch (error) {
+  //       console.error("Failed to create session:", error);
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
-    if (phase === "reading" && selectedCards && !isFollowUp) {
-      console.log("CReating new session");
-      handleCreateSession();
-    } else if (phase === "reading" && isFollowUp) {
+    if (phase === "reading" && isFollowUp) {
       console.log("Show interpreter");
       setShowInterpreter(true);
     }

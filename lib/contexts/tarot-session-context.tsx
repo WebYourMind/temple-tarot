@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+"use client";
+
+import React, { createContext, useContext, useEffect, useState, useTransition } from "react";
 import { track } from "@vercel/analytics/react";
 import { useSession } from "next-auth/react";
 import { infoMap } from "lib/tarot-data/info";
@@ -6,6 +8,8 @@ import tarotSpreads from "lib/tarot-data/tarot-spreads";
 import { Reading } from "lib/database/readings.database";
 import { CardInReading } from "lib/database/cardsInReadings.database";
 import { TarotSession } from "lib/database/tarotSessions.database";
+import { createTarotSession } from "app/actions/createTarotSession";
+import { useRouter } from "next/navigation";
 
 export type SpreadType = {
   numberOfCards: number;
@@ -56,6 +60,7 @@ interface TarotSessionContextProps {
   tarotSessionId?: string;
   onResponseComplete?: (reading: Reading) => void;
   followUpContext?: TarotSession;
+  handleCreateTarotSession: () => void;
 }
 
 const TarotSessionContext = createContext<TarotSessionContextProps | undefined>(undefined);
@@ -79,7 +84,16 @@ export const TarotSessionProvider: React.FC<{
   tarotSessionId?: string;
   onResponseComplete?: (reading: Reading) => void;
   followUpContext?: TarotSession;
-}> = ({ children, isFollowUp: isFollowUpProp = false, tarotSessionId = null, onResponseComplete, followUpContext }) => {
+  isPropped?: boolean;
+}> = ({
+  children,
+  isFollowUp: isFollowUpProp = false,
+  tarotSessionId = null,
+  onResponseComplete,
+  followUpContext,
+  isPropped,
+}) => {
+  console.log("context.tsx", tarotSessionId);
   const [query, setQuery] = useState<string>("");
   const [showInfo, setShowInfo] = useState(false);
   const [infoContent, setInfoContent] = useState(infoMap["question"]);
@@ -93,6 +107,8 @@ export const TarotSessionProvider: React.FC<{
   const [isFollowUp, setIsFollowUp] = useState(isFollowUpProp);
   const [interpretationArray, setInterpretationArray] = useState<any>();
   const [aiResponse, setAiResponse] = useState<any>();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   // Load selected deck from localStorage on component mount
   useEffect(() => {
@@ -107,12 +123,23 @@ export const TarotSessionProvider: React.FC<{
     localStorage.setItem("selectedDeck", JSON.stringify(selectedDeck));
   }, [selectedDeck]);
 
+  const handleCreateTarotSession = async () => {
+    startTransition(async () => {
+      try {
+        const tarotSessionId = await createTarotSession();
+        router.push(`/readings/${tarotSessionId}`);
+      } catch (error) {
+        console.error("Failed to create session:", error);
+      }
+    });
+  };
+
   function handleSubmitQuestion() {
     if (!hasOwnCards) {
       setPhase("cards");
       setInfoContent(infoMap["cards"]);
     } else {
-      setPhase("reading");
+      // setPhase("reading");
 
       // analytics
       track("Reading", { spread: spread.value, userId: session?.user?.id });
@@ -198,6 +225,7 @@ export const TarotSessionProvider: React.FC<{
     tarotSessionId,
     onResponseComplete,
     followUpContext,
+    handleCreateTarotSession,
   };
 
   console.log(value);

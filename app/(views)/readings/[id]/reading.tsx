@@ -93,7 +93,7 @@ function Reading({ tarotSessionId }: ReadingProps) {
   if (loading || !tarotSession) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
   console.log(tarotSession);
-  return <TarotReadingSlides />;
+  return <TarotReadingSlides tarotSessionId={tarotSessionId} />;
 }
 
 export default Reading;

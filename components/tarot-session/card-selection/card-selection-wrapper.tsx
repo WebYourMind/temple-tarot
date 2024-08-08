@@ -5,7 +5,8 @@ import { useTarotSession } from "lib/contexts/tarot-session-context";
 const ordinalLabels = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"];
 
 const CardSelectionWrapper = () => {
-  const { spread, query, setSelectedCards, selectedCards, setPhase } = useTarotSession();
+  const { spread, query, setSelectedCards, selectedCards, setPhase, handleCreateTarotSession, isFollowUp } =
+    useTarotSession();
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleCardSelect = (card) => {
@@ -16,6 +17,9 @@ const CardSelectionWrapper = () => {
       setCurrentStep(currentStep + 1);
     } else {
       setPhase("reading");
+      if (!isFollowUp) {
+        handleCreateTarotSession();
+      }
     }
   };
 

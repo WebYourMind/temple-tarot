@@ -9,37 +9,37 @@ import { parseJsonSafe } from "lib/utils";
 import ReadingLoading from "../../app/(views)/interpretation/reading-loading";
 import TarotReadingSlides from "./tarot-reading-slides";
 import InterpretationSlide from "./interpretation-slide";
+import { customDeck } from "lib/tarot-data/tarot-deck";
 
-function Interpreter({ tarotSessionId }) {
+function Interpreter({ tarotSessionId, proppedTarotSession = null }) {
+  console.log(proppedTarotSession);
+  const { query, selectedCards, spread, selectedDeck, isFollowUp } = proppedTarotSession || useTarotSession();
   const {
-    query,
-    selectedCards,
-    spread,
     interpretationArray,
     setInterpretationArray,
-    selectedDeck,
     setPhase,
     aiResponse,
     setAiResponse,
-    isFollowUp,
     onResponseComplete,
     followUpContext,
   } = useTarotSession();
+  const tarotSessionContextValue = useTarotSession();
   const router = useRouter();
   const [isComplete, setIsComplete] = useState(false);
 
-  useEffect(() => {
-    if (onResponseComplete && isComplete) {
-      const reading = {
-        aiInterpretation: aiResponse,
-        cards: selectedCards,
-        userQuery: query,
-      };
-      onResponseComplete(reading);
-    }
-  }, [isComplete]);
+  // useEffect(() => {
+  //   if (onResponseComplete && isComplete) {
+  //     const reading = {
+  //       aiInterpretation: aiResponse,
+  //       cards: selectedCards,
+  //       userQuery: query,
+  //     };
+  //     onResponseComplete(reading);
+  //   }
+  // }, [isComplete]);
 
   const generateReading = useCallback(async (content) => {
+    console.log("interpreter.ts", tarotSessionId);
     let isSubscribed = true;
     const controller = new AbortController();
     try {
@@ -106,7 +106,18 @@ function Interpreter({ tarotSessionId }) {
 
   // calls generate reading on mount if there's selected cards and no exisisting aiResponse
   useEffect(() => {
-    if (selectedCards && !aiResponse) {
+    if (onResponseComplete) {
+      console.log({ query, selectedCards, spread, selectedDeck, isFollowUp });
+      const reading = {
+        aiInterpretation: aiResponse,
+        cards: selectedCards,
+        userQuery: query,
+        proppedTarotSession: { query, selectedCards, spread, selectedDeck, isFollowUp },
+      };
+      onResponseComplete(reading);
+    } else if (selectedCards && !aiResponse) {
+      console.log(selectedDeck);
+      console.log(customDeck[0]);
       const cardDescriptions = selectedCards
         .map(
           (card, index) =>
@@ -128,7 +139,7 @@ function Interpreter({ tarotSessionId }) {
     } else if (isFollowUp && !aiResponse) {
       const content = `User's follow up query based on previous readings: ${query}`;
       generateReading(content);
-    } else {
+    } else if (!proppedTarotSession) {
       router.replace("/");
     }
   }, [query, selectedCards, spread]);
@@ -140,7 +151,7 @@ function Interpreter({ tarotSessionId }) {
 
   if (interpretationArray || aiResponse) {
     console.log("not follow up");
-    return <TarotReadingSlides />;
+    return <TarotReadingSlides tarotSessionId={tarotSessionId} />;
   }
   console.log(selectedCards);
   // if (!selectedCards) {
