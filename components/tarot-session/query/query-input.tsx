@@ -29,7 +29,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
     handleSubmitQuery(drawCards);
   };
 
-  const isSubmitDisabled = selectedCards?.some((selection) => selection.cardName === "");
+  const isSubmitDisabled = selectedCards?.some((selection) => selection.cardName === "") || (!query && !drawCards);
   const showFreeReading = !isSubscribed && (!passExpiry || new Date(passExpiry) < new Date()) && freeReadings > 0;
 
   return (
@@ -68,7 +68,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
             <Dialog>
               <DialogTrigger className={"flex items-center"}>
                 <Settings2Icon className="mr-2" />
-                Preferences
+                Settings
               </DialogTrigger>
               <DialogContent className="my-16 max-h-[80vh] w-full max-w-xs overflow-scroll rounded-2xl px-4 py-4 md:max-w-2xl">
                 <TarotOptions />

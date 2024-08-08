@@ -11,7 +11,7 @@ import TarotReadingSlides from "./tarot-reading-slides";
 import InterpretationSlide from "./interpretation-slide";
 import { customDeck } from "lib/tarot-data/tarot-deck";
 
-function Interpreter({ tarotSessionId, proppedTarotSession = null }) {
+function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   console.log(proppedTarotSession);
   const { query, selectedCards, spread, selectedDeck, isFollowUp } = proppedTarotSession || useTarotSession();
   const {
@@ -39,7 +39,6 @@ function Interpreter({ tarotSessionId, proppedTarotSession = null }) {
   // }, [isComplete]);
 
   const generateReading = useCallback(async (content) => {
-    console.log("interpreter.ts", tarotSessionId);
     let isSubscribed = true;
     const controller = new AbortController();
     try {

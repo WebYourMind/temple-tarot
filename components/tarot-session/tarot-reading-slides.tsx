@@ -21,7 +21,7 @@ import { Reading } from "lib/database/readings.database";
 import { CardInReading } from "lib/database/cardsInReadings.database";
 import Interpreter from "./interpreter";
 
-const TarotReadingSlides = ({ tarotSessionId }) => {
+const TarotReadingSlides = ({ tarotSessionId = null }) => {
   const { query, selectedDeck, handleReset, interpretationArray, aiResponse, setIsFollowUp, selectedCards } =
     useTarotSession();
   const { tarotSession, setTarotSession } = useReadingsContext();
@@ -149,9 +149,9 @@ const TarotReadingSlides = ({ tarotSessionId }) => {
     if (tarotSession?.readings) {
       const renderInterpretationSlide = (currentReading: Reading) => {
         if (!currentReading.aiInterpretation) {
-          // @ts-ignore
           return (
             <TarotSessionProvider isPropped tarotSessionId={tarotSessionId}>
+              {/* @ts-ignore */}
               <Interpreter tarotSessionId={tarotSessionId} proppedTarotSession={currentReading.proppedTarotSession} />
             </TarotSessionProvider>
           );
