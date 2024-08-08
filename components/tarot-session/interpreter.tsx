@@ -12,8 +12,10 @@ import InterpretationSlide from "./interpretation-slide";
 import { customDeck } from "lib/tarot-data/tarot-deck";
 
 function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
-  console.log(proppedTarotSession);
-  const { query, selectedCards, spread, selectedDeck, isFollowUp } = proppedTarotSession || useTarotSession();
+  const defaultSession = useTarotSession();
+
+  const { query, selectedCards, spread, selectedDeck, isFollowUp } = proppedTarotSession || defaultSession;
+
   const {
     interpretationArray,
     setInterpretationArray,
@@ -22,8 +24,7 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
     setAiResponse,
     onResponseComplete,
     followUpContext,
-  } = useTarotSession();
-  const tarotSessionContextValue = useTarotSession();
+  } = defaultSession;
   const router = useRouter();
   const [isComplete, setIsComplete] = useState(false);
 
