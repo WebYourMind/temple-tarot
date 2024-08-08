@@ -8,17 +8,17 @@ import { cn } from "lib/utils";
 import { buttonVariants } from "components/ui/button";
 
 function SpreadSelector() {
-  const { spreadType, setSpreadType, setSpreadPickerOpen, spreadPickerOpen } = useTarotSession();
+  const { spread, setSpread, setSpreadPickerOpen, spreadPickerOpen } = useTarotSession();
   const handleSpreadSelect = (spreadValue) => {
     const selectedSpread = tarotSpreads.find((spread) => spread.value === spreadValue);
-    setSpreadType(selectedSpread);
+    setSpread(selectedSpread);
     setSpreadPickerOpen(false);
   };
   return (
     <>
       <Dialog open={spreadPickerOpen} onOpenChange={() => setSpreadPickerOpen(!spreadPickerOpen)}>
         <DialogTrigger className={cn("flex w-full items-center justify-center space-x-2", buttonVariants())}>
-          <span>{spreadType?.name}</span> <ChevronDown className="h-4 w-4 opacity-50" />
+          <span>{spread?.name}</span> <ChevronDown className="h-4 w-4 opacity-50" />
         </DialogTrigger>
         <DialogContent className="my-16 max-h-[80vh] max-w-[90vw] overflow-scroll rounded-md ">
           <h2>Spreads</h2>

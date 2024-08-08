@@ -12,11 +12,11 @@ type ReadingItemProps = {
 };
 
 function ReadingItem({ tarotSession }: ReadingItemProps) {
-  const { setReading } = useReadingsContext();
+  const { setTarotSession } = useReadingsContext();
   const router = useRouter();
   const handleClick = (e) => {
     e.preventDefault();
-    setReading(tarotSession);
+    setTarotSession(tarotSession);
     router.push(`/readings/${tarotSession.id}`);
   };
 
@@ -25,7 +25,7 @@ function ReadingItem({ tarotSession }: ReadingItemProps) {
       <>
         <div className="flex items-center justify-between">
           <p className="mb-1 text-xs opacity-70">{new Date(tarotSession.createdAt).toDateString()}</p>
-          <ReadingItemMenu readingId={tarotSession.id} />
+          <ReadingItemMenu tarotSessionId={tarotSession.id} />
         </div>
         <Link
           href={`readings/${tarotSession.id}`}
