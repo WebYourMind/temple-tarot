@@ -8,13 +8,11 @@ import { InfoButton } from "components/info-dialog";
 
 import { Quicksand } from "next/font/google";
 
-import { SendIcon, Settings2Icon } from "lucide-react";
-import TarotOptions from "./tarot-options";
-import { Dialog, DialogContent, DialogTrigger } from "components/ui/dialog";
+import { SendIcon } from "lucide-react";
+
 import { cn } from "lib/utils";
 import { Switch } from "components/ui/switch";
 import { Label } from "components/ui/label";
-import { Checkbox } from "components/ui/checkbox";
 import CardInput from "./card-input";
 import DeckSelector from "./deck-selector";
 import SpreadSelector from "./spread-selector";
@@ -27,7 +25,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
   const router = useRouter();
   const [drawCards, setDrawCards] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
-  const [showCardInput, setShowCardInput] = useState();
+  const [showCardInput, setShowCardInput] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,8 +41,11 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
   };
 
   return (
-    <div className="mx-auto mb-10 flex h-full max-w-3xl grow flex-col items-center justify-between space-y-4 md:mt-10 md:justify-normal">
-      <div className="flex h-full w-full flex-col justify-between pt-5">
+    <div className="mx-auto mb-10 flex h-full max-w-3xl grow flex-col items-center justify-between space-y-4 pb-10 md:mt-10 md:justify-normal">
+      <div className="flex w-full items-center justify-end">
+        <InfoButton type={infoType} className="mr-0 p-0" />
+      </div>
+      <div className="flex h-full w-full flex-col justify-between">
         <div>
           <Textarea
             id="question"
@@ -57,21 +58,20 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
             onFocus={handleFocus}
             autoFocus
             className={cn(
-              `h-full border-0 bg-transparent bg-opacity-30 px-0 pb-0 font-sans text-3xl font-bold leading-relaxed tracking-wider caret-primary placeholder:opacity-60 focus-visible:ring-offset-0 md:h-44 md:border md:px-2 md:text-xl`,
+              `mt-0 h-full border-0 bg-transparent bg-opacity-30 px-0 pb-0 pt-0 font-sans text-3xl font-bold leading-relaxed tracking-wider caret-primary placeholder:opacity-60 focus-visible:ring-offset-0 md:h-44 md:border md:px-2 md:text-xl`,
               MagicFont.className
             )}
           />
         </div>
         <div className="flex flex-col items-center justify-center">
-          {/* isFollowUp && */}
-          {
+          {isFollowUp && (
             <div className="my-4 flex w-full items-center justify-between space-x-2">
               <Label htmlFor="draw-cards-switch" className={cn("text-sm", MagicFont.className)}>
-                {drawCards ? "Draw new cards" : "Ask without drawing new cards"}
+                {drawCards ? "Drawing new cards" : "Asking without drawing new cards"}
               </Label>
               <Switch id="draw-cards-switch" checked={drawCards} onCheckedChange={(checked) => setDrawCards(checked)} />
             </div>
-          }
+          )}
           {drawCards && (
             <>
               <DeckSelector />
@@ -79,6 +79,17 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
                 <SpreadSelector />
                 <InfoButton type="spread" />
               </div>
+              <div className="my-4 flex w-full items-center justify-between space-x-2">
+                <Label htmlFor="draw-cards-switch" className={cn("text-sm", MagicFont.className)}>
+                  {showCardInput ? "Using a physical deck" : "Using a digital deck"}
+                </Label>
+                <Switch
+                  id="draw-cards-switch"
+                  checked={showCardInput}
+                  onCheckedChange={(checked) => setShowCardInput(checked)}
+                />
+              </div>
+              {showCardInput && <CardInput />}
             </>
           )}
         </div>
@@ -94,58 +105,6 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
         </div> */}
       </div>
       <div className={cn("w-full", MagicFont.className)}>
-        <div className="mb-4 flex w-full flex-col justify-center">
-          <div className="flex items-center justify-between space-x-6">
-            <div className="flex items-center">
-              <InfoButton type={infoType} className="ml-0" />
-              Info
-            </div>
-            <Dialog open={showSettings} onOpenChange={setShowSettings}>
-              <DialogTrigger className={"flex items-center underline"}>Have your own deck?</DialogTrigger>
-              <DialogContent className="my-16 max-h-[80vh] w-full max-w-xs overflow-scroll rounded-2xl px-4 py-4 md:max-w-2xl">
-                <>
-                  <div className="mt-8 flex justify-between pb-2">
-                    <div
-                      className={cn(
-                        "flex w-full items-center justify-between rounded-md border border-foreground bg-background px-3 py-2",
-                        // "w-full",
-                        buttonVariants(),
-                        showCardInput && "border-primary text-primary"
-                      )}
-                    >
-                      <Checkbox
-                        // className="hidden"
-                        id="terms1"
-                        checked={showCardInput}
-                        onCheckedChange={setShowCardInput as () => void}
-                      />
-                      <div className="grid leading-none">
-                        <label
-                          htmlFor="terms1"
-                          className={
-                            "flex items-center text-sm peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                          }
-                        >
-                          Use a Physical Deck
-                        </label>
-                      </div>
-
-                      <Checkbox
-                        // className="hidden"
-                        id="terms1"
-                        checked={showCardInput}
-                        onCheckedChange={setShowCardInput as () => void}
-                      />
-                    </div>
-                    <InfoButton type="physical" />
-                  </div>
-                  {showCardInput && <CardInput />}
-                  {/* <TarotOptions /> */}
-                </>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
         <div className="flex flex-col justify-center">
           {showFreeReading && (
             <div className="mb-2 mt-0 space-y-0 text-center text-sm text-primary md:text-base">

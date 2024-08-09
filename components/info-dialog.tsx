@@ -19,10 +19,7 @@ export const InfoButton = ({ type, className = "" }) => {
   }
 
   return (
-    <DialogTrigger
-      className={cn("ml-2", buttonVariants({ variant: "ghost", size: "icon" }), className)}
-      onClick={() => handleInfoClick()}
-    >
+    <DialogTrigger className={cn("ml-2 opacity-70", className)} onClick={() => handleInfoClick()}>
       <Info />
     </DialogTrigger>
   );

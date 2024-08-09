@@ -53,7 +53,7 @@ const CardInput = () => {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="w-full">
       {cardSelections.map((selection, index) => (
         <div key={index} className="mb-4">
           <Label className="mb-2">Card {index + 1}</Label>
