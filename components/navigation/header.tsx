@@ -7,11 +7,12 @@ import { Button, buttonVariants } from "components/ui/button";
 import { Sidebar } from "./sidebar";
 import { SidebarList } from "components/navigation/sidebar-list";
 import { useSession } from "next-auth/react";
-import appConfig from "app.config";
+// import appConfig from "app.config";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "lib/utils";
-import { MagicFont } from "components/tarot-session/query/query-input";
+import LogoComponent from "./logo-component";
+// import { MagicFont } from "components/tarot-session/query/query-input";
 
 export default function Header() {
   const { data: session, status, update } = useSession() as any;
@@ -77,7 +78,8 @@ export default function Header() {
         <>
           <div className="flex w-full items-center justify-between">
             <Link href="/" className="mr-2 hover:no-underline">
-              <h3 className={cn("mt-0 text-lg text-foreground", MagicFont.className)}>{appConfig.appName}</h3>
+              {/* <h3 className={cn("mt-0 text-lg text-foreground", MagicFont.className)}>{appConfig.appName}</h3> */}
+              <LogoComponent />
             </Link>
             {status !== "loading" && (
               <div className="flex items-center">

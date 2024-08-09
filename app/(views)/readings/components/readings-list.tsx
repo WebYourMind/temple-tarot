@@ -7,6 +7,7 @@ import PaginationComponent from "./pagination-component";
 import LoadingSkeleton from "./loading-skeleton";
 import EmptyReadings from "./empty-readings";
 import { cn } from "lib/utils";
+import { MagicFont } from "components/tarot-session/query/query-input";
 
 function paginate(currentPage, pageCount, delta = 2) {
   const range = [];
@@ -62,6 +63,7 @@ function ReadingsList() {
 
   return (
     <>
+      <h1 className={cn("mb-8 font-sans text-3xl", MagicFont.className)}>Past Readings</h1>
       <div
         className={cn(
           "my-8 grid max-w-4xl grid-cols-1 gap-8 divide-y-2 divide-dotted md:my-20 md:grid-cols-3 md:divide-y-0 lg:grid-cols-3"

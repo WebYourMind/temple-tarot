@@ -6,6 +6,8 @@ import Card from "components/card";
 import ReadingItemMenu from "./reading-item-menu";
 import Link from "next/link";
 import { TarotSession } from "lib/database/tarotSessions.database";
+import { MagicFont } from "components/tarot-session/query/query-input";
+import { cn } from "lib/utils";
 
 type ReadingItemProps = {
   tarotSession: TarotSession;
@@ -33,7 +35,7 @@ function ReadingItem({ tarotSession }: ReadingItemProps) {
           className={"flex flex-col space-y-2 text-foreground"}
         >
           {tarotSession.readings[0].cards.map((card) => (
-            <h3 key={card.cardName} className="my-0 text-primary">
+            <h3 key={card.cardName} className={cn("my-0 text-primary", MagicFont.className)}>
               {card.cardName}
             </h3>
           ))}

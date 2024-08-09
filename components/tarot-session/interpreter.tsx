@@ -125,7 +125,7 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
               card.cardName
             }" (${card.orientation}) ${
               selectedDeck.value === "custom" &&
-              `\nCard definition: ${card.readingTips} Upright guidance: ${card.uprightGuidance} Reversed guidance: ${card.reversedGuidance}`
+              `\nCard definition: ${card.detail.readingTips} Upright guidance: ${card.detail.uprightGuidance} Reversed guidance: ${card.detail.reversedGuidance}`
             }\n\n`
         )
         .join(", ");

@@ -29,8 +29,8 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
   return (
     <div className="flex h-full w-full flex-col text-center">
       <div className="absolute bottom-0 top-0 w-full overflow-scroll py-4">
-        {query && <p className="text-left italic">{query}</p>}
-        <div className="flex space-x-4">
+        {query && <p className="mb-8 mr-1 text-left font-bold italic">{query || "Open Reading"}</p>}
+        <div className="flex w-full justify-around space-x-4">
           {cards?.length > 0 &&
             cards.map((card) => {
               let cardWithImage;
@@ -40,7 +40,7 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
                 );
               }
               return (
-                <div className="my-4" key={card.cardName}>
+                <div className="mb-8" key={card.cardName}>
                   {cardWithImage?.imageUrl && (
                     <Image
                       onClick={() => {
@@ -52,7 +52,7 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
                       width={256}
                       height={384}
                       className={cn(
-                        `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : "max-h-24"} w-auto rounded-lg`,
+                        `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : "max-h-44"} w-auto rounded-lg`,
                         (card.orientation === "reversed" || card.orientation === "Reversed") && "rotate-180"
                       )}
                     />

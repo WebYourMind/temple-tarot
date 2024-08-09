@@ -3,6 +3,8 @@
 import Image from "next/image";
 import * as Dialog from "@radix-ui/react-dialog";
 import { DialogContent } from "components/ui/dialog";
+import { cn } from "lib/utils";
+import { MagicFont } from "components/tarot-session/query/query-input";
 
 const CardInfo = ({ card, open, onOpenChange }) => {
   return (
@@ -18,14 +20,14 @@ const CardInfo = ({ card, open, onOpenChange }) => {
               className="h-auto w-full rounded-lg shadow-lg"
             />
           </div>
-          <div className="col-span-2 flex flex-col justify-between md:col-span-1">
+          <div className={cn("col-span-2 flex flex-col justify-between md:col-span-1", MagicFont.className)}>
             <div>
-              <Dialog.Title className="mt-0 text-3xl font-bold">{card?.cardName}</Dialog.Title>
+              <Dialog.Title className={"mt-0 text-3xl"}>{card?.cardName}</Dialog.Title>
               <Dialog.Description className="text-lg">{card?.suit}</Dialog.Description>
               <div className="space-y-6">
                 <div>
-                  <p className="text-xl font-semibold">Summary</p>
-                  <p>{card?.detail.paragraphSummary}</p>
+                  {/* <p className="text-xl font-semibold">Summary</p> */}
+                  <p className="font-sans">{card?.detail.paragraphSummary}</p>
                 </div>
               </div>
             </div>

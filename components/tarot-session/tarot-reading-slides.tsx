@@ -20,6 +20,7 @@ import { useReadingsContext } from "lib/contexts/readings-context";
 import { Reading } from "lib/database/readings.database";
 import { CardInReading } from "lib/database/cardsInReadings.database";
 import Interpreter from "./interpreter";
+import LogoComponent from "components/navigation/logo-component";
 
 const TarotReadingSlides = ({ tarotSessionId = null }) => {
   const { query, selectedDeck, handleReset, interpretationArray, aiResponse, setIsFollowUp, selectedCards } =
@@ -32,8 +33,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
   const router = useRouter();
 
   const cards = selectedCards || tarotSession?.readings[0]?.cards;
-  console.log(cards);
-  console.log(tarotSession);
 
   useEffect(() => {
     return () => {
@@ -88,9 +87,9 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
                 // eslint-disable-next-line tailwindcss/no-custom-classname
                 className={`max-w-[${
                   100 / cards.length
-                }%] flex h-full w-full flex-col items-center justify-center py-4 text-center`}
+                }%] flex h-full w-full flex-col items-center justify-center p-2 text-center`}
               >
-                <div className="mb-2 w-full">
+                <div className={cn("mb-2 w-full", MagicFont.className)}>
                   <p className="my-0">{card.cardName}</p>
                   <p className="my-0">({card.orientation})</p>
                 </div>
@@ -262,7 +261,8 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       )}
     >
       <div className="flex items-center justify-between">
-        <h1 className="my-0 text-xs">templetarot.com</h1>
+        {/* <h1 className="my-0 text-xs">Temple Tarot</h1> */}
+        <LogoComponent />
         <Button variant="ghost" size="icon" onClick={handleClose} className="-mr-3 rounded-full">
           <IconClose />
         </Button>

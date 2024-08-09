@@ -342,6 +342,23 @@ export const customDeck = [
     },
   },
   {
+    cardName: "Shadow",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/shadow.webp?download=1",
+    suit: "Major Arcana",
+    detail: {
+      oneSentenceSummary:
+        "Shadow explores the deeper, often darker aspects of the psyche, illuminating the hidden influences and subconscious fears that shape our behaviors and perceptions.",
+      paragraphSummary:
+        "The Shadow card delves into the realm of the unseen, where the subconscious mind holds sway over our actions and reactions. It symbolizes the journey into one’s inner depths, confronting the parts of oneself that are usually repressed or ignored. In readings, this card often suggests a period where the querent must face their inner fears and unresolved emotions, urging them to acknowledge and integrate these shadow aspects to achieve psychological balance and clarity. The card encourages embracing the whole self, including the less palatable parts, to foster genuine self-acceptance and healing. Shadow calls for a brave confrontation with the unknown, revealing that true insight often comes from understanding and embracing the complexities of one's inner world.",
+      roleDescription:
+        "Traditionally associated with The Moon, the Shadow card is depicted with imagery that evokes the night, often featuring moonlight, which casts shadows and distorts what is normally visible. This symbolism highlights the concept of illuminating what is hidden in the darkness, both literally and metaphorically.",
+      readingTips:
+        "When the Shadow card appears, consider what lies beneath the surface of your conscious mind. It’s a time to confront your inner darkness and bring those aspects into the light for greater understanding and integration.",
+      uprightGuidance: "Clarity on hidden matters; trust your intuition to guide you through uncertainty.",
+      reversedGuidance: "Deception or confusion clouds your path; seek clarity and beware of illusions.",
+    },
+  },
+  {
     cardName: "Energy",
     imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/energy-sun.webp?download=1",
     suit: "Major Arcana",
@@ -1184,7 +1201,7 @@ export const customDeck = [
   },
   {
     cardName: "Entitlement and Gratitude",
-    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/entitlement-gratitude.webp?download=1",
+    imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/entitlement-gratitude.webp?downxload=1",
     suit: "Water",
     detail: {
       oneSentenceSummary:
@@ -1219,8 +1236,8 @@ export const customDeck = [
   },
 ];
 
-// Thoth Deck
-export const tarotDeck = [
+// Crowley Thoth Deck
+export const crowleyDeck = [
   // Major Arcana
   "The Fool",
   "The Magus",
