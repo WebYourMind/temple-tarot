@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
+import { deckCardsMapping } from "./tarot-data/tarot-deck";
 
 export const EXPIRY_TIME_ONE_HOUR = 60 * 60 * 1000; // 1 hour
 export const EXPIRY_TIME_ONE_DAY = 60 * 60 * 1000 * 24; // 1 day
@@ -159,4 +160,8 @@ export function parseJsonSafe(jsonString) {
     console.error("Invalid JSON:", error);
     return null;
   }
+}
+
+export function findFullCardInCustomDeck(selectedDeck, cardName: string) {
+  return deckCardsMapping[selectedDeck.value].find((fullCard) => fullCard.cardName === cardName);
 }

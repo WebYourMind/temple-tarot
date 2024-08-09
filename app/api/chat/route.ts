@@ -3,12 +3,11 @@ import { Configuration, OpenAIApi } from "openai-edge";
 
 import { NextRequest, NextResponse } from "next/server";
 import { getChatMessagesByUserId } from "lib/database/chatMessages.database";
-import { chatTemplateNoStyles } from "lib/templates/chat.templates";
 import { getSession } from "lib/auth";
-import { Reading, addReadingWithCards } from "lib/database/readings.database";
+import { Reading } from "lib/database/readings.database";
 import { CardInReading } from "lib/database/cardsInReadings.database";
-import { spendCredits } from "app/(ai-payments)/api/stripe-credits/utils/stripe-credits-utils";
 import { rateLimitReached } from "lib/database/apiUsageLogs.database";
+import { addReadingToTarotSession, TarotSession } from "lib/database/tarotSessions.database";
 
 export const runtime = "nodejs";
 
@@ -18,10 +17,56 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+function prevReadingContent(reading: Reading) {
+  // console.log(reading);
+  // const cardDescriptions = reading.cards
+  //   .map(
+  //     (card, index) =>
+  //       `Position: ${index + 1}, position meaning: ${reading.spread} \nCard drawn for this position: "${
+  //         card.cardName
+  //       }" (${card.orientation})\n\n`
+  //   )
+  //   .join(", ");
+
+  // const content = `Query: ${reading.userQuery || "Open Reading"}
+  //     Chosen spread: ${reading.spread}
+  //     Cards drawn with their positions in the spread: ${cardDescriptions}`;
+  return `
+  Query
+  "${reading.userQuery || "Open Reading"}"
+
+  ${reading.aiInterpretation}
+  `;
+}
+
+const interpretationInstructions = `
+A reading may include a query, along with selected cards and their positions, in a tarot spread from a specified Tarot Deck.
+Begin with a single creative sentence that encapsulates the overall meaning of the reading, setting the tone for the interpretation.
+You will then follow with a complete interpretation of this reading based on all relevant factors.
+Ensure your interpretation is based on the specified Tarot deck.
+Unless it's a single card spread, ensure that you explain the meaning and significance of each position in the spread when interpreting the cards.
+Incorporate unique elements that resonate with the reading, ensuring each conclusion feels distinct and fresh.
+Use vivid and engaging language inspired by modern writers like Maya Angelou or Paulo Coelho to infuse the response with warmth, clarity, and depth.
+`;
+
+const getContextPrompt = (isReading) => `
+This is a tarot reading interpreter AI application for individuals seeking guidance.
+You will receive a tarot reading or a follow-up query based on previous readings, allowing for a personalized experience.
+Please ensure that you reference past interactions if they can be relevant.
+${isReading ? interpretationInstructions : ""}
+Use emojis and make the text vivid and visual. The tone should be positive, encouraging, and empowering, providing deep insights without giving unsolicited advice or directing the seeker's actions.
+Your response should be consumer-facing, suitable for publication, and free of placeholders.
+Remain grounded and avoid being overly theatrical.
+Do not list the provided data at the beginning of your response, as it will already be displayed in the UI.
+Now, provide an engaging response with subtle markdown formatting.
+`;
+
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { cards, userQuery, spreadType, content } = json as Reading & CardInReading & { content: string };
+  const { cards, userQuery, spread, content, tarotSessionId, followUpContext } = json as Reading &
+    CardInReading & { content: string; tarotSessionId?: string; followUpContext?: TarotSession };
   const session = await getSession();
+  console.log("route.ts", tarotSessionId);
 
   if (!session?.user || !session.user.id) {
     return new Response("Unauthorized", { status: 401 });
@@ -49,18 +94,35 @@ export async function POST(req: Request) {
     });
   }
 
-  const contextPrompt = chatTemplateNoStyles;
+  const contextPrompt = getContextPrompt(spread && cards);
+
+  const messages = [
+    {
+      role: "system",
+      content: contextPrompt,
+    },
+  ];
+
+  if (followUpContext) {
+    followUpContext.readings.forEach((reading) => {
+      messages.push({
+        role: "assistant",
+        content: prevReadingContent(reading),
+      });
+    });
+  }
+
+  messages.push({ role: "user", content });
+
+  messages.forEach((msg) => {
+    console.log(msg.content);
+  });
 
   try {
     const openAiRes = await openai.createChatCompletion({
       model,
-      messages: [
-        {
-          role: "system",
-          content: contextPrompt,
-        },
-        { role: "user", content },
-      ],
+      // @ts-ignore
+      messages,
       temperature: 0.2,
       stream: true,
       // max_tokens: 2500,
@@ -75,10 +137,12 @@ export async function POST(req: Request) {
         const reading = {
           userId: user.id,
           userQuery,
-          spreadType,
+          spread,
           aiInterpretation: completion,
+          cards,
         };
-        await addReadingWithCards(reading, cards);
+
+        await addReadingToTarotSession(user.id, reading, tarotSessionId);
       },
     });
 

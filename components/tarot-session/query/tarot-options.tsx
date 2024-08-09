@@ -12,7 +12,7 @@ function TarotOptions() {
   return (
     <div className="space-y-4 overflow-y-scroll">
       <div className="flex flex-col items-center justify-center space-y-4">
-        <h3>Customize</h3>
+        <h3>Tarot Preferences</h3>
         <DeckSelector />
         <div className="flex w-full">
           <SpreadSelector />

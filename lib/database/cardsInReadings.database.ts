@@ -7,6 +7,11 @@ export interface CardInReading {
   cardName: string;
   orientation: string;
   position: number;
+  imageUrl?: string;
+  detail?: {};
+  readingTips?: string;
+  uprightGuidance?: string;
+  reversedGuidance?: string;
 }
 
 // Function to add a new card in a reading
@@ -26,10 +31,12 @@ export const addCardInReading = async (card: CardInReading): Promise<CardInReadi
 
 // Function to retrieve all cards for a specific reading
 export const getCardsByReadingId = async (readingId: number): Promise<CardInReading[]> => {
+  console.log(readingId);
   try {
     const { rows } = await sql`
             SELECT * FROM cards_in_readings WHERE reading_id = ${readingId};
         `;
+    console.log(rows);
     return rows as CardInReading[];
   } catch (error) {
     console.error("Failed to retrieve cards by reading ID:", error);

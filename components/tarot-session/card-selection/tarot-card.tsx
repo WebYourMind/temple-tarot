@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
-import TarotBack from "../../../tarot-back.jpg";
+import TarotBack from "app/tarot-back.jpg";
 import { cn } from "lib/utils";
 
 export default function Card({ className = "", alt, onLoad = null, width = 200, height = 350 }) {

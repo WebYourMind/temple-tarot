@@ -3,14 +3,19 @@ import TarotCard from "./tarot-card";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { cn } from "lib/utils";
 import { InfoButton } from "components/info-dialog";
+import { MagicFont } from "../query/query-input";
 
 function OrientationPicker({ finalCard, onSubmit, switchOrientation }) {
   return (
     <div className="flex h-full flex-col items-center justify-center pb-4 fade-in">
-      <p className={cn("text-center font-sans text-xl")}>
-        Is your card this way... <br />
-        or that way? <InfoButton type="orientation" />
-      </p>
+      <div className="flex">
+        <InfoButton type="orientation" className="opacity-0" />
+        <p className={cn("text-center font-sans text-xl", MagicFont.className)}>
+          Is your card this way... <br />
+          or that way?
+        </p>
+        <InfoButton type="orientation" />
+      </div>
       <div className="flex items-center px-4">
         <button onClick={switchOrientation}>
           <ArrowUp className="pulse-1 opacity-90" size={25} />

@@ -11,7 +11,7 @@ import appConfig from "app.config";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "lib/utils";
-import { MagicFont } from "app/(views)/home/query/query-input";
+import { MagicFont } from "components/tarot-session/query/query-input";
 
 export default function Header() {
   const { data: session, status, update } = useSession() as any;
@@ -76,8 +76,8 @@ export default function Header() {
       {!isScrolled && (
         <>
           <div className="flex w-full items-center justify-between">
-            <Link href="/" className="mr-2 hidden hover:no-underline md:block">
-              <h3 className={cn("mt-0 font-sans text-lg text-foreground", MagicFont.className)}>{appConfig.appName}</h3>
+            <Link href="/" className="mr-2 hover:no-underline">
+              <h3 className={cn("mt-0 text-lg text-foreground", MagicFont.className)}>{appConfig.appName}</h3>
             </Link>
             {status !== "loading" && (
               <div className="flex items-center">
