@@ -76,35 +76,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       <div key={"cardslide"} className="relative inset-0 flex h-full items-center justify-center space-x-2">
         {currentSlideCards?.length > 0 &&
           currentSlideCards.map((card: CardInReading) => {
-            let cardWithImage:
-              | {
-                  cardName: string;
-                  imageUrl: string;
-                  suit: string;
-                  detail: {
-                    oneSentenceSummary: string;
-                    paragraphSummary: string;
-                    roleDescription: string;
-                    readingTips: string;
-                    uprightGuidance: string;
-                    reversedGuidance: string;
-                    crystal?: undefined;
-                  };
-                }
-              | {
-                  cardName: string;
-                  imageUrl: string;
-                  suit: string;
-                  detail: {
-                    oneSentenceSummary: string;
-                    paragraphSummary: string;
-                    roleDescription: string;
-                    readingTips: string;
-                    uprightGuidance: string;
-                    reversedGuidance: string;
-                    crystal: string;
-                  };
-                };
+            let cardWithImage;
             if (selectedDeck.value === "custom") {
               cardWithImage = deckCardsMapping[selectedDeck.value].find(
                 (fullCard) => fullCard.cardName === card.cardName
@@ -114,7 +86,9 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
               <div
                 key={card.cardName}
                 // eslint-disable-next-line tailwindcss/no-custom-classname
-                className={`max-w-[${100 / cards.length}%] flex h-full w-full flex-col items-center py-4 text-center`}
+                className={`max-w-[${
+                  100 / cards.length
+                }%] flex h-full w-full flex-col items-center justify-center py-4 text-center`}
               >
                 <div className="mb-2 w-full">
                   <p className="my-0">{card.cardName}</p>
