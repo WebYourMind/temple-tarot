@@ -120,7 +120,9 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
                 {buttonText} <SendIcon className="ml-2" />
               </Button>
 
-              {!query && <p className="mb-0 mt-2 text-sm">(press start for an open reading)</p>}
+              {!query && (
+                <p className="mb-0 mt-2 text-sm">(press {isFollowUp ? "follow-up" : "start"} for an open reading)</p>
+              )}
             </div>
           ) : (
             !showFreeReading &&
