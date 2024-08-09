@@ -6,7 +6,6 @@ import { cn } from "lib/utils";
 import Markdown from "react-markdown";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 
-// Define the types for props if using TypeScript
 interface Card {
   cardName: string;
   orientation: string;

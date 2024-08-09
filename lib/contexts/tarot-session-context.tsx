@@ -33,7 +33,7 @@ interface TarotSessionContextProps {
   query: string;
   phase: "question" | "spread" | "cards" | "reading";
   selectedCards: CardInReading[] | null;
-  selectedDeck: { promptName: string; value: string };
+  selectedDeck: { promptName: string; value: string; name: string };
   spread: SpreadType;
   hasOwnCards: boolean;
   showInfo: boolean;
@@ -42,7 +42,7 @@ interface TarotSessionContextProps {
   setQuery: React.Dispatch<React.SetStateAction<string | null>>;
   setPhase: React.Dispatch<React.SetStateAction<"question" | "spread" | "cards" | "reading">>;
   setSelectedCards: React.Dispatch<React.SetStateAction<CardInReading[] | null>>;
-  setSelectedDeck: React.Dispatch<React.SetStateAction<{ promptName: string; value: string }>>;
+  setSelectedDeck: React.Dispatch<React.SetStateAction<{ promptName: string; value: string; name: string }>>;
   setSpread: React.Dispatch<React.SetStateAction<SpreadType>>;
   setHasOwnCards: React.Dispatch<React.SetStateAction<boolean>>;
   setShowInfo: React.Dispatch<React.SetStateAction<boolean>>;
@@ -76,6 +76,7 @@ export const useTarotSession = () => {
 const defaultDeck = {
   promptName: "Toth 2.0 deck (see card definitions for interpretations)",
   value: "custom",
+  name: "Toth 2.0 Deck",
 };
 
 export const TarotSessionProvider: React.FC<{
@@ -114,7 +115,7 @@ export const TarotSessionProvider: React.FC<{
   useEffect(() => {
     const storedDeck = localStorage.getItem("selectedDeck");
     if (storedDeck) {
-      setSelectedDeck(JSON.parse(storedDeck) as { value: string; promptName: string });
+      setSelectedDeck(JSON.parse(storedDeck) as { value: string; promptName: string; name: string });
     }
   }, []);
 
@@ -227,8 +228,6 @@ export const TarotSessionProvider: React.FC<{
     followUpContext,
     handleCreateTarotSession,
   };
-
-  console.log(value);
 
   return <TarotSessionContext.Provider value={value}>{children}</TarotSessionContext.Provider>;
 };
