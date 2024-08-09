@@ -159,7 +159,7 @@ export const FollowUpReadingInput = () => {
   return (
     <QueryInput
       placeholder="What do you seek to clarify or explore further?"
-      infoType="followup-query"
+      infoType="query"
       buttonText="FOLLOW UP"
       handleSubmitQuery={handleSubmitFollowUpQuestion}
       isFollowUp={true}
