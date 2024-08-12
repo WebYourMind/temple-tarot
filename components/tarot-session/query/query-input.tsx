@@ -70,16 +70,6 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
           )}
           <TarotPreferences drawCards={drawCards} />
         </div>
-        {/* <div>
-          <div
-            onClick={() => setShowSettings(true)}
-            className={cn("mx-auto w-fit text-center text-xs", MagicFont.className)}
-          >
-            <p>{spread.name}</p>
-            <p>{selectedDeck.name}</p>
-            <p>{hasOwnCards ? "Physical Cards" : "Digital Cards"}</p>
-          </div>
-        </div> */}
       </div>
       <div className={cn("w-full", MagicFont.className)}>
         <div className="flex h-full flex-col justify-center">
