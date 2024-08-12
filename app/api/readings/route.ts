@@ -6,6 +6,7 @@ import { Reading } from "lib/database/readings.database";
 import { sql } from "@vercel/postgres";
 import {
   countTarotSessionsByUserId,
+  deleteTarotSession,
   getTarotSessionById,
   getTarotSessionsByUserId,
 } from "lib/database/tarotSessions.database";
@@ -40,14 +41,12 @@ export async function GET(request: NextRequest) {
 
   try {
     if (readingId) {
-      console.log(readingId);
       const tarotSession = await getTarotSessionById(readingId);
       if (!tarotSession) {
         return NextResponse.json({ error: "Reading not found" }, { status: 404 });
       }
       // @ts-ignore
       if (tarotSession.userId == userSessionId) {
-        console.log(tarotSession);
         // const cards = await getCardsByReadingId(tarotSession.);
         return NextResponse.json(tarotSession, { status: 200 });
       } else {
@@ -87,8 +86,8 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { readingId } = (await request.json()) as { readingId: string };
-    if (!readingId) {
+    const { tarotSessionId } = (await request.json()) as { tarotSessionId: string };
+    if (!tarotSessionId) {
       return NextResponse.json({ error: "Reading ID must be provided" }, { status: 400 });
     }
 
@@ -99,7 +98,7 @@ export async function DELETE(request: NextRequest) {
     // await deleteCardsByReadingId(readingId);
 
     // Delete the reading
-    const deletionResult = await deleteReading(readingId);
+    const deletionResult = await deleteTarotSession(tarotSessionId);
     if (!deletionResult) {
       await sql`ROLLBACK`;
       return NextResponse.json({ error: "Failed to delete reading" }, { status: 404 });

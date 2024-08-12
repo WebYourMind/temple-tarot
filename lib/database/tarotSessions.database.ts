@@ -159,7 +159,7 @@ export const getTarotSessionsByUserId = async (
       LEFT JOIN readings r ON ts.id = r.tarot_session_id
       LEFT JOIN cards_in_readings c ON r.id = c.reading_id
       WHERE ts.user_id = ${userId}
-      ORDER BY ts.created_at DESC, r.created_at DESC, c.position ASC
+      ORDER BY ts.created_at DESC, r.created_at ASC, c.position ASC
       LIMIT ${limit} OFFSET ${offset};
     `;
 
@@ -233,10 +233,34 @@ export const countTarotSessionsByUserId = async (userId: string): Promise<number
 // Delete a tarot session
 export const deleteTarotSession = async (id: string): Promise<QueryResult> => {
   try {
-    return await sql`
+    // Start a transaction to ensure all deletions are handled together
+    await sql`BEGIN`;
+
+    // Delete associated cards first
+    await sql`
+      DELETE FROM cards_in_readings
+      WHERE reading_id IN (
+        SELECT id FROM readings WHERE tarot_session_id = ${id}
+      );
+    `;
+
+    // Delete associated readings
+    await sql`
+      DELETE FROM readings WHERE tarot_session_id = ${id};
+    `;
+
+    // Delete the tarot session
+    const result = await sql`
       DELETE FROM tarot_sessions WHERE id = ${id};
     `;
+
+    // Commit the transaction
+    await sql`COMMIT`;
+
+    return result;
   } catch (error) {
+    // Rollback the transaction if there's an error
+    await sql`ROLLBACK`;
     console.error("Failed to delete tarot session:", error);
     throw error;
   }
