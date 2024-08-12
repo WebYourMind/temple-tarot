@@ -10,6 +10,7 @@ import { CardInReading } from "lib/database/cardsInReadings.database";
 import { TarotSession } from "lib/database/tarotSessions.database";
 import { createTarotSession } from "app/actions/createTarotSession";
 import { useRouter } from "next/navigation";
+import TarotBack from "app/tarot-back.jpg";
 
 export type SpreadType = {
   numberOfCards: number;
@@ -110,6 +111,12 @@ export const TarotSessionProvider: React.FC<{
   const [aiResponse, setAiResponse] = useState<any>();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    // preload card back for card selection step
+    const img = new Image();
+    img.src = TarotBack.src;
+  }, []);
 
   // Load selected deck from localStorage on component mount
   useEffect(() => {
