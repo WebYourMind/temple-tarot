@@ -140,7 +140,9 @@ export const TarotSessionProvider: React.FC<{
       setPhase("cards");
       setInfoContent(infoMap["cards"]);
     } else {
-      // setPhase("reading");
+      setPhase("reading");
+
+      handleCreateTarotSession();
 
       // analytics
       track("Reading", { spread: spread.value, userId: session?.user?.id });

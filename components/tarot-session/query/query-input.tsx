@@ -1,6 +1,6 @@
 import { Button, buttonVariants } from "components/ui/button";
 import { Textarea } from "components/ui/textarea";
-import { useState, memo } from "react";
+import { useState, memo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { useUserAccessPlan } from "app/(ai-payments)/(frontend)/contexts/user-access-plan-context";
@@ -20,12 +20,20 @@ import SpreadSelector from "./spread-selector";
 export const MagicFont = Quicksand({ subsets: ["latin"], weight: "400" });
 
 const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFollowUp }) => {
-  const { query, setQuery, selectedCards, selectedDeck, spread, hasOwnCards } = useTarotSession();
+  const { query, setQuery, selectedCards, selectedDeck, spread, hasOwnCards, setHasOwnCards, setSelectedCards } =
+    useTarotSession();
   const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed, isLoading } = useUserAccessPlan();
   const router = useRouter();
   const [drawCards, setDrawCards] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [showCardInput, setShowCardInput] = useState(false);
+
+  useEffect(() => {
+    setHasOwnCards(showCardInput);
+    if (!showCardInput) {
+      setSelectedCards(null);
+    }
+  }, [showCardInput]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,7 +41,9 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
     handleSubmitQuery(drawCards);
   };
 
-  const isSubmitDisabled = selectedCards?.some((selection) => selection.cardName === "") || (!query && !drawCards);
+  const isSubmitDisabled =
+    (showCardInput && selectedCards?.some((selection) => selection.cardName === "")) || (!query && !drawCards);
+  console.log({ isSubmitDisabled });
   const showFreeReading = !isSubscribed && (!passExpiry || new Date(passExpiry) < new Date()) && freeReadings > 0;
 
   const handleFocus = (event) => {
