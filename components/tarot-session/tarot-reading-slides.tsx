@@ -251,11 +251,11 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
   return (
     <div
       className={cn(
-        "relative mx-auto flex h-full w-full max-w-2xl grow flex-col justify-between p-4 text-center font-sans fade-in md:max-w-2xl",
+        "relative mx-auto flex h-full w-full max-w-2xl grow flex-col justify-between text-center font-sans fade-in md:max-w-2xl",
         MagicFont.className
       )}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-4">
         {/* <h1 className="my-0 text-xs">Temple Tarot</h1> */}
         <LogoComponent />
         <Button variant="ghost" size="icon" onClick={handleClose} className="-mr-3 rounded-full">
@@ -274,7 +274,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
         {slides.map((renderSlide) => renderSlide())}
       </SwipeableViews>
       <CardInfo card={focusedCard} open={open} onOpenChange={() => setOpen(!open)} />
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-4">
         <Button variant="ghost" size="icon" onClick={prevSlide} disabled={currentIndex === 0}>
           <ArrowLeft />
         </Button>

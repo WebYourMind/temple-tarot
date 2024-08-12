@@ -37,8 +37,8 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
   };
 
   return (
-    <div className="mx-auto flex h-full max-w-3xl grow flex-col items-center justify-between space-y-4 md:mt-10 md:justify-normal">
-      <div className="flex h-full w-full flex-col justify-between">
+    <div className="mx-auto flex h-full w-full max-w-lg flex-col items-center justify-between space-y-4 px-2 md:mt-10 md:justify-center">
+      <div className="flex h-full w-full flex-col justify-between space-y-4 md:justify-center">
         <div className="flex w-full items-center justify-end">
           <InfoButton type={infoType} className="mr-0 p-0" />
         </div>

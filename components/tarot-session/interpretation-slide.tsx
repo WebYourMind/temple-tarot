@@ -27,8 +27,8 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
   const [focusedCard, setFocusedCard] = useState<any>(null);
 
   return (
-    <div className="flex h-full w-full flex-col text-center">
-      <div className="absolute bottom-0 top-0 w-full overflow-scroll py-4">
+    <div className="relative flex h-full w-full flex-col text-center">
+      <div className="absolute bottom-0 top-0 w-full overflow-scroll p-4">
         {query && <p className="mb-8 mr-1 text-left font-bold italic">{query || "Open Reading"}</p>}
         <div className="flex w-full justify-around space-x-4">
           {cards?.length > 0 &&
