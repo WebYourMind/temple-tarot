@@ -41,13 +41,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log(tarotSession.readings);
-  //   if (tarotSession?.readings && currentIndex !== 0) {
-  //     setCurrentIndex(tarotSession.readings.length * 2 - 1);
-  //   }
-  // }, [tarotSession?.readings]);
-
   function handleClose() {
     router.back();
   }
@@ -55,20 +48,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
   function handleNewReading() {
     router.push("/");
   }
-
-  // let cards = [];
-
-  // if (selectedDeck.value === "custom") {
-  //   // get the selected deck from reading?
-  //   interpretation.forEach((slide) => {
-  //     if (slide.cardName) {
-  //       cards.push({
-  //         ...deckCardsMapping[selectedDeck.value].find((card) => card.cardName === slide.cardName),
-  //         orientation: slide.orientation,
-  //       });
-  //     }
-  //   });
-  // }
 
   function renderCardSlide(currentSlideCards) {
     return (
@@ -140,7 +119,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       return [
         ...tarotSession.readings.flatMap((currentReading, index) => {
           if (currentReading.cards && currentReading.cards.length > 0) {
-            console.log(currentReading);
             return [() => renderCardSlide(currentReading.cards), () => renderInterpretationSlide(currentReading)];
           }
           return [() => renderInterpretationSlide(currentReading)];

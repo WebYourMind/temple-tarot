@@ -64,7 +64,6 @@ function Reading({ tarotSessionId }: ReadingProps) {
   const { setInterpretationArray, setAiResponse, setQuery, phase, selectedCards } = useTarotSession();
 
   useEffect(() => {
-    console.log(phase);
     if (session?.user?.id && tarotSessionId != tarotSession?.id && phase !== "reading") {
       fetchReading(tarotSessionId);
     }
@@ -92,7 +91,7 @@ function Reading({ tarotSessionId }: ReadingProps) {
 
   if (loading || !tarotSession) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
-  console.log(tarotSession);
+
   return <TarotReadingSlides tarotSessionId={tarotSessionId} />;
 }
 

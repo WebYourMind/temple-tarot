@@ -66,7 +66,6 @@ export async function POST(req: Request) {
   const { cards, userQuery, spread, content, tarotSessionId, followUpContext } = json as Reading &
     CardInReading & { content: string; tarotSessionId?: string; followUpContext?: TarotSession };
   const session = await getSession();
-  console.log("route.ts", tarotSessionId);
 
   if (!session?.user || !session.user.id) {
     return new Response("Unauthorized", { status: 401 });
@@ -113,10 +112,6 @@ export async function POST(req: Request) {
   }
 
   messages.push({ role: "user", content });
-
-  messages.forEach((msg) => {
-    console.log(msg.content);
-  });
 
   try {
     const openAiRes = await openai.createChatCompletion({

@@ -16,7 +16,6 @@ export const addReadingToTarotSession = async (
 ): Promise<void> => {
   try {
     await sql`BEGIN`;
-    console.log("db.ts", tarotSessionId);
     if (!tarotSessionId) {
       const { rows: sessionRows } = await sql`
       INSERT INTO tarot_sessions (user_id)

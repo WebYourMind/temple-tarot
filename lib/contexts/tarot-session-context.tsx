@@ -87,15 +87,7 @@ export const TarotSessionProvider: React.FC<{
   onResponseComplete?: (reading: Reading) => void;
   followUpContext?: TarotSession;
   isPropped?: boolean;
-}> = ({
-  children,
-  isFollowUp: isFollowUpProp = false,
-  tarotSessionId = null,
-  onResponseComplete,
-  followUpContext,
-  isPropped,
-}) => {
-  console.log("context.tsx", tarotSessionId);
+}> = ({ children, isFollowUp: isFollowUpProp = false, tarotSessionId = null, onResponseComplete, followUpContext }) => {
   const [query, setQuery] = useState<string>("");
   const [showInfo, setShowInfo] = useState(false);
   const [infoContent, setInfoContent] = useState(infoMap["question"]);
@@ -161,7 +153,6 @@ export const TarotSessionProvider: React.FC<{
 
   function handleSubmitFollowUpQuestion(drawCards: boolean) {
     if (!drawCards) {
-      console.log("phase now reading");
       setPhase("reading");
     } else if (!hasOwnCards) {
       // or no cards
@@ -179,7 +170,6 @@ export const TarotSessionProvider: React.FC<{
   }
 
   function handleReset() {
-    console.log("*******************reset state");
     setPhase("question");
     setSelectedCards(null);
     setQuery("");

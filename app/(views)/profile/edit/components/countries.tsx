@@ -99,7 +99,6 @@ const CountryDropdown = ({ disabled, countryValue = "", setCountryValue }: Count
                       key={country.id}
                       value={country.name}
                       onSelect={(currentValue) => {
-                        console.log(currentValue);
                         setCountryValue(currentValue);
                         setOpenCountryDropdown(false);
                       }}

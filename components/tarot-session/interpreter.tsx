@@ -75,7 +75,6 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
             if (Array.isArray(intArray)) {
               setInterpretationArray(intArray);
             } else {
-              console.log(aiResponse);
               setAiResponse(interpretationValue);
             }
           }
@@ -107,7 +106,6 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   // calls generate reading on mount if there's selected cards and no exisisting aiResponse
   useEffect(() => {
     if (onResponseComplete) {
-      console.log({ query, selectedCards, spread, selectedDeck, isFollowUp });
       const reading = {
         aiInterpretation: aiResponse,
         cards: selectedCards,
@@ -116,8 +114,6 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
       };
       onResponseComplete(reading);
     } else if (selectedCards && !aiResponse) {
-      console.log(selectedDeck);
-      console.log(customDeck[0]);
       const cardDescriptions = selectedCards
         .map(
           (card, index) =>
@@ -145,18 +141,12 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   }, [query, selectedCards, spread]);
 
   if (isFollowUp && (interpretationArray || aiResponse)) {
-    console.log("is follow up");
     return <InterpretationSlide cards={selectedCards} selectedDeck={selectedDeck} aiResponse={aiResponse} />;
   }
 
   if (interpretationArray || aiResponse) {
-    console.log("not follow up");
     return <TarotReadingSlides tarotSessionId={tarotSessionId} />;
   }
-  console.log(selectedCards);
-  // if (!selectedCards) {
-  //   router.replace("/");
-  // }
 
   return <ReadingLoading cards={selectedCards} deckType={selectedDeck.value} />;
 }
