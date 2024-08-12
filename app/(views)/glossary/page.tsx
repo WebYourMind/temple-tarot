@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { customDeck } from "../../../lib/tarot-data/tarot-deck";
 import CardInfo from "./card-info";
+import { cn } from "lib/utils";
+import { MagicFont } from "components/tarot-session/query/query-input";
 
 const suits = ["Major Arcana", "Air", "Water", "Earth", "Fire"];
 
@@ -32,7 +34,7 @@ export default function Page() {
   let prevCardsLength = 0;
 
   return (
-    <div className="relative mx-auto p-4 md:max-w-6xl">
+    <div className={cn("relative mx-auto p-4 md:max-w-6xl", MagicFont.className)}>
       <h1 className="my-8">Toth 2.0 Glossary</h1>
       {suits.map((suit) => {
         const suitCards = customDeck.filter((card) => card.suit === suit);

@@ -16,15 +16,15 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { useReadingsContext } from "lib/contexts/readings-context";
 
 type ReadingItemProps = {
-  readingId: string;
+  tarotSessionId: string;
 };
 
-function ReadingItemMenu({ readingId }: ReadingItemProps) {
-  const { setReadings, readings } = useReadingsContext();
+function ReadingItemMenu({ tarotSessionId }: ReadingItemProps) {
+  const { setTarotSessions, tarotSessions } = useReadingsContext();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const handleDeleteSuccess = () => {
     setDeleteOpen(false);
-    setReadings(readings.filter((reading) => reading.id !== readingId));
+    setTarotSessions(tarotSessions.filter((tarotSession) => tarotSession.id !== tarotSessionId));
   };
   return (
     <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
@@ -41,7 +41,7 @@ function ReadingItemMenu({ readingId }: ReadingItemProps) {
         </DropdownMenuContent>
       </DropdownMenu>
       <DialogPortal>
-        <DeleteReading readingId={readingId} handleDeleteSuccess={handleDeleteSuccess} />
+        <DeleteReading tarotSessionId={tarotSessionId} handleDeleteSuccess={handleDeleteSuccess} />
       </DialogPortal>
     </Dialog>
   );

@@ -5,17 +5,21 @@ import { useTarotSession } from "lib/contexts/tarot-session-context";
 const ordinalLabels = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"];
 
 const CardSelectionWrapper = () => {
-  const { spreadType, query, setSelectedCards, selectedCards, setPhase } = useTarotSession();
+  const { spread, query, setSelectedCards, selectedCards, setPhase, handleCreateTarotSession, isFollowUp } =
+    useTarotSession();
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleCardSelect = (card) => {
     const newSelectedCards = [...(selectedCards || []), card];
     setSelectedCards(newSelectedCards);
 
-    if (currentStep < spreadType.numberOfCards - 1) {
+    if (currentStep < spread.numberOfCards - 1) {
       setCurrentStep(currentStep + 1);
     } else {
       setPhase("reading");
+      if (!isFollowUp) {
+        handleCreateTarotSession();
+      }
     }
   };
 
@@ -23,7 +27,7 @@ const CardSelectionWrapper = () => {
 
   return (
     <div className="max-h-screen">
-      {spreadType.numberOfCards > 1 && <p className="text-center text-xs uppercase">{cardOrdinal} card</p>}
+      {spread.numberOfCards > 1 && <p className="text-center text-xs uppercase">{cardOrdinal} card</p>}
       <CardSelection onSelect={handleCardSelect} query={query} currentStep={currentStep} />
     </div>
   );

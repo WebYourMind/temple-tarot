@@ -1,14 +1,15 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
+import Logo from "app/logo.png";
 
 import { Button } from "components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "components/ui/sheet";
-import Logo from "app/logo.png";
-import Image from "next/image";
 import { MenuIcon } from "lucide-react";
 import { cn } from "lib/utils";
-import { MagicFont } from "app/(views)/home/query/query-input";
+import { MagicFont } from "components/tarot-session/query/query-input";
+import LogoComponent from "./logo-component";
 
 export interface SidebarProps {
   children?: React.ReactNode;
@@ -27,8 +28,7 @@ export function Sidebar({ children }: SidebarProps) {
         <SheetContent className="inset-y-0 flex h-auto w-[300px] flex-col bg-white/20 p-0 text-foreground backdrop-blur-md">
           <SheetHeader className="mb-4 p-4">
             <SheetTitle className={cn("text-2xl tracking-wider", MagicFont.className)}>
-              {/* {appConfig.appName} */}
-              <Image src={Logo} width={200} height={100} alt="Temple Tarot" />
+              <LogoComponent />
             </SheetTitle>
           </SheetHeader>
           {children}

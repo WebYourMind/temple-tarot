@@ -96,12 +96,29 @@ CREATE TABLE credit_events (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE tarot_sessions (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   user_id INTEGER REFERENCES users(id),
-  markdown_preview TEXT
 );
 
 ALTER TABLE readings
-ADD COLUMN tarot_session_id INTEGER REFERENCES tarot_sessions(id);
+ADD COLUMN tarot_session_id UUID REFERENCES tarot_sessions(id);
+
+DO $$
+DECLARE
+    reading RECORD;
+BEGIN
+    FOR reading IN SELECT * FROM readings LOOP
+        INSERT INTO tarot_sessions (user_id, created_at)
+        VALUES (reading.user_id, reading.created_at)
+        RETURNING id INTO reading.tarot_session_id;
+
+        UPDATE readings
+        SET tarot_session_id = reading.tarot_session_id
+        WHERE id = reading.id;
+    END LOOP;
+END $$;
+

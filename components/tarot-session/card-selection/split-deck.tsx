@@ -5,6 +5,7 @@ import TarotCard from "./tarot-card";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "lib/utils";
 import { InfoButton } from "components/info-dialog";
+import { MagicFont } from "../query/query-input";
 
 function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
   const [selectedSide, setSelectedSide] = useState(null);
@@ -31,21 +32,29 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
       setTimeout(() => {
         handleSelectHalf(side);
         setSelectedSide(null);
-      }, 700);
+      }, 200);
     }
   };
   const isMobile = window.innerWidth <= 768;
 
   return (
     <>
-      <p className={cn("mb-8 max-w-xs text-center font-sans text-xl md:mb-10")}>
-        Where is your card?
-        <InfoButton type="cards" />
-      </p>
+      <div className={cn("max-w-xs text-center font-sans", MagicFont.className)}>
+        <div className="flex justify-between">
+          <InfoButton type="cards" className="opacity-0" />
+          <p className="text-xl">The deck has been split.</p>
+          <InfoButton type="cards" />
+        </div>
+        <p className={cn("my-0 max-w-xs text-center font-sans text-sm md:mb-10")}>
+          Feel into which stack has the card meant for you and select it.
+        </p>
+      </div>
       <div
-        className={`flex w-full grow justify-between space-x-4 px-4 transition-opacity duration-700 md:w-auto md:space-x-16 ${
+        className={cn(
+          "flex w-full grow justify-between space-x-4 px-4 transition-opacity duration-700 md:w-auto md:space-x-16",
+          MagicFont.className,
           allLoaded ? "opacity-100" : "opacity-0"
-        }`}
+        )}
       >
         {["left", "right"].map((side) => (
           <div
@@ -98,12 +107,8 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
                 );
               })}
             </button>
-            <p className={cn("my-0 text-center font-sans md:mt-5")}>
-              {side.charAt(0).toUpperCase() + side.slice(1)} Half
-            </p>
-            <p className={cn("my-0 text-center font-sans")}>
-              {side === "left" ? leftDeck.length : rightDeck.length} Cards
-            </p>
+            <p className={cn("my-0 text-center md:mt-5")}>{side.charAt(0).toUpperCase() + side.slice(1)} Half</p>
+            <p className={cn("my-0 text-center")}>{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
           </div>
         ))}
       </div>

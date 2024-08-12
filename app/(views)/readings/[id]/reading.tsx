@@ -2,7 +2,7 @@
 
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import FeedbackButtons from "app/(views)/interpretation/reading-feedback";
-import TarotReadingSlides from "app/(views)/interpretation/tarot-reading-slides";
+import TarotReadingSlides from "components/tarot-session/tarot-reading-slides";
 import Loading from "components/loading";
 import { Button } from "components/ui/button";
 import { useReadingsContext } from "lib/contexts/readings-context";
@@ -13,9 +13,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
+import Interpreter from "components/tarot-session/interpreter";
 
 type ReadingProps = {
-  readingId: string;
+  tarotSessionId: string;
 };
 
 export function ReadingTemplate({ reading }) {
@@ -57,38 +58,41 @@ export function ReadingTemplate({ reading }) {
   );
 }
 
-function Reading({ readingId }: ReadingProps) {
+function Reading({ tarotSessionId }: ReadingProps) {
   const { data: session, status } = useSession() as any;
-  const { reading, loading, error, fetchReading } = useReadingsContext();
-  const { setInterpretationArray, setInterpretationString } = useTarotSession();
-  const { setQuery } = useTarotSession();
+  const { tarotSession, loading, error, fetchReading } = useReadingsContext();
+  const { setInterpretationArray, setAiResponse, setQuery, phase, selectedCards } = useTarotSession();
 
   useEffect(() => {
-    if (session?.user?.id && readingId != reading?.id) {
-      fetchReading(readingId);
+    if (session?.user?.id && tarotSessionId != tarotSession?.id && phase !== "reading") {
+      fetchReading(tarotSessionId);
     }
-  }, [status]);
+  }, [status, phase]);
 
   useEffect(() => {
-    if (reading) {
-      if (reading.userQuery) setQuery(reading.userQuery);
-      const parsedInterpretation = parseJsonSafe(reading.aiInterpretation) as { content: string }[];
+    if (tarotSession && tarotSession?.readings.length > 0) {
+      if (tarotSession.readings[0].userQuery) setQuery(tarotSession.readings[0].userQuery);
+      const parsedInterpretation = parseJsonSafe(tarotSession.readings[0].aiInterpretation) as { content: string }[];
       if (Array.isArray(parsedInterpretation) && parsedInterpretation.length > 0) {
         setInterpretationArray(parsedInterpretation);
       } else {
-        setInterpretationString(reading.aiInterpretation);
+        setAiResponse(tarotSession.readings[0].aiInterpretation);
       }
     }
 
     return () => {
       setQuery("");
     };
-  }, [reading]);
+  }, [tarotSession]);
 
-  if (loading || !reading) return <Loading />;
+  if (phase === "reading" && selectedCards) {
+    return <Interpreter tarotSessionId={tarotSessionId} />;
+  }
+
+  if (loading || !tarotSession) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;
 
-  return <TarotReadingSlides cards={reading.cards} />;
+  return <TarotReadingSlides tarotSessionId={tarotSessionId} />;
 }
 
 export default Reading;

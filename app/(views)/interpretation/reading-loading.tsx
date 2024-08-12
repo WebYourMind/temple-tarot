@@ -1,11 +1,14 @@
 "use client";
 
+import Loading from "components/loading";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { cn } from "lib/utils";
 import Image from "next/image";
 import "styles/cards.css";
 
 function ReadingLoading({ cards, deckType }) {
+  if (!cards) return <Loading />;
+
   return (
     <div className="flex h-full grow flex-col items-center justify-center space-y-10">
       <div className="flex flex-wrap justify-center gap-4">

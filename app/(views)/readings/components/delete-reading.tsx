@@ -5,10 +5,10 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function DeleteReading({
-  readingId,
+  tarotSessionId,
   handleDeleteSuccess,
 }: {
-  readingId: string;
+  tarotSessionId: string;
   handleDeleteSuccess: () => void;
 }) {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -21,7 +21,7 @@ export default function DeleteReading({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ readingId }),
+        body: JSON.stringify({ tarotSessionId }),
       });
 
       const data = (await res.json()) as { message: string; error: string };

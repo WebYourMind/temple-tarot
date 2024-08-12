@@ -16,7 +16,7 @@
     --color-secondary-foreground: #ffffff;
     --color-muted: #a7a7a7;
     --color-muted-foreground: #7b7b7b;
-    --color-accent: #f8f4ed;
+    --color-accent: #f8eaf6;
     --color-accent-foreground: #333333;
     --color-destructive: #e63946;
     --color-destructive-foreground: #ffffff;
@@ -80,16 +80,22 @@
   min-height: -webkit-fill-available;
 }
 
+@media (display-mode: standalone) {
+  .h-fill {
+    min-height: 100vh;
+  }
+}
+
 h1 {
-  @apply mt-4 text-4xl font-bold;
+  @apply mt-4 text-4xl;
 }
 
 h2 {
-  @apply mt-4 text-3xl font-bold;
+  @apply mt-4 text-3xl;
 }
 
 h3 {
-  @apply mt-2 text-xl font-bold;
+  @apply mt-2 text-xl;
 }
 
 p {

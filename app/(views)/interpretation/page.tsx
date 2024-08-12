@@ -3,7 +3,7 @@ import appConfig from "app.config";
 import dynamic from "next/dynamic";
 import Loading from "components/loading";
 
-const Interpreter = dynamic(() => import("./interpreter"), {
+const Interpreter = dynamic(() => import("../../../components/tarot-session/interpreter"), {
   loading: () => <Loading />,
   ssr: false,
 });

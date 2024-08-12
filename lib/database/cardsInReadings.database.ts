@@ -7,6 +7,11 @@ export interface CardInReading {
   cardName: string;
   orientation: string;
   position: number;
+  imageUrl?: string;
+  detail?: {};
+  readingTips?: string;
+  uprightGuidance?: string;
+  reversedGuidance?: string;
 }
 
 // Function to add a new card in a reading

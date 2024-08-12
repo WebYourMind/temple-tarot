@@ -19,7 +19,7 @@ export async function rateLimitReached(userId) {
 
   if (!is_subscribed && !isPassValid) return true;
 
-  const maxRequests = 22; // is_subscribed && subscription_status === "active" ? 22 : 22; // 1;
+  const maxRequests = 111; // is_subscribed && subscription_status === "active" ? 22 : 22; // 1;
 
   try {
     const { rows } = await sql`

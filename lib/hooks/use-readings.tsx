@@ -1,12 +1,13 @@
 import { CardInReading } from "lib/database/cardsInReadings.database";
 import { Reading } from "lib/database/readings.database";
+import { TarotSession } from "lib/database/tarotSessions.database";
 import { keysToCamel } from "lib/utils";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 export function useReadings() {
-  const [readings, setReadings] = useState<Reading[]>([]);
-  const [reading, setReading] = useState<Reading>();
+  const [tarotSessions, setTarotSessions] = useState<TarotSession[]>([]);
+  const [tarotSession, setTarotSession] = useState<TarotSession>();
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -17,7 +18,7 @@ export function useReadings() {
       const response = await fetch(`/api/readings/?userId=${userId}&page=${page}&limit=${limit}`);
       const data = (await response.json()) as any;
 
-      setReadings(keysToCamel(data.readings)); // Assume the response contains an array under 'readings'
+      setTarotSessions(keysToCamel(data.readings)); // Assume the response contains an array under 'readings'
       setTotalPages(data.totalPages);
       setLoading(false);
     } catch (err) {
@@ -33,7 +34,7 @@ export function useReadings() {
       const response = await fetch(`/api/readings/?readingId=${id}`);
       const data = (await response.json()) as any;
       if (response.ok) {
-        setReading(keysToCamel(data)); // Assume the response contains an array under 'readings'
+        setTarotSession(keysToCamel(data)); // Assume the response contains an array under 'readings'
       } else {
         toast.error(data.error.message);
       }
@@ -45,13 +46,13 @@ export function useReadings() {
     }
   };
 
-  const addReading = async (reading: Reading, cards: CardInReading[]) => {
+  const addReading = async (reading: Reading, cards: CardInReading[], tarotSessionId?: string) => {
     setLoading(true);
     try {
       const response = await fetch("/api/readings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reading, cards }),
+        body: JSON.stringify({ reading, cards, tarotSessionId }),
       });
       const data = await response.json();
       setLoading(false);
@@ -102,10 +103,10 @@ export function useReadings() {
     addReading,
     updateReading,
     deleteReading,
-    readings,
-    reading,
-    setReadings,
-    setReading,
+    tarotSessions,
+    tarotSession,
+    setTarotSessions,
+    setTarotSession,
     totalPages,
   };
 }
