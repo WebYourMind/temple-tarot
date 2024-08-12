@@ -141,7 +141,9 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   }, [query, selectedCards, spread]);
 
   if (isFollowUp && (interpretationArray || aiResponse)) {
-    return <InterpretationSlide cards={selectedCards} selectedDeck={selectedDeck} aiResponse={aiResponse} />;
+    return (
+      <InterpretationSlide query={query} cards={selectedCards} selectedDeck={selectedDeck} aiResponse={aiResponse} />
+    );
   }
 
   if (interpretationArray || aiResponse) {

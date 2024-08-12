@@ -58,7 +58,7 @@ The tone should be positive, encouraging, and empowering, providing deep insight
 Your response should be consumer-facing, suitable for publication, and free of placeholders.
 Remain grounded and avoid being overly theatrical.
 Do not list the provided data at the beginning of your response, as it will already be displayed in the UI.
-Now, provide an engaging response with subtle markdown formatting and emojis where appropriate.
+Now, provide an engaging response with subtle markdown formatting and emojis where appropriate. Ensure the response is concise and succinct.
 `;
 
 export async function POST(req: Request) {

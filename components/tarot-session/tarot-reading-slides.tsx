@@ -109,7 +109,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
         }
         return (
           <InterpretationSlide
-            query={query}
+            query={currentReading.userQuery}
             cards={currentReading.cards}
             selectedDeck={selectedDeck}
             aiResponse={currentReading.aiInterpretation}
