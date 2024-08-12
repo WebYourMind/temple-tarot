@@ -91,7 +91,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
               </div>
               <div className="my-4 flex w-full items-center justify-between space-x-2">
                 <Label htmlFor="draw-cards-switch" className={cn("text-sm", MagicFont.className)}>
-                  {showCardInput ? "Using a physical deck" : "Using a digital deck"}
+                  I have a physical deck
                 </Label>
                 <Switch
                   id="draw-cards-switch"
