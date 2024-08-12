@@ -80,6 +80,12 @@
   min-height: -webkit-fill-available;
 }
 
+@media (display-mode: standalone) {
+  .h-fill {
+    min-height: 100vh;
+  }
+}
+
 h1 {
   @apply mt-4 text-4xl;
 }
