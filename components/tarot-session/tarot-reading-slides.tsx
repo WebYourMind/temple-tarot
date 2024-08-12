@@ -118,7 +118,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
   }
 
   function getInterpretationSlides() {
-    console.log(tarotSession);
     if (tarotSession?.readings) {
       const renderInterpretationSlide = (currentReading: Reading) => {
         if (!currentReading.aiInterpretation) {
@@ -165,7 +164,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
         }),
       ];
     }
-    console.log(aiResponse);
     if (aiResponse && cards) {
       return [
         () => renderCardSlide(cards),
@@ -196,8 +194,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
   }
 
   function handleDeeperComplete(newReading: Reading) {
-    console.log({ newReading });
-    console.log({ tarotSession });
     if (tarotSession) {
       setTarotSession({ ...tarotSession, readings: [...tarotSession?.readings, newReading] });
     } else {
@@ -218,7 +214,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
 
   function renderGoDeeperSlide() {
     // card selection like followupreadinginput
-    console.log("slides.tsx", tarotSessionId);
     return (
       <div className="h-full w-full" key={"godeeper"}>
         <TarotSessionProvider
@@ -256,7 +251,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
   return (
     <div
       className={cn(
-        "relative mx-auto flex h-full w-full max-w-2xl grow flex-col justify-between p-4 text-center font-sans fade-in md:max-w-lg",
+        "relative mx-auto flex h-full w-full max-w-2xl grow flex-col justify-between p-4 text-center font-sans fade-in md:max-w-2xl",
         MagicFont.className
       )}
     >

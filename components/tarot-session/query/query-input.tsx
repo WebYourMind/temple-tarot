@@ -1,6 +1,6 @@
-import { Button, buttonVariants } from "components/ui/button";
+import { Button } from "components/ui/button";
 import { Textarea } from "components/ui/textarea";
-import { useState, memo, useEffect } from "react";
+import { useState, memo } from "react";
 import { useRouter } from "next/navigation";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { useUserAccessPlan } from "app/(ai-payments)/(frontend)/contexts/user-access-plan-context";
@@ -13,37 +13,23 @@ import { SendIcon } from "lucide-react";
 import { cn } from "lib/utils";
 import { Switch } from "components/ui/switch";
 import { Label } from "components/ui/label";
-import CardInput from "./card-input";
-import DeckSelector from "./deck-selector";
-import SpreadSelector from "./spread-selector";
+import TarotPreferences from "./tarot-preferences";
 
 export const MagicFont = Quicksand({ subsets: ["latin"], weight: "400" });
 
 const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFollowUp }) => {
-  const { query, setQuery, selectedCards, selectedDeck, spread, hasOwnCards, setHasOwnCards, setSelectedCards } =
-    useTarotSession();
+  const { query, setQuery, selectedCards, hasOwnCards } = useTarotSession();
   const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed, isLoading } = useUserAccessPlan();
   const router = useRouter();
   const [drawCards, setDrawCards] = useState(true);
-  const [showSettings, setShowSettings] = useState(false);
-  const [showCardInput, setShowCardInput] = useState(false);
-
-  useEffect(() => {
-    setHasOwnCards(showCardInput);
-    if (!showCardInput) {
-      setSelectedCards(null);
-    }
-  }, [showCardInput]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(drawCards);
     handleSubmitQuery(drawCards);
   };
 
   const isSubmitDisabled =
-    (showCardInput && selectedCards?.some((selection) => selection.cardName === "")) || (!query && !drawCards);
-  console.log({ isSubmitDisabled });
+    (hasOwnCards && selectedCards?.some((selection) => selection.cardName === "")) || (!query && !drawCards);
   const showFreeReading = !isSubscribed && (!passExpiry || new Date(passExpiry) < new Date()) && freeReadings > 0;
 
   const handleFocus = (event) => {
@@ -51,11 +37,11 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
   };
 
   return (
-    <div className="mx-auto mb-10 flex h-full max-w-3xl grow flex-col items-center justify-between space-y-4 pb-10 md:mt-10 md:justify-normal">
-      <div className="flex w-full items-center justify-end">
-        <InfoButton type={infoType} className="mr-0 p-0" />
-      </div>
+    <div className="mx-auto flex h-full max-w-3xl grow flex-col items-center justify-between space-y-4 md:mt-10 md:justify-normal">
       <div className="flex h-full w-full flex-col justify-between">
+        <div className="flex w-full items-center justify-end">
+          <InfoButton type={infoType} className="mr-0 p-0" />
+        </div>
         <div>
           <Textarea
             id="question"
@@ -75,33 +61,14 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
         </div>
         <div className="flex flex-col items-center justify-center">
           {isFollowUp && (
-            <div className="my-4 flex w-full items-center justify-between space-x-2">
+            <div className="my-4 flex w-full items-center justify-between space-x-2 px-1">
               <Label htmlFor="draw-cards-switch" className={cn("text-sm", MagicFont.className)}>
-                {drawCards ? "Drawing new cards" : "Asking without drawing new cards"}
+                Draw new cards
               </Label>
               <Switch id="draw-cards-switch" checked={drawCards} onCheckedChange={(checked) => setDrawCards(checked)} />
             </div>
           )}
-          {drawCards && (
-            <>
-              <DeckSelector />
-              <div className="flex w-full">
-                <SpreadSelector />
-                <InfoButton type="spread" />
-              </div>
-              <div className="my-4 flex w-full items-center justify-between space-x-2">
-                <Label htmlFor="draw-cards-switch" className={cn("text-sm", MagicFont.className)}>
-                  I have a physical deck
-                </Label>
-                <Switch
-                  id="draw-cards-switch"
-                  checked={showCardInput}
-                  onCheckedChange={(checked) => setShowCardInput(checked)}
-                />
-              </div>
-              {showCardInput && <CardInput />}
-            </>
-          )}
+          <TarotPreferences drawCards={drawCards} />
         </div>
         {/* <div>
           <div
@@ -115,7 +82,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
         </div> */}
       </div>
       <div className={cn("w-full", MagicFont.className)}>
-        <div className="flex flex-col justify-center">
+        <div className="flex h-full flex-col justify-center">
           {showFreeReading && (
             <div className="mb-2 mt-0 space-y-0 text-center text-sm text-primary md:text-base">
               <p className="mb-0">
@@ -125,13 +92,13 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
             </div>
           )}
           {hasAccess ? (
-            <div className="flex w-full flex-col items-center">
+            <div className="mb-4 flex h-full w-full flex-col items-center">
               <Button onClick={handleSubmit} variant={"outline"} disabled={isSubmitDisabled || !hasAccess}>
                 {buttonText} <SendIcon className="ml-2" />
               </Button>
 
-              {!query && (
-                <p className="mb-0 mt-2 text-sm">(press {isFollowUp ? "follow-up" : "start"} for an open reading)</p>
+              {!query && !isSubmitDisabled && (
+                <p className="mt-2 text-sm">(press {isFollowUp ? "follow-up" : "start"} for an open reading)</p>
               )}
             </div>
           ) : (
