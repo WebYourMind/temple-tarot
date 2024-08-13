@@ -14,7 +14,7 @@ const description = appConfig.description;
 export const metadata: Metadata = {
   title,
   description,
-  icons: ["./icons/16.png"],
+  icons: [".favicon.ico"],
   openGraph: {
     title,
     description,
