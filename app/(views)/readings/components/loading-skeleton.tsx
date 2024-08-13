@@ -10,8 +10,8 @@ const SVGSkeleton = ({ className }) => <svg className={className + " animate-pul
 const LoadingSkeleton = () => (
   <>
     <div className="my-8 grid max-w-4xl grid-cols-1 gap-8 md:my-20 md:grid-cols-3 lg:grid-cols-3">
-      {Array.from(Array(9).keys()).map(() => (
-        <div className="w-full pt-6">
+      {Array.from(Array(9).keys()).map((v, i) => (
+        <div className="w-full pt-6" key={i.toString()}>
           <div className="flex items-center justify-between">
             <p className="mb-1">
               <Skeleton className="w-[120px] max-w-full" />
