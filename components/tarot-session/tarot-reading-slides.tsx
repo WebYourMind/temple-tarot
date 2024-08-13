@@ -195,7 +195,20 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
     return (
       <div className="h-full w-full" key={"godeeper"}>
         <TarotSessionProvider
-          followUpContext={tarotSession}
+          followUpContext={
+            tarotSession || {
+              id: tarotSessionId,
+              userId: "",
+              createdAt: new Date(),
+              readings: [
+                {
+                  aiInterpretation: aiResponse,
+                  cards: selectedCards,
+                  userQuery: query,
+                },
+              ],
+            }
+          }
           isFollowUp
           tarotSessionId={tarotSessionId}
           onResponseComplete={handleDeeperComplete}
@@ -207,7 +220,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
   }
 
   let slides = [...getInterpretationSlides(), goDeeper ? renderGoDeeperSlide : renderFeedbackSlide];
-  // if (goDeeper) slides.push(renderGoDeeperSlide);
 
   const nextSlide = () => {
     if (currentIndex < slides.length) {
@@ -222,7 +234,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
   };
 
   function handleGoDeeper() {
-    // setIsFollowUp(true);
     setGoDeeper(true);
   }
 

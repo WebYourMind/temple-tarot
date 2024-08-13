@@ -21,7 +21,13 @@ const config = withPlugins(
   {
     reactStrictMode: false,
     images: {
-      domains: ["ekxb0zdvbkmwks1n.public.blob.vercel-storage.com"],
+      remotePatterns: [
+        {
+          protocol: "https",
+          hostname: "ekxb0zdvbkmwks1n.public.blob.vercel-storage.com",
+          port: "",
+        },
+      ],
     },
     experimental: { instrumentationHook: true, missingSuspenseWithCSRBailout: false },
     output: "standalone",

@@ -10,7 +10,7 @@ import { CardInReading } from "lib/database/cardsInReadings.database";
 import { TarotSession } from "lib/database/tarotSessions.database";
 import { createTarotSession } from "app/actions/createTarotSession";
 import { useRouter } from "next/navigation";
-import TarotBack from "app/tarot-back.jpg";
+import TarotBack from "app/tarot-back.webp";
 
 export type SpreadType = {
   numberOfCards: number;

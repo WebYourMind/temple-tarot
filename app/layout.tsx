@@ -14,7 +14,7 @@ const description = appConfig.description;
 export const metadata: Metadata = {
   title,
   description,
-  icons: ["./favicon.ico"],
+  icons: [".favicon.ico"],
   openGraph: {
     title,
     description,
@@ -33,6 +33,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   width: "device-width",
+  viewportFit: "cover",
   initialScale: 1,
   maximumScale: 1,
   minimumScale: 1,
