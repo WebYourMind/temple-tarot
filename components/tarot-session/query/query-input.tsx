@@ -37,8 +37,13 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
   };
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-lg flex-col items-center justify-between space-y-4 px-4 md:mt-10 md:justify-center">
-      <div className="flex h-full w-full flex-col justify-between space-y-4 md:justify-center">
+    <div
+      className={cn(
+        "mx-auto flex h-full w-full max-w-lg flex-col items-center justify-start space-y-4 px-4 md:mt-10 md:justify-center",
+        isFollowUp && "min-h-screen"
+      )}
+    >
+      <div className="flex w-full flex-col justify-start space-y-4 md:justify-center">
         <div className="flex w-full items-center justify-end">
           <InfoButton type={infoType} className="mr-0 p-0" />
         </div>
@@ -88,6 +93,9 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
               </Button>
 
               {!query && !isSubmitDisabled && (
+                <p className="mt-2 text-sm">(press {isFollowUp ? "follow-up" : "start"} for an open reading)</p>
+              )}
+              {!query && !drawCards && (
                 <p className="mt-2 text-sm">(press {isFollowUp ? "follow-up" : "start"} for an open reading)</p>
               )}
             </div>

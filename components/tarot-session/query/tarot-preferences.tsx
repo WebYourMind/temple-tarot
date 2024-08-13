@@ -22,7 +22,7 @@ function TarotPreferences({ drawCards }) {
     }
   }, [showCardInput]);
   return (
-    <div className={cn("h-full w-full px-1", drawCards ? "opacity-100" : "pointer-events-none opacity-0")}>
+    <div className={cn("h-full w-full px-1", drawCards ? "opacity-100" : "pointer-events-none h-0 opacity-0")}>
       <DeckSelector />
       <div className="flex w-full">
         <SpreadSelector />
