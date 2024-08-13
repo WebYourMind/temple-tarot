@@ -14,17 +14,11 @@ import { customDeck } from "lib/tarot-data/tarot-deck";
 function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   const defaultSession = useTarotSession();
 
-  const { query, selectedCards, spread, selectedDeck, isFollowUp } = proppedTarotSession || defaultSession;
+  const { query, selectedCards, spread, selectedDeck, isFollowUp, followUpContext } =
+    proppedTarotSession || defaultSession;
 
-  const {
-    interpretationArray,
-    setInterpretationArray,
-    setPhase,
-    aiResponse,
-    setAiResponse,
-    onResponseComplete,
-    followUpContext,
-  } = defaultSession;
+  const { interpretationArray, setInterpretationArray, setPhase, aiResponse, setAiResponse, onResponseComplete } =
+    defaultSession;
   const router = useRouter();
   const [isComplete, setIsComplete] = useState(false);
 
@@ -110,26 +104,27 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
         aiInterpretation: aiResponse,
         cards: selectedCards,
         userQuery: query,
-        proppedTarotSession: { query, selectedCards, spread, selectedDeck, isFollowUp },
+        proppedTarotSession: { query, selectedCards, spread, selectedDeck, isFollowUp, followUpContext },
       };
       onResponseComplete(reading);
     } else if (selectedCards && !aiResponse) {
       const cardDescriptions = selectedCards
         .map(
           (card, index) =>
-            `Position: ${index + 1}, position meaning: ${spread.cardMeanings[index]} \nCard drawn for this position: "${
+            `\nPosition: ${index + 1}, position meaning: ${spread.cardMeanings[index]} Card name: "${
               card.cardName
-            }" (${card.orientation}) ${
-              selectedDeck.value === "custom" &&
-              `\nCard definition: ${card.detail.readingTips} Upright guidance: ${card.detail.uprightGuidance} Reversed guidance: ${card.detail.reversedGuidance}`
-            }\n\n`
+            }", orientation:(${card.orientation}) ${
+              selectedDeck.value === "custom"
+                ? `\nCard definition: ${card.detail.readingTips} Upright guidance: ${card.detail.uprightGuidance} Reversed guidance: ${card.detail.reversedGuidance}`
+                : "."
+            }`
         )
         .join(", ");
 
-      const content = `Query: ${query || "Open Reading"}
-      Chosen Tarot Deck: ${selectedDeck.promptName}
-      Chosen spread: ${spread.name}
-      Cards drawn with their positions in the spread: ${cardDescriptions}`;
+      const content = `${query || "Open Reading"}
+      Please use this Tarot Deck: ${selectedDeck.promptName}
+      Please use this spread: ${spread.name}
+      The cards I pulled with their positions in the spread are: ${cardDescriptions}`;
 
       generateReading(content);
     } else if (isFollowUp && !aiResponse) {
