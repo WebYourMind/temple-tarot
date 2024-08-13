@@ -39,8 +39,8 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
   return (
     <div
       className={cn(
-        "mx-auto flex h-full w-full max-w-lg flex-col items-center justify-start space-y-4 px-4 md:mt-10 md:justify-center",
-        isFollowUp && "min-h-screen"
+        "mx-auto flex h-full w-full max-w-lg grow flex-col items-center justify-between space-y-4 px-4 md:mt-10 md:justify-center"
+        // isFollowUp && "min-h-screen"
       )}
     >
       <div className="flex w-full flex-col justify-start space-y-4 md:justify-center">
@@ -53,7 +53,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
             name="question"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={placeholder}
+            placeholder={placeholder + (!query && !drawCards ? "*" : "")}
             maxLength={5000}
             rows={4}
             onFocus={handleFocus}
@@ -64,6 +64,8 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
             )}
           />
         </div>
+      </div>
+      <div className={cn("w-full", MagicFont.className)}>
         <div className="flex flex-col items-center justify-center">
           {isFollowUp && (
             <div className="my-4 flex w-full items-center justify-between space-x-2 px-1">
@@ -75,9 +77,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
           )}
           <TarotPreferences drawCards={drawCards} />
         </div>
-      </div>
-      <div className={cn("w-full", MagicFont.className)}>
-        <div className="flex h-full flex-col justify-center">
+        <div className="flex flex-col justify-center">
           {showFreeReading && (
             <div className="mb-2 mt-0 space-y-0 text-center text-sm text-primary md:text-base">
               <p className="mb-0">
@@ -93,9 +93,6 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
               </Button>
 
               {!query && !isSubmitDisabled && (
-                <p className="mt-2 text-sm">(press {isFollowUp ? "follow-up" : "start"} for an open reading)</p>
-              )}
-              {!query && !drawCards && (
                 <p className="mt-2 text-sm">(press {isFollowUp ? "follow-up" : "start"} for an open reading)</p>
               )}
             </div>
