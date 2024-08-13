@@ -143,22 +143,30 @@ export const getTarotSessionById = async (id: string): Promise<TarotSession | nu
 export const getTarotSessionsByUserId = async (
   userId: number,
   page: number = 1,
-  limit: number = 10
+  limit: number = 9
 ): Promise<TarotSession[]> => {
   const offset = (page - 1) * limit;
 
   try {
-    // Fetch sessions, readings, and cards in a single query with multiple joins
+    // Fetch sessions with the first reading and its associated cards
     const { rows: sessionData } = await sql`
+      WITH first_readings AS (
+        SELECT DISTINCT ON (r.tarot_session_id) 
+          r.id AS reading_id, r.tarot_session_id, r.user_query, r.spread_type, 
+          r.ai_interpretation, r.created_at AS reading_created_at
+        FROM readings r
+        WHERE r.user_id = ${userId}
+        ORDER BY r.tarot_session_id, r.created_at ASC
+      )
       SELECT 
         ts.id AS session_id, ts.user_id AS session_user_id, ts.created_at AS session_created_at,
-        r.id AS reading_id, r.user_query, r.spread_type, r.ai_interpretation, r.created_at AS reading_created_at,
+        fr.reading_id, fr.user_query, fr.spread_type, fr.ai_interpretation, fr.reading_created_at,
         c.id AS card_id, c.card_name, c.orientation, c.position
       FROM tarot_sessions ts
-      LEFT JOIN readings r ON ts.id = r.tarot_session_id
-      LEFT JOIN cards_in_readings c ON r.id = c.reading_id
+      LEFT JOIN first_readings fr ON ts.id = fr.tarot_session_id
+      LEFT JOIN cards_in_readings c ON fr.reading_id = c.reading_id
       WHERE ts.user_id = ${userId}
-      ORDER BY ts.created_at DESC, r.created_at ASC, c.position ASC
+      ORDER BY ts.created_at DESC, fr.reading_created_at ASC, c.position ASC
       LIMIT ${limit} OFFSET ${offset};
     `;
 
@@ -166,9 +174,8 @@ export const getTarotSessionsByUserId = async (
       return [];
     }
 
-    // Initialize maps to hold sessions and their readings
+    // Initialize map to hold sessions and their first reading
     const sessionsMap = new Map<number, TarotSession>();
-    const readingsMap = new Map<number, Reading>();
 
     // Populate sessions and readings
     sessionData.forEach((row) => {
@@ -182,30 +189,31 @@ export const getTarotSessionsByUserId = async (
         });
       }
 
-      // Initialize reading if not already in the map
-      if (row.reading_id && !readingsMap.has(row.reading_id)) {
-        const newReading = {
+      // Add the first reading to the session if it hasn't been added yet
+      const session = sessionsMap.get(row.session_id);
+      if (session && session.readings.length === 0 && row.reading_id) {
+        session.readings.push({
           id: row.reading_id,
           userId: row.session_user_id,
           userQuery: row.user_query,
-          spreadType: row.spread_type,
+          spread: row.spread_type,
           aiInterpretation: row.ai_interpretation,
           createdAt: row.reading_created_at,
           cards: [],
-        };
-
-        readingsMap.set(row.reading_id, newReading);
-        sessionsMap.get(row.session_id)?.readings.push(newReading);
+        });
       }
 
-      // Add card to the corresponding reading
+      // Add card to the corresponding first reading
       if (row.card_id) {
-        readingsMap.get(row.reading_id)?.cards.push({
-          id: row.card_id,
-          cardName: row.card_name,
-          orientation: row.orientation,
-          position: row.position,
-        });
+        const reading = session?.readings[0];
+        if (reading) {
+          reading.cards.push({
+            id: row.card_id,
+            cardName: row.card_name,
+            orientation: row.orientation,
+            position: row.position,
+          });
+        }
       }
     });
 

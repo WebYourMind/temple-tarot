@@ -37,16 +37,10 @@ function ReadingsList() {
 
   useEffect(() => {
     if (session?.user?.id) {
-      fetchReadings(session.user.id, page, 12);
+      fetchReadings(session.user.id, page, 9);
     }
   }, [session?.user?.id, page]);
 
-  if (loading && tarotSessions?.length === 0)
-    return (
-      <div className="my-16 md:my-20">
-        <LoadingSkeleton />
-      </div>
-    );
   if (error) return <div>Error: {error.message}</div>;
 
   if ((!tarotSessions || tarotSessions?.length === 0) && !loading) {
@@ -64,21 +58,27 @@ function ReadingsList() {
   return (
     <>
       <h1 className={cn("mb-8 font-sans text-3xl", MagicFont.className)}>Past Readings</h1>
-      <div
-        className={cn(
-          "my-8 grid max-w-4xl grid-cols-1 gap-8 divide-y-2 divide-dotted md:my-20 md:grid-cols-3 md:divide-y-0 lg:grid-cols-3"
-        )}
-      >
-        {tarotSessions &&
-          tarotSessions.map(
-            (reading) => reading.readings.length > 0 && <ReadingItem key={reading.id} tarotSession={reading} />
-          )}
-      </div>
-      <div className="my-16">
-        {totalPages > 1 && (
-          <PaginationComponent pages={pages} page={page} totalPages={totalPages} onPaginate={handlePageChange} />
-        )}
-      </div>
+
+      {loading && tarotSessions?.length === 0 && <LoadingSkeleton />}
+      {tarotSessions && (
+        <>
+          <div
+            className={cn(
+              "my-8 grid max-w-4xl grid-cols-1 gap-8 divide-y-2 divide-dotted md:my-20 md:grid-cols-3 md:divide-y-0 lg:grid-cols-3"
+            )}
+          >
+            {tarotSessions.map(
+              (reading) => reading.readings.length > 0 && <ReadingItem key={reading.id} tarotSession={reading} />
+            )}
+          </div>
+
+          <div className="my-16">
+            {totalPages > 1 && (
+              <PaginationComponent pages={pages} page={page} totalPages={totalPages} onPaginate={handlePageChange} />
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 }

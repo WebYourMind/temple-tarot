@@ -9,8 +9,9 @@ import { infoMap } from "lib/tarot-data/info";
 import { cn } from "lib/utils";
 import { Info } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { MagicFont } from "./tarot-session/query/query-input";
 
-export const InfoButton = ({ type, className = "" }) => {
+export const InfoButton = ({ type, className = "", children = "" }) => {
   const { setShowInfo, setInfoContent } = useTarotSession();
 
   function handleInfoClick() {
@@ -19,7 +20,11 @@ export const InfoButton = ({ type, className = "" }) => {
   }
 
   return (
-    <DialogTrigger className={cn("ml-2 opacity-70", className)} onClick={() => handleInfoClick()}>
+    <DialogTrigger
+      className={cn("ml-2 flex space-x-2 opacity-70", MagicFont.className, className)}
+      onClick={() => handleInfoClick()}
+    >
+      <span className="hidden md:block">{children}</span>
       <Info />
     </DialogTrigger>
   );

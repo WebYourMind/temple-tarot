@@ -25,8 +25,8 @@ function PaginationComponent({ pages, page, totalPages, onPaginate }) {
               <Button
                 onClick={() => onPaginate(p)}
                 // isActive={page === p}
-                variant={page === p ? "secondary" : "outline"}
-                className={page === p ? "active" : ""}
+                // variant={page === p ? "secondary" : "outline"}
+                className={page === p ? "border-2 border-primary text-primary" : ""}
               >
                 {p}
               </Button>

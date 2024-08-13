@@ -39,13 +39,15 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
   return (
     <div
       className={cn(
-        "mx-auto flex h-full w-full max-w-lg grow flex-col items-center justify-between space-y-4 px-4 md:mt-10 md:justify-center"
+        "mx-auto flex h-full w-full max-w-lg grow flex-col items-center justify-between space-y-4 px-4 md:justify-center"
         // isFollowUp && "min-h-screen"
       )}
     >
-      <div className="flex w-full flex-col justify-start space-y-4 md:justify-center">
-        <div className="flex w-full items-center justify-end">
-          <InfoButton type={infoType} className="mr-0 p-0" />
+      <div className="flex w-full flex-col justify-start space-y-4 md:mb-10 md:justify-center">
+        <div className="flex w-full items-center justify-end text-sm text-opacity-50">
+          <InfoButton type={infoType} className="mr-2 p-0">
+            More info
+          </InfoButton>
         </div>
         <div>
           <Textarea
@@ -59,13 +61,13 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
             onFocus={handleFocus}
             autoFocus
             className={cn(
-              `mt-0 h-full border-0 bg-transparent bg-opacity-30 px-0 pb-0 pt-0 font-sans text-3xl font-bold leading-relaxed tracking-wider caret-primary placeholder:opacity-60 focus-visible:ring-offset-0 md:h-44 md:border md:px-2 md:text-xl`,
+              `mt-0 h-full border-0 bg-transparent bg-opacity-30 px-0 pb-0 pt-0 font-sans text-3xl font-bold leading-relaxed tracking-wider caret-primary placeholder:opacity-60 focus-visible:ring-offset-0 md:h-44 md:border md:p-2 md:text-xl`,
               MagicFont.className
             )}
           />
         </div>
       </div>
-      <div className={cn("w-full", MagicFont.className)}>
+      <div className={cn("w-full md:max-w-xs", MagicFont.className)}>
         <div className="flex flex-col items-center justify-center">
           {isFollowUp && (
             <div className="my-4 flex w-full items-center justify-between space-x-2 px-1">

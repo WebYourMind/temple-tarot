@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
   const readingId = searchParams.get("readingId");
   const userId = searchParams.get("userId");
   const page = parseInt(searchParams.get("page") || "1", 10); // Default to page 1 if not specified
-  const limit = parseInt(searchParams.get("limit") || "10", 10); // Default to 10 items per page if not specified
+  const limit = parseInt(searchParams.get("limit") || "9", 10); // Default to p items per page if not specified
   const userSessionId = (await getSession())?.user.id;
 
   try {
