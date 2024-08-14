@@ -35,10 +35,14 @@ const CardSelectionWrapper = () => {
 
   const cardOrdinal = ordinalLabels[currentStep] || (currentStep + 1).toString(); // Fallback to numbers if out of predefined range
 
+  function handleClose() {
+    handleReset(isFollowUp);
+  }
+
   return (
     <div className="flex max-h-screen flex-col">
       <div className="w-full px-2">
-        <Button variant="ghost" size="icon" onClick={handleReset} className="float-right rounded-full">
+        <Button variant="ghost" size="icon" onClick={handleClose} className="float-right rounded-full">
           <IconClose />
         </Button>
       </div>
