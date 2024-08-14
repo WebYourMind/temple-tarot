@@ -50,7 +50,7 @@ interface TarotSessionContextProps {
   setInfoContent: React.Dispatch<React.SetStateAction<string>>;
   setSpreadPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleSubmitQuestion: () => void;
-  handleReset: () => void;
+  handleReset: (keepFollowUp?: boolean) => void;
   setInterpretationArray: React.Dispatch<React.SetStateAction<any>>;
   interpretationArray: any[];
   setAiResponse: React.Dispatch<React.SetStateAction<any>>;
