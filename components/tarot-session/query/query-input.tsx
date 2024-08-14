@@ -45,7 +45,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
   return (
     <div
       className={cn(
-        "p-pwa mx-auto flex h-full w-full max-w-lg grow flex-col items-center justify-between space-y-4 px-4 md:justify-center",
+        "p-pwa mx-auto flex h-full w-full max-w-lg grow flex-col items-center justify-between space-y-4 px-3 md:justify-center",
         isFollowUp && "min-h-fill"
       )}
     >

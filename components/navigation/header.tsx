@@ -42,7 +42,7 @@ export default function Header() {
   };
 
   return (
-    <header className={cn("z-50 flex w-full shrink-0 items-center justify-between px-4 py-4")}>
+    <header className={cn("z-50 flex w-full shrink-0 items-center justify-between p-3")}>
       <>
         <div className="flex w-full items-center justify-between">
           <Link href="/" className="mr-2 hover:no-underline">

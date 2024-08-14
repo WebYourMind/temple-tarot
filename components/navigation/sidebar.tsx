@@ -20,7 +20,7 @@ export function Sidebar({ children }: SidebarProps) {
     <div>
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="-ml-2 h-9 w-9 p-0">
+          <Button variant="ghost" size="icon" className="h-9 w-9 p-0">
             <MenuIcon className="h-6 w-6" />
             <span className="sr-only">Toggle Sidebar</span>
           </Button>

@@ -40,7 +40,7 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
   return (
     <>
       <div className={cn("max-w-xs text-center font-sans", MagicFont.className)}>
-        <div className="flex justify-between">
+        <div className="flex items-center justify-center px-1">
           <InfoButton type="cards" className="opacity-0" />
           <p className="text-xl">The deck has been split.</p>
           <InfoButton type="cards" />

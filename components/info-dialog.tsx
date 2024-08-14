@@ -21,7 +21,7 @@ export const InfoButton = ({ type, className = "", children = "" }) => {
 
   return (
     <DialogTrigger
-      className={cn("ml-2 flex space-x-2 opacity-70", MagicFont.className, className)}
+      className={cn("ml-1 flex space-x-2 opacity-70", MagicFont.className, className)}
       onClick={() => handleInfoClick()}
     >
       <span className="hidden md:block">{children}</span>
