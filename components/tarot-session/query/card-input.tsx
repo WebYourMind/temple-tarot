@@ -54,7 +54,7 @@ const CardInput = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full border-t p-4">
       {cardSelections.map((selection, index) => (
         <div key={index} className="mb-4">
           <Label className="mb-2">Card {index + 1}</Label>
@@ -82,7 +82,7 @@ const CardInput = () => {
             </SelectContent>
           </Select>
 
-          <div className="mt-4 flex items-center">
+          <div className="mb-6 mt-2 flex w-full items-center ">
             <Label className="mr-2">Upright</Label>
             <Switch
               checked={selection.orientation === "reversed"}
