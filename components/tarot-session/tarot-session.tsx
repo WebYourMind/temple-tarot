@@ -7,9 +7,11 @@ import CardSelectionWrapper from "./card-selection/card-selection-wrapper";
 import Interpreter from "./interpreter";
 import { FollowUpReadingInput, NewReadingInput } from "./query/query-input";
 import { useEffect, useState } from "react";
+import Loading from "components/loading";
 
 export default function TarotSession() {
-  const { phase, selectedCards, showInfo, setShowInfo, infoContent, isFollowUp, tarotSessionId } = useTarotSession();
+  const { phase, selectedCards, showInfo, setShowInfo, infoContent, isFollowUp, tarotSessionId, isPending } =
+    useTarotSession();
   const [showInterpreter, setShowInterpreter] = useState(false);
 
   useEffect(() => {
@@ -17,6 +19,8 @@ export default function TarotSession() {
       setShowInterpreter(true);
     }
   }, [phase, isFollowUp, selectedCards]);
+
+  if (isPending) return <Loading />;
 
   return (
     <Dialog open={showInfo} onOpenChange={() => setShowInfo(!showInfo)}>

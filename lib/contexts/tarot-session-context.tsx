@@ -62,6 +62,7 @@ interface TarotSessionContextProps {
   onResponseComplete?: (reading: Reading) => void;
   followUpContext?: TarotSession;
   handleCreateTarotSession: () => void;
+  isPending: boolean;
 }
 
 const TarotSessionContext = createContext<TarotSessionContextProps | undefined>(undefined);
@@ -226,6 +227,7 @@ export const TarotSessionProvider: React.FC<{
     onResponseComplete,
     followUpContext,
     handleCreateTarotSession,
+    isPending,
   };
 
   return <TarotSessionContext.Provider value={value}>{children}</TarotSessionContext.Provider>;
