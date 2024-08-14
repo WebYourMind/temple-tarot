@@ -22,6 +22,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
   const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed, isLoading } = useUserAccessPlan();
   const router = useRouter();
   const [drawCards, setDrawCards] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,13 +35,18 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
 
   const handleFocus = (event) => {
     event.target.scrollIntoView({ behavior: "smooth", block: "center" });
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
   };
 
   return (
     <div
       className={cn(
-        "mx-auto flex h-full w-full max-w-lg grow flex-col items-center justify-between space-y-4 px-4 md:justify-center"
-        // isFollowUp && "min-h-screen"
+        "mx-auto flex h-full w-full max-w-lg grow flex-col items-center justify-between space-y-4 px-4 md:justify-center",
+        isFollowUp && "min-h-fill"
       )}
     >
       <div className="flex w-full flex-col justify-start space-y-4 md:mb-10 md:justify-center">
@@ -49,7 +55,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
             More info
           </InfoButton>
         </div>
-        <div>
+        <div className="relative">
           <Textarea
             id="question"
             name="question"
@@ -58,13 +64,19 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
             placeholder={placeholder + (!query && !drawCards ? "*" : "")}
             maxLength={5000}
             rows={4}
-            onFocus={handleFocus}
             autoFocus
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             className={cn(
-              `mt-0 h-full border-0 bg-transparent bg-opacity-30 px-0 pb-0 pt-0 font-sans text-3xl font-bold leading-relaxed tracking-wider caret-primary placeholder:opacity-60 focus-visible:ring-offset-0 md:h-44 md:border md:p-2 md:text-xl`,
+              `caret mt-0 h-full border-0 bg-transparent bg-opacity-30 px-1 pb-0 pt-0 font-sans text-3xl font-bold leading-relaxed tracking-wider caret-primary placeholder:opacity-60 focus-visible:ring-offset-0 md:h-44 md:border md:p-2 md:text-xl`,
               MagicFont.className
             )}
           />
+          {!isFocused && !query && (
+            <span className="caret-blink absolute -top-2 left-0 font-sans text-4xl font-thin leading-relaxed text-primary md:hidden">
+              |
+            </span>
+          )}
         </div>
       </div>
       <div className={cn("w-full md:max-w-xs", MagicFont.className)}>
