@@ -83,12 +83,12 @@ const CardInput = () => {
           </Select>
 
           <div className="mt-4 flex items-center">
-            <Label className="mr-2">Reversed</Label>
+            <Label className="ml-2">Upright</Label>
             <Switch
               checked={selection.orientation === "reversed"}
               onCheckedChange={() => handleOrientationChange(index)}
             />
-            <Label className="ml-2">Upright</Label>
+            <Label className="mr-2">Reversed</Label>
           </div>
         </div>
       ))}
