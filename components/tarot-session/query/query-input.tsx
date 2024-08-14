@@ -102,8 +102,13 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
           )}
           {hasAccess ? (
             <div className="mb-4 flex h-full w-full flex-col items-center">
-              <Button onClick={handleSubmit} variant={"outline"} disabled={isSubmitDisabled || !hasAccess}>
-                {buttonText} <SendIcon className="ml-2" />
+              <Button
+                onClick={handleSubmit}
+                variant={"outline"}
+                className={cn("border-2 px-8")}
+                disabled={isSubmitDisabled || !hasAccess}
+              >
+                {buttonText}
               </Button>
 
               {!query && !isSubmitDisabled && (

@@ -159,7 +159,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
   function renderFeedbackSlide() {
     return (
       <div key={"feedback"} className="flex h-full w-full grow flex-col items-center justify-center space-y-4 px-4">
-        <Button className="w-full border-2 font-bold" onClick={handleGoDeeper}>
+        <Button className="w-full border-2" onClick={handleGoDeeper}>
           Go Deeper
         </Button>
         <Button className="w-full" onClick={handleNewReading}>
