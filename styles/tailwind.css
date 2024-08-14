@@ -80,11 +80,14 @@
   min-height: -webkit-fill-available;
 }
 
-/* @media (display-mode: standalone) {
-  .h-fill {
+@media (display-mode: standalone) {
+  /* .h-fill {
     min-height: 100vh;
+  } */
+  .p-pwa {
+    @apply pb-2;
   }
-} */
+}
 
 h1 {
   @apply mt-4 text-4xl;
