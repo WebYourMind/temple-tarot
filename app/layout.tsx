@@ -14,12 +14,33 @@ const description = appConfig.description;
 export const metadata: Metadata = {
   title,
   description,
-  icons: [".favicon.ico", "/icons/apple-touch-icon.png"],
+  icons: [
+    {
+      rel: "icon",
+      url: "/icons/favicon.ico",
+    },
+    {
+      rel: "apple-touch-icon",
+      sizes: "192x192",
+      url: "/icons/apple-touch-icon.png",
+    },
+    {
+      rel: "icon",
+      sizes: "192x192",
+      url: "/icons/android-chrome-192x192.png",
+    },
+    {
+      rel: "icon",
+      sizes: "512x512",
+      url: "/icons/android-chrome-512x512.png",
+    },
+  ],
   openGraph: {
     title,
     description,
     // images: [image],
   },
+
   manifest: "./manifest.json",
   // twitter: {
   //   card: "summary_large_image",
