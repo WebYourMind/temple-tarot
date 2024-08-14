@@ -30,7 +30,7 @@ function TarotPreferences({ drawCards }) {
       </div>
       <div className="my-4 flex w-full items-center justify-between space-x-2">
         <Label htmlFor="draw-cards-switch" className={cn("text-sm", MagicFont.className)}>
-          I have a physical deck
+          I am using a physical deck
         </Label>
         <Switch
           id="draw-cards-switch"
