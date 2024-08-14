@@ -35,8 +35,9 @@ const CardInput = () => {
     const newSelections = [...cardSelections];
 
     // if from custom deck
-    if (cardValue.cardName) {
-      newSelections[index] = { ...newSelections[index], ...cardValue };
+    if (selectedDeck.value === "custom") {
+      const fullCard = deckCardsMapping[selectedDeck.value].find((fc) => fc.cardName === cardValue);
+      newSelections[index] = { ...newSelections[index], ...fullCard };
     } else {
       newSelections[index] = { ...newSelections[index], cardName: cardValue };
     }
@@ -87,6 +88,7 @@ const CardInput = () => {
               checked={selection.orientation === "reversed"}
               onCheckedChange={() => handleOrientationChange(index)}
             />
+            <Label className="ml-2">Upright</Label>
           </div>
         </div>
       ))}
