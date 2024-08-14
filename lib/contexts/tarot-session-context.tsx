@@ -50,7 +50,7 @@ interface TarotSessionContextProps {
   setInfoContent: React.Dispatch<React.SetStateAction<string>>;
   setSpreadPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleSubmitQuestion: () => void;
-  handleReset: () => void;
+  handleReset: (keepFollowUp?: boolean) => void;
   setInterpretationArray: React.Dispatch<React.SetStateAction<any>>;
   interpretationArray: any[];
   setAiResponse: React.Dispatch<React.SetStateAction<any>>;
@@ -169,7 +169,7 @@ export const TarotSessionProvider: React.FC<{
     }
   }
 
-  function handleReset() {
+  function handleReset(keepFollowUp = false) {
     setPhase("question");
     setSelectedCards(null);
     setQuery("");
@@ -178,7 +178,7 @@ export const TarotSessionProvider: React.FC<{
     setHasOwnCards(false);
     setSelectedDeck(defaultDeck);
     setSpread(tarotSpreads[0]);
-    setIsFollowUp(false);
+    setIsFollowUp(keepFollowUp);
   }
 
   // This useEffect shows the info dialog automatically if it hasn't been seen by the user's device before.
