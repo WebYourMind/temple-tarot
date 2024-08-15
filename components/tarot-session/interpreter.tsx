@@ -10,9 +10,12 @@ import ReadingLoading from "../../app/(views)/interpretation/reading-loading";
 import TarotReadingSlides from "./tarot-reading-slides";
 import InterpretationSlide from "./interpretation-slide";
 import { customDeck } from "lib/tarot-data/tarot-deck";
+import { useUserAccessPlan } from "app/(payments)/(frontend)/contexts/user-access-plan-context";
 
 function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   const defaultSession = useTarotSession();
+  const { freeReadings, setFreeReadings } = useUserAccessPlan();
+  const [error, setError] = useState<string>();
 
   const { query, selectedCards, spread, selectedDeck, isFollowUp, followUpContext } =
     proppedTarotSession || defaultSession;
@@ -22,16 +25,11 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   const router = useRouter();
   const [isComplete, setIsComplete] = useState(false);
 
-  // useEffect(() => {
-  //   if (onResponseComplete && isComplete) {
-  //     const reading = {
-  //       aiInterpretation: aiResponse,
-  //       cards: selectedCards,
-  //       userQuery: query,
-  //     };
-  //     onResponseComplete(reading);
-  //   }
-  // }, [isComplete]);
+  useEffect(() => {
+    if (isComplete && freeReadings >= 1) {
+      setFreeReadings(freeReadings - 1);
+    }
+  }, [isComplete]);
 
   const generateReading = useCallback(async (content) => {
     let isSubscribed = true;
@@ -54,6 +52,11 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
       });
 
       if (!response.body) throw new Error("Failed to get the stream.");
+      // const data = (await response.json()) as { error?: string };
+      // if (data?.error) {
+      //   setError(data.error);
+      //   throw new Error(data.error);
+      // }
 
       const reader = response.body.getReader();
 
@@ -85,6 +88,7 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
         }
       }
     } catch (error: any) {
+      setError(error);
       if (isSubscribed) {
         console.error("Error generating reading: " + error.message);
         toast.error("Oops! Something went wrong. Please try again.");
@@ -134,6 +138,11 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
       router.replace("/");
     }
   }, [query, selectedCards, spread]);
+
+  if (error) {
+    console.log(error);
+    return <p>{error}</p>;
+  }
 
   if (isFollowUp && (interpretationArray || aiResponse)) {
     return (
