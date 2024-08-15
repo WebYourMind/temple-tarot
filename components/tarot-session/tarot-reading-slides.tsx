@@ -65,7 +65,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
                 key={card.cardName}
                 // eslint-disable-next-line tailwindcss/no-custom-classname
                 className={`max-w-[${
-                  100 / cards.length
+                  100 / currentSlideCards.length
                 }%] flex h-full w-full flex-col items-center justify-center p-2 text-center`}
               >
                 <div className={cn("mb-2 w-full", MagicFont.className)}>
@@ -84,7 +84,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
                     width={256}
                     height={384}
                     className={cn(
-                      `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : ""} h-full w-auto rounded-lg`,
+                      `mx-auto ${currentSlideCards.length > 1 ? "max-h-[20vh]" : ""} h-full w-auto rounded`,
                       card.orientation.toLowerCase() === "reversed" && "rotate-180"
                     )}
                   />
@@ -262,7 +262,11 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       >
         {slides.map((renderSlide) => renderSlide())}
       </SwipeableViews>
-      <CardInfo card={focusedCard} open={open} onOpenChange={() => setOpen(!open)} />
+      <CardInfo
+        card={focusedCard?.detail && focusedCard}
+        open={open && focusedCard?.detail}
+        onOpenChange={() => setOpen(!open)}
+      />
       <div className="flex items-center justify-between p-4">
         <Button variant="ghost" size="icon" onClick={prevSlide} disabled={currentIndex === 0}>
           <ArrowLeft />

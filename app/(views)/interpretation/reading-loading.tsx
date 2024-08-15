@@ -14,7 +14,7 @@ function ReadingLoading({ cards, deckType }) {
       <div className="flex flex-wrap justify-center gap-4">
         {cards?.map((card) => {
           let cardWithImage;
-          if (deckType === "custom") {
+          if (deckType === "custom" || deckType === "ryder_waite") {
             cardWithImage = deckCardsMapping[deckType].find((fullCard) => fullCard.cardName === card.cardName);
           }
           return (

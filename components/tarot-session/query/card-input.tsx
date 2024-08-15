@@ -35,7 +35,7 @@ const CardInput = () => {
     const newSelections = [...cardSelections];
 
     // if from custom deck
-    if (selectedDeck.value === "custom") {
+    if (selectedDeck.value === "custom" || selectedDeck.value === "ryder_waite") {
       const fullCard = deckCardsMapping[selectedDeck.value].find((fc) => fc.cardName === cardValue);
       newSelections[index] = { ...newSelections[index], ...fullCard };
     } else {

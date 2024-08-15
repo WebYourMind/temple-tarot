@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { cn } from "lib/utils";
+import { cn, findFullCardInCustomDeck } from "lib/utils";
 import Markdown from "react-markdown";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 
@@ -33,8 +33,8 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
         <div className="flex w-full justify-around space-x-4">
           {cards?.length > 0 &&
             cards.map((card) => {
-              let cardWithImage;
-              if (selectedDeck.value === "custom") {
+              let cardWithImage = findFullCardInCustomDeck(card.cardName);
+              if (selectedDeck.value === "custom" || selectedDeck.value === "ryder_waite") {
                 cardWithImage = deckCardsMapping[selectedDeck.value].find(
                   (fullCard) => fullCard.cardName === card.cardName
                 );
@@ -52,7 +52,7 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
                       width={256}
                       height={384}
                       className={cn(
-                        `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : "max-h-44"} w-auto rounded-lg`,
+                        `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : "max-h-44"} w-auto rounded`,
                         (card.orientation === "reversed" || card.orientation === "Reversed") && "rotate-180"
                       )}
                     />
