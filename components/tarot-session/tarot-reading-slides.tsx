@@ -64,7 +64,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
                 // eslint-disable-next-line tailwindcss/no-custom-classname
                 className={`max-w-[${
                   100 / currentSlideCards.length
-                }%] flex h-full w-full flex-col items-center justify-center p-2 text-center`}
+                }%] flex w-full flex-col items-center justify-center p-2 text-center`}
               >
                 <div className={cn("mb-2 w-full", MagicFont.className)}>
                   <p className="my-0">{card.cardName}</p>
@@ -82,7 +82,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
                     width={256}
                     height={384}
                     className={cn(
-                      `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : ""} h-full w-auto rounded-lg`,
+                      `mx-auto ${currentSlideCards.length > 1 ? "max-h-[20vh]" : ""} h-full w-auto rounded-lg`,
                       card.orientation.toLowerCase() === "reversed" && "rotate-180"
                     )}
                   />
