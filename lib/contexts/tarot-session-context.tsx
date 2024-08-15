@@ -62,6 +62,7 @@ interface TarotSessionContextProps {
   isFollowUp?: boolean;
   tarotSessionId?: string;
   onResponseComplete?: (reading: Reading) => void;
+  addAiResponseToReading: (aiResponse: string) => void;
   followUpContext?: TarotSession;
   handleCreateTarotSession: () => void;
   isPending: boolean;
@@ -91,7 +92,15 @@ export const TarotSessionProvider: React.FC<{
   onResponseComplete?: (reading: Reading) => void;
   followUpContext?: TarotSession;
   isPropped?: boolean;
-}> = ({ children, isFollowUp: isFollowUpProp = false, tarotSessionId = null, onResponseComplete, followUpContext }) => {
+  addAiResponseToReading?: (aiResponse: string) => void;
+}> = ({
+  children,
+  isFollowUp: isFollowUpProp = false,
+  tarotSessionId = null,
+  onResponseComplete,
+  followUpContext,
+  addAiResponseToReading,
+}) => {
   const [query, setQuery] = useState<string>("");
   const [showInfo, setShowInfo] = useState(false);
   const [infoContent, setInfoContent] = useState(infoMap["question"]);
@@ -122,7 +131,6 @@ export const TarotSessionProvider: React.FC<{
   }
 
   function storeLastUsedDeck() {
-    console.log(selectedDeck);
     localStorage.setItem("selectedDeck", JSON.stringify(selectedDeck));
   }
 
@@ -224,6 +232,7 @@ export const TarotSessionProvider: React.FC<{
     handleCreateTarotSession,
     isPending,
     storeLastUsedDeck,
+    addAiResponseToReading,
   };
 
   return <TarotSessionContext.Provider value={value}>{children}</TarotSessionContext.Provider>;

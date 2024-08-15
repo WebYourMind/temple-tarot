@@ -157,7 +157,6 @@ export function parseJsonSafe(jsonString) {
   try {
     return JSON.parse(cleanedJsonString);
   } catch (error) {
-    console.error("Invalid JSON:", error);
     return null;
   }
 }

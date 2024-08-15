@@ -51,7 +51,10 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
 
   function renderCardSlide(currentSlideCards) {
     return (
-      <div key={"cardslide"} className="relative inset-0 flex h-full items-center justify-center space-x-2">
+      <div
+        key={"cardslide" + currentSlideCards[0]?.cardName}
+        className="relative inset-0 flex h-full items-center justify-center space-x-2"
+      >
         {currentSlideCards?.length > 0 &&
           currentSlideCards.map((card: CardInReading) => {
             const cardWithImage = deckCardsMapping[selectedDeck.value].find(
@@ -94,12 +97,36 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
     );
   }
 
+  function addAiResponseToReading(newAiResponse: string) {
+    // @ts-ignore
+    setTarotSession((prevState: any) => {
+      // Copy the previous readings array
+      const updatedReadings = [...prevState.readings];
+
+      // Update the last reading's aiInterpretation
+      updatedReadings[updatedReadings.length - 1] = {
+        ...updatedReadings[updatedReadings.length - 1], // Copy the previous reading object
+        aiInterpretation: newAiResponse, // Update the aiInterpretation field
+      };
+
+      // Return the updated state
+      return {
+        ...prevState, // Copy the rest of the state
+        readings: updatedReadings, // Update the readings array
+      };
+    });
+  }
+
   function getInterpretationSlides() {
     if (tarotSession?.readings) {
       const renderInterpretationSlide = (currentReading: Reading) => {
         if (!currentReading.aiInterpretation) {
           return (
-            <TarotSessionProvider isPropped tarotSessionId={tarotSessionId}>
+            <TarotSessionProvider
+              isPropped
+              tarotSessionId={tarotSessionId}
+              addAiResponseToReading={addAiResponseToReading}
+            >
               {/* @ts-ignore */}
               <Interpreter tarotSessionId={tarotSessionId} proppedTarotSession={currentReading.proppedTarotSession} />
             </TarotSessionProvider>
