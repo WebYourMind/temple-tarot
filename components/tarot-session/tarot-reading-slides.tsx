@@ -63,7 +63,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
                 key={card.cardName}
                 // eslint-disable-next-line tailwindcss/no-custom-classname
                 className={`max-w-[${
-                  100 / cards.length
+                  100 / currentSlideCards.length
                 }%] flex h-full w-full flex-col items-center justify-center p-2 text-center`}
               >
                 <div className={cn("mb-2 w-full", MagicFont.className)}>
