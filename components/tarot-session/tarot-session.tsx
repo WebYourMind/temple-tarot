@@ -7,9 +7,20 @@ import CardSelectionWrapper from "./card-selection/card-selection-wrapper";
 import Interpreter from "./interpreter";
 import { FollowUpReadingInput, NewReadingInput } from "./query/query-input";
 import { useEffect, useState } from "react";
+import ReadingLoading from "app/(views)/interpretation/reading-loading";
 
 export default function TarotSession() {
-  const { phase, selectedCards, showInfo, setShowInfo, infoContent, isFollowUp, tarotSessionId } = useTarotSession();
+  const {
+    phase,
+    selectedCards,
+    showInfo,
+    setShowInfo,
+    infoContent,
+    isFollowUp,
+    tarotSessionId,
+    isPending,
+    selectedDeck,
+  } = useTarotSession();
   const [showInterpreter, setShowInterpreter] = useState(false);
 
   useEffect(() => {
@@ -23,6 +34,7 @@ export default function TarotSession() {
       {phase === "question" && (isFollowUp ? <FollowUpReadingInput /> : <NewReadingInput />)}
       {phase === "cards" && <CardSelectionWrapper />}
       {showInterpreter && <Interpreter tarotSessionId={tarotSessionId} />}
+      {isPending && <ReadingLoading cards={selectedCards} deckType={selectedDeck.value} />}
       <InfoDialog infoContent={infoContent} closeDialog={() => setShowInfo(false)} />
     </Dialog>
   );
