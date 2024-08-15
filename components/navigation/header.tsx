@@ -69,10 +69,10 @@ export default function Header() {
           {session?.user && (
             <div className="hidden items-center justify-end space-x-4 md:flex">
               <Link href="/glossary" className={buttonVariants({ variant: "link" })}>
-                Toth 2.0 Glossary
+                Thoth 2.0 Glossary
               </Link>
               <Link href="/pricing" className={buttonVariants({ variant: "link" })}>
-                Pricing
+                Membership
               </Link>
               <Link href="/readings" className={buttonVariants({ variant: "link" })}>
                 My Readings

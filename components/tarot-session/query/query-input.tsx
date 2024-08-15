@@ -119,9 +119,9 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
             !showFreeReading &&
             !isLoading && (
               <div className="text-center">
-                <p>Sorry, you do not have an active pass or subscription.</p>
+                <p>Sorry, you do not have an active subscription.</p>
                 <Button onClick={() => router.push("/pricing")} variant={"outline"}>
-                  Go To Pricing
+                  Subscribe
                 </Button>
               </div>
             )

@@ -35,7 +35,7 @@ export default function Page() {
 
   return (
     <div className={cn("relative mx-auto p-4 md:max-w-6xl", MagicFont.className)}>
-      <h1 className="my-8">Toth 2.0 Glossary</h1>
+      <h1 className="my-8">Thoth 2.0 Glossary</h1>
       {suits.map((suit) => {
         const suitCards = customDeck.filter((card) => card.suit === suit);
         prevCardsLength += suitCards.length;

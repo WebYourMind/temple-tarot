@@ -76,9 +76,9 @@ export const useTarotSession = () => {
 };
 
 const defaultDeck = {
-  promptName: "Toth 2.0 deck (see card definitions for interpretations)",
+  promptName: "Thoth 2.0 deck (see card definitions for interpretations)",
   value: "custom",
-  name: "Toth 2.0 Deck",
+  name: "Thoth 2.0 Deck",
 };
 
 export const TarotSessionProvider: React.FC<{

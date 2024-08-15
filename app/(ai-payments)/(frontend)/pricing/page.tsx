@@ -61,10 +61,10 @@ const Pricing: React.FC = () => {
       <div className="mx-auto w-full max-w-5xl space-y-16 px-4 md:container">
         <CurrentPass />
         <header className="mb-16 md:text-center">
-          <h1 className="mb-4 text-4xl font-bold">Pricing</h1>
+          <h1 className="mb-4 text-4xl font-bold">Membership</h1>
           <p className="mb-6 text-lg opacity-70">
-            Discover our flexible pricing options designed to meet your needs. Whether you&apos;re looking for short or
-            long term, we&apos;ve got you covered.
+            Join the Temple Tarot community to have unlimited access to readings. Get guidance wherever and whenever you
+            like!
           </p>
         </header>
         <div>

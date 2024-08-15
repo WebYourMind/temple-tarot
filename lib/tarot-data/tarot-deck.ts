@@ -1498,8 +1498,8 @@ export const deckCardsMapping = {
 export const decks = [
   {
     value: "custom",
-    name: "Toth 2.0 Deck",
-    promptName: "Toth 2.0 deck (see card definitions for interpretations)",
+    name: "Thoth 2.0 Deck",
+    promptName: "Thoth 2.0 deck (see card definitions for interpretations)",
     // cards: customDeck,
   },
   {
