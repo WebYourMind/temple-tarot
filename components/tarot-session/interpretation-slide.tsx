@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { cn } from "lib/utils";
+import { cn, findFullCardInCustomDeck } from "lib/utils";
 import Markdown from "react-markdown";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
+import { MagicFont } from "./query/query-input";
 
 interface Card {
   cardName: string;
@@ -33,15 +34,15 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
         <div className="flex w-full justify-around space-x-4">
           {cards?.length > 0 &&
             cards.map((card) => {
-              let cardWithImage;
+              let cardWithImage = findFullCardInCustomDeck(card.cardName);
               if (selectedDeck.value === "custom") {
                 cardWithImage = deckCardsMapping[selectedDeck.value].find(
                   (fullCard) => fullCard.cardName === card.cardName
                 );
               }
               return (
-                <div className="mb-8" key={card.cardName}>
-                  {cardWithImage?.imageUrl && (
+                <div className="mb-4" key={card.cardName}>
+                  {cardWithImage && cardWithImage?.imageUrl && (
                     <Image
                       onClick={() => {
                         setFocusedCard(cardWithImage);
@@ -57,6 +58,12 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
                       )}
                     />
                   )}
+                  <div
+                    className={cn(!cardWithImage && "flex flex-col justify-center rounded-md p-4", MagicFont.className)}
+                  >
+                    <p className="mb-0 text-sm">{card.cardName}</p>
+                    <p className="mt-0 text-sm">({card.orientation})</p>
+                  </div>
                 </div>
               );
             })}

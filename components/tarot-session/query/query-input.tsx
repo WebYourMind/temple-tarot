@@ -18,7 +18,7 @@ import TarotPreferences from "./tarot-preferences";
 export const MagicFont = Quicksand({ subsets: ["latin"], weight: "400" });
 
 const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFollowUp }) => {
-  const { query, setQuery, selectedCards, hasOwnCards } = useTarotSession();
+  const { query, setQuery, selectedCards, hasOwnCards, storeLastUsedDeck } = useTarotSession();
   const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed, isLoading } = useUserAccessPlan();
   const router = useRouter();
   const [drawCards, setDrawCards] = useState(true);
@@ -26,6 +26,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    storeLastUsedDeck();
     handleSubmitQuery(drawCards);
   };
 
