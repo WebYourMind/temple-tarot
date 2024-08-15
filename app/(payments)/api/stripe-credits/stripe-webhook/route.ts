@@ -6,7 +6,7 @@ import {
   getCustomerEmail,
   logSubscriptionEvent,
   updateUserSubscriptionStatus,
-} from "app/(ai-payments)/api/stripe-credits/utils/stripe-credits-utils";
+} from "app/(payments)/api/stripe-credits/utils/stripe-credits-utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2023-10-16",
@@ -36,6 +36,7 @@ export async function POST(request: Request) {
   try {
     switch (event.type) {
       case "checkout.session.completed":
+        // one off payments (not currently being used)
         return await handleCheckoutSessionCompleted(event);
       case "invoice.payment_succeeded":
         return await handleInvoicePaymentSucceeded(event);
@@ -52,6 +53,7 @@ export async function POST(request: Request) {
   }
 }
 
+// one off payments
 async function handleCheckoutSessionCompleted(event: Stripe.Event) {
   const session = event.data.object as Stripe.Checkout.Session;
   const email = session.customer_email;
