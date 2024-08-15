@@ -85,7 +85,7 @@ export default function Header() {
           {session?.user && (
             <Sidebar>
               <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
-                <SidebarList user={session.user} />
+                <SidebarList />
               </React.Suspense>
             </Sidebar>
           )}
