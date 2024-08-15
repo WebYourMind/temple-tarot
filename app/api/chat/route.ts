@@ -98,10 +98,15 @@ export async function POST(req: Request) {
         content: `${reading.userQuery || "Open Reading"}
         ${cardDescriptions ? `The cards I pulled are: ${cardDescriptions}` : ""}`,
       });
-      messages.push({
-        role: "assistant",
-        content: reading.aiInterpretation,
-      });
+      if (!reading.aiInterpretation) {
+        // @ts-ignore
+        console.log(reading.followUpContext.readings);
+      } else {
+        messages.push({
+          role: "assistant",
+          content: reading.aiInterpretation,
+        });
+      }
     });
   }
 
@@ -130,7 +135,7 @@ export async function POST(req: Request) {
           aiInterpretation: completion,
           cards,
         };
-
+        console.log(tarotSessionId);
         await addReadingToTarotSession(user.id, reading, tarotSessionId);
       },
     });

@@ -18,7 +18,7 @@ function ReadingItem({ tarotSession }: ReadingItemProps) {
   const router = useRouter();
   const handleClick = (e) => {
     e.preventDefault();
-    setTarotSession(tarotSession);
+    // setTarotSession(tarotSession);
     router.push(`/readings/${tarotSession.id}`);
   };
 
