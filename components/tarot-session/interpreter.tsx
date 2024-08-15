@@ -20,8 +20,14 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   const { query, selectedCards, spread, selectedDeck, isFollowUp, followUpContext } =
     proppedTarotSession || defaultSession;
 
-  const { interpretationArray, setInterpretationArray, setPhase, aiResponse, setAiResponse, onResponseComplete } =
-    defaultSession;
+  const {
+    interpretationArray,
+    setInterpretationArray,
+    aiResponse,
+    setAiResponse,
+    onResponseComplete,
+    addAiResponseToReading,
+  } = defaultSession;
   const router = useRouter();
   const [isComplete, setIsComplete] = useState(false);
 
@@ -29,7 +35,10 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
     if (isComplete && freeReadings >= 1) {
       setFreeReadings(freeReadings - 1);
     }
-  }, [isComplete]);
+    if (isComplete && addAiResponseToReading) {
+      addAiResponseToReading(aiResponse);
+    }
+  }, [isComplete, addAiResponseToReading, aiResponse]);
 
   const generateReading = useCallback(async (content) => {
     let isSubscribed = true;
