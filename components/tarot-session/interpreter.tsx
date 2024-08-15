@@ -149,7 +149,6 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   }, [query, selectedCards, spread]);
 
   if (error) {
-    console.log(error);
     return <p>{error}</p>;
   }
 

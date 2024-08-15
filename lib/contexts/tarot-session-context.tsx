@@ -131,7 +131,6 @@ export const TarotSessionProvider: React.FC<{
   }
 
   function storeLastUsedDeck() {
-    console.log(selectedDeck);
     localStorage.setItem("selectedDeck", JSON.stringify(selectedDeck));
   }
 

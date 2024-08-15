@@ -98,9 +98,7 @@ export async function POST(req: Request) {
         content: `${reading.userQuery || "Open Reading"}
         ${cardDescriptions ? `The cards I pulled are: ${cardDescriptions}` : ""}`,
       });
-      if (!reading.aiInterpretation) {
-        console.log(reading);
-      } else {
+      if (reading.aiInterpretation) {
         messages.push({
           role: "assistant",
           content: reading.aiInterpretation,
@@ -134,7 +132,6 @@ export async function POST(req: Request) {
           aiInterpretation: completion,
           cards,
         };
-        console.log(tarotSessionId);
         await addReadingToTarotSession(user.id, reading, tarotSessionId);
       },
     });

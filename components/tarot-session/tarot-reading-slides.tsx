@@ -117,8 +117,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
     });
   }
 
-  console.log(tarotSession);
-
   function getInterpretationSlides() {
     if (tarotSession?.readings) {
       const renderInterpretationSlide = (currentReading: Reading) => {
