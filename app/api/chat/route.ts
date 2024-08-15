@@ -99,8 +99,7 @@ export async function POST(req: Request) {
         ${cardDescriptions ? `The cards I pulled are: ${cardDescriptions}` : ""}`,
       });
       if (!reading.aiInterpretation) {
-        // @ts-ignore
-        console.log(reading.followUpContext.readings);
+        console.log(reading);
       } else {
         messages.push({
           role: "assistant",
