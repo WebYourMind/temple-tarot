@@ -8,6 +8,7 @@ const UserAccessPlanContext = createContext({
   freeReadings: 0,
   emailVerified: false,
   fetchUserAccessPlan: () => {},
+  setFreeReadings: (freeReadings: number) => {},
   isLoading: false,
 });
 
@@ -72,7 +73,16 @@ export const UserAccessPlanProvider = ({ children }: { children: ReactNode }) =>
 
   return (
     <UserAccessPlanContext.Provider
-      value={{ isSubscribed, passExpiry, hasAccess, emailVerified, freeReadings, fetchUserAccessPlan, isLoading }}
+      value={{
+        isSubscribed,
+        passExpiry,
+        hasAccess,
+        emailVerified,
+        freeReadings,
+        setFreeReadings,
+        fetchUserAccessPlan,
+        isLoading,
+      }}
     >
       {children}
     </UserAccessPlanContext.Provider>

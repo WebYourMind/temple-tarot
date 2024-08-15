@@ -49,8 +49,6 @@ const Pricing: React.FC = () => {
     const path = `/checkout?product=${priceId}${type === "recurring" ? "&mode=subscription" : ""}`;
     if (!isSubscribed) {
       router.push(path);
-    } else {
-      await manageSubscription();
     }
   };
 

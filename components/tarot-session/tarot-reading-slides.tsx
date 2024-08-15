@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "components/ui/button";
-import { cn } from "lib/utils";
+import { cn, findFullCardInCustomDeck } from "lib/utils";
 import { TarotSessionProvider, useTarotSession } from "lib/contexts/tarot-session-context";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { ArrowLeft, ArrowRight, Dot } from "lucide-react";
@@ -54,19 +54,17 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       <div key={"cardslide"} className="relative inset-0 flex h-full items-center justify-center space-x-2">
         {currentSlideCards?.length > 0 &&
           currentSlideCards.map((card: CardInReading) => {
-            let cardWithImage;
-            if (selectedDeck.value === "custom") {
-              cardWithImage = deckCardsMapping[selectedDeck.value].find(
-                (fullCard) => fullCard.cardName === card.cardName
-              );
-            }
+            const cardWithImage = deckCardsMapping[selectedDeck.value].find(
+              (fullCard) => fullCard.cardName === card.cardName
+            );
+
             return (
               <div
                 key={card.cardName}
                 // eslint-disable-next-line tailwindcss/no-custom-classname
                 className={`max-w-[${
-                  100 / cards.length
-                }%] flex h-full w-full flex-col items-center justify-center p-2 text-center`}
+                  100 / currentSlideCards.length
+                }%] flex w-full flex-col items-center justify-center p-2 text-center`}
               >
                 <div className={cn("mb-2 w-full", MagicFont.className)}>
                   <p className="my-0">{card.cardName}</p>
@@ -84,7 +82,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
                     width={256}
                     height={384}
                     className={cn(
-                      `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : ""} h-full w-auto rounded-lg`,
+                      `mx-auto ${currentSlideCards.length > 1 ? "max-h-[20vh]" : ""} h-full w-auto rounded-lg`,
                       card.orientation.toLowerCase() === "reversed" && "rotate-180"
                     )}
                   />
@@ -119,7 +117,12 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       return [
         ...tarotSession.readings.flatMap((currentReading, index) => {
           if (currentReading.cards && currentReading.cards.length > 0) {
-            return [() => renderCardSlide(currentReading.cards), () => renderInterpretationSlide(currentReading)];
+            const cardWithImage = findFullCardInCustomDeck(currentReading.cards[0].cardName);
+            const readingViews = [];
+            if (cardWithImage) readingViews.push(() => renderCardSlide(currentReading.cards));
+            readingViews.push(() => renderInterpretationSlide(currentReading));
+            return readingViews;
+            // return [() => renderCardSlide(currentReading.cards), () => renderInterpretationSlide(currentReading)];
           }
           return [() => renderInterpretationSlide(currentReading)];
         }),
@@ -143,10 +146,17 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       ];
     }
     if (aiResponse && cards) {
-      return [
-        () => renderCardSlide(cards),
-        () => <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />,
-      ];
+      const cardWithImage = findFullCardInCustomDeck(cards[0].cardName);
+      const readingViews = [];
+      if (cardWithImage) readingViews.push(() => renderCardSlide(cards));
+      readingViews.push(() => (
+        <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />
+      ));
+      return readingViews;
+      // return [
+      //   () => renderCardSlide(cards),
+      //   () => <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />,
+      // ];
     }
     if (aiResponse) {
       return [

@@ -3,7 +3,7 @@ import { Textarea } from "components/ui/textarea";
 import { useState, memo } from "react";
 import { useRouter } from "next/navigation";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
-import { useUserAccessPlan } from "app/(ai-payments)/(frontend)/contexts/user-access-plan-context";
+import { useUserAccessPlan } from "app/(payments)/(frontend)/contexts/user-access-plan-context";
 import { InfoButton } from "components/info-dialog";
 
 import { Quicksand } from "next/font/google";
@@ -18,7 +18,7 @@ import TarotPreferences from "./tarot-preferences";
 export const MagicFont = Quicksand({ subsets: ["latin"], weight: "400" });
 
 const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFollowUp }) => {
-  const { query, setQuery, selectedCards, hasOwnCards } = useTarotSession();
+  const { query, setQuery, selectedCards, hasOwnCards, storeLastUsedDeck } = useTarotSession();
   const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed, isLoading } = useUserAccessPlan();
   const router = useRouter();
   const [drawCards, setDrawCards] = useState(true);
@@ -26,6 +26,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    storeLastUsedDeck();
     handleSubmitQuery(drawCards);
   };
 
@@ -118,9 +119,9 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
           ) : (
             !showFreeReading &&
             !isLoading && (
-              <div className="text-center">
+              <div className="mb-4 text-center">
                 <p>Sorry, you do not have an active subscription.</p>
-                <Button onClick={() => router.push("/pricing")} variant={"outline"}>
+                <Button className={cn("border-2 px-8")} onClick={() => router.push("/pricing")} variant={"outline"}>
                   Subscribe
                 </Button>
               </div>

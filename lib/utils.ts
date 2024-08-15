@@ -162,6 +162,6 @@ export function parseJsonSafe(jsonString) {
   }
 }
 
-export function findFullCardInCustomDeck(selectedDeck, cardName: string) {
-  return deckCardsMapping[selectedDeck.value].find((fullCard) => fullCard.cardName === cardName);
+export function findFullCardInCustomDeck(cardName: string) {
+  return deckCardsMapping.custom.find((fullCard) => fullCard.cardName === cardName);
 }

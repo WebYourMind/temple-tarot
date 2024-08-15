@@ -51,11 +51,11 @@ export async function POST(req: Request) {
 
   const user = session.user;
 
-  const isLimitReached = await rateLimitReached(user.id);
-  if (isLimitReached) {
+  const rateInfo = await rateLimitReached(user.id);
+  if (rateInfo.limitReached) {
     return NextResponse.json(
       {
-        error: "AI limit reached for today",
+        error: rateInfo.message,
       },
       {
         status: 429,

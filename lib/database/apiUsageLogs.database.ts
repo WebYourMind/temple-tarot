@@ -12,12 +12,13 @@ export async function rateLimitReached(userId) {
 
   if (free_readings > 0 && email_verified) {
     await sql`UPDATE users SET free_readings = ${free_readings - 1} WHERE id = ${userId};`;
-    return false;
+    return { limitReached: false };
   }
 
   const isPassValid = pass_expiry && new Date(pass_expiry) > new Date();
 
-  if (!is_subscribed && !isPassValid) return true;
+  if (!is_subscribed && !isPassValid)
+    return { limitReached: true, message: "Sorry, you do not have an active subscription." };
 
   const maxRequests = 77; // is_subscribed && subscription_status === "active" ? 22 : 22; // 1;
 
@@ -31,7 +32,7 @@ export async function rateLimitReached(userId) {
     `;
 
     const isLimitReached = rows[0].request_count > maxRequests;
-    return isLimitReached;
+    return { limitReached: isLimitReached, message: "Sorry, you have reach the AI limit for today." };
   } catch (error) {
     console.error("Error checking rate limit:", error);
     throw Error(error);
