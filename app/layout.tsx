@@ -35,13 +35,23 @@ export const metadata: Metadata = {
       url: "/icons/android-chrome-512x512.png",
     },
   ],
+  authors: [
+    {
+      name: "Adam O'Neill",
+      url: "https://www.linkedin.com/in/adam-o-neill/",
+    },
+    {
+      name: "Web Your Mind",
+      url: "https://webyourmind.com/",
+    },
+  ],
   openGraph: {
     title,
     description,
     // images: [image],
   },
 
-  manifest: "./manifest.json",
+  manifest: "/manifest.json",
   // twitter: {
   //   card: "summary_large_image",
   //   title,
