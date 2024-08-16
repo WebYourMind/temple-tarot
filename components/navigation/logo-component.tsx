@@ -9,7 +9,7 @@ import { MagicFont } from "components/tarot-session/query/query-input";
 export default function LogoComponent() {
   return (
     <div className="flex w-full items-center justify-start md:px-2">
-      <Image src={Logo2} width={40} height={40} alt="Temple Tarot" className="mr-1 h-8 w-8 rounded-full" />
+      <Image src={Logo2} width={40} height={40} alt="Temple Tarot" className="mr-1 h-8 w-8 rounded-full shadow-sm" />
       <h1 className={cn("my-4 text-xl", MagicFont.className)}>{appConfig.appName}</h1>
     </div>
   );
