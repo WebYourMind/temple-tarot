@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "components/ui/button";
-import { cn } from "lib/utils";
+import { cn, findFullCardInCustomDeck } from "lib/utils";
 import { TarotSessionProvider, useTarotSession } from "lib/contexts/tarot-session-context";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { ArrowLeft, ArrowRight, Dot } from "lucide-react";
@@ -51,15 +51,16 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
 
   function renderCardSlide(currentSlideCards) {
     return (
-      <div key={"cardslide"} className="relative inset-0 flex h-full items-center justify-center space-x-2">
+      <div
+        key={"cardslide" + currentSlideCards[0]?.cardName}
+        className="relative inset-0 flex h-full items-center justify-center space-x-2"
+      >
         {currentSlideCards?.length > 0 &&
           currentSlideCards.map((card: CardInReading) => {
-            let cardWithImage;
-            if (selectedDeck.value === "custom") {
-              cardWithImage = deckCardsMapping[selectedDeck.value].find(
-                (fullCard) => fullCard.cardName === card.cardName
-              );
-            }
+            const cardWithImage = deckCardsMapping[selectedDeck.value].find(
+              (fullCard) => fullCard.cardName === card.cardName
+            );
+
             return (
               <div
                 key={card.cardName}
@@ -96,12 +97,36 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
     );
   }
 
+  function addAiResponseToReading(newAiResponse: string) {
+    // @ts-ignore
+    setTarotSession((prevState: any) => {
+      // Copy the previous readings array
+      const updatedReadings = [...prevState.readings];
+
+      // Update the last reading's aiInterpretation
+      updatedReadings[updatedReadings.length - 1] = {
+        ...updatedReadings[updatedReadings.length - 1], // Copy the previous reading object
+        aiInterpretation: newAiResponse, // Update the aiInterpretation field
+      };
+
+      // Return the updated state
+      return {
+        ...prevState, // Copy the rest of the state
+        readings: updatedReadings, // Update the readings array
+      };
+    });
+  }
+
   function getInterpretationSlides() {
     if (tarotSession?.readings) {
       const renderInterpretationSlide = (currentReading: Reading) => {
         if (!currentReading.aiInterpretation) {
           return (
-            <TarotSessionProvider isPropped tarotSessionId={tarotSessionId}>
+            <TarotSessionProvider
+              isPropped
+              tarotSessionId={tarotSessionId}
+              addAiResponseToReading={addAiResponseToReading}
+            >
               {/* @ts-ignore */}
               <Interpreter tarotSessionId={tarotSessionId} proppedTarotSession={currentReading.proppedTarotSession} />
             </TarotSessionProvider>
@@ -119,7 +144,12 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       return [
         ...tarotSession.readings.flatMap((currentReading, index) => {
           if (currentReading.cards && currentReading.cards.length > 0) {
-            return [() => renderCardSlide(currentReading.cards), () => renderInterpretationSlide(currentReading)];
+            const cardWithImage = findFullCardInCustomDeck(currentReading.cards[0].cardName);
+            const readingViews = [];
+            if (cardWithImage) readingViews.push(() => renderCardSlide(currentReading.cards));
+            readingViews.push(() => renderInterpretationSlide(currentReading));
+            return readingViews;
+            // return [() => renderCardSlide(currentReading.cards), () => renderInterpretationSlide(currentReading)];
           }
           return [() => renderInterpretationSlide(currentReading)];
         }),
@@ -143,10 +173,17 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       ];
     }
     if (aiResponse && cards) {
-      return [
-        () => renderCardSlide(cards),
-        () => <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />,
-      ];
+      const cardWithImage = findFullCardInCustomDeck(cards[0].cardName);
+      const readingViews = [];
+      if (cardWithImage) readingViews.push(() => renderCardSlide(cards));
+      readingViews.push(() => (
+        <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />
+      ));
+      return readingViews;
+      // return [
+      //   () => renderCardSlide(cards),
+      //   () => <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />,
+      // ];
     }
     if (aiResponse) {
       return [

@@ -30,11 +30,13 @@ export type SelectedCardType = {
   reversedGuidance?: string;
 };
 
+export type DeckType = { promptName: string; value: string; name: string };
+
 interface TarotSessionContextProps {
   query: string;
   phase: "question" | "spread" | "cards" | "reading";
   selectedCards: CardInReading[] | null;
-  selectedDeck: { promptName: string; value: string; name: string };
+  selectedDeck: DeckType;
   spread: SpreadType;
   hasOwnCards: boolean;
   showInfo: boolean;
@@ -43,7 +45,7 @@ interface TarotSessionContextProps {
   setQuery: React.Dispatch<React.SetStateAction<string | null>>;
   setPhase: React.Dispatch<React.SetStateAction<"question" | "spread" | "cards" | "reading">>;
   setSelectedCards: React.Dispatch<React.SetStateAction<CardInReading[] | null>>;
-  setSelectedDeck: React.Dispatch<React.SetStateAction<{ promptName: string; value: string; name: string }>>;
+  setSelectedDeck: React.Dispatch<React.SetStateAction<DeckType>>;
   setSpread: React.Dispatch<React.SetStateAction<SpreadType>>;
   setHasOwnCards: React.Dispatch<React.SetStateAction<boolean>>;
   setShowInfo: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,9 +62,11 @@ interface TarotSessionContextProps {
   isFollowUp?: boolean;
   tarotSessionId?: string;
   onResponseComplete?: (reading: Reading) => void;
+  addAiResponseToReading: (aiResponse: string) => void;
   followUpContext?: TarotSession;
   handleCreateTarotSession: () => void;
   isPending: boolean;
+  storeLastUsedDeck: () => void;
 }
 
 const TarotSessionContext = createContext<TarotSessionContextProps | undefined>(undefined);
@@ -88,7 +92,15 @@ export const TarotSessionProvider: React.FC<{
   onResponseComplete?: (reading: Reading) => void;
   followUpContext?: TarotSession;
   isPropped?: boolean;
-}> = ({ children, isFollowUp: isFollowUpProp = false, tarotSessionId = null, onResponseComplete, followUpContext }) => {
+  addAiResponseToReading?: (aiResponse: string) => void;
+}> = ({
+  children,
+  isFollowUp: isFollowUpProp = false,
+  tarotSessionId = null,
+  onResponseComplete,
+  followUpContext,
+  addAiResponseToReading,
+}) => {
   const [query, setQuery] = useState<string>("");
   const [showInfo, setShowInfo] = useState(false);
   const [infoContent, setInfoContent] = useState(infoMap["question"]);
@@ -111,18 +123,22 @@ export const TarotSessionProvider: React.FC<{
     img.src = TarotBack.src;
   }, []);
 
-  // Load selected deck from localStorage on component mount
-  useEffect(() => {
+  function getLastUsedDeck() {
     const storedDeck = localStorage.getItem("selectedDeck");
     if (storedDeck) {
-      setSelectedDeck(JSON.parse(storedDeck) as { value: string; promptName: string; name: string });
+      return JSON.parse(storedDeck) as { value: string; promptName: string; name: string };
     }
-  }, []);
+  }
 
-  // Update localStorage whenever selectedDeck changes
-  useEffect(() => {
+  function storeLastUsedDeck() {
     localStorage.setItem("selectedDeck", JSON.stringify(selectedDeck));
-  }, [selectedDeck]);
+  }
+
+  // Load selected deck from localStorage on component mount
+  useEffect(() => {
+    const storedDeck = getLastUsedDeck();
+    setSelectedDeck(storedDeck || defaultDeck);
+  }, []);
 
   const handleCreateTarotSession = async () => {
     startTransition(async () => {
@@ -177,23 +193,10 @@ export const TarotSessionProvider: React.FC<{
     setInterpretationArray(null);
     setAiResponse(null);
     setHasOwnCards(false);
-    setSelectedDeck(defaultDeck);
+    setSelectedDeck(getLastUsedDeck());
     setSpread(tarotSpreads[0]);
     setIsFollowUp(keepFollowUp);
   }
-
-  // This useEffect shows the info dialog automatically if it hasn't been seen by the user's device before.
-  // useEffect(() => {
-  //   const phaseKey = `hasSeenInfo-${phase}`;
-  //   const hasSeenInfo = localStorage.getItem(phaseKey);
-
-  //   // If it's the user's first time in this phase, show the info dialog
-  //   setInfoContent(infoMap[phase] || infoMap["question"]);
-  //   if (!hasSeenInfo && (phase === "cards" || phase === "question")) {
-  //     setShowInfo(true);
-  //     localStorage.setItem(phaseKey, "true"); // Mark this phase as seen
-  //   }
-  // }, [phase]);
 
   const value = {
     query,
@@ -228,6 +231,8 @@ export const TarotSessionProvider: React.FC<{
     followUpContext,
     handleCreateTarotSession,
     isPending,
+    storeLastUsedDeck,
+    addAiResponseToReading,
   };
 
   return <TarotSessionContext.Provider value={value}>{children}</TarotSessionContext.Provider>;
