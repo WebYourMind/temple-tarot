@@ -1,5 +1,5 @@
-// Custom Deck
-export const customDeck = [
+// thoth_2 Deck
+export const thoth2 = [
   {
     cardName: "Origin",
     imageUrl: "https://ekxb0zdvbkmwks1n.public.blob.vercel-storage.com/cards-md/origin.webp?download=1",
@@ -1501,14 +1501,14 @@ const riderWaiteCards = [
 ];
 
 export const deckCardsMapping = {
-  custom: customDeck,
+  thoth_2: thoth2,
   thoth: thothCards,
   ryder_waite: riderWaiteCards,
 };
 
 export const decks = [
   {
-    value: "custom",
+    value: "thoth_2",
     name: "Thoth 2.0 Deck",
     promptName: "Thoth 2.0 deck (see card definitions for interpretations)",
     // cards: customDeck,

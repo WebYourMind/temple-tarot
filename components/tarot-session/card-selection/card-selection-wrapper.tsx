@@ -10,6 +10,7 @@ const CardSelectionWrapper = () => {
   const {
     spread,
     query,
+    selectedDeck,
     setSelectedCards,
     selectedCards,
     setPhase,
@@ -20,7 +21,7 @@ const CardSelectionWrapper = () => {
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleCardSelect = (card) => {
-    const newSelectedCards = [...(selectedCards || []), card];
+    const newSelectedCards = [...(selectedCards || []), { ...card, deck: selectedDeck.value }];
     setSelectedCards(newSelectedCards);
 
     if (currentStep < spread.numberOfCards - 1) {

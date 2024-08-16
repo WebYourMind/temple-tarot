@@ -12,7 +12,8 @@ export interface TarotSession {
 export const addReadingToTarotSession = async (
   userId: string,
   reading: Reading,
-  tarotSessionId?: string
+  tarotSessionId?: string,
+  deck?: string
 ): Promise<void> => {
   try {
     await sql`BEGIN`;
@@ -40,8 +41,8 @@ export const addReadingToTarotSession = async (
 
       for (const card of reading.cards) {
         await sql`
-          INSERT INTO cards_in_readings (reading_id, card_name, orientation, position)
-          VALUES (${readingId}, ${card.cardName}, ${card.orientation}, ${card.position});
+          INSERT INTO cards_in_readings (reading_id, card_name, orientation, position, deck)
+          VALUES (${readingId}, ${card.cardName}, ${card.orientation}, ${card.position}, ${deck});
         `;
       }
     }
@@ -77,7 +78,7 @@ export const getTarotSessionById = async (id: string): Promise<TarotSession | nu
       SELECT 
         ts.id AS session_id, ts.user_id AS session_user_id, ts.created_at AS session_created_at,
         r.id AS reading_id, r.user_query, r.spread_type, r.ai_interpretation, r.created_at AS reading_created_at,
-        c.id AS card_id, c.card_name, c.orientation, c.position
+        c.id AS card_id, c.card_name, c.orientation, c.position, c.deck
       FROM tarot_sessions ts
       LEFT JOIN readings r ON ts.id = r.tarot_session_id
       LEFT JOIN cards_in_readings c ON r.id = c.reading_id
@@ -128,6 +129,7 @@ export const getTarotSessionById = async (id: string): Promise<TarotSession | nu
           cardName: row.card_name,
           orientation: row.orientation,
           position: row.position,
+          deck: row.deck,
         });
       }
     });
@@ -161,7 +163,7 @@ export const getTarotSessionsByUserId = async (
       SELECT 
         ts.id AS session_id, ts.user_id AS session_user_id, ts.created_at AS session_created_at,
         fr.reading_id, fr.user_query, fr.spread_type, fr.ai_interpretation, fr.reading_created_at,
-        c.id AS card_id, c.card_name, c.orientation, c.position
+        c.id AS card_id, c.card_name, c.orientation, c.position, c.deck
       FROM tarot_sessions ts
       LEFT JOIN first_readings fr ON ts.id = fr.tarot_session_id
       LEFT JOIN cards_in_readings c ON fr.reading_id = c.reading_id
@@ -212,6 +214,7 @@ export const getTarotSessionsByUserId = async (
             cardName: row.card_name,
             orientation: row.orientation,
             position: row.position,
+            deck: row.deck,
           });
         }
       }

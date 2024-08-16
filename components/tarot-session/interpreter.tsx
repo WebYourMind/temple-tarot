@@ -9,7 +9,7 @@ import { parseJsonSafe } from "lib/utils";
 import ReadingLoading from "../../app/(views)/interpretation/reading-loading";
 import TarotReadingSlides from "./tarot-reading-slides";
 import InterpretationSlide from "./interpretation-slide";
-import { customDeck } from "lib/tarot-data/tarot-deck";
+import { thoth2 } from "lib/tarot-data/tarot-deck";
 import { useUserAccessPlan } from "app/(payments)/(frontend)/contexts/user-access-plan-context";
 
 function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
@@ -56,6 +56,7 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
           spread,
           tarotSessionId,
           followUpContext,
+          deck: selectedDeck.value,
         }),
         signal: controller.signal,
       });
@@ -127,7 +128,7 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
             `\nPosition: ${index + 1}, position meaning: ${spread.cardMeanings[index]} Card name: "${
               card.cardName
             }", orientation:(${card.orientation}) ${
-              selectedDeck.value === "custom"
+              selectedDeck.value === "thoth_2"
                 ? `\nCard definition: ${card.detail.readingTips} Upright guidance: ${card.detail.uprightGuidance} Reversed guidance: ${card.detail.reversedGuidance}`
                 : "."
             }`

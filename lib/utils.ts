@@ -161,9 +161,15 @@ export function parseJsonSafe(jsonString) {
   }
 }
 
-export function findFullCardInCustomDeck(cardName: string) {
-  return (
-    deckCardsMapping.custom.find((fullCard) => fullCard.cardName === cardName) ||
-    deckCardsMapping.ryder_waite.find((fullCard) => fullCard.cardName === cardName)
-  );
+export function findFullCardInDeck(cardName: string, deckName?: string) {
+  console.log(deckName);
+  if (deckName === "thoth_2" || deckName === "ryder_waite") {
+    return deckCardsMapping[deckName].find((fullCard) => fullCard.cardName === cardName);
+  } else if (!deckName) {
+    return (
+      deckCardsMapping.thoth_2.find((fullCard) => fullCard.cardName === cardName) ||
+      deckCardsMapping.ryder_waite.find((fullCard) => fullCard.cardName === cardName)
+    );
+  }
+  return null;
 }

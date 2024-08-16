@@ -12,6 +12,7 @@ export interface CardInReading {
   readingTips?: string;
   uprightGuidance?: string;
   reversedGuidance?: string;
+  deck?: string;
 }
 
 // Function to add a new card in a reading

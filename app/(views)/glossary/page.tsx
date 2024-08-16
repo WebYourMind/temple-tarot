@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { customDeck } from "../../../lib/tarot-data/tarot-deck";
+import { thoth2 } from "../../../lib/tarot-data/tarot-deck";
 import CardInfo from "./card-info";
 import { cn } from "lib/utils";
 import { MagicFont } from "components/tarot-session/query/query-input";
@@ -37,7 +37,7 @@ export default function Page() {
     <div className={cn("relative mx-auto p-4 md:max-w-6xl", MagicFont.className)}>
       <h1 className="my-8">Thoth 2.0 Glossary</h1>
       {suits.map((suit) => {
-        const suitCards = customDeck.filter((card) => card.suit === suit);
+        const suitCards = thoth2.filter((card) => card.suit === suit);
         prevCardsLength += suitCards.length;
         return renderSuit(suit, suitCards, prevCardsLength);
       })}

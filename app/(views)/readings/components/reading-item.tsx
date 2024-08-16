@@ -8,6 +8,7 @@ import Link from "next/link";
 import { TarotSession } from "lib/database/tarotSessions.database";
 import { MagicFont } from "components/tarot-session/query/query-input";
 import { cn } from "lib/utils";
+import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 
 type ReadingItemProps = {
   tarotSession: TarotSession;

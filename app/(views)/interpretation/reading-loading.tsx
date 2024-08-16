@@ -14,7 +14,7 @@ function ReadingLoading({ cards, deckType }) {
       <div className="flex flex-wrap justify-center gap-4">
         {cards?.map((card) => {
           let cardWithImage;
-          if (deckType === "custom" || deckType === "ryder_waite") {
+          if (deckType === "thoth_2" || deckType === "ryder_waite") {
             cardWithImage = deckCardsMapping[deckType].find((fullCard) => fullCard.cardName === card.cardName);
           }
           return (
@@ -30,7 +30,7 @@ function ReadingLoading({ cards, deckType }) {
                   width={256}
                   height={384}
                   className={cn(
-                    `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : "max-h-[30vh]"} w-auto rounded-lg shadow-lg`,
+                    `mx-auto ${cards.length > 1 ? "max-h-[20vh]" : "max-h-[30vh]"} w-auto rounded`,
                     (card.orientation === "reversed" || card.orientation === "Reversed") && "rotate-180"
                   )}
                 />

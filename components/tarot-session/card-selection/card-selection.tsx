@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { customDeck, deckCardsMapping } from "lib/tarot-data/tarot-deck";
+import { thoth2, deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import "styles/cards.css";
 import OrientationPicker from "./orientation-picker";
 import SplitDeck from "./split-deck";

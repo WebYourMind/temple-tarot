@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "components/ui/button";
-import { cn, findFullCardInCustomDeck } from "lib/utils";
+import { cn, findFullCardInDeck } from "lib/utils";
 import { TarotSessionProvider, useTarotSession } from "lib/contexts/tarot-session-context";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { ArrowLeft, ArrowRight, Dot } from "lucide-react";
@@ -57,10 +57,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       >
         {currentSlideCards?.length > 0 &&
           currentSlideCards.map((card: CardInReading) => {
-            const cardWithImage = deckCardsMapping[selectedDeck.value].find(
-              (fullCard) => fullCard.cardName === card.cardName
-            );
-
+            const cardWithImage = findFullCardInDeck(card.cardName, card.deck);
             return (
               <div
                 key={card.cardName}
@@ -144,7 +141,8 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       return [
         ...tarotSession.readings.flatMap((currentReading, index) => {
           if (currentReading.cards && currentReading.cards.length > 0) {
-            const cardWithImage = findFullCardInCustomDeck(currentReading.cards[0].cardName);
+            console.log(currentReading);
+            const cardWithImage = findFullCardInDeck(currentReading.cards[0].cardName, currentReading.cards[0].deck);
             const readingViews = [];
             if (cardWithImage) readingViews.push(() => renderCardSlide(currentReading.cards));
             readingViews.push(() => renderInterpretationSlide(currentReading));
@@ -156,6 +154,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       ];
     }
 
+    // only used for old readings. Can probably be deleted.
     if (interpretationArray) {
       return [
         ...interpretationArray.map((currentSlide, index) => {
@@ -172,8 +171,9 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
         }),
       ];
     }
+
     if (aiResponse && cards) {
-      const cardWithImage = findFullCardInCustomDeck(cards[0].cardName);
+      const cardWithImage = findFullCardInDeck(cards[0].cardName, cards[0].deck);
       const readingViews = [];
       if (cardWithImage) readingViews.push(() => renderCardSlide(cards));
       readingViews.push(() => (

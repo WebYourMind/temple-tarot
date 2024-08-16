@@ -34,12 +34,12 @@ const CardInput = () => {
   const handleCardChange = (index, cardValue) => {
     const newSelections = [...cardSelections];
 
-    // if from custom deck
-    if (selectedDeck.value === "custom" || selectedDeck.value === "ryder_waite") {
+    // if from deck with images
+    if (selectedDeck.value === "thoth_2" || selectedDeck.value === "ryder_waite") {
       const fullCard = deckCardsMapping[selectedDeck.value].find((fc) => fc.cardName === cardValue);
-      newSelections[index] = { ...newSelections[index], ...fullCard };
+      newSelections[index] = { ...newSelections[index], ...fullCard, deck: selectedDeck.value };
     } else {
-      newSelections[index] = { ...newSelections[index], cardName: cardValue };
+      newSelections[index] = { ...newSelections[index], cardName: cardValue, deck: selectedDeck.value };
     }
     setCardSelections(newSelections);
   };

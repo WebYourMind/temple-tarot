@@ -41,8 +41,8 @@ Now, provide an engaging response with subtle markdown formatting and emojis whe
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { cards, userQuery, spread, content, tarotSessionId, followUpContext } = json as Reading &
-    CardInReading & { content: string; tarotSessionId?: string; followUpContext?: TarotSession };
+  const { cards, userQuery, spread, content, tarotSessionId, followUpContext, deck } = json as Reading &
+    CardInReading & { content: string; tarotSessionId?: string; followUpContext?: TarotSession; deck?: string };
   const session = await getSession();
 
   if (!session?.user || !session.user.id) {
@@ -132,7 +132,7 @@ export async function POST(req: Request) {
           aiInterpretation: completion,
           cards,
         };
-        await addReadingToTarotSession(user.id, reading, tarotSessionId);
+        await addReadingToTarotSession(user.id, reading, tarotSessionId, deck);
       },
     });
 

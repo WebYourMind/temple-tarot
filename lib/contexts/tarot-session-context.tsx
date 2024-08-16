@@ -81,7 +81,7 @@ export const useTarotSession = () => {
 
 const defaultDeck = {
   promptName: "Thoth 2.0 deck (see card definitions for interpretations)",
-  value: "custom",
+  value: "thoth_2",
   name: "Thoth 2.0 Deck",
 };
 
