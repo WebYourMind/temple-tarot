@@ -11,13 +11,15 @@ import TarotReadingSlides from "./tarot-reading-slides";
 import InterpretationSlide from "./interpretation-slide";
 import { thoth2 } from "lib/tarot-data/tarot-deck";
 import { useUserAccessPlan } from "app/(payments)/(frontend)/contexts/user-access-plan-context";
+import { useSession } from "next-auth/react";
 
 function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   const defaultSession = useTarotSession();
+  const { data: userSession } = useSession() as any;
   const { freeReadings, setFreeReadings } = useUserAccessPlan();
   const [error, setError] = useState<string>();
 
-  const { query, selectedCards, spread, selectedDeck, isFollowUp, followUpContext } =
+  const { query, selectedCards, spread, selectedDeck, isFollowUp, followUpContext, usersName } =
     proppedTarotSession || defaultSession;
 
   const {
@@ -57,6 +59,7 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
           tarotSessionId,
           followUpContext,
           deck: selectedDeck.value,
+          usersName: usersName,
         }),
         signal: controller.signal,
       });
@@ -118,7 +121,7 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
         aiInterpretation: aiResponse,
         cards: selectedCards,
         userQuery: query,
-        proppedTarotSession: { query, selectedCards, spread, selectedDeck, isFollowUp, followUpContext },
+        proppedTarotSession: { query, selectedCards, spread, selectedDeck, isFollowUp, followUpContext, usersName },
       };
       onResponseComplete(reading);
     } else if (selectedCards && !aiResponse) {

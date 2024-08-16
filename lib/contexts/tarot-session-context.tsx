@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useTransition } from "react";
+import React, { createContext, Dispatch, SetStateAction, useContext, useEffect, useState, useTransition } from "react";
 import { track } from "@vercel/analytics/react";
 import { useSession } from "next-auth/react";
 import { infoMap } from "lib/tarot-data/info";
@@ -67,6 +67,9 @@ interface TarotSessionContextProps {
   handleCreateTarotSession: () => void;
   isPending: boolean;
   storeLastUsedDeck: () => void;
+  storeLastUsersName: () => void;
+  usersName?: string;
+  setUsersName?: Dispatch<SetStateAction<string>>;
 }
 
 const TarotSessionContext = createContext<TarotSessionContextProps | undefined>(undefined);
@@ -101,6 +104,7 @@ export const TarotSessionProvider: React.FC<{
   followUpContext,
   addAiResponseToReading,
 }) => {
+  const { data: userSession } = useSession() as any;
   const [query, setQuery] = useState<string>("");
   const [showInfo, setShowInfo] = useState(false);
   const [infoContent, setInfoContent] = useState(infoMap["question"]);
@@ -114,6 +118,7 @@ export const TarotSessionProvider: React.FC<{
   const [isFollowUp, setIsFollowUp] = useState(isFollowUpProp);
   const [interpretationArray, setInterpretationArray] = useState<any>();
   const [aiResponse, setAiResponse] = useState<any>();
+  const [usersName, setUsersName] = useState<string>(userSession?.user?.name || "");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -134,11 +139,32 @@ export const TarotSessionProvider: React.FC<{
     localStorage.setItem("selectedDeck", JSON.stringify(selectedDeck));
   }
 
+  function getUsersName() {
+    const storedName = localStorage.getItem("usersName");
+    return storedName;
+  }
+
+  function storeLastUsersName() {
+    localStorage.setItem("usersName", usersName);
+  }
+
   // Load selected deck from localStorage on component mount
   useEffect(() => {
     const storedDeck = getLastUsedDeck();
     setSelectedDeck(storedDeck || defaultDeck);
+
+    const storedName = getUsersName();
+    setSelectedDeck(storedDeck || defaultDeck);
   }, []);
+
+  useEffect(() => {
+    const storedName = getUsersName();
+    if (storedName) {
+      setUsersName(storedName);
+    } else {
+      setUsersName(userSession?.user?.name);
+    }
+  }, [userSession?.user?.name]);
 
   const handleCreateTarotSession = async () => {
     startTransition(async () => {
@@ -233,6 +259,9 @@ export const TarotSessionProvider: React.FC<{
     isPending,
     storeLastUsedDeck,
     addAiResponseToReading,
+    usersName,
+    setUsersName,
+    storeLastUsersName,
   };
 
   return <TarotSessionContext.Provider value={value}>{children}</TarotSessionContext.Provider>;

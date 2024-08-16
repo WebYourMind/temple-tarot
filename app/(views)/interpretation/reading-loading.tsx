@@ -2,7 +2,7 @@
 
 import Loading from "components/loading";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
-import { cn } from "lib/utils";
+import { cn, findFullCardInDeck } from "lib/utils";
 import Image from "next/image";
 import "styles/cards.css";
 
@@ -13,10 +13,7 @@ function ReadingLoading({ cards, deckType }) {
     <div className="flex h-full grow flex-col items-center justify-center space-y-10">
       <div className="flex flex-wrap justify-center gap-4">
         {cards?.map((card) => {
-          let cardWithImage;
-          if (deckType === "thoth_2" || deckType === "ryder_waite") {
-            cardWithImage = deckCardsMapping[deckType].find((fullCard) => fullCard.cardName === card.cardName);
-          }
+          const cardWithImage = findFullCardInDeck(card.cardName, deckType);
           return (
             <div
               key={card.cardName}

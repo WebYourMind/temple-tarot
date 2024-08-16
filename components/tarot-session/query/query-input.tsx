@@ -8,8 +8,6 @@ import { InfoButton } from "components/info-dialog";
 
 import { Quicksand } from "next/font/google";
 
-import { SendIcon } from "lucide-react";
-
 import { cn } from "lib/utils";
 import { Switch } from "components/ui/switch";
 import { Label } from "components/ui/label";
@@ -18,7 +16,7 @@ import TarotPreferences from "./tarot-preferences";
 export const MagicFont = Quicksand({ subsets: ["latin"], weight: "400" });
 
 const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFollowUp }) => {
-  const { query, setQuery, selectedCards, hasOwnCards, storeLastUsedDeck } = useTarotSession();
+  const { query, setQuery, selectedCards, hasOwnCards, storeLastUsedDeck, storeLastUsersName } = useTarotSession();
   const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed, isLoading } = useUserAccessPlan();
   const router = useRouter();
   const [drawCards, setDrawCards] = useState(true);
@@ -27,6 +25,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
   const handleSubmit = (e) => {
     e.preventDefault();
     storeLastUsedDeck();
+    storeLastUsersName();
     handleSubmitQuery(drawCards);
   };
 

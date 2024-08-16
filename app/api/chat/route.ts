@@ -27,7 +27,7 @@ Incorporate unique elements that resonate with the reading, ensuring each conclu
 Use vivid and engaging language inspired by modern writers like Maya Angelou or Paulo Coelho to infuse the response with warmth, clarity, and depth.
 `;
 
-const getContextPrompt = (includesCards) => `
+const getContextPrompt = (includesCards, usersName) => `
 This is a tarot reading interpreter app for individuals seeking guidance.
 You will receive a tarot reading, or a follow-up query based on previous readings allowing for a more personal experience.
 Please ensure that you reference past user interactions.
@@ -37,12 +37,19 @@ Your response should be consumer-facing, suitable for publication, and free of p
 Remain grounded and avoid being overly theatrical.
 Do not list the provided data at the beginning of your response, as it will already be displayed in the UI.
 Now, provide an engaging response with subtle markdown formatting and emojis where appropriate. Ensure the response is concise and succinct.
+${usersName && "The user's name is " + usersName}
 `;
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { cards, userQuery, spread, content, tarotSessionId, followUpContext, deck } = json as Reading &
-    CardInReading & { content: string; tarotSessionId?: string; followUpContext?: TarotSession; deck?: string };
+  const { cards, userQuery, spread, content, tarotSessionId, followUpContext, deck, usersName } = json as Reading &
+    CardInReading & {
+      content: string;
+      tarotSessionId?: string;
+      followUpContext?: TarotSession;
+      deck?: string;
+      usersName?: string;
+    };
   const session = await getSession();
 
   if (!session?.user || !session.user.id) {
@@ -72,7 +79,7 @@ export async function POST(req: Request) {
   }
 
   const includesCards = spread && cards;
-  const contextPrompt = getContextPrompt(includesCards);
+  const contextPrompt = getContextPrompt(includesCards, usersName);
 
   const messages = [
     {

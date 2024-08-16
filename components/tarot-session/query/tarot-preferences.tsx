@@ -10,9 +10,10 @@ import { memo, useEffect, useState } from "react";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { Switch } from "components/ui/switch";
 import { Label } from "components/ui/label";
+import { Input } from "components/ui/input";
 
 function TarotPreferences({ drawCards }) {
-  const { setHasOwnCards, setSelectedCards } = useTarotSession();
+  const { setHasOwnCards, setSelectedCards, usersName, setUsersName } = useTarotSession();
   const [showCardInput, setShowCardInput] = useState(false);
 
   useEffect(() => {
@@ -23,6 +24,15 @@ function TarotPreferences({ drawCards }) {
   }, [showCardInput]);
   return (
     <div className={cn("h-full w-full px-1", drawCards ? "opacity-100" : "pointer-events-none h-0 opacity-0")}>
+      <div className="mb-4 flex items-center border-b">
+        <Label>For:</Label>
+        <Input
+          placeholder="Who is this reading is for?"
+          className="rounded-none border-none bg-transparent focus-within:ring-offset-0 focus-visible:ring-offset-0 focus-visible:shadow-none focus-visible:outline-none focus-visible:ring-0"
+          value={usersName}
+          onChange={({ target: { value } }) => setUsersName(value)}
+        />
+      </div>
       <DeckSelector />
       <div className="flex w-full">
         <SpreadSelector />
