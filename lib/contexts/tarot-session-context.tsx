@@ -130,8 +130,11 @@ export const TarotSessionProvider: React.FC<{
 
   function getLastUsedDeck() {
     const storedDeck = localStorage.getItem("selectedDeck");
-    if (storedDeck && storedDeck !== "custom") {
-      return JSON.parse(storedDeck) as { value: string; promptName: string; name: string };
+    if (storedDeck) {
+      const parsedDeck = JSON.parse(storedDeck) as { value: string; promptName: string; name: string };
+      if (parsedDeck.value !== "custom") {
+        return parsedDeck;
+      }
     }
   }
 
