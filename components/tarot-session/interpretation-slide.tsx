@@ -35,13 +35,7 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
         <div className="flex w-full justify-around space-x-4">
           {cards?.length > 0 &&
             cards.map((card) => {
-              console.log;
-              let cardWithImage = findFullCardInDeck(card.cardName, card.deck);
-              // if (selectedDeck.value === "thoth_2" || selectedDeck.value === "ryder_waite") {
-              //   cardWithImage = deckCardsMapping[selectedDeck.value].find(
-              //     (fullCard) => fullCard.cardName === card.cardName
-              //   );
-              // }
+              const cardWithImage = findFullCardInDeck(card.cardName, card.deck);
               return (
                 <div className="mb-8" key={card.cardName}>
                   {cardWithImage && cardWithImage?.imageUrl && (
