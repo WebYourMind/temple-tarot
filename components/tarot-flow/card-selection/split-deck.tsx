@@ -108,7 +108,11 @@ function SplitDeck({ leftDeck, rightDeck, handleSelectHalf, currentStep }) {
               })}
             </button>
             <p className={cn("my-0 text-center md:mt-5")}>{side.charAt(0).toUpperCase() + side.slice(1)} Half</p>
-            <p className={cn("my-0 text-center")}>{side === "left" ? leftDeck.length : rightDeck.length} Cards</p>
+            <p className={cn("my-0 text-center")}>
+              {side === "left"
+                ? `${leftDeck.length} Card${leftDeck.length > 1 ? "s" : ""}`
+                : `${rightDeck.length} Card${rightDeck.length > 1 ? "s" : ""}`}
+            </p>
           </div>
         ))}
       </div>
