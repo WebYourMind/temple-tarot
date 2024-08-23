@@ -1,17 +1,10 @@
 import { QueryResult, sql } from "@vercel/postgres";
-import { Reading } from "./readings.database";
-
-export interface TarotSession {
-  id: string;
-  userId: string;
-  createdAt: Date;
-  readings: Reading[];
-}
+import { ReadingType, TarotSessionType } from "lib/types";
 
 // Function to add a new tarot session with readings or add a reading to an existing tarot session
 export const addReadingToTarotSession = async (
   userId: string,
-  reading: Reading,
+  reading: ReadingType,
   tarotSessionId?: string,
   deck?: string
 ): Promise<void> => {
@@ -56,14 +49,14 @@ export const addReadingToTarotSession = async (
 };
 
 // Function to add a new tarot session
-export const addTarotSession = async (tarotSession: TarotSession): Promise<TarotSession> => {
+export const addTarotSession = async (tarotSession: TarotSessionType): Promise<TarotSessionType> => {
   try {
     const { rows } = await sql`
       INSERT INTO tarot_sessions (user_id, created_at)
       VALUES (${tarotSession.userId}, NOW())
       RETURNING *;
     `;
-    return rows[0] as TarotSession;
+    return rows[0] as TarotSessionType;
   } catch (error) {
     console.error("Failed to add tarot session:", error);
     throw error;
@@ -71,7 +64,7 @@ export const addTarotSession = async (tarotSession: TarotSession): Promise<Tarot
 };
 
 // Function to retrieve a tarot session by ID
-export const getTarotSessionById = async (id: string): Promise<TarotSession | null> => {
+export const getTarotSessionById = async (id: string): Promise<TarotSessionType | null> => {
   try {
     // Fetch session, readings, and cards in a single query with multiple joins
     const { rows } = await sql`
@@ -91,8 +84,8 @@ export const getTarotSessionById = async (id: string): Promise<TarotSession | nu
     }
 
     // Initialize maps to hold session and readings
-    const sessionsMap = new Map<number, TarotSession>();
-    const readingsMap = new Map<number, Reading>();
+    const sessionsMap = new Map<number, TarotSessionType>();
+    const readingsMap = new Map<number, ReadingType>();
 
     // Populate session and readings
     rows.forEach((row) => {
@@ -146,7 +139,7 @@ export const getTarotSessionsByUserId = async (
   userId: number,
   page: number = 1,
   limit: number = 9
-): Promise<TarotSession[]> => {
+): Promise<TarotSessionType[]> => {
   const offset = (page - 1) * limit;
 
   try {
@@ -177,7 +170,7 @@ export const getTarotSessionsByUserId = async (
     }
 
     // Initialize map to hold sessions and their first reading
-    const sessionsMap = new Map<number, TarotSession>();
+    const sessionsMap = new Map<number, TarotSessionType>();
 
     // Populate sessions and readings
     sessionData.forEach((row) => {
@@ -220,7 +213,7 @@ export const getTarotSessionsByUserId = async (
       }
     });
 
-    return Array.from(sessionsMap.values()) as TarotSession[];
+    return Array.from(sessionsMap.values()) as TarotSessionType[];
   } catch (error) {
     console.error("Failed to retrieve tarot sessions:", error);
     throw error;

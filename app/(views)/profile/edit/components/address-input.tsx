@@ -1,11 +1,11 @@
 import React from "react";
 import InputField from "app/(views)/(auth)/components/input-field";
-import { Address } from "lib/types";
 import CountryDropdown from "./countries";
 import StateDropdown from "./states";
+import { AddressType } from "lib/types";
 
 interface AddressInputProps {
-  address: Address;
+  address: AddressType;
   setAddress: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   setState: (v: string) => void;
   setCountry: (v: string) => void;

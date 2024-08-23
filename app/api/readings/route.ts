@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addReadingWithCards, deleteReading } from "lib/database/readings.database";
-import { CardInReading, getCardsByReadingId } from "lib/database/cardsInReadings.database";
+import { addReadingWithCards } from "lib/database/readings.database";
 import { getSession } from "lib/auth";
-import { Reading } from "lib/database/readings.database";
 import { sql } from "@vercel/postgres";
 import {
   countTarotSessionsByUserId,
@@ -10,6 +8,7 @@ import {
   getTarotSessionById,
   getTarotSessionsByUserId,
 } from "lib/database/tarotSessions.database";
+import { CardInReading, ReadingType } from "lib/types";
 
 // POST method to add a new reading and associated cards
 export async function POST(request: NextRequest) {
@@ -19,7 +18,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { reading, cards } = (await request.json()) as { reading: Reading; cards: CardInReading[] };
+    const { reading, cards } = (await request.json()) as { reading: ReadingType; cards: CardInReading[] };
 
     // Add reading and cards
     const newReading = await addReadingWithCards(reading, cards);

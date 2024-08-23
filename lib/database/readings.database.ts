@@ -1,20 +1,8 @@
 import { QueryResult, sql } from "@vercel/postgres";
-import { CardInReading } from "./cardsInReadings.database";
-import { SpreadType } from "lib/contexts/tarot-session-context";
-
-// Interface for a Reading
-export interface Reading {
-  id?: string;
-  userId?: string;
-  userQuery: string;
-  spread?: SpreadType;
-  aiInterpretation?: string;
-  createdAt?: Date;
-  cards?: CardInReading[];
-}
+import { CardInReading, ReadingType } from "lib/types";
 
 // Function to add reading and cards
-export const addReadingWithCards = async (reading: Reading, cards: CardInReading[]): Promise<void> => {
+export const addReadingWithCards = async (reading: ReadingType, cards: CardInReading[]): Promise<void> => {
   try {
     // Start a transaction
     await sql`BEGIN`;
@@ -46,14 +34,14 @@ export const addReadingWithCards = async (reading: Reading, cards: CardInReading
 };
 
 // Function to add a new reading
-export const addReading = async (reading: Reading): Promise<Reading> => {
+export const addReading = async (reading: ReadingType): Promise<ReadingType> => {
   try {
     const { rows } = await sql`
             INSERT INTO readings (user_id, user_query, spread_type, ai_interpretation, created_at)
             VALUES (${reading.userId}, ${reading.userQuery}, ${reading.spread.value}, ${reading.aiInterpretation}, NOW())
             RETURNING *;
         `;
-    return rows[0] as Reading;
+    return rows[0] as ReadingType;
   } catch (error) {
     console.error("Failed to add reading:", error);
     throw error;
@@ -61,12 +49,12 @@ export const addReading = async (reading: Reading): Promise<Reading> => {
 };
 
 // Function to retrieve a reading by ID
-export const getReadingById = async (id: number): Promise<Reading | null> => {
+export const getReadingById = async (id: number): Promise<ReadingType | null> => {
   try {
     const { rows } = await sql`
             SELECT * FROM readings WHERE id = ${id};
         `;
-    return (rows[0] as Reading) || null;
+    return (rows[0] as ReadingType) || null;
   } catch (error) {
     console.error("Failed to get reading:", error);
     throw error;
@@ -74,7 +62,11 @@ export const getReadingById = async (id: number): Promise<Reading | null> => {
 };
 
 // Function to list readings for a specific user
-export const getReadingsByUserId = async (userId: number, page: number = 1, limit: number = 10): Promise<Reading[]> => {
+export const getReadingsByUserId = async (
+  userId: number,
+  page: number = 1,
+  limit: number = 10
+): Promise<ReadingType[]> => {
   const offset = (page - 1) * limit;
 
   try {
@@ -127,7 +119,7 @@ export const getReadingsByUserId = async (userId: number, page: number = 1, limi
       });
     }
 
-    return Array.from(readingsMap.values()) as Reading[];
+    return Array.from(readingsMap.values()) as ReadingType[];
   } catch (error) {
     console.error("Failed to retrieve readings:", error);
     throw error;

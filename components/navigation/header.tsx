@@ -1,14 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "components/ui/button";
 import { Sidebar } from "./sidebar";
 import { SidebarList } from "components/navigation/sidebar-list";
 import { useSession } from "next-auth/react";
 // import appConfig from "app.config";
-import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "lib/utils";
 import LogoComponent from "./logo-component";
@@ -16,12 +14,9 @@ import LogoComponent from "./logo-component";
 
 export default function Header() {
   const { data: session, status, update } = useSession() as any;
-  const { setTheme, resolvedTheme } = useTheme();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-
-  const [isScrolled, setIsScrolled] = useState(false);
 
   const createAuthUrl = (path: string) => {
     const currentPath = searchParams.get("redirect") || "/";

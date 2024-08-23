@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getUserById } from "lib/database/user.database";
 import { getSession } from "lib/auth";
 // import { getCustomerBalance } from "lib/stripe-credits-utils";
@@ -6,7 +6,7 @@ import { countReadingsByUserId } from "lib/database/readings.database";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const userId = (await getSession())?.user.id;
 

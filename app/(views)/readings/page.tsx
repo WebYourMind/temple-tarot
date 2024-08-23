@@ -1,8 +1,6 @@
 import { Metadata } from "next";
 import appConfig from "app.config";
 import dynamic from "next/dynamic";
-import Loading from "components/loading";
-import { cn } from "lib/utils";
 
 const ReadingsList = dynamic(() => import("./components/readings-list"), {
   // loading: () => <Loading />,

@@ -31,7 +31,7 @@ export default function Card({ className = "", alt, onLoad = null, width = 200, 
         height={height | 350}
         onLoadingComplete={handleLoad} // Adjusted to handle both internal and external loading
       />
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 rounded-lg border-4 border-white border-opacity-95 md:rounded-2xl md:border-8" />
+      <div className="pointer-events-none absolute inset-0 rounded-lg border-4 border-white border-opacity-95 md:rounded-2xl md:border-8" />
     </div>
   );
 }

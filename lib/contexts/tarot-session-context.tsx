@@ -5,32 +5,10 @@ import { track } from "@vercel/analytics/react";
 import { useSession } from "next-auth/react";
 import { infoMap } from "lib/tarot-data/info";
 import tarotSpreads from "lib/tarot-data/tarot-spreads";
-import { Reading } from "lib/database/readings.database";
-import { CardInReading } from "lib/database/cardsInReadings.database";
-import { TarotSession } from "lib/database/tarotSessions.database";
 import { createTarotSession } from "app/actions/createTarotSession";
 import { useRouter } from "next/navigation";
 import TarotBack from "app/tarot-back.webp";
-
-export type SpreadType = {
-  numberOfCards: number;
-  description: string;
-  value: "single_card" | "three_card";
-  name: string;
-  cardMeanings: string[];
-};
-
-export type SelectedCardType = {
-  cardName: string;
-  orientation: string;
-  imageUrl?: string;
-  detail?: {};
-  readingTips?: string;
-  uprightGuidance?: string;
-  reversedGuidance?: string;
-};
-
-export type DeckType = { promptName: string; value: string; name: string };
+import { CardInReading, DeckType, ReadingType, SpreadType, TarotSessionType } from "lib/types";
 
 interface TarotSessionContextProps {
   query: string;
@@ -53,17 +31,15 @@ interface TarotSessionContextProps {
   setSpreadPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleSubmitQuestion: () => void;
   handleReset: (keepFollowUp?: boolean) => void;
-  setInterpretationArray: React.Dispatch<React.SetStateAction<any>>;
-  interpretationArray: any[];
   setAiResponse: React.Dispatch<React.SetStateAction<any>>;
   aiResponse: string;
   handleSubmitFollowUpQuestion: (drawCards?: boolean) => void;
   setIsFollowUp: React.Dispatch<React.SetStateAction<any>>;
   isFollowUp?: boolean;
   tarotSessionId?: string;
-  onResponseComplete?: (reading: Reading) => void;
+  onResponseComplete?: (reading: ReadingType) => void;
   addAiResponseToReading: (aiResponse: string) => void;
-  followUpContext?: TarotSession;
+  followUpContext?: TarotSessionType;
   handleCreateTarotSession: () => void;
   isPending: boolean;
   storeLastUsedDeck: () => void;
@@ -92,8 +68,8 @@ export const TarotSessionProvider: React.FC<{
   children: React.ReactNode;
   isFollowUp?: boolean;
   tarotSessionId?: string;
-  onResponseComplete?: (reading: Reading) => void;
-  followUpContext?: TarotSession;
+  onResponseComplete?: (reading: ReadingType) => void;
+  followUpContext?: TarotSessionType;
   isPropped?: boolean;
   addAiResponseToReading?: (aiResponse: string) => void;
 }> = ({
@@ -116,7 +92,6 @@ export const TarotSessionProvider: React.FC<{
   const { data: session } = useSession() as { data: { user: { id: string } } };
   const [hasOwnCards, setHasOwnCards] = useState(false);
   const [isFollowUp, setIsFollowUp] = useState(isFollowUpProp);
-  const [interpretationArray, setInterpretationArray] = useState<any>();
   const [aiResponse, setAiResponse] = useState<any>();
   const [usersName, setUsersName] = useState<string>(userSession?.user?.name || "");
   const router = useRouter();
@@ -154,9 +129,6 @@ export const TarotSessionProvider: React.FC<{
   // Load selected deck from localStorage on component mount
   useEffect(() => {
     const storedDeck = getLastUsedDeck();
-    setSelectedDeck(storedDeck || defaultDeck);
-
-    const storedName = getUsersName();
     setSelectedDeck(storedDeck || defaultDeck);
   }, []);
 
@@ -219,7 +191,6 @@ export const TarotSessionProvider: React.FC<{
     setPhase("question");
     setSelectedCards(null);
     setQuery("");
-    setInterpretationArray(null);
     setAiResponse(null);
     setHasOwnCards(false);
     setSelectedDeck(getLastUsedDeck());
@@ -249,8 +220,6 @@ export const TarotSessionProvider: React.FC<{
     handleSubmitQuestion,
     handleSubmitFollowUpQuestion,
     handleReset,
-    interpretationArray,
-    setInterpretationArray,
     aiResponse,
     setAiResponse,
     isFollowUp,

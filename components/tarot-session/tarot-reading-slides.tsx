@@ -3,28 +3,23 @@ import Image from "next/image";
 import { Button } from "components/ui/button";
 import { cn, findFullCardInDeck } from "lib/utils";
 import { TarotSessionProvider, useTarotSession } from "lib/contexts/tarot-session-context";
-import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { ArrowLeft, ArrowRight, Dot } from "lucide-react";
 import { IconClose } from "components/ui/icons";
 import { useRouter } from "next/navigation";
-import { EnterFullScreenIcon } from "@radix-ui/react-icons";
 import CardInfo from "../../app/(views)/glossary/card-info";
 import { MagicFont } from "components/tarot-session/query/query-input";
 import DividerWithText from "components/divider-with-text";
 import SwipeableViews from "react-swipeable-views-react-18-fix";
-import Markdown from "react-markdown";
-import ReadingFeedback from "app/(views)/interpretation/reading-feedback";
+import ReadingFeedback from "./reading-feedback";
 import InterpretationSlide from "./interpretation-slide";
 import TarotSession from "./tarot-session";
 import { useReadingsContext } from "lib/contexts/readings-context";
-import { Reading } from "lib/database/readings.database";
-import { CardInReading } from "lib/database/cardsInReadings.database";
 import Interpreter from "./interpreter";
 import LogoComponent from "components/navigation/logo-component";
+import { CardInReading, ReadingType } from "lib/types";
 
 const TarotReadingSlides = ({ tarotSessionId = null }) => {
-  const { query, selectedDeck, handleReset, interpretationArray, aiResponse, setIsFollowUp, selectedCards } =
-    useTarotSession();
+  const { query, selectedDeck, handleReset, aiResponse, setIsFollowUp, selectedCards } = useTarotSession();
   const { tarotSession, setTarotSession } = useReadingsContext();
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -49,12 +44,9 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
     router.push("/");
   }
 
-  function renderCardSlide(currentSlideCards) {
+  function renderCardSlide(currentSlideCards, key) {
     return (
-      <div
-        key={"cardslide" + currentSlideCards[0]?.cardName}
-        className="relative inset-0 flex h-full items-center justify-center space-x-2"
-      >
+      <div key={key} className="relative inset-0 flex h-full items-center justify-center space-x-2">
         {currentSlideCards?.length > 0 &&
           currentSlideCards.map((card: CardInReading) => {
             const cardWithImage = findFullCardInDeck(card.cardName, card.deck);
@@ -116,10 +108,12 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
 
   function getInterpretationSlides() {
     if (tarotSession?.readings) {
-      const renderInterpretationSlide = (currentReading: Reading) => {
+      const renderInterpretationSlide = (currentReading: ReadingType, key) => {
+        console.log(key);
         if (!currentReading.aiInterpretation) {
           return (
             <TarotSessionProvider
+              key={key}
               isPropped
               tarotSessionId={tarotSessionId}
               addAiResponseToReading={addAiResponseToReading}
@@ -131,9 +125,9 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
         }
         return (
           <InterpretationSlide
+            key={key}
             query={currentReading.userQuery}
             cards={currentReading.cards}
-            selectedDeck={selectedDeck}
             aiResponse={currentReading.aiInterpretation}
           />
         );
@@ -144,30 +138,11 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
             console.log(currentReading);
             const cardWithImage = findFullCardInDeck(currentReading.cards[0].cardName, currentReading.cards[0].deck);
             const readingViews = [];
-            if (cardWithImage) readingViews.push(() => renderCardSlide(currentReading.cards));
-            readingViews.push(() => renderInterpretationSlide(currentReading));
+            if (cardWithImage) readingViews.push((key) => renderCardSlide(currentReading.cards, key));
+            readingViews.push((key) => renderInterpretationSlide(currentReading, key));
             return readingViews;
-            // return [() => renderCardSlide(currentReading.cards), () => renderInterpretationSlide(currentReading)];
           }
-          return [() => renderInterpretationSlide(currentReading)];
-        }),
-      ];
-    }
-
-    // only used for old readings. Can probably be deleted.
-    if (interpretationArray) {
-      return [
-        ...interpretationArray.map((currentSlide, index) => {
-          const SlideComponent = () => (
-            <div className="my-1 flex grow flex-col justify-center">
-              <Markdown className="text-start text-sm leading-relaxed tracking-wide md:text-base">
-                {currentSlide.content}
-              </Markdown>
-            </div>
-          );
-
-          SlideComponent.displayName = `SlideComponent_${index}`;
-          return SlideComponent;
+          return [(key) => renderInterpretationSlide(currentReading, key)];
         }),
       ];
     }
@@ -175,27 +150,19 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
     if (aiResponse && cards) {
       const cardWithImage = findFullCardInDeck(cards[0].cardName, cards[0].deck);
       const readingViews = [];
-      if (cardWithImage) readingViews.push(() => renderCardSlide(cards));
-      readingViews.push(() => (
-        <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />
-      ));
+      if (cardWithImage) readingViews.push((key) => renderCardSlide(cards, key));
+      readingViews.push((key) => <InterpretationSlide key={key} query={query} cards={cards} aiResponse={aiResponse} />);
       return readingViews;
-      // return [
-      //   () => renderCardSlide(cards),
-      //   () => <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />,
-      // ];
     }
     if (aiResponse) {
-      return [
-        () => <InterpretationSlide query={query} cards={cards} selectedDeck={selectedDeck} aiResponse={aiResponse} />,
-      ];
+      return [(key) => <InterpretationSlide key={key} query={query} cards={cards} aiResponse={aiResponse} />];
     }
     return [];
   }
 
-  function renderFeedbackSlide() {
+  function renderFeedbackSlide(key) {
     return (
-      <div key={"feedback"} className="flex h-full w-full grow flex-col items-center justify-center space-y-4 px-4">
+      <div key={key} className="flex h-full w-full grow flex-col items-center justify-center space-y-4 px-4">
         <Button className="w-full border-2" onClick={handleGoDeeper}>
           Go Deeper
         </Button>
@@ -203,12 +170,12 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
           New Reading
         </Button>
         <DividerWithText />
-        <ReadingFeedback content={JSON.stringify(aiResponse || interpretationArray)} />
+        <ReadingFeedback content={JSON.stringify(aiResponse)} />
       </div>
     );
   }
 
-  function handleDeeperComplete(newReading: Reading) {
+  function handleDeeperComplete(newReading: ReadingType) {
     if (tarotSession) {
       setTarotSession({ ...tarotSession, readings: [...tarotSession?.readings, newReading] });
     } else {
@@ -227,10 +194,10 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
     setGoDeeper(false);
   }
 
-  function renderGoDeeperSlide() {
+  function renderGoDeeperSlide(key) {
     // card selection like followupreadinginput
     return (
-      <div className="h-full w-full" key={"godeeper"}>
+      <div className="h-full w-full" key={key}>
         <TarotSessionProvider
           followUpContext={
             tarotSession || {
@@ -282,22 +249,18 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       )}
     >
       <div className="flex items-center justify-between p-4">
-        {/* <h1 className="my-0 text-xs">Temple Tarot</h1> */}
         <LogoComponent />
         <Button variant="ghost" size="icon" onClick={handleClose} className="-mr-3 rounded-full">
           <IconClose />
         </Button>
       </div>
-      {/* <div className="my-0 flex items-center justify-center border-y border-y-muted py-4 text-sm font-normal italic">
-        <h2 className="my-0 text-sm font-normal italic">{query || "Open Reading"}</h2>
-      </div> */}
       <SwipeableViews
         index={currentIndex}
         onChangeIndex={setCurrentIndex}
         className="h-full flex-col"
         slideClassName="h-full"
       >
-        {slides.map((renderSlide) => renderSlide())}
+        {slides.map((renderSlide, index) => renderSlide(index.toString()))}
       </SwipeableViews>
       <CardInfo
         card={focusedCard?.detail && focusedCard}

@@ -1,7 +1,5 @@
 import { Metadata } from "next";
 import appConfig from "app.config";
-import dynamic from "next/dynamic";
-import Loading from "components/loading";
 import Markdown from "react-markdown";
 import privacyPolicy from "./privacy-policy";
 

@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import Loading from "components/loading";
+import Loading from "app/loading";
 
 const Verify = () => {
   const searchParams = useSearchParams();

@@ -10,7 +10,7 @@ import AddressInput from "./address-input";
 import { useRouter } from "next/navigation";
 import { isValidEmail, isValidPhoneNumber } from "lib/utils";
 import { useProfile } from "lib/hooks/use-profile";
-import Loading from "components/loading";
+import Loading from "app/loading";
 import { PhoneInput } from "./phone-input";
 
 export default function EditProfile() {

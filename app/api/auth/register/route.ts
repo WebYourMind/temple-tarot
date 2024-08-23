@@ -2,13 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import sgMail from "@sendgrid/mail";
-import { RegisterUser } from "../../../../lib/AppInterface";
 import { insertVerificationToken } from "../../../../lib/database/verificationTokens.database";
 import { getUserByEmail, insertUser } from "../../../../lib/database/user.database";
 
 export async function POST(request: NextRequest) {
   try {
-    const user = (await request.json()) as RegisterUser;
+    const user = (await request.json()) as {
+      email: string;
+      password: string;
+      name?: string;
+    };
 
     // Validation
     if (!user || !user.email || !user.password || !user.name) {

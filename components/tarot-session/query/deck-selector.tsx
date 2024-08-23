@@ -1,7 +1,7 @@
 "use client";
 
 import { InfoButton } from "components/info-dialog";
-import Loading from "components/loading";
+import Loading from "app/loading";
 import { buttonVariants } from "components/ui/button";
 import {
   Select,

@@ -9,7 +9,7 @@ import {
   MobileIcon,
   Pencil2Icon,
 } from "@radix-ui/react-icons";
-import Loading from "components/loading";
+import Loading from "app/loading";
 import { Button } from "components/ui/button";
 import { useRouter } from "next/navigation";
 import DeactivateAccount from "../edit/components/deactivate-account";

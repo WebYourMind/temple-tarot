@@ -1,6 +1,6 @@
 "use client";
 
-import { DotsVerticalIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { Dialog, DialogTrigger } from "components/ui/dialog";
 import {
   DropdownMenu,

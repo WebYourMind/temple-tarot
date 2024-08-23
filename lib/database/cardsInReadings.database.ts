@@ -1,19 +1,5 @@
 import { sql } from "@vercel/postgres";
-
-// Define an interface for a Card in a Reading
-export interface CardInReading {
-  id?: number;
-  readingId?: number;
-  cardName: string;
-  orientation: string;
-  position: number;
-  imageUrl?: string;
-  detail?: {};
-  readingTips?: string;
-  uprightGuidance?: string;
-  reversedGuidance?: string;
-  deck?: string;
-}
+import { CardInReading } from "lib/types";
 
 // Function to add a new card in a reading
 export const addCardInReading = async (card: CardInReading): Promise<CardInReading> => {

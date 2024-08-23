@@ -1,6 +1,6 @@
 import { getSession } from "lib/auth";
 import { getUserById } from "lib/database/user.database";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getUserSubscription } from "../utils/stripe-credits-utils";
 
@@ -10,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2023-10-16",
 });
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const userId = (await getSession())?.user.id;
     const user = await getUserById(parseInt(userId));

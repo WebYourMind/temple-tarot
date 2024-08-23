@@ -1,4 +1,4 @@
-import { SpreadType } from "lib/contexts/tarot-session-context";
+import { SpreadType } from "lib/types";
 
 const tarotSpreads: SpreadType[] = [
   {

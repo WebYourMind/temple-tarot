@@ -1,36 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { cn, findFullCardInDeck } from "lib/utils";
 import Markdown from "react-markdown";
-import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import { MagicFont } from "./query/query-input";
-import { CardInReading } from "lib/database/cardsInReadings.database";
-
-interface Card {
-  cardName: string;
-  orientation: string;
-}
-
-interface Deck {
-  value: string;
-}
+import { CardInReading } from "lib/types";
 
 interface InterpretationSlideProps {
   cards: CardInReading[];
-  selectedDeck: Deck;
   aiResponse: string;
   query?: string;
 }
 
-const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, selectedDeck, aiResponse, query }) => {
-  const [open, setOpen] = useState(false);
-  const [focusedCard, setFocusedCard] = useState<any>(null);
-
+const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, aiResponse, query }) => {
   return (
     <div className="relative flex h-full w-full flex-col text-center">
-      <div className="absolute bottom-0 top-0 w-full overflow-scroll p-4">
+      <div className="absolute inset-y-0 w-full overflow-scroll p-4">
         {query && <p className="mb-8 mr-1 text-left font-bold italic">{query || "Open Reading"}</p>}
         <div className="flex w-full justify-around space-x-4">
           {cards?.length > 0 &&
@@ -40,10 +26,6 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
                 <div className="mb-8" key={card.cardName}>
                   {cardWithImage && cardWithImage?.imageUrl && (
                     <Image
-                      onClick={() => {
-                        setFocusedCard(cardWithImage);
-                        setOpen(true);
-                      }}
                       alt={cardWithImage.cardName}
                       src={cardWithImage.imageUrl}
                       width={256}
@@ -73,8 +55,6 @@ const InterpretationSlide: React.FC<InterpretationSlideProps> = ({ cards, select
           {aiResponse}
         </Markdown>
       </div>
-      {/* Optionally include a modal or popover to display focused card details */}
-      {/* <CardInfo card={focusedCard} open={open} onOpenChange={() => setOpen(!open)} /> */}
     </div>
   );
 };

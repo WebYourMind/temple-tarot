@@ -1,4 +1,4 @@
-import { UserProfile } from "lib/types";
+import { UserProfileType } from "lib/types";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -17,7 +17,7 @@ export function useProfile() {
       country: "",
     },
   };
-  const [profile, setProfile] = useState<UserProfile>(emptyProfile);
+  const [profile, setProfile] = useState<UserProfileType>(emptyProfile);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

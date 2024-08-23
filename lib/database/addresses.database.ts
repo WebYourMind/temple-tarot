@@ -1,4 +1,4 @@
-import { QueryResultRow, sql } from "@vercel/postgres";
+import { sql } from "@vercel/postgres";
 
 export const updateUserAddress = async (
   street: string,
@@ -33,7 +33,7 @@ export const insertNewAddress = async (
   }
 };
 
-export const deleteAddressById = async ( address_id: number) => {
+export const deleteAddressById = async (address_id: number) => {
   try {
     await sql`DELETE FROM addresses WHERE id = ${address_id}`;
   } catch (error) {

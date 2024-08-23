@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import appConfig from "app.config";
 import dynamic from "next/dynamic";
-import Loading from "components/loading";
+import Loading from "app/loading";
 
 const Reading = dynamic(() => import("./reading"), {
   loading: () => <Loading />,

@@ -1,25 +1,21 @@
 "use client";
 
-import { useReadingsContext } from "lib/contexts/readings-context";
 import { useRouter } from "next/navigation";
 import Card from "components/card";
 import ReadingItemMenu from "./reading-item-menu";
 import Link from "next/link";
-import { TarotSession } from "lib/database/tarotSessions.database";
 import { MagicFont } from "components/tarot-session/query/query-input";
 import { cn } from "lib/utils";
-import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
+import { TarotSessionType } from "lib/types";
 
 type ReadingItemProps = {
-  tarotSession: TarotSession;
+  tarotSession: TarotSessionType;
 };
 
 function ReadingItem({ tarotSession }: ReadingItemProps) {
-  const { setTarotSession } = useReadingsContext();
   const router = useRouter();
   const handleClick = (e) => {
     e.preventDefault();
-    // setTarotSession(tarotSession);
     router.push(`/readings/${tarotSession.id}`);
   };
 

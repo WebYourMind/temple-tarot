@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { thoth2, deckCardsMapping } from "lib/tarot-data/tarot-deck";
+import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import "styles/cards.css";
 import OrientationPicker from "./orientation-picker";
 import SplitDeck from "./split-deck";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
-import { CardInReading } from "lib/database/cardsInReadings.database";
+import { CardInReading } from "lib/types";
 
 interface CardSelectionProps {
   onSelect: (finalCard: CardInReading) => void;

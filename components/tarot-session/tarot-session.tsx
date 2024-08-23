@@ -7,7 +7,7 @@ import CardSelectionWrapper from "./card-selection/card-selection-wrapper";
 import Interpreter from "./interpreter";
 import { FollowUpReadingInput, NewReadingInput } from "./query/query-input";
 import { useEffect, useState } from "react";
-import ReadingLoading from "app/(views)/interpretation/reading-loading";
+import ReadingLoading from "./reading-loading";
 
 export default function TarotSession() {
   const {

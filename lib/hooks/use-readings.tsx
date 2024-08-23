@@ -1,13 +1,11 @@
-import { CardInReading } from "lib/database/cardsInReadings.database";
-import { Reading } from "lib/database/readings.database";
-import { TarotSession } from "lib/database/tarotSessions.database";
+import { CardInReading, ReadingType, TarotSessionType } from "lib/types";
 import { keysToCamel } from "lib/utils";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 export function useReadings() {
-  const [tarotSessions, setTarotSessions] = useState<TarotSession[]>([]);
-  const [tarotSession, setTarotSession] = useState<TarotSession>();
+  const [tarotSessions, setTarotSessions] = useState<TarotSessionType[]>([]);
+  const [tarotSession, setTarotSession] = useState<TarotSessionType>();
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -46,32 +44,15 @@ export function useReadings() {
     }
   };
 
-  const addReading = async (reading: Reading, cards: CardInReading[], tarotSessionId?: string) => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/readings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reading, cards, tarotSessionId }),
-      });
-      const data = await response.json();
-      setLoading(false);
-    } catch (err) {
-      setLoading(false);
-      setError(err as Error);
-      console.error("Failed to add reading:", err);
-    }
-  };
-
   const updateReading = async (readingId: number, reading: any, cards: any[]) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/readings/${readingId}`, {
+      await fetch(`/api/readings/${readingId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reading, cards }),
       });
-      const data = await response.json();
+
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -83,10 +64,9 @@ export function useReadings() {
   const deleteReading = async (readingId: number) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/readings/${readingId}`, {
+      await fetch(`/api/readings/${readingId}`, {
         method: "DELETE",
       });
-      const data = await response.json();
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -100,7 +80,6 @@ export function useReadings() {
     error,
     fetchReadings,
     fetchReading,
-    addReading,
     updateReading,
     deleteReading,
     tarotSessions,

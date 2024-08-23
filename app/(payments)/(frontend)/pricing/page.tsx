@@ -3,9 +3,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "components/ui/button";
-import Loading from "components/loading";
+import Loading from "app/loading";
 import Faq from "./faq";
-import { manageSubscription } from "../utils";
 import CurrentPass from "./current-pass";
 
 interface SimplifiedPrice {

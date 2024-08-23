@@ -1236,97 +1236,6 @@ export const thoth2 = [
   },
 ];
 
-// Crowley Thoth Deck
-export const crowleyDeck = [
-  // Major Arcana
-  "The Fool",
-  "The Magus",
-  "The Priestess",
-  "The Empress",
-  "The Emperor",
-  "The Hierophant",
-  "The Lovers",
-  "The Chariot",
-  "Adjustment",
-  "The Hermit",
-  "Fortune",
-  "Lust",
-  "The Hanged Man",
-  "Death",
-  "Art",
-  "The Devil",
-  "The Tower",
-  "The Star",
-  "The Moon",
-  "The Sun",
-  "The Aeon",
-  "The Universe",
-
-  // Minor Arcana - Wands
-  "Ace of Wands",
-  "Two of Wands",
-  "Three of Wands",
-  "Four of Wands",
-  "Five of Wands",
-  "Six of Wands",
-  "Seven of Wands",
-  "Eight of Wands",
-  "Nine of Wands",
-  "Ten of Wands",
-  "Princess of Wands",
-  "Prince of Wands",
-  "Queen of Wands",
-  "Knight of Wands",
-
-  // Minor Arcana - Cups
-  "Ace of Cups",
-  "Two of Cups",
-  "Three of Cups",
-  "Four of Cups",
-  "Five of Cups",
-  "Six of Cups",
-  "Seven of Cups",
-  "Eight of Cups",
-  "Nine of Cups",
-  "Ten of Cups",
-  "Princess of Cups",
-  "Prince of Cups",
-  "Queen of Cups",
-  "Knight of Cups",
-
-  // Minor Arcana - Swords
-  "Ace of Swords",
-  "Two of Swords",
-  "Three of Swords",
-  "Four of Swords",
-  "Five of Swords",
-  "Six of Swords",
-  "Seven of Swords",
-  "Eight of Swords",
-  "Nine of Swords",
-  "Ten of Swords",
-  "Princess of Swords",
-  "Prince of Swords",
-  "Queen of Swords",
-  "Knight of Swords",
-
-  // Minor Arcana - Disks (Pentacles in traditional decks)
-  "Ace of Disks",
-  "Two of Disks",
-  "Three of Disks",
-  "Four of Disks",
-  "Five of Disks",
-  "Six of Disks",
-  "Seven of Disks",
-  "Eight of Disks",
-  "Nine of Disks",
-  "Ten of Disks",
-  "Princess of Disks",
-  "Prince of Disks",
-  "Queen of Disks",
-  "Knight of Disks",
-];
-
 const thothCards = [
   "The Fool",
   "The Magus",
@@ -1511,18 +1420,15 @@ export const decks = [
     value: "thoth_2",
     name: "Thoth 2.0 Deck",
     promptName: "Thoth 2.0 deck (see card definitions for interpretations)",
-    // cards: customDeck,
   },
   {
     value: "thoth",
     name: "Aleister Crowley's Thoth Deck",
     promptName: "Thoth Deck by Aleister Crowley",
-    // cards: thothCards
   },
   {
     value: "ryder_waite",
     name: "Ryder Waite Deck",
     promptName: "Ryder Waite Deck",
-    // cards: riderWaiteCards
   },
 ];

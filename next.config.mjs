@@ -19,7 +19,7 @@ const config = withPlugins(
     ],
   ],
   {
-    reactStrictMode: true,
+    reactStrictMode: false,
     images: {
       remotePatterns: [
         {

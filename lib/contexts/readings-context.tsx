@@ -1,21 +1,18 @@
-import { CardInReading } from "lib/database/cardsInReadings.database";
-import { Reading } from "lib/database/readings.database";
-import { TarotSession } from "lib/database/tarotSessions.database";
 import { useReadings } from "lib/hooks/use-readings";
+import { CardInReading, TarotSessionType } from "lib/types";
 import React, { ReactNode, createContext, useContext } from "react";
 
 export interface ReadingsContextType {
   loading: boolean;
   error: Error | null;
-  tarotSessions: TarotSession[];
-  tarotSession?: TarotSession;
+  tarotSessions: TarotSessionType[];
+  tarotSession?: TarotSessionType;
   fetchReadings: (userId: string, page: number, limit: number) => Promise<void>;
   fetchReading: (id: string) => Promise<void>;
-  addReading: (reading: Reading, cards: CardInReading[], tarotSessionId?: string) => Promise<void>;
-  updateReading: (readingId: number, reading: Reading, cards: CardInReading[]) => Promise<void>;
+  updateReading: (readingId: number, reading: TarotSessionType, cards: CardInReading[]) => Promise<void>;
   deleteReading: (readingId: number) => Promise<void>;
-  setTarotSessions: (tarotSessions: TarotSession[]) => void;
-  setTarotSession: (tarotSession: TarotSession) => void;
+  setTarotSessions: (tarotSessions: TarotSessionType[]) => void;
+  setTarotSession: (tarotSession: TarotSessionType) => void;
   totalPages: number;
 }
 

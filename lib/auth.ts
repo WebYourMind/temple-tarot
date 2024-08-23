@@ -64,7 +64,6 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        // domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` : undefined,
         secure: VERCEL_DEPLOYMENT,
       },
     },
@@ -94,7 +93,6 @@ export const authOptions: NextAuthOptions = {
         token.user = user;
       }
       if (trigger === "update" && session?.isSubscribed) {
-        // Note, that `session` can be any arbitrary object, remember to validate it!
         token.isSubscribed = session.isSubscribed;
         // @ts-expect-error
         token.user.isSubscribed = session.isSubscribed;

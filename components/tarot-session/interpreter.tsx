@@ -5,31 +5,20 @@ import { toast } from "react-hot-toast";
 import "styles/cards.css";
 import { useTarotSession } from "lib/contexts/tarot-session-context";
 import { useRouter } from "next/navigation";
-import { parseJsonSafe } from "lib/utils";
-import ReadingLoading from "../../app/(views)/interpretation/reading-loading";
+import ReadingLoading from "./reading-loading";
 import TarotReadingSlides from "./tarot-reading-slides";
 import InterpretationSlide from "./interpretation-slide";
-import { thoth2 } from "lib/tarot-data/tarot-deck";
 import { useUserAccessPlan } from "app/(payments)/(frontend)/contexts/user-access-plan-context";
-import { useSession } from "next-auth/react";
 
 function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
   const defaultSession = useTarotSession();
-  const { data: userSession } = useSession() as any;
   const { freeReadings, setFreeReadings } = useUserAccessPlan();
   const [error, setError] = useState<string>();
 
   const { query, selectedCards, spread, selectedDeck, isFollowUp, followUpContext, usersName } =
     proppedTarotSession || defaultSession;
 
-  const {
-    interpretationArray,
-    setInterpretationArray,
-    aiResponse,
-    setAiResponse,
-    onResponseComplete,
-    addAiResponseToReading,
-  } = defaultSession;
+  const { aiResponse, setAiResponse, onResponseComplete, addAiResponseToReading } = defaultSession;
   const router = useRouter();
   const [isComplete, setIsComplete] = useState(false);
 
@@ -81,12 +70,7 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
 
         if (done) {
           if (interpretationValue) {
-            const intArray = parseJsonSafe(interpretationValue);
-            if (Array.isArray(intArray)) {
-              setInterpretationArray(intArray);
-            } else {
-              setAiResponse(interpretationValue);
-            }
+            setAiResponse(interpretationValue);
           }
           setIsComplete(true);
           break;
@@ -156,13 +140,11 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
     return <p>{error}</p>;
   }
 
-  if (isFollowUp && (interpretationArray || aiResponse)) {
-    return (
-      <InterpretationSlide query={query} cards={selectedCards} selectedDeck={selectedDeck} aiResponse={aiResponse} />
-    );
+  if (isFollowUp && aiResponse) {
+    return <InterpretationSlide query={query} cards={selectedCards} aiResponse={aiResponse} />;
   }
 
-  if (interpretationArray || aiResponse) {
+  if (aiResponse) {
     return <TarotReadingSlides tarotSessionId={tarotSessionId} />;
   }
 

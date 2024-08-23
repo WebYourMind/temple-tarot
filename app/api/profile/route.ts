@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import sgMail from "@sendgrid/mail";
 import crypto from "crypto";
-import { UserProfile } from "lib/types";
 import { getSession } from "lib/auth";
 import {
   getAddressById,
@@ -25,7 +24,22 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "The user ID must be provided." }, { status: 400 });
     }
 
-    const { user } = (await request.json()) as { user: UserProfile };
+    const { user } = (await request.json()) as {
+      user: {
+        name: string;
+        email: string;
+        id?: string;
+        address: {
+          street: string;
+          city: string;
+          state: string;
+          postalCode: string;
+          country: string;
+        };
+        phone?: string;
+        isSubscribed?: boolean;
+      };
+    };
 
     // Validate email and name
     if (!user.email || !user.email.includes("@")) {
@@ -118,7 +132,7 @@ export async function PATCH(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   try {
     const userId = (await getSession())?.user.id;
 

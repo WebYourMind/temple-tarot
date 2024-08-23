@@ -10,10 +10,6 @@ const Header = dynamic(() => import("../components/navigation/header"), {
   ssr: false,
 });
 
-const FeedbackWidget = dynamic(() => import("../components/feedback/feedback-widget"), {
-  ssr: false,
-});
-
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { phase } = useTarotSession();
@@ -31,7 +27,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <Toaster />
         {!hideHeader && <Header />}
         {children}
-        <FeedbackWidget />
         <CookieNotice />
       </div>
     </div>

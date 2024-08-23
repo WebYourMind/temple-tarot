@@ -1,13 +1,11 @@
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 
-import { NextRequest, NextResponse } from "next/server";
-import { getChatMessagesByUserId } from "lib/database/chatMessages.database";
+import { NextResponse } from "next/server";
 import { getSession } from "lib/auth";
-import { Reading } from "lib/database/readings.database";
-import { CardInReading } from "lib/database/cardsInReadings.database";
 import { rateLimitReached } from "lib/database/apiUsageLogs.database";
-import { addReadingToTarotSession, TarotSession } from "lib/database/tarotSessions.database";
+import { addReadingToTarotSession } from "lib/database/tarotSessions.database";
+import { CardInReading, ReadingType, TarotSessionType } from "lib/types";
 
 export const runtime = "nodejs";
 
@@ -42,11 +40,11 @@ ${usersName && "The user's name is " + usersName}
 
 export async function POST(req: Request) {
   const json = (await req.json()) as any;
-  const { cards, userQuery, spread, content, tarotSessionId, followUpContext, deck, usersName } = json as Reading &
+  const { cards, userQuery, spread, content, tarotSessionId, followUpContext, deck, usersName } = json as ReadingType &
     CardInReading & {
       content: string;
       tarotSessionId?: string;
-      followUpContext?: TarotSession;
+      followUpContext?: TarotSessionType;
       deck?: string;
       usersName?: string;
     };
@@ -163,32 +161,5 @@ export async function POST(req: Request) {
     if (!error.response || error.response.status !== 429) {
       throw error;
     }
-  }
-}
-
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-
-    // Check if userId is not null or undefined
-    if (!userId) {
-      return NextResponse.json({ error: "The user ID must be provided." }, { status: 400 });
-    }
-
-    // Query to select the latest reports row for the given user ID
-    const existingMessages = await getChatMessagesByUserId(parseInt(userId));
-
-    // Check if we got a result back
-    if (!existingMessages) {
-      return NextResponse.json({ error: "No chat found for the given user ID." }, { status: 404 });
-    }
-
-    // Return the latest scores row
-    return NextResponse.json({ message: "Chat retrieved successfully.", existingMessages }, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    // Return an error response
-    return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
   }
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import Loading from "components/loading";
-import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
+import Loading from "app/loading";
 import { cn, findFullCardInDeck } from "lib/utils";
 import Image from "next/image";
 import "styles/cards.css";
