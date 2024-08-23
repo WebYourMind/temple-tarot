@@ -1,7 +1,7 @@
 "use client";
 
-import TarotSession from "components/tarot-session/tarot-session";
+import TarotFlow from "components/tarot-flow";
 
 export default function Home() {
-  return <TarotSession />;
+  return <TarotFlow />;
 }

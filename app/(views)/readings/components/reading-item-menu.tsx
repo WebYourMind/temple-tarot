@@ -13,14 +13,14 @@ import {
 import DeleteReading from "./delete-reading";
 import { useState } from "react";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useReadingsContext } from "lib/contexts/readings-context";
+import { useTarotSessionsContext } from "lib/contexts/tarot-sessions-context";
 
 type ReadingItemProps = {
   tarotSessionId: string;
 };
 
 function ReadingItemMenu({ tarotSessionId }: ReadingItemProps) {
-  const { setTarotSessions, tarotSessions } = useReadingsContext();
+  const { setTarotSessions, tarotSessions } = useTarotSessionsContext();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const handleDeleteSuccess = () => {
     setDeleteOpen(false);

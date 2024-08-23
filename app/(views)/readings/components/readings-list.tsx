@@ -2,12 +2,12 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import ReadingItem from "./reading-item";
-import { useReadingsContext } from "lib/contexts/readings-context";
+import { useTarotSessionsContext } from "lib/contexts/tarot-sessions-context";
 import PaginationComponent from "./pagination-component";
 import LoadingSkeleton from "./loading-skeleton";
 import EmptyReadings from "./empty-readings";
 import { cn } from "lib/utils";
-import { MagicFont } from "components/tarot-session/query/query-input";
+import { MagicFont } from "components/tarot-flow/query/query-input";
 
 function paginate(currentPage, pageCount, delta = 2) {
   const range = [];
@@ -32,12 +32,12 @@ function paginate(currentPage, pageCount, delta = 2) {
 
 function ReadingsList() {
   const { data: session } = useSession() as any;
-  const { tarotSessions, loading, error, fetchReadings, totalPages } = useReadingsContext();
+  const { tarotSessions, loading, error, fetchTarotSessions, totalPages } = useTarotSessionsContext();
   const [page, setPage] = useState(1);
 
   useEffect(() => {
     if (session?.user?.id) {
-      fetchReadings(session.user.id, page, 9);
+      fetchTarotSessions(session.user.id, page, 9);
     }
   }, [session?.user?.id, page]);
 

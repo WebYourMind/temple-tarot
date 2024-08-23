@@ -4,7 +4,7 @@ import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
 import "styles/cards.css";
 import OrientationPicker from "./orientation-picker";
 import SplitDeck from "./split-deck";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 import { CardInReading } from "lib/types";
 
 interface CardSelectionProps {
@@ -37,7 +37,7 @@ const createShuffledDeck = (selectedDeck) => {
 };
 
 const CardSelection = ({ onSelect, query, currentStep }: CardSelectionProps) => {
-  const { selectedDeck } = useTarotSession();
+  const { selectedDeck } = useTarotFlow();
   const [deck, setDeck] = useState<CardInReading[]>();
   const [leftDeck, setLeftDeck] = useState<CardInReading[]>([]);
   const [rightDeck, setRightDeck] = useState<CardInReading[]>([]);

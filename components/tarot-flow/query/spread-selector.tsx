@@ -3,12 +3,12 @@ import * as React from "react";
 import tarotSpreads from "lib/tarot-data/tarot-spreads";
 import { Dialog, DialogContent, DialogTrigger } from "components/ui/dialog";
 import { ChevronDown } from "lucide-react";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 import { cn } from "lib/utils";
 import { buttonVariants } from "components/ui/button";
 
 function SpreadSelector() {
-  const { spread, setSpread, setSpreadPickerOpen, spreadPickerOpen } = useTarotSession();
+  const { spread, setSpread, setSpreadPickerOpen, spreadPickerOpen } = useTarotFlow();
   const handleSpreadSelect = (spreadValue) => {
     const selectedSpread = tarotSpreads.find((spread) => spread.value === spreadValue);
     setSpread(selectedSpread);

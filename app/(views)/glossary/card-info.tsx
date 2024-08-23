@@ -4,7 +4,7 @@ import Image from "next/image";
 import * as Dialog from "@radix-ui/react-dialog";
 import { DialogContent } from "components/ui/dialog";
 import { cn } from "lib/utils";
-import { MagicFont } from "components/tarot-session/query/query-input";
+import { MagicFont } from "components/tarot-flow/query/query-input";
 
 const CardInfo = ({ card, open, onOpenChange }) => {
   return (

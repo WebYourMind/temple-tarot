@@ -13,10 +13,10 @@ export default function DeleteReading({
 }) {
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteReading = async () => {
     setIsProcessing(true);
     try {
-      const res = await fetch("/api/readings", {
+      const res = await fetch("/api/tarot-sessions", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export default function DeleteReading({
             Cancel
           </Button>
         </DialogClose>
-        <Button variant={"destructive"} type="button" onClick={handleDeleteAccount} disabled={isProcessing}>
+        <Button variant={"destructive"} type="button" onClick={handleDeleteReading} disabled={isProcessing}>
           {isProcessing ? "Deleting..." : "Delete"}
         </Button>
       </DialogFooter>

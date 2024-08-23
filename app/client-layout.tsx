@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 import { Toaster } from "react-hot-toast";
 import { usePathname } from "next/navigation";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 
 const Header = dynamic(() => import("../components/navigation/header"), {
   ssr: false,
@@ -12,7 +12,7 @@ const Header = dynamic(() => import("../components/navigation/header"), {
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { phase } = useTarotSession();
+  const { phase } = useTarotFlow();
   const hideHeader =
     phase === "reading" || (pathname && (pathname === "/interpretation" || pathname.includes("/readings/")));
   return (

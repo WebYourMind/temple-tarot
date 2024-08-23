@@ -2,25 +2,25 @@ import React, { memo, useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "components/ui/button";
 import { cn, findFullCardInDeck } from "lib/utils";
-import { TarotSessionProvider, useTarotSession } from "lib/contexts/tarot-session-context";
+import { TarotFlowProvider, useTarotFlow } from "lib/contexts/tarot-flow-context";
 import { ArrowLeft, ArrowRight, Dot } from "lucide-react";
 import { IconClose } from "components/ui/icons";
 import { useRouter } from "next/navigation";
-import CardInfo from "../../app/(views)/glossary/card-info";
-import { MagicFont } from "components/tarot-session/query/query-input";
+import CardInfo from "../../../app/(views)/glossary/card-info";
+import { MagicFont } from "components/tarot-flow/query/query-input";
 import DividerWithText from "components/divider-with-text";
 import SwipeableViews from "react-swipeable-views-react-18-fix";
 import ReadingFeedback from "./reading-feedback";
 import InterpretationSlide from "./interpretation-slide";
-import TarotSession from "./tarot-session";
-import { useReadingsContext } from "lib/contexts/readings-context";
+import TarotFlow from "..";
+import { useTarotSessionsContext } from "lib/contexts/tarot-sessions-context";
 import Interpreter from "./interpreter";
 import LogoComponent from "components/navigation/logo-component";
 import { CardInReading, ReadingType } from "lib/types";
 
 const TarotReadingSlides = ({ tarotSessionId = null }) => {
-  const { query, selectedDeck, handleReset, aiResponse, setIsFollowUp, selectedCards } = useTarotSession();
-  const { tarotSession, setTarotSession } = useReadingsContext();
+  const { query, handleReset, aiResponse, selectedCards } = useTarotFlow();
+  const { tarotSession, setTarotSession } = useTarotSessionsContext();
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [goDeeper, setGoDeeper] = useState(false);
@@ -112,7 +112,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
         console.log(key);
         if (!currentReading.aiInterpretation) {
           return (
-            <TarotSessionProvider
+            <TarotFlowProvider
               key={key}
               isPropped
               tarotSessionId={tarotSessionId}
@@ -120,7 +120,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
             >
               {/* @ts-ignore */}
               <Interpreter tarotSessionId={tarotSessionId} proppedTarotSession={currentReading.proppedTarotSession} />
-            </TarotSessionProvider>
+            </TarotFlowProvider>
           );
         }
         return (
@@ -175,6 +175,7 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
     );
   }
 
+  // add follow up readings to the existing tarot session readings array
   function handleDeeperComplete(newReading: ReadingType) {
     if (tarotSession) {
       setTarotSession({ ...tarotSession, readings: [...tarotSession?.readings, newReading] });
@@ -194,11 +195,11 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
     setGoDeeper(false);
   }
 
+  // creates a nested tarot flow context for follow up readings
   function renderGoDeeperSlide(key) {
-    // card selection like followupreadinginput
     return (
       <div className="h-full w-full" key={key}>
-        <TarotSessionProvider
+        <TarotFlowProvider
           followUpContext={
             tarotSession || {
               id: tarotSessionId,
@@ -217,8 +218,8 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
           tarotSessionId={tarotSessionId}
           onResponseComplete={handleDeeperComplete}
         >
-          <TarotSession />
-        </TarotSessionProvider>
+          <TarotFlow />
+        </TarotFlowProvider>
       </div>
     );
   }

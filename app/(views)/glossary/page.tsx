@@ -5,7 +5,7 @@ import Image from "next/image";
 import { thoth2 } from "../../../lib/tarot-data/tarot-deck";
 import CardInfo from "./card-info";
 import { cn } from "lib/utils";
-import { MagicFont } from "components/tarot-session/query/query-input";
+import { MagicFont } from "components/tarot-flow/query/query-input";
 
 const suits = ["Major Arcana", "Air", "Water", "Earth", "Fire"];
 

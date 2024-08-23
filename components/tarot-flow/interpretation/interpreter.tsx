@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import "styles/cards.css";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 import { useRouter } from "next/navigation";
 import ReadingLoading from "./reading-loading";
 import TarotReadingSlides from "./tarot-reading-slides";
@@ -11,7 +11,7 @@ import InterpretationSlide from "./interpretation-slide";
 import { useUserAccessPlan } from "app/(payments)/(frontend)/contexts/user-access-plan-context";
 
 function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
-  const defaultSession = useTarotSession();
+  const defaultSession = useTarotFlow();
   const { freeReadings, setFreeReadings } = useUserAccessPlan();
   const [error, setError] = useState<string>();
 
@@ -35,7 +35,7 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
     let isSubscribed = true;
     const controller = new AbortController();
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch("/api/readings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,11 +54,6 @@ function Interpreter({ tarotSessionId = null, proppedTarotSession = null }) {
       });
 
       if (!response.body) throw new Error("Failed to get the stream.");
-      // const data = (await response.json()) as { error?: string };
-      // if (data?.error) {
-      //   setError(data.error);
-      //   throw new Error(data.error);
-      // }
 
       const reader = response.body.getReader();
 

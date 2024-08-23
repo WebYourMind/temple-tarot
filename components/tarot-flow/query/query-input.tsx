@@ -2,7 +2,7 @@ import { Button } from "components/ui/button";
 import { Textarea } from "components/ui/textarea";
 import { useState, memo } from "react";
 import { useRouter } from "next/navigation";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 import { useUserAccessPlan } from "app/(payments)/(frontend)/contexts/user-access-plan-context";
 import { InfoButton } from "components/info-dialog";
 
@@ -16,7 +16,7 @@ import TarotPreferences from "./tarot-preferences";
 export const MagicFont = Quicksand({ subsets: ["latin"], weight: "400" });
 
 const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFollowUp }) => {
-  const { query, setQuery, selectedCards, hasOwnCards, storeLastUsedDeck, storeLastUsersName } = useTarotSession();
+  const { query, setQuery, selectedCards, hasOwnCards, storeLastUsedDeck, storeLastUsersName } = useTarotFlow();
   const { hasAccess, freeReadings, emailVerified, passExpiry, isSubscribed, isLoading } = useUserAccessPlan();
   const router = useRouter();
   const [drawCards, setDrawCards] = useState(true);
@@ -134,7 +134,7 @@ const QueryInput = ({ placeholder, infoType, buttonText, handleSubmitQuery, isFo
 
 // Higher-order component for new reading
 export const NewReadingInput = () => {
-  const { handleSubmitQuestion } = useTarotSession();
+  const { handleSubmitQuestion } = useTarotFlow();
   return (
     <QueryInput
       placeholder="What guidance are you seeking?"
@@ -148,7 +148,7 @@ export const NewReadingInput = () => {
 
 // Higher-order component for follow-up reading
 export const FollowUpReadingInput = () => {
-  const { handleSubmitFollowUpQuestion } = useTarotSession();
+  const { handleSubmitFollowUpQuestion } = useTarotFlow();
   return (
     <QueryInput
       placeholder="What do you seek to clarify or explore further?"

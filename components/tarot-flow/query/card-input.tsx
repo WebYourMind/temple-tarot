@@ -11,11 +11,11 @@ import {
 import { Switch } from "components/ui/switch";
 import { Label } from "components/ui/label";
 import { deckCardsMapping } from "lib/tarot-data/tarot-deck";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 import { CardInReading } from "lib/types";
 
 const CardInput = () => {
-  const { spread, setSelectedCards, selectedDeck } = useTarotSession();
+  const { spread, setSelectedCards, selectedDeck } = useTarotFlow();
   const [cardSelections, setCardSelections] = useState<CardInReading[]>(
     Array(spread.numberOfCards).fill({ cardName: "", orientation: "upright" })
   );

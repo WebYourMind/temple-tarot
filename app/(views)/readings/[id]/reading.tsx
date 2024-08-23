@@ -1,12 +1,12 @@
 "use client";
 
-import TarotReadingSlides from "components/tarot-session/tarot-reading-slides";
+import TarotReadingSlides from "components/tarot-flow/interpretation/tarot-reading-slides";
 import Loading from "app/loading";
-import { useReadingsContext } from "lib/contexts/readings-context";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotSessionsContext } from "lib/contexts/tarot-sessions-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import Interpreter from "components/tarot-session/interpreter";
+import Interpreter from "components/tarot-flow/interpretation/interpreter";
 
 type ReadingProps = {
   tarotSessionId: string;
@@ -14,12 +14,12 @@ type ReadingProps = {
 
 function Reading({ tarotSessionId }: ReadingProps) {
   const { data: session, status } = useSession() as any;
-  const { tarotSession, loading, error, fetchReading } = useReadingsContext();
-  const { setAiResponse, setQuery, phase, selectedCards } = useTarotSession();
+  const { tarotSession, loading, error, fetchTarotSession } = useTarotSessionsContext();
+  const { setAiResponse, setQuery, phase, selectedCards } = useTarotFlow();
 
   useEffect(() => {
     if (session?.user?.id && tarotSessionId !== tarotSession?.id && phase !== "reading") {
-      fetchReading(tarotSessionId);
+      fetchTarotSession(tarotSessionId);
     }
   }, [status, phase]);
 

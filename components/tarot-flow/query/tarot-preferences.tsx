@@ -7,13 +7,13 @@ import DeckSelector from "./deck-selector";
 import { MagicFont } from "./query-input";
 import SpreadSelector from "./spread-selector";
 import { memo, useEffect, useState } from "react";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 import { Switch } from "components/ui/switch";
 import { Label } from "components/ui/label";
 import { Input } from "components/ui/input";
 
 function TarotPreferences({ drawCards }) {
-  const { setHasOwnCards, setSelectedCards, usersName, setUsersName } = useTarotSession();
+  const { setHasOwnCards, setSelectedCards, usersName, setUsersName } = useTarotFlow();
   const [showCardInput, setShowCardInput] = useState(false);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ function TarotPreferences({ drawCards }) {
         <Label>For:</Label>
         <Input
           placeholder="Who is this reading is for?"
-          className="rounded-none border-none bg-transparent focus-within:ring-offset-0 focus-visible:ring-offset-0 focus-visible:shadow-none focus-visible:outline-none focus-visible:ring-0"
+          className="rounded-none border-none bg-transparent focus-within:ring-offset-0 focus-visible:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           value={usersName}
           onChange={({ target: { value } }) => setUsersName(value)}
         />

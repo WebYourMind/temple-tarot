@@ -12,12 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "components/ui/select";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 import { decks } from "lib/tarot-data/tarot-deck";
 import { cn } from "lib/utils";
 
 export default function DeckSelector() {
-  const { selectedDeck, setSelectedDeck } = useTarotSession();
+  const { selectedDeck, setSelectedDeck } = useTarotFlow();
   const handleDeckChange = (deckValue) => {
     setSelectedDeck(decks.find((deck) => deck.value === deckValue));
   };

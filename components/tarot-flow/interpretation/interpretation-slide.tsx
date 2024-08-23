@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { cn, findFullCardInDeck } from "lib/utils";
 import Markdown from "react-markdown";
-import { MagicFont } from "./query/query-input";
+import { MagicFont } from "../query/query-input";
 import { CardInReading } from "lib/types";
 
 interface InterpretationSlideProps {

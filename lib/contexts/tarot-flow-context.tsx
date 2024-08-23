@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import TarotBack from "app/tarot-back.webp";
 import { CardInReading, DeckType, ReadingType, SpreadType, TarotSessionType } from "lib/types";
 
-interface TarotSessionContextProps {
+interface TarotFlowContextProps {
   query: string;
   phase: "question" | "spread" | "cards" | "reading";
   selectedCards: CardInReading[] | null;
@@ -48,12 +48,12 @@ interface TarotSessionContextProps {
   setUsersName?: Dispatch<SetStateAction<string>>;
 }
 
-const TarotSessionContext = createContext<TarotSessionContextProps | undefined>(undefined);
+const TarotFlowContext = createContext<TarotFlowContextProps | undefined>(undefined);
 
-export const useTarotSession = () => {
-  const context = useContext(TarotSessionContext);
+export const useTarotFlow = () => {
+  const context = useContext(TarotFlowContext);
   if (context === undefined) {
-    throw new Error("useTarotSession must be used within a TarotSessionProvider");
+    throw new Error("useTarotFlow must be used within a TarotFlowProvider");
   }
   return context;
 };
@@ -64,7 +64,7 @@ const defaultDeck = {
   name: "Thoth 2.0 Deck",
 };
 
-export const TarotSessionProvider: React.FC<{
+export const TarotFlowProvider: React.FC<{
   children: React.ReactNode;
   isFollowUp?: boolean;
   tarotSessionId?: string;
@@ -236,5 +236,5 @@ export const TarotSessionProvider: React.FC<{
     storeLastUsersName,
   };
 
-  return <TarotSessionContext.Provider value={value}>{children}</TarotSessionContext.Provider>;
+  return <TarotFlowContext.Provider value={value}>{children}</TarotFlowContext.Provider>;
 };

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CardSelection from "./card-selection";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 import { Button } from "components/ui/button";
 import { IconClose } from "components/ui/icons";
 
@@ -17,7 +17,7 @@ const CardSelectionWrapper = () => {
     handleCreateTarotSession,
     isFollowUp,
     handleReset,
-  } = useTarotSession();
+  } = useTarotFlow();
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleCardSelect = (card) => {

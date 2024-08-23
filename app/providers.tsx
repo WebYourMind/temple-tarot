@@ -4,22 +4,22 @@ import { SessionProvider } from "next-auth/react";
 import { TooltipProvider } from "components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { FeedbackDataProvider } from "./feedback-data";
-import { ReadingsProvider } from "lib/contexts/readings-context";
+import { TarotSessionsProvider } from "lib/contexts/tarot-sessions-context";
 import { UserAccessPlanProvider } from "./(payments)/(frontend)/contexts/user-access-plan-context";
-import { TarotSessionProvider } from "lib/contexts/tarot-session-context";
+import { TarotFlowProvider } from "lib/contexts/tarot-flow-context";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class" forcedTheme="light">
       <SessionProvider>
         <TooltipProvider>
-          <TarotSessionProvider>
+          <TarotFlowProvider>
             <UserAccessPlanProvider>
               <FeedbackDataProvider>
-                <ReadingsProvider>{children}</ReadingsProvider>
+                <TarotSessionsProvider>{children}</TarotSessionsProvider>
               </FeedbackDataProvider>
             </UserAccessPlanProvider>
-          </TarotSessionProvider>
+          </TarotFlowProvider>
         </TooltipProvider>
       </SessionProvider>
     </ThemeProvider>

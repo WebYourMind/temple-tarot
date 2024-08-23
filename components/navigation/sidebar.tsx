@@ -6,7 +6,7 @@ import { Button } from "components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "components/ui/sheet";
 import { MenuIcon } from "lucide-react";
 import { cn } from "lib/utils";
-import { MagicFont } from "components/tarot-session/query/query-input";
+import { MagicFont } from "components/tarot-flow/query/query-input";
 import LogoComponent from "./logo-component";
 
 export interface SidebarProps {

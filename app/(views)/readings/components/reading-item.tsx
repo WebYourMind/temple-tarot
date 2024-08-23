@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Card from "components/card";
 import ReadingItemMenu from "./reading-item-menu";
 import Link from "next/link";
-import { MagicFont } from "components/tarot-session/query/query-input";
+import { MagicFont } from "components/tarot-flow/query/query-input";
 import { cn } from "lib/utils";
 import { TarotSessionType } from "lib/types";
 

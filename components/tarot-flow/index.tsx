@@ -2,14 +2,14 @@
 
 import { Dialog } from "@radix-ui/react-dialog";
 import InfoDialog from "components/info-dialog";
-import { useTarotSession } from "lib/contexts/tarot-session-context";
+import { useTarotFlow } from "lib/contexts/tarot-flow-context";
 import CardSelectionWrapper from "./card-selection/card-selection-wrapper";
-import Interpreter from "./interpreter";
+import Interpreter from "./interpretation/interpreter";
 import { FollowUpReadingInput, NewReadingInput } from "./query/query-input";
 import { useEffect, useState } from "react";
-import ReadingLoading from "./reading-loading";
+import ReadingLoading from "./interpretation/reading-loading";
 
-export default function TarotSession() {
+export default function TarotFlow() {
   const {
     phase,
     selectedCards,
@@ -20,7 +20,7 @@ export default function TarotSession() {
     tarotSessionId,
     isPending,
     selectedDeck,
-  } = useTarotSession();
+  } = useTarotFlow();
   const [showInterpreter, setShowInterpreter] = useState(false);
 
   useEffect(() => {
