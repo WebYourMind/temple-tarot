@@ -162,7 +162,6 @@ export function parseJsonSafe(jsonString) {
 }
 
 export function findFullCardInDeck(cardName: string, deckName?: string) {
-  console.log(deckName);
   if (deckName === "thoth_2" || deckName === "ryder_waite") {
     return deckCardsMapping[deckName].find((fullCard) => fullCard.cardName === cardName);
   } else if (!deckName) {

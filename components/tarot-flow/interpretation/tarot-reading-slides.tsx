@@ -109,7 +109,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
   function getInterpretationSlides() {
     if (tarotSession?.readings) {
       const renderInterpretationSlide = (currentReading: ReadingType, key) => {
-        console.log(key);
         if (!currentReading.aiInterpretation) {
           return (
             <TarotFlowProvider
@@ -135,7 +134,6 @@ const TarotReadingSlides = ({ tarotSessionId = null }) => {
       return [
         ...tarotSession.readings.flatMap((currentReading, index) => {
           if (currentReading.cards && currentReading.cards.length > 0) {
-            console.log(currentReading);
             const cardWithImage = findFullCardInDeck(currentReading.cards[0].cardName, currentReading.cards[0].deck);
             const readingViews = [];
             if (cardWithImage) readingViews.push((key) => renderCardSlide(currentReading.cards, key));
